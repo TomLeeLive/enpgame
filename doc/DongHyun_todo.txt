@@ -1,0 +1,12 @@
+10 월 28일 까지 * 1차 pt
+
+ 1주 : 오브젝트 애니메이션,터렛
+ 2주 : MFC 이펙트 OPEN,DELETE,SAVE,PLAY,PAUSE / POSITION X,Y,Z W,H 조절 /FRAME SPEED 조절
+ 3주 : Particle, Alpha Blending
+ 4주 : 프로젝트 간 필요한 컨텐츠 대입
+
+
+
+
+
+
