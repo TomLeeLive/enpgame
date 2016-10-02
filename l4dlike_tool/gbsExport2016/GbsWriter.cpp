@@ -774,7 +774,7 @@ bool GbsWriter::ExpObject() {
 		std::sort(m_gObjectList[iObj].triList.begin(),
 			m_gObjectList[iObj].triList.end(),
 			AScendingSort());
-		_ftprintf(m_fp, _T("%s %d\n"), _T("TRIANGLE"),
+		_ftprintf(m_fp, _T("%s %d\n"), _T("#TRIANGLE"),
 			m_gMtlList[m_gObjectList[iObj].iRef].subMtls.size());
 
 		int iAddCount = 0;

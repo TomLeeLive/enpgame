@@ -68,34 +68,12 @@ bool	GbsViewer::Init() {
 #endif
 #ifdef G_DEFINE_ANI_TURRET
 		m_stModel.Init(L"data/Turret_Deploy.ASE", L"Tutorial04.fx");
-		//m_stModel.Init(L"data/mong.ASE", L"Tutorial04.fx");
-		//m_Parser.OpenStream(L"data/MultiCameras.ASE");
 #endif
 	
 
 
 	// Initialize the world matrix
 	D3DXMatrixIdentity(&m_World);
-
-
-	//     // Initialize the view matrix
-	//#ifdef G_DEFINE_BOX
-	//     D3DXVECTOR3 Eye = D3DXVECTOR3(0.0f, 1.0f, -7.0f);
-	//#endif
-	//#ifdef G_DEFINE_SHIP
-	//     D3DXVECTOR3 Eye = D3DXVECTOR3(0.0f, 1.0f, -700.0f);
-	//#endif
-	//#ifdef G_DEFINE_MULTICAMERAS
-	//     D3DXVECTOR3 Eye = D3DXVECTOR3(0.0f, 1.0f, -100.0f);
-	//#endif
-	//
-	//     D3DXVECTOR3 At = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	//     D3DXVECTOR3 Up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	//     D3DXMatrixLookAtLH(&m_View, &Eye, &At, &Up);
-
-	//// Initialize the projection matrix
-	//D3DXMatrixPerspectiveFovLH(&m_Projection, XM_PIDIV2, m_iWindowWidth / (FLOAT)m_iWindowHeight, 0.01f, 10000.0f);
-
 
 
 	//--------------------------------------------------------------------------------------
