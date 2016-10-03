@@ -2,8 +2,8 @@
 
 
 
-#define GBS_DEFINE_BOX
-//#define GBS_DEFINE_SHIP
+//#define GBS_DEFINE_BOX
+#define GBS_DEFINE_SHIP
 //#define GBS_DEFINE_MULTICAMERAS
 //#define GBS_DEFINE_ANI_TRANSLATE
 //#define GBS_DEFINE_ANI_SCALE
@@ -47,7 +47,7 @@ bool	GbsViewer::Init() {
 		m_stModel.Init(L"data/box.GBS", L"Tutorial04.fx");
 #endif
 #ifdef GBS_DEFINE_SHIP
-		m_stModel.Init(L"data/st02sc00.GBS", L"Tutorial04.fx");
+		m_stModel.Init(L"data/ship.GBS", L"Tutorial04.fx");
 #endif
 #ifdef GBS_DEFINE_MULTICAMERAS
 		m_stModel.Init(L"data/MultiCameras.GBS", L"Tutorial04.fx");

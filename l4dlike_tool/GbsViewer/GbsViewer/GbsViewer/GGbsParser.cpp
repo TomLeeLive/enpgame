@@ -945,6 +945,13 @@ int		GGbsParser::GetDataFromFile(GGbsModel* stModel ){
 							&iDiffuse,
 							&stModel->m_vMaterial[iMtlCnt].get()->m_szMapDiffuse
 							);
+
+
+						TCHAR strDir[MAX_PATH] = L"data\\";
+						_tcsncat(strDir, stModel->m_vMaterial[iMtlCnt].get()->m_szMapDiffuse, _tcsclen(stModel->m_vMaterial[iMtlCnt].get()->m_szMapDiffuse));
+
+						_tcscpy(stModel->m_vMaterial[iMtlCnt].get()->m_szMapDiffuse, strDir);
+
 					}
 					else {
 						/*
@@ -978,6 +985,11 @@ int		GGbsParser::GetDataFromFile(GGbsModel* stModel ){
 								&iDiffuse,
 								&stModel->m_vMaterial[iMtlCnt].get()->m_vSubMaterial[j].get()->m_szMapDiffuse
 								);
+
+							TCHAR strDir[MAX_PATH] = L"data\\";
+							_tcsncat(strDir, stModel->m_vMaterial[iMtlCnt].get()->m_vSubMaterial[j].get()->m_szMapDiffuse, _tcsclen(stModel->m_vMaterial[iMtlCnt].get()->m_vSubMaterial[j].get()->m_szMapDiffuse));
+
+							_tcscpy(stModel->m_vMaterial[iMtlCnt].get()->m_vSubMaterial[j].get()->m_szMapDiffuse, strDir);
 						}
 					}	
 					iMtlCnt++;
@@ -1058,6 +1070,7 @@ int		GGbsParser::GetDataFromFile(GGbsModel* stModel ){
 							&iIndexSize
 							);
 
+						/*stModel->m_vGeomObj[iObjCnt].get()->m_iMaterial_Ref = iMtlNum;*/
 
 						for (int k = 0; k < iVertexSize; k++) {
 
@@ -1089,8 +1102,8 @@ int		GGbsParser::GetDataFromFile(GGbsModel* stModel ){
 							_stscanf(m_pBuffer, _T("%d %d %d"), &iIndex1, &iIndex2, &iIndex3);
 							if (iMtlNum == -1) {
 								stModel->m_vGeomObj[iObjCnt].get()->m_vObj[0].get()->m_vIndexList.push_back(iIndex1);
-								stModel->m_vGeomObj[iObjCnt].get()->m_vObj[0].get()->m_vIndexList.push_back(iIndex1);
-								stModel->m_vGeomObj[iObjCnt].get()->m_vObj[0].get()->m_vIndexList.push_back(iIndex1);
+								stModel->m_vGeomObj[iObjCnt].get()->m_vObj[0].get()->m_vIndexList.push_back(iIndex2);
+								stModel->m_vGeomObj[iObjCnt].get()->m_vObj[0].get()->m_vIndexList.push_back(iIndex3);
 							}
 							else {
 								stModel->m_vGeomObj[iObjCnt].get()->m_vObj[iMtlNum]->m_vIndexList.push_back(iIndex1);

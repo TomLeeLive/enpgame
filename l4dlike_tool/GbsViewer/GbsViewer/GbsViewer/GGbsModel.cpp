@@ -191,20 +191,20 @@ bool GGbsModel::MultiModelInit() {
 
 
 			// Create index buffer
-			WORD* indices;
-			indices = (WORD *)malloc(sizeof(WORD) * m_vGeomObj[i].get()->m_vObj[j]->m_vPnctVertex.size());
+			//WORD* indices;
+			//indices = (WORD *)malloc(sizeof(WORD) * m_vGeomObj[i].get()->m_vObj[j]->m_vIndexList.size());
 
-			for (int k = 0; k < m_vGeomObj[i].get()->m_vObj[j]->m_vPnctVertex.size(); k++) {
-				indices[k] = k;
-			}
+			//for (int k = 0; k < m_vGeomObj[i].get()->m_vObj[j]->m_vPnctVertex.size(); k++) {
+			//	indices[k] = m_vGeomObj[i].get()->m_vObj[j]->m_vIndexList[k];
+			//}
 
 
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(WORD) * m_vGeomObj[i].get()->m_vObj[j]->m_vPnctVertex.size();        // 36 vertices needed for 12 triangles in a triangle list
+			bd.ByteWidth = sizeof(WORD) * m_vGeomObj[i].get()->m_vObj[j]->m_vIndexList.size();        // 36 vertices needed for 12 triangles in a triangle list
 			bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			ZeroMemory(&InitData, sizeof(InitData));
-			InitData.pSysMem = indices;
+			InitData.pSysMem = &m_vGeomObj[i].get()->m_vObj[j]->m_vIndexList[0];
 			hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, m_vGeomObj[i].get()->m_vObj[j]->m_pIndexBuffer.GetAddressOf());
 			if (FAILED(hr))
 				return hr;
@@ -216,7 +216,7 @@ bool GGbsModel::MultiModelInit() {
 			g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
-			delete[] indices;
+			//delete[] indices;
 			delete[] vertices;
 
 
@@ -287,10 +287,10 @@ bool GGbsModel::SingleModelInit() {
 
 		// Create index buffer
 		//WORD* indices;
-		//indices = (WORD *)malloc(sizeof(WORD) * m_vGeomObj[0].get()->m_vObj[0]->m_vPnctVertex.size());
+		//indices = (WORD *)malloc(sizeof(WORD) * m_vGeomObj[0].get()->m_vObj[0]->m_vIndexList.size());
 
-		//for (int j = 0; j < m_vGeomObj[0].get()->m_vObj[0]->m_vPnctVertex.size(); j++) {
-		//	indices[j] = j;
+		//for (int j = 0; j < m_vGeomObj[0].get()->m_vObj[0]->m_vIndexList.size(); j++) {
+		//	indices[j] = m_vGeomObj[0].get()->m_vObj[0]->m_vIndexList[j];
 		//}
 
 
@@ -385,20 +385,20 @@ bool GGbsModel::SingleModelInit() {
 
 
 			// Create index buffer
-			WORD* indices;
-			indices = (WORD *)malloc(sizeof(WORD) * m_vGeomObj[0].get()->m_vObj[i]->m_vPnctVertex.size());
+			//WORD* indices;
+			//indices = (WORD *)malloc(sizeof(WORD) * m_vGeomObj[0].get()->m_vObj[i]->m_vIndexList.size());
 
-			for (int j = 0; j < m_vGeomObj[0].get()->m_vObj[i]->m_vPnctVertex.size(); j++) {
-				indices[j] = j;
-			}
+			//for (int j = 0; j < m_vGeomObj[0].get()->m_vObj[i]->m_vIndexList.size(); j++) {
+			//	indices[j] = m_vGeomObj[0].get()->m_vObj[i]->m_vIndexList[j];
+			//}
 
 
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(WORD) * m_vGeomObj[0].get()->m_vObj[i]->m_vPnctVertex.size();        // 36 vertices needed for 12 triangles in a triangle list
+			bd.ByteWidth = sizeof(WORD) * m_vGeomObj[0].get()->m_vObj[i]->m_vIndexList.size();        // 36 vertices needed for 12 triangles in a triangle list
 			bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			ZeroMemory(&InitData, sizeof(InitData));
-			InitData.pSysMem = indices;
+			InitData.pSysMem = &m_vGeomObj[0].get()->m_vObj[i]->m_vIndexList[0];
 			hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, m_vGeomObj[0].get()->m_vObj[i]->m_pIndexBuffer.GetAddressOf());
 			if (FAILED(hr))
 				return hr;
@@ -410,7 +410,7 @@ bool GGbsModel::SingleModelInit() {
 			g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
-			delete[] indices;
+			//delete[] indices;
 			delete[] vertices;
 
 		}
@@ -929,7 +929,7 @@ bool		GGbsModel::SingleRender(D3DXMATRIX* matWorld, D3DXMATRIX* matView, D3DXMAT
 			g_pImmediateContext->IASetVertexBuffers(0, 1, m_vGeomObj[0].get()->m_vObj[i]->m_pVertexBuffer.GetAddressOf(), &stride, &offset);
 			g_pImmediateContext->PSSetShaderResources(0, 1, m_vMaterial[0]->m_vSubMaterial[i]->m_pTextureRV.GetAddressOf());
 			g_pImmediateContext->IASetIndexBuffer(m_vGeomObj[0].get()->m_vObj[i]->m_pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-			g_pImmediateContext->DrawIndexed(m_vGeomObj[0].get()->m_vObj[i]->m_vPnctVertex.size(), 0, 0);
+			g_pImmediateContext->DrawIndexed(m_vGeomObj[0].get()->m_vObj[i]->m_vIndexList.size(), 0, 0);
 			//g_pImmediateContext->Draw(m_vObj[i]->m_vPnctVertex.size(), 0);
 		}
 	}
@@ -956,8 +956,8 @@ bool		GGbsModel::MultiRender(D3DXMATRIX* matWorld, D3DXMATRIX* matView, D3DXMATR
 
 	for (int i = 0; i < m_vGeomObj.size(); i++) {
 
-		if (m_vGeomObj[i]->m_bUsed == false)
-			continue;
+		//if (m_vGeomObj[i]->m_bUsed == false)
+		//	continue;
 
 		D3DXMATRIX	  matTemp;
 		D3DXMatrixIdentity(&matTemp);
@@ -979,10 +979,13 @@ bool		GGbsModel::MultiRender(D3DXMATRIX* matWorld, D3DXMATRIX* matView, D3DXMATR
 			UINT stride = sizeof(PNCT_VERTEX);
 			UINT offset = 0;
 			g_pImmediateContext->IASetVertexBuffers(0, 1, m_vGeomObj[i].get()->m_vObj[j]->m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+
 			g_pImmediateContext->PSSetShaderResources(0, 1, m_vMaterial[m_vGeomObj[i].get()->m_iMaterial_Ref]->m_vSubMaterial[j]->m_pTextureRV.GetAddressOf());
+			//g_pImmediateContext->PSSetShaderResources(0, 1, m_vMaterial[0]->m_vSubMaterial[j]->m_pTextureRV.GetAddressOf());
+
 			g_pImmediateContext->IASetIndexBuffer(m_vGeomObj[i].get()->m_vObj[j]->m_pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-			//g_pImmediateContext->DrawIndexed(m_vGeomObj[0].get()->m_vObj[i]->m_vPnctVertex.size(), 0, 0);
-			g_pImmediateContext->Draw(m_vGeomObj[i].get()->m_vObj[j]->m_vPnctVertex.size(), 0);
+			g_pImmediateContext->DrawIndexed(m_vGeomObj[i].get()->m_vObj[j]->m_vIndexList.size(), 0, 0);
+			//g_pImmediateContext->Draw(m_vGeomObj[i].get()->m_vObj[j]->m_vPnctVertex.size(), 0);
 
 		}
 	}

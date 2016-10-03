@@ -2,18 +2,18 @@ GBS_FILE_EXPORT
 #SCENE 100 0 100 30 160 1 1
 #MATERIAL 0 5 0
 	#SUBMATERIAL 0 0 1
-		1 0_st02_sc00_g04.tga
+		1 0_st02_sc00_g04.dds
 	#SUBMATERIAL 1 0 1
-		1 0_st02_sc00_g00.tga
+		1 0_st02_sc00_g00.dds
 	#SUBMATERIAL 2 0 1
-		1 0_st02_sc00_g01.tga
+		1 0_st02_sc00_g01.dds
 	#SUBMATERIAL 3 0 1
-		1 0_st02_sc00_g03.tga
+		1 0_st02_sc00_g03.dds
 	#SUBMATERIAL 4 0 1
-		1 0_st02_sc00_g02.tga
+		1 0_st02_sc00_g02.dds
 #OBJECT 0 st02_sc00_g Scene_Root
 #WORLD     1.0000     0.0000     0.0000     0.0000      0.0000     1.0000     0.0000     0.0000      0.0000     0.0000     1.0000     0.0000      0.6585   119.7286   447.1455     1.0000 
-TRIANGLE 5
+#TRIANGLE 5
 0 1205 3564
   -34.0769   -58.7459   349.9640    -0.6303      0.0000    -0.7764     1.0000     1.0000      1.0000     0.0000     0.6465     0.1751 
   -34.0769   -57.3233   353.3985    -0.6296      0.5517    -0.5470     1.0000     1.0000      1.0000     0.0000     0.5966     0.1544 
