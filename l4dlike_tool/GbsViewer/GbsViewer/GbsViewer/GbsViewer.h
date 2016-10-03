@@ -5,7 +5,7 @@ class GbsViewer : public GBASISLib_0
 public:
 	shared_ptr<GCamera > m_pMainCamera;
 
-	GAseModel	m_stModel;
+	GGbsModel	m_stModel;
 
 
 	D3DXMATRIX				m_World;

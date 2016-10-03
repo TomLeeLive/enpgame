@@ -1,13 +1,13 @@
 #include "_stdafx.h"
 
-//#define G_DEFINE_BOX
-//#define G_DEFINE_SHIP
-//#define G_DEFINE_MULTICAMERAS
-//#define G_DEFINE_ANI_TRANSLATE
-//#define G_DEFINE_ANI_SCALE
-#define G_DEFINE_ANI_TURRET
 
-//#define G_DEFINE_ANI_ROTATE
+
+#define GBS_DEFINE_BOX
+//#define GBS_DEFINE_SHIP
+//#define GBS_DEFINE_MULTICAMERAS
+//#define GBS_DEFINE_ANI_TRANSLATE
+//#define GBS_DEFINE_ANI_SCALE
+//#define GBS_DEFINE_ANI_TURRET
 
 int GbsViewer::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -42,34 +42,29 @@ HRESULT GbsViewer::DeleteResource()
 
 bool	GbsViewer::Init() {
 
-#ifdef G_DEFINE_BOX
-	m_stModel.Init(L"data/BOX.ASE", L"Tutorial04.fx");
-	//m_Parser.OpenStream(L"data/BOX.ASE");
+
+#ifdef GBS_DEFINE_BOX
+		m_stModel.Init(L"data/box.GBS", L"Tutorial04.fx");
 #endif
-#ifdef G_DEFINE_SHIP
-	m_stModel.Init(L"data/st02sc00.ASE", L"Tutorial04.fx");
-	//m_Parser.OpenStream(L"data/st02sc00.ASE");
+#ifdef GBS_DEFINE_SHIP
+		m_stModel.Init(L"data/st02sc00.GBS", L"Tutorial04.fx");
 #endif
-#ifdef G_DEFINE_MULTICAMERAS
-	m_stModel.Init(L"data/MultiCameras.ASE", L"Tutorial04.fx");
-	//m_Parser.OpenStream(L"data/MultiCameras.ASE");
+#ifdef GBS_DEFINE_MULTICAMERAS
+		m_stModel.Init(L"data/MultiCameras.GBS", L"Tutorial04.fx");
 #endif
-#ifdef G_DEFINE_ANI_TRANSLATE
-		m_stModel.Init(L"data/boxtranslate.ASE", L"Tutorial04.fx");
-		//m_Parser.OpenStream(L"data/MultiCameras.ASE");
+#ifdef GBS_DEFINE_ANI_TRANSLATE
+		m_stModel.Init(L"data/boxtranslate.GBS", L"Tutorial04.fx");
 #endif
-#ifdef G_DEFINE_ANI_SCALE
-		m_stModel.Init(L"data/scaleanimationmodel.ASE", L"Tutorial04.fx");
-		//m_Parser.OpenStream(L"data/MultiCameras.ASE");
+#ifdef GBS_DEFINE_ANI_SCALE
+		m_stModel.Init(L"data/scaleanimationmodel.GBS", L"Tutorial04.fx");
 #endif
-#ifdef G_DEFINE_ANI_ROTATE
-		m_stModel.Init(L"data/rotanimation.ASE", L"Tutorial04.fx");
-		//m_Parser.OpenStream(L"data/MultiCameras.ASE");
+#ifdef GBS_DEFINE_ANI_ROTATE
+		m_stModel.Init(L"data/rotanimation.GBS", L"Tutorial04.fx");
 #endif
 #ifdef G_DEFINE_ANI_TURRET
-		m_stModel.Init(L"data/Turret_Deploy.ASE", L"Tutorial04.fx");
+		m_stModel.Init(L"data/Turret_Deploy.GBS", L"Tutorial04.fx");
 #endif
-	
+
 
 
 	// Initialize the world matrix

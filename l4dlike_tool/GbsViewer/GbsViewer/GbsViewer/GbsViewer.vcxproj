@@ -151,14 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GAseModel.h" />
-    <ClInclude Include="GAseParser.h" />
+    <ClInclude Include="GGbsModel.h" />
+    <ClInclude Include="GGbsParser.h" />
     <ClInclude Include="GbsViewer.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GAseModel.cpp" />
-    <ClCompile Include="GAseParser.cpp" />
+    <ClCompile Include="GGbsModel.cpp" />
+    <ClCompile Include="GGbsParser.cpp" />
     <ClCompile Include="GbsViewer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

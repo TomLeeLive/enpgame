@@ -6,8 +6,8 @@
 #include <GBasisLib_0.h>
 #include <GShape.h>
 #include <GParser.h>
-#include "GAseParser.h"
-#include "GAseModel.h"
+#include "GGbsParser.h"
+#include "GGbsModel.h"
 #include "GModelViewCamera.h"
 #include "GbsViewer.h"
 #endif
