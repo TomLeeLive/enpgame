@@ -1010,6 +1010,10 @@ int		GGbsParser::GetDataFromFile(GGbsModel* stModel ){
 						&stModel->m_vGeomObj[iObjCnt].get()->m_szParentName
 						);
 
+					_fgetts(m_pBuffer, 256, m_pStream);
+					_stscanf(m_pBuffer, _T("%d"),
+						&stModel->m_vGeomObj[iObjCnt].get()->m_iMaterial_Ref);
+
 					//GetGeomObjDataFromFile(stModel);
 				}
 				break;

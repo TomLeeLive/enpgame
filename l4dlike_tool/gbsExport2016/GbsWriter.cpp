@@ -748,6 +748,9 @@ bool GbsWriter::ExpObject() {
 			m_gObjectList[iObj].nodeName,
 			m_gObjectList[iObj].nodeParentName);
 
+		_ftprintf(m_fp, _T("%d\n"),
+			m_gObjectList[iObj].iRef);
+
 		_ftprintf(m_fp, _T("%s %10.4f %10.4f %10.4f %10.4f  %10.4f %10.4f %10.4f %10.4f  %10.4f %10.4f %10.4f %10.4f  %10.4f %10.4f %10.4f %10.4f \n"),
 			_T("#WORLD"),
 			m_gObjectList[iObj].matWorld._11,
