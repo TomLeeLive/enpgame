@@ -94,11 +94,15 @@ bool		GHeroObj::Frame()
 	m_iCurrentFrame = (int)m_fFrame;
 	// 1프레임 사이 간격
 	m_fLerpTime = m_fFrame - m_iCurrentFrame;
+
+
 //#ifdef _DEBUG
 //	TCHAR  strMessage[MAX_PATH] = { 0, };
 //	_stprintf_s(strMessage, _T("<===== %d [%10.4f] %d====>\n "), m_iCurrentFrame,m_fLerpTime,  m_iCurrentFrame+1);
 //	OutputDebugString(strMessage);
 //#endif
+
+
 	if (m_pBoneObject->AniFrame(m_fFrame,
 		m_fLerpTime,
 		m_iStartFrame,
@@ -108,6 +112,8 @@ bool		GHeroObj::Frame()
 		m_iCurrentFrame = m_iStartFrame;
 		m_fFrame = (float)m_iStartFrame +m_fLerpTime;
 	}
+
+
 	//////////////////////////  보간 없이 투박하게////////////////////////////
 	//if(m_iCurrentFrame >= m_iLastFrame- m_iStartFrame)
 	//{

@@ -1,11 +1,78 @@
 #include "Sample.h"
 #include "GObjMgr.h"
 
-bool Sample::Init()
+bool Sample::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 {
-	I_CharMgr.Init();
+	OPENFILENAME    ofn;
+	TCHAR           szFile[MAX_PATH] = { 0, };
+	TCHAR			szFileTitle[MAX_PATH] = { 0, };
+	static TCHAR    *szFilter;
 
-	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharTable.gci")))
+	TCHAR lpCurBuffer[256] = { 0, };
+	GetCurrentDirectory(256, lpCurBuffer);
+
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	_tcscpy_s(szFile, _T("*."));
+	_tcscat_s(szFile, szExt);
+	_tcscat_s(szFile, _T("\0"));
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = GetActiveWindow();
+	ofn.lpstrFilter = szFilter;
+	ofn.lpstrCustomFilter = NULL;
+	ofn.nMaxCustFilter = 0L;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrFileTitle = szFileTitle;
+	ofn.nMaxFileTitle = MAX_PATH;
+	ofn.lpstrInitialDir = _T("../../data/Character/");
+	ofn.lpstrTitle = szTitle;
+	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+	ofn.nFileOffset = 0;
+	ofn.nFileExtension = 0;
+	ofn.lpstrDefExt = szExt;
+
+	if (!GetOpenFileName(&ofn))
+	{
+		return false;
+	}
+	TCHAR* load = _tcstok(szFile, _T("\n"));
+	T_STR dir = szFile;
+	load = &load[_tcslen(load) + 1];
+	if (*load == 0)
+	{
+		m_LoadFiles.push_back(dir);
+	}
+
+	while (*load != 0)
+	{
+		T_STR dir = szFile;
+		load = _tcstok(load, _T("\n"));
+		dir += _T("\\");
+		dir += load;
+		m_LoadFiles.push_back(dir);
+		load = &load[_tcslen(load) + 1];
+	}
+	SetCurrentDirectory(lpCurBuffer);
+	return true;
+}
+bool Sample::Load()
+{
+	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
+	{
+		return false;
+	}
+
+	//int iLoad = m_LoadFiles.size() - 1;
+	//if (!m_tObject.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
+	//{
+	//	return false;
+	//}
+
+	int iLoad = m_LoadFiles.size() - 1;
+
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -16,48 +83,59 @@ bool Sample::Init()
 	//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
 
 	shared_ptr<GHeroObj> pObjA = make_shared<GHeroObj>();
-	pObjA->Set(	pChar0, 
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	pObjA->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjA);
-/*
+	/*
 	shared_ptr<GHeroObj> pObjB = make_shared<GHeroObj>();
 	pObjB->Set(pChar1,
-		pChar1->m_pBoneObject,
-		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-		60);
+	pChar1->m_pBoneObject,
+	pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+	60);
 	m_HeroObj.push_back(pObjB);
-	
+
 
 	shared_ptr<GHeroObj> pObjC = make_shared<GHeroObj>();
 	pObjC->Set(pChar1,
-		pChar1->m_pBoneObject,
-		61,
-		90);
+	pChar1->m_pBoneObject,
+	61,
+	90);
 	m_HeroObj.push_back(pObjC);
 
 	shared_ptr<GHeroObj> pObjD = make_shared<GHeroObj>();
 	pObjD->Set(pChar1,
-		pChar1->m_pBoneObject,
-		62,
-		116);		
+	pChar1->m_pBoneObject,
+	62,
+	116);
 	m_HeroObj.push_back(pObjD);
-	
+
 
 	shared_ptr<GHeroObj> pObjE = make_shared<GHeroObj>();
 	pObjE->Set(	pChar2,
-				pChar2->m_pBoneObject,
-				pChar2->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar2->m_pBoneObject->m_Scene.iLastFrame);
+	pChar2->m_pBoneObject,
+	pChar2->m_pBoneObject->m_Scene.iFirstFrame,
+	pChar2->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjE);
 
 	shared_ptr<GHeroObj> pObjF = make_shared<GHeroObj>();
 	pObjF->Set( pChar3,
-				pChar3->m_pBoneObject,
-				pChar3->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar3->m_pBoneObject->m_Scene.iLastFrame);
+	pChar3->m_pBoneObject,
+	pChar3->m_pBoneObject->m_Scene.iFirstFrame,
+	pChar3->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjF);*/
+	return true;
+}
+
+bool Sample::Init()
+{
+	
+
+	I_CharMgr.Init();
+
+	Load();
+
 	
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
@@ -128,6 +206,11 @@ bool Sample::Frame()
 		{
 			m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
 		}
+	}
+
+	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
+	{
+		Load();
 	}
 	return true;
 }

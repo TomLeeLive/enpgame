@@ -18,7 +18,7 @@ BOOL	GCharacterLoader::GetDataFromSkinMeshString( TCHAR* pString, VOID* pData0, 
 }
 
 
-int		TCharMgr::Create(	ID3D11Device* pd3dDevice, 
+int		GCharMgr::Create(	ID3D11Device* pd3dDevice, 
 							ID3D11DeviceContext*    pImmediateContext,
 							const TCHAR* strFileName, 
 							const TCHAR* strShaderName, 
@@ -67,7 +67,7 @@ int		TCharMgr::Create(	ID3D11Device* pd3dDevice,
 	}
 	return -1;	
 };
-bool	TCharMgr::Load(	ID3D11Device* pd3dDevice, 
+bool	GCharMgr::Load(	ID3D11Device* pd3dDevice, 
 								ID3D11DeviceContext*    pImmediateContext,
 								const TCHAR* strFileName )
 {
@@ -150,10 +150,10 @@ bool	TCharMgr::Load(	ID3D11Device* pd3dDevice,
 	m_Parser.CloseStream();	
 	return true;
 }
-TCharMgr::TCharMgr()
+GCharMgr::GCharMgr()
 {
 }
-TCharMgr::~TCharMgr()
+GCharMgr::~GCharMgr()
 {
 }
 

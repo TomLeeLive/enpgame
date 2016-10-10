@@ -12,10 +12,10 @@ public:
 	~GCharacterLoader() {};
 };
 
-class TCharMgr  : public GTemplateMap< GCharacter >, public GSingleton< TCharMgr >
+class GCharMgr  : public GTemplateMap< GCharacter >, public GSingleton< GCharMgr >
 {
 private:
-	friend class GSingleton<TCharMgr>;
+	friend class GSingleton<GCharMgr>;
 public:
 	GCharacterLoader				m_Parser;	
 public:	
@@ -28,7 +28,7 @@ public:
 						ID3D11DeviceContext*    pImmediateContext,
 						const TCHAR* strFileName);
 private:
-	TCharMgr();
-	virtual~TCharMgr();
+	GCharMgr();
+	virtual~GCharMgr();
 };
-#define I_CharMgr TCharMgr::GetInstance()
+#define I_CharMgr GCharMgr::GetInstance()
