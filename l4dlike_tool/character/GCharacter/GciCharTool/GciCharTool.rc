@@ -73,7 +73,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GciCharTool.ico"
+
 IDR_AIToolTYPE          ICON                    "res\\GciCharToolDoc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +83,9 @@ IDR_AIToolTYPE          ICON                    "res\\GciCharToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -171,18 +175,14 @@ BEGIN
             END
         END
     END
+    POPUP "케릭터(&C)"
+    BEGIN
+        MENUITEM "로드(&L)\tF11",                 ID_CHARLOAD
+        MENUITEM "GCI저장(&S)\tF12",              ID_CHARSAVE
+    END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "GciCharTool 정보(&A)...",            ID_APP_ABOUT
-    END
-    POPUP "지형"
-    BEGIN
-        MENUITEM "생성(&N)\tCtrl+1",              ID_CREATEMAP
-        MENUITEM "저장",                          ID_MAPSAVE
-    END
-    POPUP "케릭터"
-    BEGIN
-        MENUITEM "로드",                          ID_32775
+        MENUITEM "GciCharTool 정보(&A)...",       ID_APP_ABOUT
     END
 END
 
@@ -198,7 +198,7 @@ END
 
 IDR_HELP_MENU MENU
 BEGIN
-    MENUITEM "GciCharTool 정보(&A)...",            ID_APP_ABOUT
+    MENUITEM "GciCharTool 정보(&A)...",       ID_APP_ABOUT
 END
 
 IDR_THEME_MENU MENU
@@ -218,20 +218,22 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
-    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
-    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
-    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_F12,         ID_CHARSAVE,            VIRTKEY, NOINVERT
+    VK_F11,         ID_CHARLOAD,            VIRTKEY, NOINVERT
 END
 
 

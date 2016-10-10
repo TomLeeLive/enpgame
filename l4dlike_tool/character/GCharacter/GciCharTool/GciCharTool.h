@@ -51,6 +51,8 @@ public:
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnIdle(LONG lCount);
+	afx_msg void OnCharload();
+	afx_msg void OnCharsave();
 };
 
 extern CGciCharToolApp theApp;
