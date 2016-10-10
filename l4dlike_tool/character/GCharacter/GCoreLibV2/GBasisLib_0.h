@@ -16,6 +16,7 @@ public:
 	bool					m_bWireFrameRender;
 	bool					m_bDebugPrint;
 	GDirectionLineShape		m_AxisLine;
+	T_STR					m_LineShaderFile;
 public:
 	virtual bool		Init();
 	virtual bool		Frame();

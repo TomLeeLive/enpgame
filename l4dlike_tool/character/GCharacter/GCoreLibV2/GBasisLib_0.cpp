@@ -36,7 +36,7 @@ bool GBasisLib_0::PreInit()
 		return false;
 	}
 
-	if (FAILED(m_AxisLine.Create(GetDevice(), L"data/shader/line.hlsl")))
+	if (FAILED(m_AxisLine.Create(GetDevice(), m_LineShaderFile.c_str())))
 	{
 		MessageBox(0, _T("m_pDirectionLIne ½ÇÆÐ"), _T("Fatal error"), MB_OK);
 		return 0;
@@ -309,6 +309,7 @@ GBasisLib_0::GBasisLib_0(void)
 	m_iSamplerMode = 0;
 	m_bWireFrameRender = false;
 	m_bDebugPrint = true;
+	m_LineShaderFile = L"data/shader/line.hlsl";
 }
 
 GBasisLib_0::~GBasisLib_0(void)
