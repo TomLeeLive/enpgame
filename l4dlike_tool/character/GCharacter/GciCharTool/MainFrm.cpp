@@ -66,6 +66,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
 
+	//추가함_S
+	//추가된 메뉴가 축소되서 보이지 않도록& Ctrl+1등 단축키를 리소스 편집(액설레이터)에 추가해도 동작하지 않을때의 해결.
+	m_wndMenuBar.SetRecentlyUsedMenus(FALSE);
+	//추가함_E
+
 	// 메뉴 모음을 활성화해도 포커스가 이동하지 않게 합니다.
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
 

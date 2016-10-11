@@ -73,9 +73,7 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GciCharTool.ico"
-
 IDR_AIToolTYPE          ICON                    "res\\GciCharToolDoc.ico"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -83,9 +81,7 @@ IDR_AIToolTYPE          ICON                    "res\\GciCharToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
-
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -177,8 +173,8 @@ BEGIN
     END
     POPUP "케릭터(&C)"
     BEGIN
-        MENUITEM "로드(&L)\tF11",                 ID_CHARLOAD
-        MENUITEM "GCI저장(&S)\tF12",              ID_CHARSAVE
+        MENUITEM "GCI 로드(&L)\tF11",             ID_CHARLOAD
+        MENUITEM "GCI 저장(&S)\tF12",             ID_CHARSAVE
     END
     POPUP "도움말(&H)"
     BEGIN
