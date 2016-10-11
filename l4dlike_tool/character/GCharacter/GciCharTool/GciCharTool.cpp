@@ -25,6 +25,8 @@ BEGIN_MESSAGE_MAP(CGciCharToolApp, CWinAppEx)
 	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 	// 표준 인쇄 설정 명령입니다.
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
+	ON_COMMAND(ID_CHARLOAD, &CGciCharToolApp::OnCharload)
+	ON_COMMAND(ID_CHARSAVE, &CGciCharToolApp::OnCharsave)
 END_MESSAGE_MAP()
 
 
@@ -151,7 +153,7 @@ BOOL CGciCharToolApp::InitInstance()
 	GBasisLib_0::TInit();
 
 
-	I_CharMgr.Init();
+	
 
 	Load();
 
@@ -307,6 +309,8 @@ bool CGciCharToolApp::Frame() {
 
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
+		I_CharMgr.Release();
+
 		Load();
 	}
 	return true;
@@ -382,6 +386,8 @@ bool CGciCharToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 }
 bool CGciCharToolApp::Load()
 {
+	I_CharMgr.Init();
+
 	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
 	{
 		return false;
@@ -449,4 +455,20 @@ bool CGciCharToolApp::Load()
 	pChar3->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjF);*/
 	return true;
+}
+
+void CGciCharToolApp::OnCharload()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	I_CharMgr.Release();
+
+	Load();
+}
+
+
+
+
+void CGciCharToolApp::OnCharsave()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
