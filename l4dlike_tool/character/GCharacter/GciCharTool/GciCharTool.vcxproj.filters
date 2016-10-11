@@ -57,6 +57,18 @@
     <ClInclude Include="GciAnimation\GHeroObj.h">
       <Filter>GciAnimation</Filter>
     </ClInclude>
+    <ClInclude Include="GModelForm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GModelControl.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GAniCtrlControl.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GAniCtrlForm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -88,6 +100,18 @@
     </ClCompile>
     <ClCompile Include="GciAnimation\GHeroObj.cpp">
       <Filter>GciAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="GModelForm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GModelControl.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GAniCtrlControl.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GAniCtrlForm.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

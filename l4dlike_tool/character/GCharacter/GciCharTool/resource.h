@@ -30,7 +30,9 @@
 #define ID_VIEW_APPLOOK_WINDOWS_7       219
 #define IDS_EDIT_MENU                   306
 #define IDD_CREATEMAP                   310
+#define IDD_GMODELFORM                  311
 #define IDD_CHARACTERVIEW               312
+#define IDD_GANICTRLFORM                313
 #define IDC_TILEWIDTHSIZE               1000
 #define IDC_IDC_TILEHEIGHTSIZE          1001
 #define IDC_COMBO1                      1002
@@ -60,9 +62,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        314
+#define _APS_NEXT_RESOURCE_VALUE        315
 #define _APS_NEXT_COMMAND_VALUE         32782
 #define _APS_NEXT_CONTROL_VALUE         1014
-#define _APS_NEXT_SYMED_VALUE           310
+#define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif

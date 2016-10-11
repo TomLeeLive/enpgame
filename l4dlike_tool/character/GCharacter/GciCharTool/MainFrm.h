@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include "GModelControl.h"
+#include "GAniCtrlControl.h"
+
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -16,6 +19,12 @@ public:
 
 // 작업입니다.
 public:
+
+	//추가함_S
+	CTabbedPane m_wndTabPane;
+	GModelControl m_wndModelCtrl;
+	GAniCtrlControl m_wndAniCtrlCtrl;
+	//추가함_E
 
 // 재정의입니다.
 public:

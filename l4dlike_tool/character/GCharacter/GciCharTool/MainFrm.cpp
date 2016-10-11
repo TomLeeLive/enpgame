@@ -108,6 +108,46 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
 
+	// 추가함_S
+	if (TRUE == m_wndModelCtrl.CreateEx(NULL, _T("Model"),
+		this, CRect(0, 0, 300, 300),
+		TRUE, 1234,
+		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
+		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI)) {
+		m_wndModelCtrl.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndModelCtrl);
+	}
+	// 추가함_E
+
+	// 추가함_S
+	if (TRUE == m_wndAniCtrlCtrl.CreateEx(NULL, _T("AniCtrl"),
+		this, CRect(0, 0, 300, 300),
+		TRUE, 5678,
+		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
+		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI)) {
+		m_wndAniCtrlCtrl.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndAniCtrlCtrl);
+	}
+	// 추가함_E
+
+	// 추가함_S
+	//m_wndTabPane = new CTabbedPane(TRUE); 
+	//  CTabbedPane* m_wndTabPane; 포인터로 사용할경우 
+	//  생성자에 TRUE 하면 가비지 컬렉터 처럼 메모리 관리가 됨. 
+
+	if (TRUE == m_wndTabPane.Create(NULL, this,
+		CRect(0, 0, 300, 300),
+		TRUE, (UINT)-1,
+		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
+		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI))
+	{
+		m_wndTabPane.AddTab(&m_wndAniCtrlCtrl);
+		m_wndTabPane.AddTab(&m_wndModelCtrl);
+		m_wndTabPane.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndTabPane);
+	}
+
+	// 추가함_E
 
 	// Visual Studio 2005 스타일 도킹 창 동작을 활성화합니다.
 	CDockingManager::SetDockingMode(DT_SMART);
