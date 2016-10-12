@@ -21,7 +21,7 @@ public:
 	GShape() {};
 	virtual ~GShape(void) {};
 };
-class TLineShape : public GShape
+class GLineShape : public GShape
 {
 public:
 	vector<PC_VERTEX>	m_LineVertexList;
@@ -33,8 +33,8 @@ public:
 	HRESULT				CreateResource();
 	bool				Draw(ID3D11DeviceContext* pContext, D3DXVECTOR3 vStart, D3DXVECTOR3 vEnd, D3DXVECTOR4 dwColor);
 public:
-	TLineShape(void);
-	virtual ~TLineShape(void);
+	GLineShape(void);
+	virtual ~GLineShape(void);
 };
 
 class GDirectionLineShape : public GShape

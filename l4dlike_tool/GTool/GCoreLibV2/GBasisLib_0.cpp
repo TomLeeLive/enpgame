@@ -51,7 +51,7 @@ bool GBasisLib_0::PostInit()
 {
 	return true;
 }
-bool GBasisLib_0::TInit()
+bool GBasisLib_0::GInit()
 {
 	if( !PreInit() ) return false;
 	if( !Init() ) return false;
@@ -125,7 +125,7 @@ bool GBasisLib_0::Release()
 {
 	return true;
 }
-bool GBasisLib_0::TRelease()
+bool GBasisLib_0::GRelease()
 {
 	CleanupDevice();
 	if( !m_Timer.Release() ) return false;		
@@ -134,14 +134,14 @@ bool GBasisLib_0::TRelease()
 	if( !I_Input.Release() ) return false;	
 	return Release();
 }
-bool GBasisLib_0::TFrame()
+bool GBasisLib_0::GFrame()
 {
 	PreFrame();
 	Frame();
 	PostFrame();
 	return true;
 }
-bool GBasisLib_0::TRender()
+bool GBasisLib_0::GRender()
 {
 	I_Input.Render();
 	m_Timer.Render();
@@ -242,17 +242,17 @@ bool GBasisLib_0::PostRender()
 }
 bool GBasisLib_0::ToolRun()
 {
-	if( !TInit() ) return false;
+	if( !GInit() ) return false;
 	
-	//TFrame();
-    //TRender();        
+	//GFrame();
+    //GRender();        
 	
 	return true;
 }
 bool GBasisLib_0::Run()
 {
 	I_Input.m_hWnd = m_hWnd;
-	if( !TInit() ) return false;
+	if( !GInit() ) return false;
 	// Main message loop
     MSG msg = {0};
     while( WM_QUIT != msg.message )
@@ -264,11 +264,11 @@ bool GBasisLib_0::Run()
         }
         else
         {
-			TFrame();
-            TRender();
+			GFrame();
+            GRender();
         }
     }
-	if( !TRelease() ) return false;
+	if( !GRelease() ) return false;
 	return true;
 }
 HRESULT GBasisLib_0::CreateDxResource()

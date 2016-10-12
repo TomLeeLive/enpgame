@@ -250,7 +250,7 @@ BOOL CMapToolApp::InitInstance()
 	GWindow::m_iWindowWidth = rcClient.Width();
 	GWindow::m_iWindowHeight = rcClient.Height();
 
-	GBasisLib_0::TInit();
+	GBasisLib_0::GInit();
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);
@@ -262,7 +262,7 @@ int CMapToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
-	TRelease();
+	GRelease();
 
 	return CWinAppEx::ExitInstance();
 }
@@ -313,8 +313,8 @@ BOOL CMapToolApp::OnIdle(LONG lCount)
 {
 	__super::OnIdle(lCount);
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	TFrame();
-	TRender();
+	GFrame();
+	GRender();
 
 	return TRUE;
 }

@@ -150,7 +150,7 @@ BOOL CGciCharToolApp::InitInstance()
 	GWindow::m_iWindowWidth = rcClient.Width();
 	GWindow::m_iWindowHeight = rcClient.Height();
 	m_LineShaderFile = L"data/shader/line.hlsl";
-	GBasisLib_0::TInit();
+	GBasisLib_0::GInit();
 
 
 	
@@ -182,11 +182,11 @@ int CGciCharToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	I_CharMgr.Release();
-	return true;
+	//return true;
 
 
 	AfxOleTerm(FALSE);
-	TRelease();
+	GRelease();
 	return CWinAppEx::ExitInstance();
 }
 
@@ -261,8 +261,8 @@ BOOL CGciCharToolApp::OnIdle(LONG lCount)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	__super::OnIdle(lCount);
-	TFrame();
-	TRender();
+	GFrame();
+	GRender();
 	return TRUE;
 }
 

@@ -36,12 +36,12 @@ public:
 	virtual bool		DrawDebugRect(RECT* rcDest = NULL, TCHAR* pString = 0, D3DXCOLOR color = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f) );
 	virtual	bool		PostRender();
 
-	bool				TInit();
-	bool				TFrame();
-	bool				TRender();	
+	bool				GInit();
+	bool				GFrame();
+	bool				GRender();	
 	bool				Run();		 
 	bool				ToolRun();
-	bool				TRelease();
+	bool				GRelease();
 
 				HRESULT		CreateDxResource();
 				HRESULT		DeleteDxResource();

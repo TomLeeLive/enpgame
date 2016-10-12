@@ -79,9 +79,9 @@ void GShape::CreateAABBBox(D3DXVECTOR3 max, D3DXVECTOR3 min)
 	m_Box.vAxis[2] = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                            TLineShape
+//                            GLineShape
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT TLineShape::SetInputLayout()
+HRESULT GLineShape::SetInputLayout()
 {
 	HRESULT hr = S_OK;
 
@@ -95,7 +95,7 @@ HRESULT TLineShape::SetInputLayout()
 		m_dxobj.g_pVSBlob.Get()->GetBufferPointer(), layout, numElements));
 	return hr;
 }
-bool TLineShape::CreateVertexData()
+bool GLineShape::CreateVertexData()
 {
 	m_LineVertexList.resize(2);
 	m_LineVertexList[0].p = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -107,7 +107,7 @@ bool TLineShape::CreateVertexData()
 	m_dxobj.m_iNumVertex = m_LineVertexList.size();
 	return true;
 }
-bool TLineShape::CreateIndexData()
+bool GLineShape::CreateIndexData()
 {
 	m_IndexList.resize(2);
 	m_IndexList[0] = 0;
@@ -117,7 +117,7 @@ bool TLineShape::CreateIndexData()
 	m_dxobj.m_iIndexSize = sizeof(DWORD);
 	return true;
 }
-HRESULT TLineShape::CreateVertexBuffer()
+HRESULT GLineShape::CreateVertexBuffer()
 {
 	if (m_dxobj.m_iNumVertex <= 0) return S_OK;
 	m_dxobj.g_pVertexBuffer.Attach(DX::CreateVertexBuffer(m_pd3dDevice,
@@ -126,7 +126,7 @@ HRESULT TLineShape::CreateVertexBuffer()
 		m_dxobj.m_iVertexSize));
 	return S_OK;
 }
-bool TLineShape::Draw(ID3D11DeviceContext* pContext, D3DXVECTOR3 vStart, D3DXVECTOR3 vEnd, D3DXVECTOR4 vColor)
+bool GLineShape::Draw(ID3D11DeviceContext* pContext, D3DXVECTOR3 vStart, D3DXVECTOR3 vEnd, D3DXVECTOR4 vColor)
 {
 	PC_VERTEX vertices[2];
 	vertices[0].p = vStart;
@@ -140,21 +140,21 @@ bool TLineShape::Draw(ID3D11DeviceContext* pContext, D3DXVECTOR3 vStart, D3DXVEC
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT TLineShape::CreateResource()
+HRESULT GLineShape::CreateResource()
 {
 	m_dxobj.m_iPrimitiveType = D3D10_PRIMITIVE_TOPOLOGY_LINELIST;
 	return S_OK;
 }
-TLineShape::TLineShape(void)
+GLineShape::GLineShape(void)
 {
 }
 
-TLineShape::~TLineShape(void)
+GLineShape::~GLineShape(void)
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                            TLineShape
+//                            GLineShape
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT GDirectionLineShape::SetInputLayout()
 {
