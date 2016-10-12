@@ -43,3 +43,6 @@ conflit 해결방법은 다음 이시간에.................
 
 //참고 3
 history
+
+git pull
+:wq!
