@@ -21,9 +21,9 @@
 class CMapToolApp : public CWinAppEx, public GBasisLib_0
 {
 public:
-	//GMap			m_CustomMap;
-	//GCamera*		m_pMainCamera;
-	//TLineShape				m_LineDraw;
+	GMap			m_CustomMap;
+	GCamera*		m_pMainCamera;
+	TLineShape				m_LineDraw;
 public:
 	bool		Init();
 	bool		Frame();
