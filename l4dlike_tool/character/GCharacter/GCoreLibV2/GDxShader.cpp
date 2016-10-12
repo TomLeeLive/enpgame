@@ -399,7 +399,7 @@ void GDxShader::ClearShaderResources(ID3D11DeviceContext*  pImmediateContext)
 GDxShader::GDxShader(void)
 {
 	m_pBuffer = NULL;
-	m_szPath = _T("../../data/shader");
+	m_szPath = _T("../../output/data/shader");
 	m_pVertexShader = NULL;//¡§¡°Ω¶¿Ã¥ı	
 	m_pHullShader = NULL;//«Ê Ω¶¿Ã¥ı
 	m_pDomainShader = NULL;//µµ∏ﬁ¿ŒΩ¶¿Ã¥ı
