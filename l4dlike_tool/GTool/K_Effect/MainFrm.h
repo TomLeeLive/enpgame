@@ -10,7 +10,6 @@ class CMainFrame : public CFrameWnd
 protected: // serialization에서만 만들어집니다.
 	CMainFrame();
 	DECLARE_DYNCREATE(CMainFrame)
-
 // 특성입니다.
 public:
 
