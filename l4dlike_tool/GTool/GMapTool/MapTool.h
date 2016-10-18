@@ -9,8 +9,10 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GBasisLib_0.h"
+#include "map/GHeightMap.h"
+#include "GMapTileRender.h"
+#include "GMiniMap.h"
 #include "GCamera.h"
-#include "map/GMap.h"
 
 
 
@@ -21,20 +23,41 @@
 class CMapToolApp : public CWinAppEx, public GBasisLib_0
 {
 public:
-	GMap			m_CustomMap;
-	GCamera*		m_pMainCamera;
-	GLineShape				m_LineDraw;
+	shared_ptr<GCamera >	m_pMainCamera;
+	//--------------------------------------------------------------------------------------
+	// 쿼드트리
+	//--------------------------------------------------------------------------------------
+	GMapTileRender	m_QuadTree;
+	//--------------------------------------------------------------------------------------
+	// 지형
+	//--------------------------------------------------------------------------------------
+	GHeightMap		m_Map;
+	//--------------------------------------------------------------------------------------
+	// 미니맵
+	//--------------------------------------------------------------------------------------
+	GMiniMap		m_MiniMap;
+	int							m_iDrawDepth;
+	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
+	ComPtr<ID3D11ShaderResourceView> m_pTexture[4];
 public:
-	bool		Init();
-	bool		Frame();
-	bool		Render();
-	bool		Release();
-	bool		DrawDebug();
+	bool			Init();
+	bool			Frame();
+	bool			Render();
+	bool			Release();
+
 	//--------------------------------------------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//--------------------------------------------------------------------------------------
-	HRESULT		CreateResource();
-	HRESULT		DeleteResource();
+	HRESULT			CreateResource();
+	HRESULT			DeleteResource();
+	bool			DrawDebug();
+	//--------------------------------------------------------------------------------------
+	// 디버깅 용도
+	//--------------------------------------------------------------------------------------
+	GShape*			m_pLine;
+	bool			m_bDebugRender;
+	bool			DrawQuadLine(GNode* pNode);
+	void			DrawMiniMap();
 public:
 	CMapToolApp();
 
