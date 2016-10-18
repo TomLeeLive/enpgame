@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 #include "K_Effect_.h"
 #include "MainFrm.h"
+#include <GBasisLib_0.h>
 
 #include "K_Effect_Doc.h"
 #include "K_Effect_View.h"
@@ -124,17 +125,34 @@ BOOL CK_Effect_App::InitInstance()
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 	return TRUE;
+
+	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
+	CK_Effect_View* pView = (CK_Effect_View*)pFrame->GetActiveView();
+	GWindow::m_hInstance = AfxGetInstanceHandle();
+	GWindow::m_hWnd = pView->m_hWnd;
+	g_hInstance = GWindow::m_hInstance;
+	g_hWnd = GWindow::m_hWnd;
+	I_Input.m_hWnd = pFrame->m_hWnd;
+
+	CRect rcClient;
+	pView->GetClientRect(rcClient);
+	GWindow::m_iWindowWidth = rcClient.Width();
+	GWindow::m_iWindowHeight = rcClient.Height();
+	m_LineShaderFile = L"data/shader/line.hlsl";
+	GBasisLib_0::GInit();
 }
 
 int CK_Effect_App::ExitInstance()
 {
+	//CK_Effect_View::CView::ONsize();
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
-
+	GRelease();
 	return CWinApp::ExitInstance();
 }
 
 // CK_Effect_App 메시지 처리기
+
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
@@ -182,8 +200,14 @@ void CK_Effect_App::OnAppAbout()
 // CK_Effect_App 메시지 처리기
 
 
-
-
+BOOL CK_Effect_App::OnIdle(LONG lCount)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	__super::OnIdle(lCount);
+	GFrame();
+	GRender();
+	return TRUE;
+}
 
 void CAboutDlg::OnBnClickedButton1()
 {
