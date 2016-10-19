@@ -228,7 +228,7 @@ bool GMap::CreateMap(TMapDesc& MapDesc)
 	m_iNumCols = MapDesc.iNumRows;
 	m_iNumSellRows = m_iNumRows - 1;
 	m_iNumSellCols = m_iNumCols - 1;
-	m_iNumVertices = m_iNumRows*m_iNumCols;
+	m_iNumVertices = m_iNumRows * m_iNumCols;
 	m_iNumFace = m_iNumSellRows*m_iNumSellCols * 2;
 	m_fSellDistance = MapDesc.fSellDistance;
 	return true;

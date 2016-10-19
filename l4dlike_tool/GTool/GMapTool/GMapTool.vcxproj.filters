@@ -182,5 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Customize.hlsl" />
+    <FxCompile Include="QuadTree.hlsl" />
   </ItemGroup>
 </Project>
