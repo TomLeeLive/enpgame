@@ -22,10 +22,12 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	int m_iCellWidth;
-	int m_iCellHeight;
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	CComboBox m_CBCellCount;
-
+	int m_iTileWidth;
+	int m_iTileHeight;
+	CComboBox m_cbCellCount;
+	float m_fCellDistance;
+	afx_msg void OnBnClickedButton1();
+	CString m_strCharName;
 };
