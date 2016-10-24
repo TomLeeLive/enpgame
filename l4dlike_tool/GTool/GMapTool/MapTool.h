@@ -9,11 +9,13 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GBasisLib_0.h"
-//#include "map/GHeightMap.h"
-//#include "GMapTileRender.h"
-//#include "GMiniMap.h"
-#include "map/GMap.h"
 #include "GCamera.h"
+
+#include "GMiniMap.h"
+#include "map/GNoiseMap.h"
+#include "map/GQuadTreeIndex.h"
+#include "map/GMapObject.h"
+
 
 
 
@@ -24,21 +26,46 @@
 class CMapToolApp : public CWinAppEx, public GBasisLib_0
 {
 public:
-	
-	GMap			m_CustomMap;
-	GCamera*		m_pMainCamera;
-	GLineShape				m_LineDraw;
+	shared_ptr<GCamera >	m_pMainCamera;
+	//--------------------------------------------------------------------------------------
+	// 오브젝트
+	//--------------------------------------------------------------------------------------
+	//GMapObject*			m_pMapObj;
+	//GBoxShape*			m_pBoxs;
+	//--------------------------------------------------------------------------------------
+	// 쿼드트리
+	//--------------------------------------------------------------------------------------
+	GQuadTreeIndex	m_QuadTree;
+	//--------------------------------------------------------------------------------------
+	// 노이즈 맵
+	//--------------------------------------------------------------------------------------
+	GNoiseMap		m_NoiseMap;
+	//--------------------------------------------------------------------------------------
+	// 미니맵
+	//--------------------------------------------------------------------------------------
+	GMiniMap		m_MiniMap;
+	//--------------------------------------------------------------------------------------
+	// 디버깅 용도
+	//--------------------------------------------------------------------------------------
+	GLineShape		m_DrawLine;
+	bool			m_bDebugRender;
+	int				m_iDrawDepth;
+	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
 public:
-	bool		Init();
-	bool		Frame();
-	bool		Render();
-	bool		Release();
-	bool		DrawDebug();
+	bool			Init();
+	bool			Frame();
+	bool			Render();
+	bool			Release();
+	void			DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj);
 	//--------------------------------------------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//--------------------------------------------------------------------------------------
-	HRESULT		CreateResource();
-	HRESULT		DeleteResource();
+	HRESULT			CreateResource();
+	HRESULT			DeleteResource();
+	bool			DrawDebug();
+
+	bool			DrawQuadLine(GNode* pNode);
+	void			DrawMiniMap(); 
 public:
 	CMapToolApp();
 
