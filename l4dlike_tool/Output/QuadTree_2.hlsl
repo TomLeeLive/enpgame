@@ -18,7 +18,7 @@ struct VS_INPUT
 struct PNCT2_VS_INPUT
 {
 	float4 p		: POSITION;
-	float3 n		: NORMAL;
+	float3 n		: NORMAL
 	float4 c		: COLOR0;
 	float2 t		: TEXCOORD0;
 };
