@@ -134,7 +134,7 @@ BOOL CPracticeApp::InitInstance()
 	pView->GetClientRect(rcClient);
 	GWindow::m_iWindowWidth = rcClient.Width();
 	GWindow::m_iWindowHeight = rcClient.Height();
-	m_LineShaderFile = L"../../output/data/shader/line.hlsl";
+	m_LineShaderFile = L"data/shader/line.hlsl";
 	GBasisLib_0::GInit();
 
 
@@ -214,12 +214,12 @@ BOOL CPracticeApp::OnIdle(LONG lCount)
 
 bool CPracticeApp::Init()
 {
-	m_pPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"../../output/data/shader/Blend.hlsl", "PS_MATERIAL"));
+	m_pPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/Blend.hlsl", "PS_MATERIAL"));
 	//--------------------------------------------------------------------------------------
 	// 배경 부분
 	//--------------------------------------------------------------------------------------
 	m_pScreen = make_shared<GPlaneShape>();
-	if (m_pScreen->Create(GetDevice(), L"../../output/data/shader/plane.hlsl") == false)
+	if (m_pScreen->Create(GetDevice(), L"data/shader/plane.hlsl") == false)
 	{
 		MessageBox(0, _T("m_pPlane 실패"), _T("Fatal error"), MB_OK);
 		return 0;
