@@ -1,4 +1,5 @@
 l4dlike_tool/character/Lib/GCoreLib32.lib
+*.cso
 *.pch
 *.VC.db
 *.tlog

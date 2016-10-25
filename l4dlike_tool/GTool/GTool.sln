@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GMapTool", "GMapTool\GMapTo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "K_Effect_", "K_Effect\K_Effect_.vcxproj", "{A21FFB0E-725E-4642-A82C-DDD5BFD08B01}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ENPGame", "ENPGame\ENPGame.vcxproj", "{A925E2E1-94AC-466D-9B61-A8F955EE9C35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -115,6 +117,16 @@ Global
 		{A21FFB0E-725E-4642-A82C-DDD5BFD08B01}.Release|x64.Build.0 = Release|x64
 		{A21FFB0E-725E-4642-A82C-DDD5BFD08B01}.Release|x86.ActiveCfg = Release|Win32
 		{A21FFB0E-725E-4642-A82C-DDD5BFD08B01}.Release|x86.Build.0 = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Debug|x64.ActiveCfg = Debug|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Debug|x86.ActiveCfg = Debug|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Debug|x86.Build.0 = Debug|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Hybrid|x64.ActiveCfg = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Hybrid|x64.Build.0 = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Hybrid|x86.ActiveCfg = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Hybrid|x86.Build.0 = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Release|x64.ActiveCfg = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Release|x86.ActiveCfg = Release|Win32
+		{A925E2E1-94AC-466D-9B61-A8F955EE9C35}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
