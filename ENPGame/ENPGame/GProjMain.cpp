@@ -362,8 +362,13 @@ bool GProjMain::Render()
 	m_pImmediateContext->PSSetShader(m_pPS.Get(), NULL, 0);
 	m_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite->m_dxobj.g_pConstantBuffer.GetAddressOf());
 	m_pScreen->PostRender(m_pImmediateContext);
-#endif
 
+
+
+
+	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthDisable);
+	ApplyBS(m_pImmediateContext, GDxState::g_pBSOneZero);
+#endif
 	return true;
 }
 bool GProjMain::Release()
@@ -522,6 +527,9 @@ HRESULT GProjMain::DeleteResource()
 }
 GProjMain::GProjMain(void)
 {
+#ifdef G_MACRO_EFFECT_ADD
+	m_pSprite = nullptr;
+#endif
 }
 
 GProjMain::~GProjMain(void)
