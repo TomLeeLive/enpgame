@@ -1,5 +1,4 @@
 l4dlike_tool/character/Lib/GCoreLib32.lib
-*.lib
 *.cso
 *.pch
 *.VC.db
@@ -21,7 +20,6 @@ l4dlike_tool/character/Lib/GCoreLib32.lib
 
 [Dd]ebug/
 [Rr]elease/
-x64/
 build/
 [Bb]in/
 [Oo]bj/
