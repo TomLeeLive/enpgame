@@ -3,9 +3,9 @@
 #include "GHeroObj.h"
 #include "GCamera.h"
 
-//#define G_MACRO_MAP_ADD		1
+#define G_MACRO_MAP_ADD		1
 #define G_MACRO_EFFECT_ADD   1
-//#define G_MACRO_CHAR_ADD     1
+#define G_MACRO_CHAR_ADD     1
 
 #ifdef G_MACRO_MAP_ADD
 #include "GMiniMap.h"

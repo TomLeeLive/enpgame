@@ -354,10 +354,9 @@ bool GProjMain::Render()
 	//	{
 	ApplyRS(GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(GetContext(), GDxState::g_pDSSDepthEnable);
-	if (check == true)
-	{
+
 		m_pSprite->Render(m_pImmediateContext);
-	}
+	
 	//	m_RT.Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
 	//	m_RT.End(m_pImmediateContext);
 	//	}
