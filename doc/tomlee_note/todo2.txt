@@ -1,0 +1,19 @@
+mdl -> smd -> MAX2012 smd importer로 불러와서 MAX로 저장 -> MAX2016에서 작성한 Exporter로 출력
+
+1.mdl -> smd 로 export 밀크쉐이프3D로 처리.
+
+
+뷰어
+애니메이션재생
+BB
+노말표시
+노말맵핑
+
+부착물
+마우스피킹
+드래그&드롭
+메쉬색바꾸기
+
+
+shepard 정화통 깨지는 부분 디버깅.
+
