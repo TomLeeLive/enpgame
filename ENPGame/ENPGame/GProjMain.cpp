@@ -149,6 +149,34 @@ bool GProjMain::Init()
 
 	Load();
 
+#ifdef G_MACRO_EFFECT_ADD
+	m_pPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/Blend.hlsl", "PS_MATERIAL"));
+	//--------------------------------------------------------------------------------------
+	// 배경 부분
+	//--------------------------------------------------------------------------------------
+	m_pScreen = make_shared<GPlaneShape>();
+	if (m_pScreen->Create(GetDevice(), L"data/shader/plane.hlsl") == false)
+	{
+		MessageBox(0, _T("m_pPlane 실패"), _T("Fatal error"), MB_OK);
+		return 0;
+	}
+	SAFE_NEW(m_pSprite, GSprite);
+	//--------------------------------------------------------------------------------------
+	// 월드  행렬
+	//--------------------------------------------------------------------------------------
+	D3DXMATRIX matRotation, matScale;
+	D3DXMatrixScaling(&matScale, 5.0f, 5.0f, 5.0f);
+	D3DXMatrixRotationX(&matRotation, D3DX_PI*0.5f);
+	D3DXMatrixMultiply(&m_mPlanWorld, &matScale, &matRotation);
+	D3DXMatrixIdentity(&m_matPlaneWorld);
+
+
+	//play 버튼시 init() 부분
+	m_pSprite->Create(GetDevice(), L"data/shader/plane.hlsl", L"data/effect/ds1.dds");
+	// 애니메이션 관련, 가로4x4
+	m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
+#endif
+
 #ifdef G_MACRO_MAP_ADD
 
 	//--------------------------------------------------------------------------------------
@@ -297,6 +325,45 @@ bool GProjMain::Render()
 		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
+
+
+
+
+#ifdef G_MACRO_EFFECT_ADD
+	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
+	float fValue = cosf(m_Timer.GetElapsedTime())*0.5f + 0.5f;
+	FLOAT fFactor[4] = { 0 , };
+	m_vMaterial.x = 1.0f;
+	m_vMaterial.y = 1.0f;
+	m_vMaterial.z = 1.0f;
+	m_vMaterial.w = fValue;
+	m_pSprite->m_cbData.Color = m_vMaterial;
+	ApplyBS(m_pImmediateContext, GDxState::g_pBSAlphaOne, fFactor, 0xffffffff);
+
+	//if (m_RT.Begin(m_pImmediateContext, vColor))
+	//	{
+	ApplyRS(GetContext(), GDxState::g_pRSBackCullSolid);
+	ApplyDSS(GetContext(), GDxState::g_pDSSDepthEnable);
+	if (check == true)
+	{
+		m_pSprite->Render(m_pImmediateContext);
+	}
+	//	m_RT.Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+	//	m_RT.End(m_pImmediateContext);
+	//	}
+
+	ApplyDSS(GetContext(), GDxState::g_pDSSDepthDisable);
+	D3DXMATRIX matIdentity;
+	D3DXMatrixIdentity(&matIdentity);
+	m_pScreen->SetMatrix(&matIdentity, &matIdentity, &matIdentity);
+	m_pScreen->PreRender(m_pImmediateContext);
+	m_pImmediateContext->OMSetBlendState(GDxState::g_pBSAlphaOne, 0, -1);
+	//	m_pImmediateContext->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
+	m_pImmediateContext->PSSetShader(m_pPS.Get(), NULL, 0);
+	m_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite->m_dxobj.g_pConstantBuffer.GetAddressOf());
+	m_pScreen->PostRender(m_pImmediateContext);
+#endif
+
 	return true;
 }
 bool GProjMain::Release()
@@ -316,6 +383,22 @@ bool GProjMain::Frame()
 	//m_pMainCamera->Update(g_fSecPerFrame);
 	m_pMainCamera->Frame();
 
+#ifdef G_MACRO_EFFECT_ADD
+	//--------------------------------------------------------------------------------------
+	// 빌보드 행렬
+	//-----------------------------------------------------------------------------------
+	FLOAT fDeterminant;
+	D3DXMATRIX matBillboard;
+	D3DXMatrixInverse(&matBillboard, &fDeterminant, m_pMainCamera->GetViewMatrix());
+	matBillboard._41 = 0.0f;
+	matBillboard._42 = 0.0f;
+	matBillboard._43 = 0.0f;
+	matBillboard._44 = 1.0f;
+
+
+	m_pSprite->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSprite->Frame(m_pImmediateContext, m_Timer.GetElapsedTime(), g_fSecPerFrame);
+#endif
 #ifdef G_MACRO_MAP_ADD
 	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
 	{
