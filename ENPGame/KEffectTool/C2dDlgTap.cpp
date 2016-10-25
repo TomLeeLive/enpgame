@@ -84,7 +84,7 @@ void C2dDlgTap::OnBnClickedOnbnclick2dplay()
 	PlayList->GetText(PlayListIndex, m_strPath2);
 
 	//play 버튼시 init() 부분
-	p_CParctice->m_pSprite->Create(p_CParctice->GetDevice(), L"../../output/data/shader/plane.hlsl", m_strPath2);
+	p_CParctice->m_pSprite->Create(p_CParctice->GetDevice(), L"data/shader/plane.hlsl", m_strPath2);
 	// 애니메이션 관련, 가로4x4
 	p_CParctice->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
 
