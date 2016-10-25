@@ -166,7 +166,7 @@ HRESULT GDevice::CreateDeviceAndSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, 
 
     UINT createDeviceFlags =  D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #ifdef _DEBUG
-   // createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
     D3D_DRIVER_TYPE driverTypes[] =
