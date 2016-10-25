@@ -277,35 +277,35 @@ bool CGciCharToolApp::Frame() {
 	m_matWorld._42 = 0.0f;
 	m_matWorld._43 = 0.0f;
 
-	//for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	//{
-	//	if (I_Input.KeyCheck(DIK_ADD))
-	//	{
-	//		m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
-	//	}
-	//	if (I_Input.KeyCheck(DIK_SUBTRACT))
-	//	{
-	//		m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
-	//		if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
-	//	}
-	//	m_HeroObj[iChar]->Frame();
-	//}
-	//if (I_Input.KeyCheck(DIK_F3) == KEY_UP && m_HeroObj.size() > 1)
-	//{
-	//	m_HeroObj[1]->SetActionFrame(120, 205);//jump		
-	//}
-	//if (I_Input.KeyCheck(DIK_F4) == KEY_UP&& m_HeroObj.size() > 1)
-	//{
-	//	m_HeroObj[1]->SetActionFrame(205, 289);//attack		
-	//}
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		if (I_Input.KeyCheck(DIK_ADD))
+		{
+			m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
+		}
+		if (I_Input.KeyCheck(DIK_SUBTRACT))
+		{
+			m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
+			if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
+		}
+		m_HeroObj[iChar]->Frame();
+	}
+	if (I_Input.KeyCheck(DIK_F3) == KEY_UP && m_HeroObj.size() > 1)
+	{
+		m_HeroObj[1]->SetActionFrame(120, 205);//jump		
+	}
+	if (I_Input.KeyCheck(DIK_F4) == KEY_UP&& m_HeroObj.size() > 1)
+	{
+		m_HeroObj[1]->SetActionFrame(205, 289);//attack		
+	}
 
-	//if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
-	//{
-	//	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	//	{
-	//		m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
-	//	}
-	//}
+	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
+	{
+		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+		{
+			m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
+		}
+	}
 
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
@@ -319,12 +319,12 @@ bool CGciCharToolApp::Render() {
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
 
-	//for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	//{
-	//	//m_matWorld._41 = -50.0f + iChar * 25.0f;
-	//	m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	//	m_HeroObj[iChar]->Render(m_pImmediateContext);
-	//}
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		//m_matWorld._41 = -50.0f + iChar * 25.0f;
+		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->Render(m_pImmediateContext);
+	}
 	return true;
 }
 
