@@ -23,8 +23,8 @@ using namespace GBASIS;
 //////////////////////////////////////////////
 // WinMain ∏≈≈©∑Œ
 //////////////////////////////////////////////
-#define GBASIS_START int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow ){ Sample gSample;
-#define GBASIS_WIN(x) if( !gSample.InitWindow( hInstance, nCmdShow,  L#x ) )	{	return 0;	}	ShowCursor ( TRUE );gSample.Run();	return 1; }
+#define GBASIS_START int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow ){ GProjMain gProjMain;
+#define GBASIS_WIN(x) if( !gProjMain.InitWindow( hInstance, nCmdShow,  L#x ) )	{	return 0;	}	ShowCursor ( TRUE );gProjMain.Run();	return 1; }
 #define GBASIS_RUN(x) GBASIS_START; GBASIS_WIN(x);
 
 #endif //GBASIS_H

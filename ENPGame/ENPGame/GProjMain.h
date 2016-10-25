@@ -4,7 +4,7 @@
 #include "GCamera.h"
 
 
-class Sample : public GBasisLib_0
+class GProjMain : public GBasisLib_0
 {
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
@@ -28,6 +28,6 @@ public:
 	bool		Load();
 	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
 public:
-	Sample(void);
-	virtual ~Sample(void);
+	GProjMain(void);
+	virtual ~GProjMain(void);
 };

@@ -1,7 +1,7 @@
-#include "Sample.h"
+#include "GProjMain.h"
 #include "GObjMgr.h"
 
-bool Sample::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
+bool GProjMain::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 {
 	OPENFILENAME    ofn;
 	TCHAR           szFile[MAX_PATH] = { 0, };
@@ -57,7 +57,7 @@ bool Sample::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 	SetCurrentDirectory(lpCurBuffer);
 	return true;
 }
-bool Sample::Load()
+bool GProjMain::Load()
 {
 	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
 	{
@@ -128,7 +128,7 @@ bool Sample::Load()
 	return true;
 }
 
-bool Sample::Init()
+bool GProjMain::Init()
 {
 	
 
@@ -148,7 +148,7 @@ bool Sample::Init()
 	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);	
 	return true;
 }
-bool Sample::Render()
+bool GProjMain::Render()
 {	
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
@@ -161,13 +161,13 @@ bool Sample::Render()
 	}
 	return true;
 }
-bool Sample::Release()
+bool GProjMain::Release()
 {
 	I_CharMgr.Release();
 	return true;
 }
 
-bool Sample::Frame()
+bool GProjMain::Frame()
 {	
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
@@ -218,7 +218,7 @@ bool Sample::Frame()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::CreateResource()
+HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
 	if (m_pMainCamera)
@@ -232,20 +232,20 @@ HRESULT Sample::CreateResource()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::DeleteResource()
+HRESULT GProjMain::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (m_pImmediateContext) m_pImmediateContext->ClearState();
 	return S_OK;
 }
-Sample::Sample(void)
+GProjMain::GProjMain(void)
 {
 }
 
-Sample::~Sample(void)
+GProjMain::~GProjMain(void)
 {
 }
-int Sample::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_pMainCamera != nullptr)
 	{

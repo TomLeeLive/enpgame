@@ -104,13 +104,13 @@
     <ClCompile Include="GCharacter.cpp" />
     <ClCompile Include="GCharMgr.cpp" />
     <ClCompile Include="GHeroObj.cpp" />
-    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GCharacter.h" />
     <ClInclude Include="GCharMgr.h" />
     <ClInclude Include="GHeroObj.h" />
-    <ClInclude Include="Sample.h" />
+    <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Character.hlsl" />

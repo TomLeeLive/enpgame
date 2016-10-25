@@ -2,7 +2,7 @@
 #include "GBasisLib_0.h"
 #include "GObject.h"
 #include "GModelViewCamera.h"
-class Sample : public GBasisLib_0
+class GProjMain : public GBasisLib_0
 {
 public:
 	GObject		m_GObject;	
@@ -27,6 +27,6 @@ public:
 	bool		Load();
 	bool		LoadFileDlg( TCHAR* szExt, TCHAR* szTitle );
 public:
-	Sample(void);
-	virtual ~Sample(void);
+	GProjMain(void);
+	virtual ~GProjMain(void);
 };

@@ -101,13 +101,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Sample.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Sample.h" />
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="MatrixViewer.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GProjMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
