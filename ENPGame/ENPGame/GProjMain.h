@@ -3,8 +3,9 @@
 #include "GHeroObj.h"
 #include "GCamera.h"
 
-#define G_MACRO_MAP_ADD		1
+//#define G_MACRO_MAP_ADD		1
 #define G_MACRO_EFFECT_ADD   1
+//#define G_MACRO_CHAR_ADD     1
 
 #ifdef G_MACRO_MAP_ADD
 #include "GMiniMap.h"
@@ -67,7 +68,16 @@ public:
 #endif
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
+#ifdef G_MACRO_CHAR_ADD	
+public:
+	//--------------------------------------------------------------------------------------
+	// 파일 선택하여 로드( 단축기 : O )
+	//--------------------------------------------------------------------------------------
 	vector<shared_ptr<GHeroObj>>	m_HeroObj;
+	T_STR_VECTOR m_LoadFiles;
+	bool		Load();
+	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
+#endif
 public:	
 	bool		Init();
 	bool		Frame();
@@ -79,13 +89,7 @@ public:
 	//----------------------------------------------------
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
-public:
-	//--------------------------------------------------------------------------------------
-	// 파일 선택하여 로드( 단축기 : O )
-	//--------------------------------------------------------------------------------------
-	T_STR_VECTOR m_LoadFiles;
-	bool		Load();
-	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
+
 public:
 	GProjMain(void);
 	virtual ~GProjMain(void);

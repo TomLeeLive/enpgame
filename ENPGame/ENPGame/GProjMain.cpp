@@ -1,6 +1,7 @@
 #include "GProjMain.h"
 #include "GObjMgr.h"
 
+#ifdef G_MACRO_CHAR_ADD
 bool GProjMain::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 {
 	OPENFILENAME    ofn;
@@ -57,6 +58,10 @@ bool GProjMain::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 	SetCurrentDirectory(lpCurBuffer);
 	return true;
 }
+#endif
+
+#ifdef G_MACRO_CHAR_ADD
+
 bool GProjMain::Load()
 {
 	//if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
@@ -138,16 +143,17 @@ bool GProjMain::Load()
 	m_HeroObj.push_back(pObjF);*/
 	return true;
 }
-
+#endif 
 bool GProjMain::Init()
 {
 	
-	m_iDrawDepth = 0;
-	m_bDebugRender = false;
 
+
+#ifdef G_MACRO_CHAR_ADD
 	I_CharMgr.Init();
 
 	Load();
+#endif
 
 #ifdef G_MACRO_EFFECT_ADD
 	m_pPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/Blend.hlsl", "PS_MATERIAL"));
@@ -178,6 +184,8 @@ bool GProjMain::Init()
 #endif
 
 #ifdef G_MACRO_MAP_ADD
+	m_iDrawDepth = 0;
+	m_bDebugRender = false;
 
 	//--------------------------------------------------------------------------------------
 	// 디버그 라인 생성
@@ -319,13 +327,15 @@ bool GProjMain::Render()
 
 #endif
 
+
+#ifdef G_MACRO_CHAR_ADD 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
 		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
-
+#endif
 
 
 
@@ -368,6 +378,8 @@ bool GProjMain::Render()
 
 	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthDisable);
 	ApplyBS(m_pImmediateContext, GDxState::g_pBSOneZero);
+
+	ClearD3D11DeviceContext(m_pImmediateContext);
 #endif
 	return true;
 }
@@ -377,7 +389,9 @@ bool GProjMain::Release()
 	m_NoiseMap.Release();
 	m_QuadTree.Release();
 #endif
+#ifdef G_MACRO_CHAR_ADD 
 	I_CharMgr.Release();
+#endif
 	return true;
 }
 
@@ -388,22 +402,7 @@ bool GProjMain::Frame()
 	//m_pMainCamera->Update(g_fSecPerFrame);
 	m_pMainCamera->Frame();
 
-#ifdef G_MACRO_EFFECT_ADD
-	//--------------------------------------------------------------------------------------
-	// 빌보드 행렬
-	//-----------------------------------------------------------------------------------
-	FLOAT fDeterminant;
-	D3DXMATRIX matBillboard;
-	D3DXMatrixInverse(&matBillboard, &fDeterminant, m_pMainCamera->GetViewMatrix());
-	matBillboard._41 = 0.0f;
-	matBillboard._42 = 0.0f;
-	matBillboard._43 = 0.0f;
-	matBillboard._44 = 1.0f;
 
-
-	m_pSprite->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	m_pSprite->Frame(m_pImmediateContext, m_Timer.GetElapsedTime(), g_fSecPerFrame);
-#endif
 #ifdef G_MACRO_MAP_ADD
 	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
 	{
@@ -465,6 +464,27 @@ bool GProjMain::Frame()
 	m_matWorld._42 = 0.0f;
 	m_matWorld._43 = 0.0f;
 
+
+
+#ifdef G_MACRO_EFFECT_ADD
+	//--------------------------------------------------------------------------------------
+	// 빌보드 행렬
+	//-----------------------------------------------------------------------------------
+	FLOAT fDeterminant;
+	D3DXMATRIX matBillboard;
+	D3DXMatrixInverse(&matBillboard, &fDeterminant, m_pMainCamera->GetViewMatrix());
+	matBillboard._41 = 0.0f;
+	matBillboard._42 = 0.0f;
+	matBillboard._43 = 0.0f;
+	matBillboard._44 = 1.0f;
+
+
+	m_pSprite->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSprite->Frame(m_pImmediateContext, m_Timer.GetElapsedTime(), g_fSecPerFrame);
+#endif
+
+
+#ifdef G_MACRO_CHAR_ADD 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		if (I_Input.KeyCheck(DIK_ADD))
@@ -499,7 +519,10 @@ bool GProjMain::Frame()
 	{
 		Load();
 	}
+#endif
 	return true;
+
+
 }
 
 //--------------------------------------------------------------------------------------
