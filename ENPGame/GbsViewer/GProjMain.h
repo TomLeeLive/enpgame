@@ -4,7 +4,7 @@
 #include "GObject.h"
 
 //속성:디버깅:명령->C:\Program Files\Autodesk\3ds Max 2016\3dsmax.exe
-class Sample : public GBasisLib_0
+class GProjMain : public GBasisLib_0
 {
 public:
 	GGbsObj		m_tbsobj;
@@ -24,6 +24,6 @@ public:
 	HRESULT		DeleteResource();	
 	void		AddObject();
 public:
-	Sample(void);
-	virtual ~Sample(void);
+	GProjMain(void);
+	virtual ~GProjMain(void);
 };

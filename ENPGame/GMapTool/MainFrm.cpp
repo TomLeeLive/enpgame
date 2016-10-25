@@ -426,4 +426,27 @@ void CMainFrame::OnCreatemap()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	GCreateMapDlg dlg;
 	dlg.DoModal();
+
+	//TMapDesc MapDesc = { pow(2.0f,3.0f) + 1, pow(2.0f,3.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
+	//if (!m_NoiseMap.Load(MapDesc))
+	//{
+	//	return false;
+	//}
+	//m_QuadTree.SetMinDivideSize(10);
+	//m_QuadTree.SetMaxDepthLimit(7);
+	//m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
+	//m_QuadTree.Build(&m_NoiseMap, m_NoiseMap.m_iNumCols, m_NoiseMap.m_iNumRows); //가져오기
+
+	////frame
+	//m_NoiseMap.SetHurstIndex(false); //가져오기
+	//m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	//m_QuadTree.Frame();
+	//if (m_QuadTree.m_bDynamicUpdateIB == true)
+	//{
+	//	m_NoiseMap.UpdateIndexBuffer(m_pImmediateContext, m_QuadTree.m_IndexList, m_QuadTree.m_iNumFace);
+	//}
+	//m_NoiseMap.Frame();
+
+	////render
+
 }

@@ -1,6 +1,6 @@
-#include "Sample.h"
+#include "GProjMain.h"
 
-bool Sample::LoadFileDlg( TCHAR* szExt, TCHAR* szTitle )
+bool GProjMain::LoadFileDlg( TCHAR* szExt, TCHAR* szTitle )
 {
 	OPENFILENAME    ofn;
 	TCHAR           szFile[MAX_PATH]={0,};
@@ -56,7 +56,7 @@ bool Sample::LoadFileDlg( TCHAR* szExt, TCHAR* szTitle )
 	SetCurrentDirectory( lpCurBuffer );
 	return true;
 }
-bool Sample::Load()
+bool GProjMain::Load()
 {
 	if( !LoadFileDlg(_T("gsk"), _T("GSK Viewer")) )
 	{
@@ -69,7 +69,7 @@ bool Sample::Load()
 	}	
 	return true;
 }
-bool Sample::Init()
+bool GProjMain::Init()
 {
 	m_GObject.Init();		
 	//--------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ bool Sample::Init()
 	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);
 	return Load();
 }
-bool Sample::Render()
+bool GProjMain::Render()
 {	
 	m_GObject.SetMatrix( NULL, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_GObject.Render(m_pImmediateContext);
@@ -92,13 +92,13 @@ bool Sample::Render()
 	//m_AxisLine.Render(m_pImmediateContext);
 	return true;
 }
-bool Sample::Release()
+bool GProjMain::Release()
 {
 	m_GObject.Release();
 	return true;
 }
 
-bool Sample::Frame()
+bool GProjMain::Frame()
 {	
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
@@ -117,7 +117,7 @@ bool Sample::Frame()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::CreateResource()
+HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
 	if (m_pMainCamera)
@@ -131,20 +131,20 @@ HRESULT Sample::CreateResource()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::DeleteResource()
+HRESULT GProjMain::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (m_pImmediateContext) m_pImmediateContext->ClearState();
 	return S_OK;
 }
-Sample::Sample(void)
+GProjMain::GProjMain(void)
 {
 }
 
-Sample::~Sample(void)
+GProjMain::~GProjMain(void)
 {
 }
-int Sample::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_pMainCamera != nullptr)
 	{

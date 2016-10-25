@@ -8,6 +8,7 @@
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
 
+//추가
 #include "GCreateMapDlg.h"
 
 class CMainFrame : public CFrameWndEx
@@ -19,7 +20,7 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
-
+	GCreateMapDlg GMapDlg;
 // 작업입니다.
 public:
 

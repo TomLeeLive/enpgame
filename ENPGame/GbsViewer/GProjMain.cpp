@@ -1,6 +1,6 @@
-#include "Sample.h"
+#include "GProjMain.h"
 
-void Sample::AddObject()
+void GProjMain::AddObject()
 {
 	if (!m_tObj.Load(GetDevice(), _T("../../data/Turret_Deploy.tbs"), L"../../data/shader/box.hlsl"))
 	{
@@ -9,7 +9,7 @@ void Sample::AddObject()
 	m_tObj.m_pModelList[m_tObj.m_pModelList.size() - 1]->m_pModel->m_matWorld._41 = 
 		m_tObj.m_pModelList.size() * 30.0f;
 }
-bool Sample::Init()
+bool GProjMain::Init()
 {
 	m_tbsobj.Init();	
 	if(!m_tbsobj.Load(GetDevice(),_T("data/turret.GBS"), L"data/shader/box.hlsl")  )
@@ -38,7 +38,7 @@ bool Sample::Init()
 	
 	return true;
 }
-bool Sample::Render()
+bool GProjMain::Render()
 {	
 	m_tbsobj.SetMatrix(NULL, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_tbsobj.Render(m_pImmediateContext);
@@ -47,13 +47,13 @@ bool Sample::Render()
 	m_tObj.Render(m_pImmediateContext);
 	return true;
 }
-bool Sample::Release()
+bool GProjMain::Release()
 {
 	m_tbsobj.Release();
 	return true;
 }
 
-bool Sample::Frame()
+bool GProjMain::Frame()
 {	
 	m_pMainCamera->Update(g_fSecPerFrame);
 	m_matWorld = *m_pMainCamera->GetWorldMatrix();
@@ -68,7 +68,7 @@ bool Sample::Frame()
 	return true;
 }
 
-HRESULT Sample::CreateResource()
+HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
 	if (m_pMainCamera)
@@ -82,20 +82,20 @@ HRESULT Sample::CreateResource()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::DeleteResource()
+HRESULT GProjMain::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (m_pImmediateContext) m_pImmediateContext->ClearState();
 	return S_OK;
 }
-Sample::Sample(void)
+GProjMain::GProjMain(void)
 {
 }
 
-Sample::~Sample(void)
+GProjMain::~GProjMain(void)
 {
 }
-int Sample::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_pMainCamera != nullptr)
 	{
