@@ -70,7 +70,7 @@ bool CMapToolApp::Init()
 	//--------------------------------------------------------------------------------------
 	m_NoiseMap.Init(GetDevice(), m_pImmediateContext);
 	//TMapDesc MapDesc = { pow(2.0f,7.0f) + 1, pow(2.0f,7.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
-	TMapDesc MapDesc = { pow(2.0f,7.0f) + 1, pow(2.0f,7.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
+	TMapDesc MapDesc = { pow(2.0f,3.0f) + 1, pow(2.0f,3.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
 	if (!m_NoiseMap.Load(MapDesc))
 	{
 		return false;
@@ -78,7 +78,7 @@ bool CMapToolApp::Init()
 	m_QuadTree.SetMinDivideSize(10);
 	m_QuadTree.SetMaxDepthLimit(7);
 	m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
-	m_QuadTree.Build(&m_NoiseMap, m_NoiseMap.m_iNumCols, m_NoiseMap.m_iNumRows);
+	m_QuadTree.Build(&m_NoiseMap, m_NoiseMap.m_iNumCols, m_NoiseMap.m_iNumRows); //가져오기
 
 	//--------------------------------------------------------------------------------------
 	// 쿼드트리에 오브젝트 추가
@@ -93,17 +93,17 @@ bool CMapToolApp::Init()
 	//--------------------------------------------------------------------------------------
 	// 미니맵 영역에 랜더링할 랜더타켓용 텍스처 생성( 기본 카메라 : 탑뷰 ) 
 	//--------------------------------------------------------------------------------------
-	if (!m_MiniMap.Create(GetDevice(), L"data/shader/plane.hlsl"))
-	{
-		return false;
-	}
-	m_MiniMap.Set(GetDevice(), 0, m_SwapChainDesc.BufferDesc.Height - 300, 300, 300);
+	//if (!m_MiniMap.Create(GetDevice(), L"data/shader/plane.hlsl"))
+	//{
+	//	return false;
+	//}
+	//m_MiniMap.Set(GetDevice(), 0, m_SwapChainDesc.BufferDesc.Height - 300, 300, 300);
 
-	DWORD dwWidth = m_MiniMap.m_pMiniMapRT->m_TexDesc.Width;
-	DWORD dwHeight = m_MiniMap.m_pMiniMapRT->m_TexDesc.Height;
-	D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
-	m_MiniMap.SetViewMatrix(D3DXVECTOR3(0.0f, 3000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), vUpVector);
-	m_MiniMap.SetProjMatrix(D3DX_PI * 0.25f, (float)dwWidth / (float)dwHeight, 0.1f, 10000.0f);
+	//DWORD dwWidth = m_MiniMap.m_pMiniMapRT->m_TexDesc.Width;
+	//DWORD dwHeight = m_MiniMap.m_pMiniMapRT->m_TexDesc.Height;
+	//D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
+	//m_MiniMap.SetViewMatrix(D3DXVECTOR3(0.0f, 3000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f), vUpVector);
+	//m_MiniMap.SetProjMatrix(D3DX_PI * 0.25f, (float)dwWidth / (float)dwHeight, 0.1f, 10000.0f);
 
 	return true;
 }
@@ -121,7 +121,9 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	if (I_Input.KeyCheck(DIK_F2) == KEY_UP)
 		m_NoiseMap.SetHurstIndex(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	if (I_Input.KeyCheck(DIK_F3) == KEY_UP)m_NoiseMap.SetHurstIndex(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	if (I_Input.KeyCheck(DIK_F3) == KEY_UP)
+		m_NoiseMap.SetHurstIndex(false); //가져오기
+		m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
 
 	if (I_Input.KeyCheck(DIK_F4) == KEY_UP)m_NoiseMap.SetLacunarity(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
 	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)m_NoiseMap.SetLacunarity(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
@@ -163,7 +165,8 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	// 미니맵 갱신
 	//--------------------------------------------------------------------------------------
-	return m_MiniMap.Frame();
+	//m_MiniMap.Frame();
+	return true; 
 }
 bool CMapToolApp::Render()
 {
@@ -189,7 +192,7 @@ bool CMapToolApp::Render()
 	//--------------------------------------------------------------------------------------
 	// 미니맵의 랜더타켓 텍스처에 탑뷰 랜더링
 	//--------------------------------------------------------------------------------------
-	DrawMiniMap();
+	//DrawMiniMap();
 	return true;
 }
 bool CMapToolApp::Release()
@@ -219,27 +222,27 @@ void CMapToolApp::DrawMiniMap()
 	ApplyBS(m_pImmediateContext, GDxState::g_pAlphaBlend);
 
 	D3DXMATRIX matScale, matRotation;
-	if (m_MiniMap.BeginRender(m_pImmediateContext))
-	{
-		m_NoiseMap.SetMatrix(0, &m_MiniMap.m_matView, &m_MiniMap.m_matProj);
-		if (m_QuadTree.m_bDynamicUpdateIB == true)
-		{
-			m_NoiseMap.Render(m_pImmediateContext);
-		}
-		else
-		{
-			m_QuadTree.Render(m_pImmediateContext);
-		}
-		DrawSelectTreeLevel(&m_MiniMap.m_matView, &m_MiniMap.m_matProj);
+	//if (m_MiniMap.BeginRender(m_pImmediateContext))
+	//{
+	//	m_NoiseMap.SetMatrix(0, &m_MiniMap.m_matView, &m_MiniMap.m_matProj);
+	//	if (m_QuadTree.m_bDynamicUpdateIB == true)
+	//	{
+	//		m_NoiseMap.Render(m_pImmediateContext);
+	//	}
+	//	else
+	//	{
+	//		m_QuadTree.Render(m_pImmediateContext);
+	//	}
+	//	DrawSelectTreeLevel(&m_MiniMap.m_matView, &m_MiniMap.m_matProj);
 
-		m_pMainCamera->SetMatrix(NULL, &m_MiniMap.m_matView, &m_MiniMap.m_matProj);
-		m_pMainCamera->PreRender(m_pImmediateContext);
-		{
-			m_pImmediateContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
-			m_pMainCamera->PostRender(m_pImmediateContext);
-		}
-		m_MiniMap.EndRender(m_pImmediateContext);
-	}
+	//	m_pMainCamera->SetMatrix(NULL, &m_MiniMap.m_matView, &m_MiniMap.m_matProj);
+	//	m_pMainCamera->PreRender(m_pImmediateContext);
+	//	{
+	//		m_pImmediateContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
+	//		m_pMainCamera->PostRender(m_pImmediateContext);
+	//	}
+	//	m_MiniMap.EndRender(m_pImmediateContext);
+	//}
 
 	//--------------------------------------------------------------------------------------
 	// 랜더타켓의 텍스처를 미니맵 영역에 랜더링
@@ -247,9 +250,9 @@ void CMapToolApp::DrawMiniMap()
 	//--------------------------------------------------------------------------------------
 	// 랜더타켓의 텍스처를 미니맵 영역에 랜더링
 	//--------------------------------------------------------------------------------------
-	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthDisable);
-	ApplyBS(m_pImmediateContext, GDxState::g_pBSOneZero);
-	m_MiniMap.Render(m_pImmediateContext);
+	//ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthDisable);
+	//ApplyBS(m_pImmediateContext, GDxState::g_pBSOneZero);
+	//m_MiniMap.Render(m_pImmediateContext);
 }
 bool CMapToolApp::DrawQuadLine(GNode* pNode)
 {
@@ -402,7 +405,7 @@ CMapToolApp theApp;
 BOOL CMapToolApp::InitInstance()
 {
 	m_iDrawDepth = 0;
-	m_bDebugRender = false;
+	m_bDebugRender = true;
 	//SAFE_ZERO(m_pBoxs);
 	//SAFE_ZERO(m_pMapObj);
 

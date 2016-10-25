@@ -46,7 +46,7 @@ END_MESSAGE_MAP()
 
 
 BOOL GCreateMapDlg::OnInitDialog()
-{
+{//1
 	CDialogEx::OnInitDialog();
 
 
