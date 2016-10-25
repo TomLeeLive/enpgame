@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GCoreLib", "GCoreLib\GCoreLib.vcxproj", "{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "Test\test.vcxproj", "{A9149525-A7EF-44EF-BCB9-70BE3366D4E4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "l4dlike", "l4dlike\l4dlike.vcxproj", "{97B50A31-7CE4-48C2-8938-8C8DE529CAD6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V1", "V1", "{F7FC3B78-F120-4767-9C15-4A9FA07F4879}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GCoreLibV1", "GCoreLibV1\GCoreLibV1.vcxproj", "{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "l4dlikeV1", "l4dlikeV1\l4dlikeV1.vcxproj", "{97B50A31-7CE4-48C2-8938-8C8DE529CAD6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V2", "V2", "{B5F436C2-CDF3-4A33-BE21-26DB911850C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,14 +19,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Debug|x86.ActiveCfg = Debug|Win32
-		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Debug|x86.Build.0 = Debug|Win32
-		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Release|x86.ActiveCfg = Release|Win32
-		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Release|x86.Build.0 = Release|Win32
 		{A9149525-A7EF-44EF-BCB9-70BE3366D4E4}.Debug|x86.ActiveCfg = Debug|Win32
 		{A9149525-A7EF-44EF-BCB9-70BE3366D4E4}.Debug|x86.Build.0 = Debug|Win32
 		{A9149525-A7EF-44EF-BCB9-70BE3366D4E4}.Release|x86.ActiveCfg = Release|Win32
 		{A9149525-A7EF-44EF-BCB9-70BE3366D4E4}.Release|x86.Build.0 = Release|Win32
+		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Debug|x86.ActiveCfg = Debug|Win32
+		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Debug|x86.Build.0 = Debug|Win32
+		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Release|x86.ActiveCfg = Release|Win32
+		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}.Release|x86.Build.0 = Release|Win32
 		{97B50A31-7CE4-48C2-8938-8C8DE529CAD6}.Debug|x86.ActiveCfg = Debug|Win32
 		{97B50A31-7CE4-48C2-8938-8C8DE529CAD6}.Debug|x86.Build.0 = Debug|Win32
 		{97B50A31-7CE4-48C2-8938-8C8DE529CAD6}.Release|x86.ActiveCfg = Release|Win32
@@ -30,6 +34,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A9149525-A7EF-44EF-BCB9-70BE3366D4E4} = {F7FC3B78-F120-4767-9C15-4A9FA07F4879}
+		{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C} = {F7FC3B78-F120-4767-9C15-4A9FA07F4879}
+		{97B50A31-7CE4-48C2-8938-8C8DE529CAD6} = {F7FC3B78-F120-4767-9C15-4A9FA07F4879}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

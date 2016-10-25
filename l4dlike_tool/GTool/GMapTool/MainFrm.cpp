@@ -6,7 +6,7 @@
 #include "MapTool.h"
 
 #include "MainFrm.h"
-//#include "GCreateMapDlg.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_WM_SETTINGCHANGE()
+	ON_COMMAND(ID_CREATEMAP, &CMainFrame::OnCreatemap)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -407,14 +408,6 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 	m_wndOutput.UpdateFonts();
 }
 
-//void CMainFrame::OnCreatemap()
-//{
-//	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-//	GCreateMapDlg dlg;
-//	dlg.DoModal();
-//}
-//
-//
 //void CMainFrame::OnMapsave()
 //{
 //	// TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -426,3 +419,11 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 //	dlg.ShowWindow(SW_SHOW);
 //}
 
+
+
+void CMainFrame::OnCreatemap()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	GCreateMapDlg dlg;
+	dlg.DoModal();
+}
