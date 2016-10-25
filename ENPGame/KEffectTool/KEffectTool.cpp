@@ -1,27 +1,25 @@
 
-// Practice.cpp : 응용 프로그램에 대한 클래스 동작을 정의합니다.
+// KEffectTool.cpp : 응용 프로그램에 대한 클래스 동작을 정의합니다.
 //
 
 #include "stdafx.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
-#include "Practice.h"
+#include "KEffectTool.h"
 #include "MainFrm.h"
-#include "EffectTool.h"
 
-
-#include "PracticeDoc.h"
-#include "PracticeView.h"
+#include "KEffectToolDoc.h"
+#include "KEffectToolView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CPracticeApp
+// CKEffectToolApp
 
-BEGIN_MESSAGE_MAP(CPracticeApp, CWinApp)
-	ON_COMMAND(ID_APP_ABOUT, &CPracticeApp::OnAppAbout)
+BEGIN_MESSAGE_MAP(CKEffectToolApp, CWinApp)
+	ON_COMMAND(ID_APP_ABOUT, &CKEffectToolApp::OnAppAbout)
 	// 표준 파일을 기초로 하는 문서 명령입니다.
 	ON_COMMAND(ID_FILE_NEW, &CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CWinApp::OnFileOpen)
@@ -30,9 +28,9 @@ BEGIN_MESSAGE_MAP(CPracticeApp, CWinApp)
 END_MESSAGE_MAP()
 
 
-// CPracticeApp 생성
+// CKEffectToolApp 생성
 
-CPracticeApp::CPracticeApp()
+CKEffectToolApp::CKEffectToolApp()
 {
 	// 다시 시작 관리자 지원
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
@@ -45,20 +43,20 @@ CPracticeApp::CPracticeApp()
 
 	// TODO: 아래 응용 프로그램 ID 문자열을 고유 ID 문자열로 바꾸십시오(권장).
 	// 문자열에 대한 서식: CompanyName.ProductName.SubProduct.VersionInformation
-	SetAppID(_T("Practice.AppID.NoVersion"));
+	SetAppID(_T("KEffectTool.AppID.NoVersion"));
 
 	// TODO: 여기에 생성 코드를 추가합니다.
 	// InitInstance에 모든 중요한 초기화 작업을 배치합니다.
 }
 
-// 유일한 CPracticeApp 개체입니다.
+// 유일한 CKEffectToolApp 개체입니다.
 
-CPracticeApp theApp;
+CKEffectToolApp theApp;
 
 
-// CPracticeApp 초기화
+// CKEffectToolApp 초기화
 
-BOOL CPracticeApp::InitInstance()
+BOOL CKEffectToolApp::InitInstance()
 {
 	// 응용 프로그램 매니페스트가 ComCtl32.dll 버전 6 이상을 사용하여 비주얼 스타일을
 	// 사용하도록 지정하는 경우, Windows XP 상에서 반드시 InitCommonControlsEx()가 필요합니다. 
@@ -103,9 +101,9 @@ BOOL CPracticeApp::InitInstance()
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
-		RUNTIME_CLASS(CPracticeDoc),
+		RUNTIME_CLASS(CKEffectToolDoc),
 		RUNTIME_CLASS(CMainFrame),       // 주 SDI 프레임 창입니다.
-		RUNTIME_CLASS(CPracticeView));
+		RUNTIME_CLASS(CKEffectToolView));
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
@@ -115,15 +113,18 @@ BOOL CPracticeApp::InitInstance()
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
+
+
+	// 명령줄에 지정된 명령을 디스패치합니다.
+	// 응용 프로그램이 /RegServer, /Register, /Unregserver 또는 /Unregister로 시작된 경우 FALSE를 반환합니다.
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
-	
 
 	//--------------------------------------------------------------------------------------
 	//  디바이스 생성 
 	//--------------------------------------------------------------------------------------	
 	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
-	CPracticeView* pView = (CPracticeView*)pFrame->GetActiveView();
+	CKEffectToolView* pView = (CKEffectToolView*)pFrame->GetActiveView();
 	GWindow::m_hInstance = AfxGetInstanceHandle();
 	GWindow::m_hWnd = pView->m_hWnd;
 	g_hInstance = GWindow::m_hInstance;
@@ -137,31 +138,22 @@ BOOL CPracticeApp::InitInstance()
 	m_LineShaderFile = L"data/shader/line.hlsl";
 	GBasisLib_0::GInit();
 
-
-
-
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
 	return TRUE;
-
-
-
 }
 
-int CPracticeApp::ExitInstance()
+int CKEffectToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
-	//SAFE_DEL(m_pSprite[0]);
 	GRelease();
-
-	//CPracticeView::CView::OnSize();
 
 	return CWinApp::ExitInstance();
 }
 
-// CPracticeApp 메시지 처리기
+// CKEffectToolApp 메시지 처리기
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
@@ -197,13 +189,13 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 // 대화 상자를 실행하기 위한 응용 프로그램 명령입니다.
-void CPracticeApp::OnAppAbout()
+void CKEffectToolApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-BOOL CPracticeApp::OnIdle(LONG lCount)
+BOOL CKEffectToolApp::OnIdle(LONG lCount)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	__super::OnIdle(lCount);
@@ -211,8 +203,7 @@ BOOL CPracticeApp::OnIdle(LONG lCount)
 	GRender();
 	return TRUE;
 }
-
-bool CPracticeApp::Init()
+bool CKEffectToolApp::Init()
 {
 	m_pPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/Blend.hlsl", "PS_MATERIAL"));
 	//--------------------------------------------------------------------------------------
@@ -233,29 +224,16 @@ bool CPracticeApp::Init()
 	D3DXMatrixRotationX(&matRotation, D3DX_PI*0.5f);
 	D3DXMatrixMultiply(&m_mPlanWorld, &matScale, &matRotation);
 	D3DXMatrixIdentity(&m_matPlaneWorld);
-	//--------------------------------------------------------------------------------------
-	// 카메라  행렬 
-	//--------------------------------------------------------------------------------------	
-	//m_pMainCamera = make_shared<GModelViewCamera>();
-	//m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 8.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	//
-	//float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
-	//m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 5000.0f);
-	//m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);
+
 	m_pMainCamera = make_shared<GCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 50.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f, m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height),
 		1.0f, 10000.0f);
-	
-	//if (FAILED(m_RT.Create(m_pd3dDevice, g_iTextureRTSize, g_iTextureRTSize)))
-	//{
-	//	return false;
-	//}
+
 
 	return true;
 }
-
-bool CPracticeApp::Render() {
+bool CKEffectToolApp::Render() {
 
 	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
 	float fValue = cosf(m_Timer.GetElapsedTime())*0.5f + 0.5f;
@@ -266,37 +244,35 @@ bool CPracticeApp::Render() {
 	m_vMaterial.w = fValue;
 	m_pSprite->m_cbData.Color = m_vMaterial;
 	ApplyBS(m_pImmediateContext, GDxState::g_pBSAlphaOne, fFactor, 0xffffffff);
+	
 	//if (m_RT.Begin(m_pImmediateContext, vColor))
-//	{
-		ApplyRS(GetContext(), GDxState::g_pRSBackCullSolid);
-		ApplyDSS(GetContext(), GDxState::g_pDSSDepthEnable);
-		if (check == true)
-		{
-			RenderPlane();
-		}
+	//	{
+	ApplyRS(GetContext(), GDxState::g_pRSBackCullSolid);
+	ApplyDSS(GetContext(), GDxState::g_pDSSDepthEnable);
+	if (check == true)
+	{
+		RenderPlane();
+	}
 	//	m_RT.Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
 	//	m_RT.End(m_pImmediateContext);
+	//	}
 
-//	}
 	ApplyDSS(GetContext(), GDxState::g_pDSSDepthDisable);
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity(&matIdentity);
 	m_pScreen->SetMatrix(&matIdentity, &matIdentity, &matIdentity);
 	m_pScreen->PreRender(m_pImmediateContext);
 	m_pImmediateContext->OMSetBlendState(GDxState::g_pBSAlphaOne, 0, -1);
-//	m_pImmediateContext->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
+	//	m_pImmediateContext->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
 	m_pImmediateContext->PSSetShader(m_pPS.Get(), NULL, 0);
 	m_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite->m_dxobj.g_pConstantBuffer.GetAddressOf());
 	m_pScreen->PostRender(m_pImmediateContext);
 
 	ClearD3D11DeviceContext(m_pImmediateContext);
-	
+
 	return true;
-
-
 }
-
-HRESULT CPracticeApp::SetBlendState()
+HRESULT CKEffectToolApp::SetBlendState()
 {
 	HRESULT hr = S_OK;
 	D3D11_BLEND_DESC BlendState;
@@ -343,18 +319,17 @@ HRESULT CPracticeApp::SetBlendState()
 
 	return hr;
 }
-bool CPracticeApp::RenderPlane()
+
+bool CKEffectToolApp::RenderPlane()
 {
-	//m_pPlane->SetMatrix(&m_matPlaneWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	//pPlane->SetMatrix(&(m_mPlanWorld*m_matWorld), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_pSprite->Render(m_pImmediateContext);
 	return true;
 }
-bool CPracticeApp::Release()
+bool CKEffectToolApp::Release()
 {
 	return true;
 }
-bool CPracticeApp::Frame() {
+bool CKEffectToolApp::Frame() {
 
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
@@ -375,16 +350,17 @@ bool CPracticeApp::Frame() {
 	matBillboard._42 = 0.0f;
 	matBillboard._43 = 0.0f;
 	matBillboard._44 = 1.0f;
-	
+
 
 	m_pSprite->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_pSprite->Frame(m_pImmediateContext, m_Timer.GetElapsedTime(), g_fSecPerFrame);
+	
 	return true;
 }
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT CPracticeApp::CreateResource()
+HRESULT CKEffectToolApp::CreateResource()
 {
 	//HRESULT hr;
 	//if (m_pMainCamera)
@@ -400,17 +376,14 @@ HRESULT CPracticeApp::CreateResource()
 			m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 10000.0f);
 	return S_OK;
 }
-//--------------------------------------------------------------------------------------
-// 
-//--------------------------------------------------------------------------------------
-HRESULT CPracticeApp::DeleteResource()
+HRESULT CKEffectToolApp::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (m_pImmediateContext) m_pImmediateContext->ClearState();
 
 	return S_OK;
 }
-void CPracticeApp::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext)
+void CKEffectToolApp::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext)
 {
 	// Unbind all objects from the immediate context
 	if (pd3dDeviceContext == NULL) return;
@@ -464,4 +437,3 @@ void CPracticeApp::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContex
 	pd3dDeviceContext->OMSetDepthStencilState(NULL, 0);
 	pd3dDeviceContext->RSSetState(NULL);
 }
-

@@ -1,19 +1,19 @@
 
-// PracticeView.h : CPracticeView 클래스의 인터페이스
+// KEffectToolView.h : CKEffectToolView 클래스의 인터페이스
 //
 
 #pragma once
 
 
-class CPracticeView : public CView
+class CKEffectToolView : public CView
 {
 protected: // serialization에서만 만들어집니다.
-	CPracticeView();
-	DECLARE_DYNCREATE(CPracticeView)
+	CKEffectToolView();
+	DECLARE_DYNCREATE(CKEffectToolView)
 
 // 특성입니다.
 public:
-	CPracticeDoc* GetDocument() const;
+	CKEffectToolDoc* GetDocument() const;
 
 // 작업입니다.
 public:
@@ -29,7 +29,7 @@ protected:
 
 // 구현입니다.
 public:
-	virtual ~CPracticeView();
+	virtual ~CKEffectToolView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -40,12 +40,10 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
-#ifndef _DEBUG  // PracticeView.cpp의 디버그 버전
-inline CPracticeDoc* CPracticeView::GetDocument() const
-   { return reinterpret_cast<CPracticeDoc*>(m_pDocument); }
+#ifndef _DEBUG  // KEffectToolView.cpp의 디버그 버전
+inline CKEffectToolDoc* CKEffectToolView::GetDocument() const
+   { return reinterpret_cast<CKEffectToolDoc*>(m_pDocument); }
 #endif
 

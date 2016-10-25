@@ -1,16 +1,16 @@
 
-// PracticeDoc.h : CPracticeDoc 클래스의 인터페이스
+// KEffectToolDoc.h : CKEffectToolDoc 클래스의 인터페이스
 //
 
 
 #pragma once
 
 
-class CPracticeDoc : public CDocument
+class CKEffectToolDoc : public CDocument
 {
 protected: // serialization에서만 만들어집니다.
-	CPracticeDoc();
-	DECLARE_DYNCREATE(CPracticeDoc)
+	CKEffectToolDoc();
+	DECLARE_DYNCREATE(CKEffectToolDoc)
 
 // 특성입니다.
 public:
@@ -29,7 +29,7 @@ public:
 
 // 구현입니다.
 public:
-	virtual ~CPracticeDoc();
+	virtual ~CKEffectToolDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

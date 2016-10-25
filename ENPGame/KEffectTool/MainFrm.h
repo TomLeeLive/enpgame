@@ -4,6 +4,15 @@
 
 #pragma once
 
+class CSplitterX : public CSplitterWnd
+{
+public:
+	CSplitterX();
+	~CSplitterX();
+protected:
+	afx_msg LRESULT OnNcHitTest(CPoint point);
+	DECLARE_MESSAGE_MAP();
+};
 class CMainFrame : public CFrameWnd
 {
 	
@@ -12,6 +21,8 @@ protected: // serialization에서만 만들어집니다.
 	DECLARE_DYNCREATE(CMainFrame)
 
 // 특성입니다.
+protected:
+	CSplitterX m_wndSplitter;
 public:
 
 // 작업입니다.
@@ -19,6 +30,7 @@ public:
 
 // 재정의입니다.
 public:
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
 // 구현입니다.
@@ -38,10 +50,6 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
 
-
-
-public:
-	afx_msg void OnEffectClick();
 };
 
 

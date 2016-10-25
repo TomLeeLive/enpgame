@@ -18,7 +18,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Practice.h">
+    <ClInclude Include="KEffectTool.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -30,24 +30,30 @@
     <ClInclude Include="MainFrm.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PracticeDoc.h">
+    <ClInclude Include="KEffectToolDoc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PracticeView.h">
+    <ClInclude Include="KEffectToolView.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EffectTool.h">
+    <ClInclude Include="ControlView.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EffectListBox.h">
+    <ClInclude Include="C2dDlgTap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="C3dDlgTap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PartiCleTap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Practice.cpp">
+    <ClCompile Include="KEffectTool.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
@@ -56,34 +62,40 @@
     <ClCompile Include="MainFrm.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PracticeDoc.cpp">
+    <ClCompile Include="KEffectToolDoc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PracticeView.cpp">
+    <ClCompile Include="KEffectToolView.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EffectTool.cpp">
+    <ClCompile Include="ControlView.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EffectListBox.cpp">
+    <ClCompile Include="C2dDlgTap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="C3dDlgTap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PartiCleTap.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Practice.rc">
+    <ResourceCompile Include="KEffectTool.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Practice.rc2">
+    <None Include="res\KEffectTool.rc2">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\PracticeDoc.ico">
+    <Image Include="res\KEffectToolDoc.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\Practice.ico">
+    <Image Include="res\KEffectTool.ico">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">

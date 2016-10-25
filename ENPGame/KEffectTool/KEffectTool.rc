@@ -52,7 +52,7 @@ BEGIN
     "\r\n"
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
     "LANGUAGE 18, 1\r\n"
-    "#include ""res\\Practice.rc2""  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.\r\n"
+    "#include ""res\\KEffectTool.rc2""  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.\r\n"
     "#include ""l.KOR\\afxres.rc""      // 표준 구성 요소\r\n"
     "#include ""l.KOR\\afxprint.rc""    // 인쇄 미리 보기 리소스\r\n"
     "#endif\r\n"
@@ -69,8 +69,8 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\Practice.ico"
-IDR_PracticeTYPE        ICON                    "res\\PracticeDoc.ico"
+IDR_MAINFRAME           ICON                    "res\\KEffectTool.ico"
+IDR_KEffectToolTYPE     ICON                    "res\\KEffectToolDoc.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -133,14 +133,11 @@ BEGIN
     BEGIN
         MENUITEM "도구 모음(&T)",                   ID_VIEW_TOOLBAR
         MENUITEM "상태 표시줄(&S)",                  ID_VIEW_STATUS_BAR
+        MENUITEM "분할(&P)",                      ID_WINDOW_SPLIT
     END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "Practice 정보(&A)...",          ID_APP_ABOUT
-    END
-    POPUP "Effect"
-    BEGIN
-        MENUITEM "Click",                       ID_EFFECT_CLICK
+        MENUITEM "KEffectTool 정보(&A)...",       ID_APP_ABOUT
     END
 END
 
@@ -176,33 +173,55 @@ END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Practice 정보"
+CAPTION "KEffectTool 정보"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
-    LTEXT           "Practice, 버전 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "KEffectTool, 버전 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2016",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "확인",IDOK,113,41,50,14,WS_GROUP
 END
 
-IDD_EffectTool DIALOGEX 1, 13, 184, 242
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
+IDD_CONTROLVIEW DIALOGEX 0, 0, 175, 332
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 9, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_TAB1,"SysTabControl32",0x0,0,7,175,325
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 179, 241
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "확인",IDOK,75,221,50,14
-    PUSHBUTTON      "취소",IDCANCEL,127,221,50,14
-    PUSHBUTTON      "Open",IDC_Open,7,35,50,19
-    PUSHBUTTON      "Save",IDC_Save,57,35,50,19
-    PUSHBUTTON      "Play",IDC_Play,107,35,50,19
-    LISTBOX         IDC_OpenList,7,54,150,67,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_EDIT1,118,133,40,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT2,118,152,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT3,118,172,40,12,ES_AUTOHSCROLL
-    CTEXT           "Time",IDC_STATIC,76,134,16,8
-    CTEXT           "Fade In",IDC_STATIC,75,153,26,8
-    CTEXT           "Fade Out",IDC_STATIC,74,173,31,8
-    PUSHBUTTON      "입력",IDC_BUTTON1,119,192,39,13
+    PUSHBUTTON      "Open",IDC_OnBnClick2DOpen,0,98,38,14
+    PUSHBUTTON      "Save",IDC_OnBnClick2DSave,38,98,38,14
+    PUSHBUTTON      "Play",IDC_OnBnClick2DPlay,77,98,38,14
+    PUSHBUTTON      "Input",IDC_OnBnClick2DInput,121,124,38,14
+    PUSHBUTTON      "Button1",IDC_BUTTON5,119,201,38,14
+    LISTBOX         IDC_LISTBOX,0,36,115,57,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_2DTime,0,124,39,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_2DFI,41,124,39,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_2DFO,83,124,39,13,ES_AUTOHSCROLL
+    CTEXT           "Time",IDC_STATIC,1,114,41,9
+    CTEXT           "Fade In",IDC_STATIC,40,114,41,9
+    LTEXT           "Fade Out",IDC_STATIC,87,114,41,9
+END
+
+IDD_DIALOG2 DIALOGEX 0, 0, 161, 250
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Button1",IDC_BUTTON1,7,36,38,14
+    PUSHBUTTON      "Button1",IDC_BUTTON2,45,36,38,14
+    PUSHBUTTON      "Button1",IDC_BUTTON3,83,36,38,14
+    PUSHBUTTON      "Button1",IDC_BUTTON4,44,67,38,14
+    PUSHBUTTON      "Button1",IDC_BUTTON5,7,67,38,14
+END
+
+IDD_DIALOG3 DIALOGEX 0, 0, 157, 255
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
 END
 
 
@@ -229,11 +248,11 @@ BEGIN
         BLOCK "041204B0"
         BEGIN
             VALUE "CompanyName", "TODO: <회사 이름>"
-            VALUE "FileDescription", "Practice"
+            VALUE "FileDescription", "KEffectTool"
             VALUE "FileVersion", "1.0.0.1"
-            VALUE "InternalName", "Practice.exe"
+            VALUE "InternalName", "KEffectTool.exe"
             VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
-            VALUE "OriginalFilename", "Practice.exe"
+            VALUE "OriginalFilename", "KEffectTool.exe"
             VALUE "ProductName", "TODO: <제품 이름>"
             VALUE "ProductVersion", "1.0.0.1"
         END
@@ -261,12 +280,35 @@ BEGIN
         BOTTOMMARGIN, 55
     END
 
-    IDD_EffectTool, DIALOG
+    IDD_CONTROLVIEW, DIALOG
+    BEGIN
+        RIGHTMARGIN, 161
+        VERTGUIDE, 1
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 279
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        RIGHTMARGIN, 172
+        TOPMARGIN, 12
+        BOTTOMMARGIN, 234
+    END
+
+    IDD_DIALOG2, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 177
+        RIGHTMARGIN, 154
         TOPMARGIN, 7
-        BOTTOMMARGIN, 235
+        BOTTOMMARGIN, 243
+    END
+
+    IDD_DIALOG3, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 150
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 248
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -277,7 +319,22 @@ END
 // AFX_DIALOG_LAYOUT
 //
 
-IDD_EffectTool AFX_DIALOG_LAYOUT
+IDD_CONTROLVIEW AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG1 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG2 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG3 AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
@@ -295,12 +352,12 @@ END
 
 STRINGTABLE
 BEGIN
-    IDR_MAINFRAME           "Practice\n\nPractice\n\n\nPractice.Document\nPractice.Document"
+    IDR_MAINFRAME           "KEffectTool\n\nKEffectTool\n\n\nKEffectTool.Document\nKEffectTool.Document"
 END
 
 STRINGTABLE
 BEGIN
-    AFX_IDS_APP_TITLE       "Practice"
+    AFX_IDS_APP_TITLE       "KEffectTool"
     AFX_IDS_IDLEMESSAGE     "준비"
 END
 
@@ -424,7 +481,7 @@ END
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE 18, 1
-#include "res\Practice.rc2"  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.
+#include "res\KEffectTool.rc2"  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.
 #include "l.KOR\afxres.rc"      // 표준 구성 요소
 #include "l.KOR\afxprint.rc"    // 인쇄 미리 보기 리소스
 #endif
