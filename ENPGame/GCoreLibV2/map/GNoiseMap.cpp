@@ -60,7 +60,7 @@ bool GNoiseMap::CreateVertexData()
 			if( m_iNoiseType == PERLIN_NOISE)
 			{
 				fNoiseValue = (float)PerlinNoise(vertex, m_fPersistence, m_fOctaves);
-				m_VertexList[iVertexIndex].p.y = 0.0f; //fNoiseValue * 25.0f;
+				m_VertexList[iVertexIndex].p.y = fNoiseValue * 25.0f;
 				m_VertexList[iVertexIndex].c    = D3DXVECTOR4( ( fNoiseValue + 1 ) / 2.0f,
 																( fNoiseValue + 1 ) / 2.0f,
 																( fNoiseValue + 1 ) / 2.0f,
@@ -69,7 +69,7 @@ bool GNoiseMap::CreateVertexData()
 			if( m_iNoiseType == FBM)
 			{
 				fNoiseValue  = (float)fBM( vertex, m_fHurstIndex, m_fLacunarity, m_fOctaves );
-				m_VertexList[iVertexIndex].p.y = 0.0f; // fNoiseValue;
+				m_VertexList[iVertexIndex].p.y = fNoiseValue;
 				m_VertexList[iVertexIndex].c    = D3DXVECTOR4( ( fNoiseValue + 75 ) / 150.0f,
 																( fNoiseValue + 75 ) / 150.0f,
 																( fNoiseValue + 75 ) / 150.0f,

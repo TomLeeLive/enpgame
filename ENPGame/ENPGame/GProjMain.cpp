@@ -59,10 +59,12 @@ bool GProjMain::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 }
 bool GProjMain::Load()
 {
-	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
-	{
-		return false;
-	}
+	//if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
+	//{
+	//	return false;
+	//}
+
+
 
 	//int iLoad = m_LoadFiles.size() - 1;
 	//if (!m_tObject.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
@@ -70,9 +72,18 @@ bool GProjMain::Load()
 	//	return false;
 	//}
 
-	int iLoad = m_LoadFiles.size() - 1;
 
-	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+
+	//int iLoad = m_LoadFiles.size() - 1;
+
+
+
+	//if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+	//{
+	//	return false;
+	//}
+
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharTable3.gci") /*_T("CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -131,12 +142,25 @@ bool GProjMain::Load()
 bool GProjMain::Init()
 {
 	
+	m_iDrawDepth = 0;
+	m_bDebugRender = false;
 
 	I_CharMgr.Init();
 
 	Load();
 
-	
+#ifdef G_MACRO_MAP_ADD
+
+	//--------------------------------------------------------------------------------------
+	// 디버그 라인 생성
+	//--------------------------------------------------------------------------------------
+	if (FAILED(m_DrawLine.Create(GetDevice(), L"data/shader/line.hlsl")))
+	{
+		MessageBox(0, _T("m_DrawLine 실패"), _T("Fatal error"), MB_OK);
+		return 0;
+	}
+#endif
+
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -144,14 +168,128 @@ bool GProjMain::Init()
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 10.0f, 100.0f));
 
 	float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
-	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f);
+	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);	
+
+
+#ifdef G_MACRO_MAP_ADD
+	//--------------------------------------------------------------------------------------
+	// 카메라 프로스텀 랜더링용 박스 오브젝트 생성
+	//--------------------------------------------------------------------------------------
+	m_pMainCamera->CreateRenderBox(GetDevice(), m_pImmediateContext);
+	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/box.hlsl", "PS_Color"));
+
+	//--------------------------------------------------------------------------------------
+	// 노이즈 맵 생성
+	//--------------------------------------------------------------------------------------
+	m_NoiseMap.Init(GetDevice(), m_pImmediateContext);
+	TMapDesc MapDesc = { pow(2.0f,7.0f) + 1, pow(2.0f,7.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
+	//TMapDesc MapDesc = { pow(2.0f,3.0f) + 1, pow(2.0f,3.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
+	if (!m_NoiseMap.Load(MapDesc))
+	{
+		return false;
+	}
+	m_QuadTree.SetMinDivideSize(10);
+	m_QuadTree.SetMaxDepthLimit(7);
+	m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
+	m_QuadTree.Build(&m_NoiseMap, m_NoiseMap.m_iNumCols, m_NoiseMap.m_iNumRows); //가져오기
+#endif
+
 	return true;
 }
+
+#ifdef G_MACRO_MAP_ADD
+void GProjMain::DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj)
+{
+	//for (int iObj = 0; iObj < m_QuadTree.m_DrawObjList.size(); iObj++)
+	//{
+	//	GMapObject* pBox = dynamic_cast<GMapObject*>(m_QuadTree.m_DrawObjList[iObj]);
+	//	m_pBoxs->SetAmbientColor(pBox->m_vColor.x, pBox->m_vColor.y, pBox->m_vColor.z, pBox->m_vColor.w);
+	//	m_pBoxs->SetMatrix(&pBox->m_matWorld, pView, pProj);
+	//	m_pBoxs->Render(m_pImmediateContext);
+	//}
+}
+
+bool GProjMain::DrawQuadLine(GNode* pNode)
+{
+	if (pNode == NULL) return true;
+	if (m_QuadTree.m_iRenderDepth == pNode->m_iDepth ||
+		(pNode->m_isLeaf &&  m_QuadTree.m_iRenderDepth < 0))
+	{
+		m_DrawLine.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+
+		D3DXVECTOR4 vColor = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
+		if (pNode->m_iDepth == 1) vColor = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+		if (pNode->m_iDepth == 2) vColor = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+		if (pNode->m_iDepth == 3) vColor = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
+		if (pNode->m_iDepth == 4) vColor = D3DXVECTOR4(1.0f, 0.0f, 1.0f, 1.0f);
+		if (pNode->m_iDepth == 5) vColor = D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f);
+		if (pNode->m_iDepth == 6) vColor = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+		if (pNode->m_iDepth == 7) vColor = D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f);
+		if (pNode->m_iDepth == 8) vColor = D3DXVECTOR4(1.0f, 0.5f, 0.5f, 1.0f);
+		if (pNode->m_iDepth == 9) vColor = D3DXVECTOR4(1.0f, 0.5f, 1.0f, 1.0f);
+
+		D3DXVECTOR3 vPoint[8];
+		vPoint[0] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMin.z);
+		vPoint[1] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMin.z);
+		vPoint[2] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMin.z);
+		vPoint[3] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMin.z);
+		vPoint[4] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMax.z);
+		vPoint[5] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMax.z);
+		vPoint[6] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMax.z);
+		vPoint[7] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMax.z);
+
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[0], vPoint[1], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[1], vPoint[2], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[2], vPoint[3], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[3], vPoint[0], vColor);
+
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[4], vPoint[5], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[5], vPoint[6], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[6], vPoint[7], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[7], vPoint[0], vColor);
+
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[0], vPoint[4], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[1], vPoint[5], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[2], vPoint[6], vColor);
+		m_DrawLine.Draw(m_pImmediateContext, vPoint[3], vPoint[7], vColor);
+	}
+	for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
+	{
+		DrawQuadLine(pNode->m_ChildList[iNode]);
+	}
+	return true;
+}
+#endif
+
 bool GProjMain::Render()
 {	
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
+
+
+#ifdef G_MACRO_MAP_ADD
+	m_NoiseMap.SetMatrix(0, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	if (m_QuadTree.m_bDynamicUpdateIB == true)
+	{
+		if (!m_NoiseMap.Render(m_pImmediateContext)) return false;
+	}
+	else
+	{
+		if (!m_QuadTree.Render(m_pImmediateContext)) return false;
+	}
+	//--------------------------------------------------------------------------------------
+	// 쿼드트리의 임의의 레벨 선텍 랜더링
+	//--------------------------------------------------------------------------------------
+	DrawSelectTreeLevel(m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+
+	if (m_bDebugRender)
+	{
+		DrawQuadLine(m_QuadTree.m_pRootNode);
+	}
+
+
+#endif
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
@@ -163,6 +301,10 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
+#ifdef G_MACRO_MAP_ADD
+	m_NoiseMap.Release();
+	m_QuadTree.Release();
+#endif
 	I_CharMgr.Release();
 	return true;
 }
@@ -173,6 +315,63 @@ bool GProjMain::Frame()
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
 	//m_pMainCamera->Update(g_fSecPerFrame);
 	m_pMainCamera->Frame();
+
+#ifdef G_MACRO_MAP_ADD
+	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
+	{
+		if (++m_iDrawDepth > 7) m_iDrawDepth = -1;
+		m_QuadTree.SetRenderDepth(m_iDrawDepth);
+	}
+	m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
+
+	//--------------------------------------------------------------------------------------
+	// 화면 디버그 정보 출력 
+	//--------------------------------------------------------------------------------------
+	if (I_Input.KeyCheck(DIK_F2) == KEY_UP)
+		m_NoiseMap.SetHurstIndex(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	if (I_Input.KeyCheck(DIK_F3) == KEY_UP)
+		m_NoiseMap.SetHurstIndex(false); //가져오기
+	m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+
+	if (I_Input.KeyCheck(DIK_F4) == KEY_UP)m_NoiseMap.SetLacunarity(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)m_NoiseMap.SetLacunarity(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+
+	if (I_Input.KeyCheck(DIK_F6) == KEY_UP)m_NoiseMap.SetOctaves(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	if (I_Input.KeyCheck(DIK_F7) == KEY_UP)m_NoiseMap.SetOctaves(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+
+	if (I_Input.KeyCheck(DIK_F8) == KEY_UP)m_NoiseMap.SetPersistence(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	if (I_Input.KeyCheck(DIK_F9) == KEY_UP)m_NoiseMap.SetPersistence(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+
+
+	if (I_Input.KeyCheck(DIK_U) == KEY_UP)
+	{
+		m_NoiseMap.SetNoiseType(0);
+		m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	}
+	if (I_Input.KeyCheck(DIK_I) == KEY_UP)
+	{
+		m_NoiseMap.SetNoiseType(1);
+		m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
+	}
+	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
+	{
+		m_bDebugRender = !m_bDebugRender;
+	}
+	if (I_Input.KeyCheck(DIK_GRAVE) == KEY_UP) //문턱값 사용 ~
+	{
+		m_QuadTree.SetThresHold(!m_QuadTree.m_bThresHoldValue);
+	}
+
+
+
+	m_QuadTree.Frame();
+	if (m_QuadTree.m_bDynamicUpdateIB == true)
+	{
+		m_NoiseMap.UpdateIndexBuffer(m_pImmediateContext, m_QuadTree.m_IndexList, m_QuadTree.m_iNumFace);
+	}
+	m_NoiseMap.Frame();
+#endif
+
 	m_matWorld = *m_pMainCamera->GetWorldMatrix();
 	m_matWorld._41 = 0.0f;
 	m_matWorld._42 = 0.0f;
@@ -191,16 +390,16 @@ bool GProjMain::Frame()
 		}
 		m_HeroObj[iChar]->Frame();
 	}
-	if(I_Input.KeyCheck( DIK_F3 ) == KEY_UP && m_HeroObj.size() > 1)
+	if(I_Input.KeyCheck( DIK_F10 ) == KEY_UP && m_HeroObj.size() > 1)
 	{
 		m_HeroObj[1]->SetActionFrame( 120, 205 );//jump		
 	}
-	if(I_Input.KeyCheck(DIK_F4) == KEY_UP&& m_HeroObj.size() > 1)
+	if(I_Input.KeyCheck(DIK_F11) == KEY_UP&& m_HeroObj.size() > 1)
 	{
 		m_HeroObj[1]->SetActionFrame( 205, 289 );//attack		
 	}
 
-	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
+	if (I_Input.KeyCheck(DIK_F12) == KEY_UP)
 	{
 		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 		{
@@ -253,7 +452,7 @@ int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return -1;
 }
-GBASIS_RUN(GCI Animation Viewer);
+GBASIS_RUN(ENP Game);
 
 
 
