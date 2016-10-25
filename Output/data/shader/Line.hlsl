@@ -3,9 +3,9 @@
 //--------------------------------------------------------------------------------------
 cbuffer cb0
 {
-	matrix	g_matWorld		: packoffset(c0);
-	matrix	g_matView		: packoffset(c4);
-	matrix	g_matProj		: packoffset(c8);
+	float4x4	g_matWorld		: packoffset(c0);
+	float4x4	g_matView		: packoffset(c4);
+	float4x4	g_matProj		: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
 //--------------------------------------------------------------------------------------

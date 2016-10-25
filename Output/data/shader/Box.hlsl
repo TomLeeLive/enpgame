@@ -5,9 +5,9 @@ Texture2D g_txDiffuse: register (t0);
 SamplerState samLinear: register (s0);
 cbuffer cb0
 {
-	matrix	g_matWorld		: packoffset(c0);
-	matrix	g_matView		: packoffset(c4);
-	matrix	g_matProj		: packoffset(c8);
+	row_major float4x4	g_matWorld	: packoffset(c0);
+	row_major float4x4	g_matView		: packoffset(c4);
+	row_major float4x4	g_matProj		: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
 //--------------------------------------------------------------------------------------
@@ -32,9 +32,9 @@ struct VS_OUTPUT
 VS_OUTPUT VS(VS_INPUT vIn)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
-	output.p = mul(vIn.p, g_matWorld);
-	output.p = mul(output.p, g_matView);
-	output.p = mul(output.p, g_matProj);
+	output.p = mul(g_matWorld, vIn.p);
+	output.p = mul(g_matView,output.p );
+	output.p = mul(g_matProj,output.p );
 	output.n = vIn.n;
 	output.t = vIn.t;
 	output.c = vIn.c * g_MeshColor;
@@ -46,18 +46,8 @@ VS_OUTPUT VS(VS_INPUT vIn)
 //--------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
-	return g_txDiffuse.Sample(samLinear, vIn.t);// *vIn.c;
+	return g_txDiffuse.Sample(samLinear, vIn.t) * vIn.c;
 }
-//--------------------------------------------------------------------------------------
-// Pixel Shader
-//--------------------------------------------------------------------------------------
-float4 PS_Texture(VS_OUTPUT vIn) : SV_Target
-{
-	return g_txDiffuse.Sample(samLinear, vIn.t);
-}
-//--------------------------------------------------------------------------------------
-// Pixel Shader
-//--------------------------------------------------------------------------------------
 float4 PS_Color(VS_OUTPUT vIn) : SV_Target
 {
 	return vIn.c;
