@@ -164,7 +164,7 @@ bool GBasisLib_0::Render()
 bool GBasisLib_0::PreRender()
 {
 	// Just clear the backbuffer
-    float ClearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f }; //red,green,blue,alpha
+    float ClearColor[4] = { 0.5f, 1.0f, 0.5f, 1.0f }; //red,green,blue,alpha
 	m_pImmediateContext->ClearRenderTargetView( GetRenderTargetView(), ClearColor );	
 	m_pImmediateContext->ClearDepthStencilView(m_DefaultRT.m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_pImmediateContext->OMSetRenderTargets(1, GetRenderTargetViewAddress(), m_DefaultRT.m_pDepthStencilView.Get() );
@@ -174,16 +174,25 @@ bool GBasisLib_0::PreRender()
 }
 bool GBasisLib_0::DrawDebug()
 {
+
 	// FPS 출력
 	TCHAR pBuffer[256];
 	memset( pBuffer, 0, sizeof( TCHAR ) * 256 );
 	_stprintf_s( pBuffer, _T("FPS:%d"), m_Timer.GetFPS() );	
 	
 	m_Font.Begin();
-	m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+
+	//m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 	RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
-	m_Font.DrawText( rc1, pBuffer,  D2D1::ColorF(1.0f, 1.0f, 1.0f,0.5));		
+	m_Font.SetText(D2D1::Point2F(rc1.right, rc1.bottom), pBuffer, D2D1::ColorF(1, 1, 0, 1));
+	m_Font.SetFont(L"Impact");
+	m_Font.SetBold(true);
+	//m_Font.SetFontSize(100);
+	m_Font.SetItalic(true);
+	m_Font.SetUnderline(true);
+	m_Font.DrawText(D2D1::Point2F(rc1.left, rc1.top), D2D1::ColorF(1.0f, 0.0f, 0.0f,1.0f));
 	m_Font.End();
 
 	//-----------------------------------------------------------------------
@@ -195,7 +204,7 @@ bool GBasisLib_0::DrawDebug()
 	rc.left = 0;
 	rc.right = 800;
 	T_STR str = RasterizerState[m_iCullMode];
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
 	//-----------------------------------------------------------------------
 	// 적용되어 SamplerState 타입 표시
@@ -205,7 +214,7 @@ bool GBasisLib_0::DrawDebug()
 	rc.left = 0;
 	rc.right = 800;
 	str = SamplerState[m_iSamplerMode];
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
 	return true;
 }
@@ -222,10 +231,18 @@ bool GBasisLib_0::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
         int height = static_cast <int> (rtSize.height);
 
 		m_Font.Begin();
-		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 		m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 		//RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
-		m_Font.DrawText( *rcDest, pString,  D2D1::ColorF(color.r,color.g,color.b,0.5f));		
+
+		m_Font.SetText(D2D1::Point2F(rcDest->right, rcDest->bottom), pString, D2D1::ColorF(1, 1, 0, 1));
+		m_Font.SetFont(L"Consolas");
+		m_Font.SetBold(false);
+		//m_Font.SetFontSize(100);
+		m_Font.SetItalic(false);
+		m_Font.SetUnderline(false);
+
+		m_Font.DrawText(D2D1::Point2F(rcDest->left, rcDest->top),  D2D1::ColorF(color.r,color.g,color.b,1.0f));
 		m_Font.End();
 	}
 
