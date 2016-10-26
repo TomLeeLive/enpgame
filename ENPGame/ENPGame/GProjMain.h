@@ -1,11 +1,14 @@
 #pragma once
 #include "GBasisLib_0.h"
-#include "GHeroObj.h"
 #include "GCamera.h"
 
 #define G_MACRO_MAP_ADD		1
-#define G_MACRO_EFFECT_ADD   1
-#define G_MACRO_CHAR_ADD     1
+//#define G_MACRO_EFFECT_ADD   1
+//#define G_MACRO_CHAR_ADD     1
+
+#ifdef G_MACRO_CHAR_ADD
+#include "GHeroObj.h"
+#endif
 
 #ifdef G_MACRO_MAP_ADD
 #include "GMiniMap.h"
@@ -22,19 +25,19 @@ class GProjMain : public GBasisLib_0
 {
 #ifdef G_MACRO_EFFECT_ADD
 public:
-	GPlaneShape				m_BigPlane;
-	GSprite*				m_pSprite;
-	ComPtr<ID3D11PixelShader>	m_pPS;
-	D3DXVECTOR4				m_vMaterial;
-	D3DXMATRIX				m_matPlaneWorld;
-	D3DXMATRIX				m_mPlanWorld;
+	GPlaneShape						m_BigPlane;
+	shared_ptr<GSprite>				m_pSprite;
+	ComPtr<ID3D11PixelShader>		m_pPS;
+	D3DXVECTOR4						m_vMaterial;
+	D3DXMATRIX						m_matPlaneWorld;
+	D3DXMATRIX						m_mPlanWorld;
 	//D3DXMATRIX				m_matWorld;
-	shared_ptr<GPlaneShape> m_pPlane;
-	shared_ptr<GPlaneShape> m_pScreen;
-public:
-	bool check; // play button check
-	ID3D11BlendState*           m_pAlphaBlendFactor;
-	ID3D11BlendState*			m_pAlphaBlend;
+	shared_ptr<GPlaneShape>			m_pPlane;
+	shared_ptr<GPlaneShape>			m_pScreen;
+//public:
+//	bool check; // play button check
+//	ComPtr<ID3D11BlendState>		m_pAlphaBlendFactor;
+//	ComPtr<ID3D11BlendState>		m_pAlphaBlend;
 #endif
 #ifdef G_MACRO_MAP_ADD
 	//--------------------------------------------------------------------------------------

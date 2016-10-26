@@ -101,6 +101,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <FxCompile Include="Character.hlsl" />
+    <FxCompile Include="MatrixViewer.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CharTable.gci" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="GCharacter.cpp" />
     <ClCompile Include="GCharMgr.cpp" />
     <ClCompile Include="GHeroObj.cpp" />
@@ -111,13 +118,6 @@
     <ClInclude Include="GCharMgr.h" />
     <ClInclude Include="GHeroObj.h" />
     <ClInclude Include="GProjMain.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Character.hlsl" />
-    <FxCompile Include="MatrixViewer.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CharTable.gci" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

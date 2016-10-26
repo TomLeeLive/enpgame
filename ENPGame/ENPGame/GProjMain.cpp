@@ -166,7 +166,8 @@ bool GProjMain::Init()
 		MessageBox(0, _T("m_pPlane 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
-	SAFE_NEW(m_pSprite, GSprite);
+	//SAFE_NEW(m_pSprite, GSprite);
+	m_pSprite = make_shared<GSprite>();
 	//--------------------------------------------------------------------------------------
 	// 월드  행렬
 	//--------------------------------------------------------------------------------------
@@ -178,9 +179,9 @@ bool GProjMain::Init()
 
 
 	//play 버튼시 init() 부분
-	m_pSprite->Create(GetDevice(), L"data/shader/plane.hlsl", L"data/effect/ds1.dds");
+	m_pSprite.get()->Create(GetDevice(), L"data/shader/plane.hlsl", L"data/effect/ds1.dds");
 	// 애니메이션 관련, 가로4x4
-	m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
+	m_pSprite.get()->SetRectAnimation(1.0f, 4, 128, 4, 128);
 #endif
 
 #ifdef G_MACRO_MAP_ADD
@@ -347,7 +348,7 @@ bool GProjMain::Render()
 	m_vMaterial.y = 1.0f;
 	m_vMaterial.z = 1.0f;
 	m_vMaterial.w = fValue;
-	m_pSprite->m_cbData.Color = m_vMaterial;
+	m_pSprite.get()->m_cbData.Color = m_vMaterial;
 	ApplyBS(m_pImmediateContext, GDxState::g_pBSAlphaOne, fFactor, 0xffffffff);
 
 	//if (m_RT.Begin(m_pImmediateContext, vColor))
@@ -355,7 +356,7 @@ bool GProjMain::Render()
 	ApplyRS(GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(GetContext(), GDxState::g_pDSSDepthEnable);
 
-		m_pSprite->Render(m_pImmediateContext);
+	m_pSprite.get()->Render(m_pImmediateContext);
 	
 	//	m_RT.Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
 	//	m_RT.End(m_pImmediateContext);
@@ -369,7 +370,7 @@ bool GProjMain::Render()
 	m_pImmediateContext->OMSetBlendState(GDxState::g_pBSAlphaOne, 0, -1);
 	//	m_pImmediateContext->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
 	m_pImmediateContext->PSSetShader(m_pPS.Get(), NULL, 0);
-	m_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite->m_dxobj.g_pConstantBuffer.GetAddressOf());
+	m_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite.get()->m_dxobj.g_pConstantBuffer.GetAddressOf());
 	m_pScreen->PostRender(m_pImmediateContext);
 
 
@@ -478,8 +479,8 @@ bool GProjMain::Frame()
 	matBillboard._44 = 1.0f;
 
 
-	m_pSprite->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	m_pSprite->Frame(m_pImmediateContext, m_Timer.GetElapsedTime(), g_fSecPerFrame);
+	m_pSprite.get()->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSprite.get()->Frame(m_pImmediateContext, m_Timer.GetElapsedTime(), g_fSecPerFrame);
 #endif
 
 
