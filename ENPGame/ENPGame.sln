@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GbsViewer", "GbsViewer\GbsViewer.vcxproj", "{D80BC546-E88C-4698-B90F-733B2B16DD15}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ENPGame", "ENPGame\ENPGame.vcxproj", "{A925E2E1-94AC-466D-9B61-A8F955EE9C35}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KEffectTool", "KEffectTool\KEffectTool.vcxproj", "{676CC919-7A13-4A21-B4B0-7F4509621E94}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GCharCore", "GCharCore\GCharCore.vcxproj", "{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,18 @@ Global
 		{676CC919-7A13-4A21-B4B0-7F4509621E94}.Release|x64.Build.0 = Release|x64
 		{676CC919-7A13-4A21-B4B0-7F4509621E94}.Release|x86.ActiveCfg = Release|Win32
 		{676CC919-7A13-4A21-B4B0-7F4509621E94}.Release|x86.Build.0 = Release|Win32
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Debug|x64.ActiveCfg = Debug|x64
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Debug|x64.Build.0 = Debug|x64
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Debug|x86.ActiveCfg = Debug|Win32
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Debug|x86.Build.0 = Debug|Win32
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Hybrid|x64.ActiveCfg = Release|x64
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Hybrid|x64.Build.0 = Release|x64
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Hybrid|x86.ActiveCfg = Release|Win32
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Hybrid|x86.Build.0 = Release|Win32
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Release|x64.ActiveCfg = Release|x64
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Release|x64.Build.0 = Release|x64
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Release|x86.ActiveCfg = Release|Win32
+		{5E4B3BCF-83BB-44FE-8EC9-51301ABC372E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

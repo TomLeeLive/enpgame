@@ -3,6 +3,12 @@
 #include "GModelViewCamera.h"
 #include "GObject.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )	
+#else
+#pragma comment( lib, "GCharCore32.lib" )
+#endif
+
 //속성:디버깅:명령->C:\Program Files\Autodesk\3ds Max 2016\3dsmax.exe
 class GProjMain : public GBasisLib_0
 {

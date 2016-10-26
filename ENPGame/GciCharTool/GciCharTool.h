@@ -12,6 +12,12 @@
 #include "GciAnimation/GHeroObj.h"
 #include "GCamera.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )	
+#else
+#pragma comment( lib, "GCharCore32.lib" )
+#endif
+
 // CAIToolApp:
 // 이 클래스의 구현에 대해서는 GciCharTool.cpp을 참조하십시오.
 //

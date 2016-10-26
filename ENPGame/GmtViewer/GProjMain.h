@@ -2,6 +2,13 @@
 #include "GBasisLib_0.h"
 #include "GObject.h"
 #include "GModelViewCamera.h"
+
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )
+#else
+#pragma comment( lib, "GCharCore32.lib" )
+#endif
+
 class GProjMain : public GBasisLib_0
 {
 public:

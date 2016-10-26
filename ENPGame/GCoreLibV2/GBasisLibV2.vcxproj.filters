@@ -138,37 +138,7 @@
     <ClCompile Include="GVector.cpp">
       <Filter>Common\math</Filter>
     </ClCompile>
-    <ClCompile Include="GAnimation.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GAseObj.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GAseParser.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GBaseObj.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GBoneObj.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GLoadToken.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
     <ClCompile Include="GModel.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GObjMgr.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GSkinObj.cpp">
-      <Filter>Common\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GGbsObj.cpp">
       <Filter>Common\Object</Filter>
     </ClCompile>
     <ClCompile Include="GBoxObj.cpp">
@@ -305,46 +275,10 @@
     <ClInclude Include="GVector.h">
       <Filter>Common\math</Filter>
     </ClInclude>
-    <ClInclude Include="GAnimation.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GAseObj.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GAseParser.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GBaseObj.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GBoneObj.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GLoadMgr.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GLoadToken.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GMesh.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
     <ClInclude Include="GModel.h">
       <Filter>Common\Object</Filter>
     </ClInclude>
-    <ClInclude Include="GObject.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GObjMgr.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
     <ClInclude Include="GObjStd.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GSkinObj.h">
-      <Filter>Common\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GGbsObj.h">
       <Filter>Common\Object</Filter>
     </ClInclude>
     <ClInclude Include="GBoxObj.h">

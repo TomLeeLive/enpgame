@@ -7,6 +7,11 @@
 #define G_MACRO_EFFECT_ADD   1
 #define G_MACRO_CHAR_ADD     1
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )	
+#else
+#pragma comment( lib, "GCharCore32.lib" )
+#endif
 
 //공통 사용 헤더
 #include "GCamera.h"
