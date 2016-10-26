@@ -1,5 +1,5 @@
 #pragma once
-#include "../GParser.h"
+#include "GParser.h"
 #include "GSpaceDivision.h"
 
 class GBspParser : public GParser

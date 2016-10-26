@@ -25,14 +25,8 @@
     <Filter Include="Common\Camera">
       <UniqueIdentifier>{07150801-8ec0-4ad8-8642-b5e2b590436e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common\Sprite">
-      <UniqueIdentifier>{6c5bee6d-21e3-4515-b434-556ef916390a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common\DXHelper">
       <UniqueIdentifier>{2ef91f50-a9a0-43d6-93bc-743f1a89b794}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\Map">
-      <UniqueIdentifier>{26dd2da1-cbf9-4853-a2cc-cc533f7e6783}</UniqueIdentifier>
     </Filter>
     <Filter Include="Common\Texture">
       <UniqueIdentifier>{c4d16f28-340c-4b2d-8eac-1aba23daa9a8}</UniqueIdentifier>
@@ -90,48 +84,6 @@
     <ClCompile Include="GLightObj.cpp">
       <Filter>Common\Light</Filter>
     </ClCompile>
-    <ClCompile Include="map\GBspParser.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GBspRender.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GBspTree.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GHeightMap.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GMap.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GMapLOD.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GMapObject.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GNode.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GNoise.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GNoiseMap.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GPolygonGen.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GQuadTree.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GQuadTreeIndex.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="map\GSpaceDivision.cpp">
-      <Filter>Common\Map</Filter>
-    </ClCompile>
     <ClCompile Include="GMatrix.cpp">
       <Filter>Common\math</Filter>
     </ClCompile>
@@ -149,12 +101,6 @@
     </ClCompile>
     <ClCompile Include="GSkyObj.cpp">
       <Filter>Common\Shape</Filter>
-    </ClCompile>
-    <ClCompile Include="GSprite.cpp">
-      <Filter>Common\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="GSpriteMgr.cpp">
-      <Filter>Common\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="GTextureMgr.cpp">
       <Filter>Common\Texture</Filter>
@@ -185,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="GWindow.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GBaseObj.cpp">
+      <Filter>Common\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,48 +176,6 @@
     <ClInclude Include="GLightObj.h">
       <Filter>Common\Light</Filter>
     </ClInclude>
-    <ClInclude Include="map\GBspParser.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GBspRender.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GBspTree.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GHeightMap.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GMap.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GMapLOD.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GMapObject.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GNode.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GNoise.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GNoiseMap.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GPolygonGen.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GQuadTree.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GQuadTreeIndex.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="map\GSpaceDivision.h">
-      <Filter>Common\Map</Filter>
-    </ClInclude>
     <ClInclude Include="GMatrix.h">
       <Filter>Common\math</Filter>
     </ClInclude>
@@ -289,12 +196,6 @@
     </ClInclude>
     <ClInclude Include="GSkyObj.h">
       <Filter>Common\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="GSprite.h">
-      <Filter>Common\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="GSpriteMgr.h">
-      <Filter>Common\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="GTextureMgr.h">
       <Filter>Common\Texture</Filter>
@@ -334,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="GWindow.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GBaseObj.h">
+      <Filter>Common\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

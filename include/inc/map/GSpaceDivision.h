@@ -1,9 +1,9 @@
 #pragma once
 #include "GNode.h"
-#include "../GModel.h"
-#include "../GBaseObj.h"
-#include "../GCamera.h"
-#include "../GTextureMgr.h"
+#include "GModel.h"
+#include "GBaseObj.h"
+#include "GCamera.h"
+#include "GTextureMgr.h"
 #include <queue>
 
 typedef vector <PNCT_VERTEX>			VertexList;

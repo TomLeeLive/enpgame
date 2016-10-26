@@ -153,7 +153,6 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClInclude Include="GAnimation.h" />
     <ClInclude Include="GAseObj.h" />
     <ClInclude Include="GAseParser.h" />
-    <ClInclude Include="GBaseObj.h" />
     <ClInclude Include="GBoneObj.h" />
     <ClInclude Include="GGbsObj.h" />
     <ClInclude Include="GLoadMgr.h" />
@@ -167,7 +166,6 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClCompile Include="GAnimation.cpp" />
     <ClCompile Include="GAseObj.cpp" />
     <ClCompile Include="GAseParser.cpp" />
-    <ClCompile Include="GBaseObj.cpp" />
     <ClCompile Include="GBoneObj.cpp" />
     <ClCompile Include="GGbsObj.cpp" />
     <ClCompile Include="GLoadToken.cpp" />

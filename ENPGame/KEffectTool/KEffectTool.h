@@ -15,6 +15,12 @@
 #include <memory>
 #include "GSprite.h"
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GEffectCore32d.lib" )
+#else
+#pragma comment( lib, "GEffectCore32.lib" )
+#endif
+
 // CKEffectToolApp:
 // 이 클래스의 구현에 대해서는 KEffectTool.cpp을 참조하십시오.
 //

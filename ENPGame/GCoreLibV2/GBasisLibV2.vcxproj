@@ -71,9 +71,8 @@
     <PostBuildEvent />
     <PostBuildEvent>
       <Command>copy "./GCoreLib32d.lib" "..\\..\\lib"
+md "..\\..\\include\\Inc"
 copy "*.h" "..\\..\\include\\Inc"
-md "..\\..\\include\\Inc\\map""
-copy ".\\map\\*.h" "..\\..\\include\\Inc\\map"
 md "..\\..\\Output\\data\\shader"
 copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     </PostBuildEvent>
@@ -98,8 +97,6 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <PostBuildEvent>
       <Command>copy "./GCoreLib32.lib" "..\\..\\lib"
 copy "*.h" "..\\..\\include\\Inc"
-md "..\\..\\include\\Inc\\map""
-copy ".\\map\\*.h" "..\\..\\include\\Inc\\map"
 md "..\\..\\Output\\data\\shader"
 copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     </PostBuildEvent>
@@ -107,6 +104,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
   <ItemGroup>
     <ClCompile Include="GArcBall.cpp" />
     <ClCompile Include="GBackViewCamera.cpp" />
+    <ClCompile Include="GBaseObj.cpp" />
     <ClCompile Include="GBasisLib_0.cpp" />
     <ClCompile Include="GBoxObj.cpp" />
     <ClCompile Include="GCamera.cpp" />
@@ -130,30 +128,15 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GSelect.cpp" />
     <ClCompile Include="GShape.cpp" />
     <ClCompile Include="GSkyObj.cpp" />
-    <ClCompile Include="GSprite.cpp" />
-    <ClCompile Include="GSpriteMgr.cpp" />
     <ClCompile Include="GTextureMgr.cpp" />
     <ClCompile Include="GTimer.cpp" />
     <ClCompile Include="GVector.cpp" />
     <ClCompile Include="GWindow.cpp" />
-    <ClCompile Include="map\GBspParser.cpp" />
-    <ClCompile Include="map\GBspRender.cpp" />
-    <ClCompile Include="map\GBspTree.cpp" />
-    <ClCompile Include="map\GHeightMap.cpp" />
-    <ClCompile Include="map\GMap.cpp" />
-    <ClCompile Include="map\GMapLOD.cpp" />
-    <ClCompile Include="map\GMapObject.cpp" />
-    <ClCompile Include="map\GNode.cpp" />
-    <ClCompile Include="map\GNoise.cpp" />
-    <ClCompile Include="map\GNoiseMap.cpp" />
-    <ClCompile Include="map\GPolygonGen.cpp" />
-    <ClCompile Include="map\GQuadTree.cpp" />
-    <ClCompile Include="map\GQuadTreeIndex.cpp" />
-    <ClCompile Include="map\GSpaceDivision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GArcBall.h" />
     <ClInclude Include="GBackViewCamera.h" />
+    <ClInclude Include="GBaseObj.h" />
     <ClInclude Include="GBasisLib_0.h" />
     <ClInclude Include="GBasisStd.h" />
     <ClInclude Include="GBoxObj.h" />
@@ -179,28 +162,12 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GSelect.h" />
     <ClInclude Include="GShape.h" />
     <ClInclude Include="GSkyObj.h" />
-    <ClInclude Include="GSprite.h" />
-    <ClInclude Include="GSpriteMgr.h" />
     <ClInclude Include="GTemplate.h" />
     <ClInclude Include="GTextureMgr.h" />
     <ClInclude Include="GTimer.h" />
     <ClInclude Include="GUtils.h" />
     <ClInclude Include="GVector.h" />
     <ClInclude Include="GWindow.h" />
-    <ClInclude Include="map\GBspParser.h" />
-    <ClInclude Include="map\GBspRender.h" />
-    <ClInclude Include="map\GBspTree.h" />
-    <ClInclude Include="map\GHeightMap.h" />
-    <ClInclude Include="map\GMap.h" />
-    <ClInclude Include="map\GMapLOD.h" />
-    <ClInclude Include="map\GMapObject.h" />
-    <ClInclude Include="map\GNode.h" />
-    <ClInclude Include="map\GNoise.h" />
-    <ClInclude Include="map\GNoiseMap.h" />
-    <ClInclude Include="map\GPolygonGen.h" />
-    <ClInclude Include="map\GQuadTree.h" />
-    <ClInclude Include="map\GQuadTreeIndex.h" />
-    <ClInclude Include="map\GSpaceDivision.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

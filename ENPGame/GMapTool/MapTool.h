@@ -19,7 +19,11 @@
 //Ãß°¡
 #include "MainFrm.h"
 
-
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GMapCore32d.lib" )
+#else
+#pragma comment( lib, "GMapCore32.lib" )
+#endif
 
 
 // CMapToolApp:

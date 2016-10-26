@@ -1,6 +1,6 @@
 #pragma once
-#include "../GBaseObj.h"
-#include "../GCamera.h"
+#include "GBaseObj.h"
+#include "GCamera.h"
 
 struct NodeMtrlInfo
 {

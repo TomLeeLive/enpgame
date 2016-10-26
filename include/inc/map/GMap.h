@@ -1,5 +1,5 @@
 #pragma once
-#include "../GShape.h"
+#include "GShape.h"
 using namespace DX;
 
 #define RANDOM(n)			(rand() % (n))

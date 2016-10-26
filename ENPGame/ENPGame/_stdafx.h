@@ -9,8 +9,12 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment( lib, "GCharCore32d.lib" )	
+#pragma comment( lib, "GEffectCore32d.lib" )
+#pragma comment( lib, "GMapCore32d.lib" )
 #else
 #pragma comment( lib, "GCharCore32.lib" )
+#pragma comment( lib, "GEffectCore32.lib" )
+#pragma comment( lib, "GMapCore32.lib" )
 #endif
 
 //공통 사용 헤더
@@ -19,6 +23,13 @@
 
 //캐릭터
 #ifdef G_MACRO_CHAR_ADD
+
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )	
+#else
+#pragma comment( lib, "GCharCore32.lib" )
+#endif
+
 #include "GTemplate.h"
 #include "GParser.h"
 #include "GObjMgr.h"
@@ -30,6 +41,13 @@
 
 //맵
 #ifdef G_MACRO_MAP_ADD
+
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GMapCore32d.lib" )
+#else
+#pragma comment( lib, "GMapCore32.lib" )
+#endif
+
 #include "GMiniMap.h"
 #include "map/GNoiseMap.h"
 #include "map/GQuadTreeIndex.h"
@@ -38,6 +56,13 @@
 
 //이펙트
 #ifdef G_MACRO_EFFECT_ADD
+
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GEffectCore32d.lib" )
+#else
+#pragma comment( lib, "GEffectCore32.lib" )
+#endif
+
 #include "GSprite.h"
 #endif
 
