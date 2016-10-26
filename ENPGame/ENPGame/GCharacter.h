@@ -1,5 +1,5 @@
 #pragma once
-#include "GObject.h"
+//#include "GObject.h"
 
 class GCharacter : public GObject
 {

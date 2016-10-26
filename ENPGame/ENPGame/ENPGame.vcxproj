@@ -118,6 +118,7 @@
     <ClInclude Include="GCharMgr.h" />
     <ClInclude Include="GHeroObj.h" />
     <ClInclude Include="GProjMain.h" />
+    <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,8 @@
-#include "GCharMgr.h"
-#include "GObjMgr.h"
+//#include "GCharMgr.h"
+//#include "GObjMgr.h"
+#include "_stdafx.h"
+
+#ifdef G_MACRO_CHAR_ADD
 
 BOOL	GCharacterLoader::GetDataFromSkinMeshString( TCHAR* pString, VOID* pData0, VOID* pData1 ) 
 {
@@ -157,3 +160,4 @@ GCharMgr::~GCharMgr()
 {
 }
 
+#endif

@@ -1,5 +1,5 @@
 #pragma once
-#include "GCharMgr.h"
+//#include "GCharMgr.h"
 
 #define MAX_BONE_MATRICES 255
 

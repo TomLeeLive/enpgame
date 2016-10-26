@@ -1,7 +1,7 @@
 #pragma once
-#include "GTemplate.h"
-#include "GCharacter.h"
-#include "GParser.h"
+//#include "GTemplate.h"
+//#include "GCharacter.h"
+//#include "GParser.h"
 
 class GCharacterLoader : public GParser
 {

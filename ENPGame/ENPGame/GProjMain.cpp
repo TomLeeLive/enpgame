@@ -1,5 +1,4 @@
-#include "GProjMain.h"
-#include "GObjMgr.h"
+#include "_stdafx.h"
 
 #ifdef G_MACRO_CHAR_ADD
 bool GProjMain::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)

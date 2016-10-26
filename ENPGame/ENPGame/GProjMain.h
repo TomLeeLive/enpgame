@@ -1,25 +1,6 @@
 #pragma once
-#include "GBasisLib_0.h"
-#include "GCamera.h"
 
-#define G_MACRO_MAP_ADD		1
-//#define G_MACRO_EFFECT_ADD   1
-//#define G_MACRO_CHAR_ADD     1
 
-#ifdef G_MACRO_CHAR_ADD
-#include "GHeroObj.h"
-#endif
-
-#ifdef G_MACRO_MAP_ADD
-#include "GMiniMap.h"
-#include "map/GNoiseMap.h"
-#include "map/GQuadTreeIndex.h"
-#include "map/GMapObject.h"
-#endif
-
-#ifdef G_MACRO_EFFECT_ADD
-#include "GSprite.h"
-#endif
 
 class GProjMain : public GBasisLib_0
 {

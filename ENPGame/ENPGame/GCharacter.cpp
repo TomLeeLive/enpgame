@@ -1,6 +1,9 @@
-#include "GCharacter.h"
-#include "GTimer.h"
-#include "GObjMgr.h"
+//#include "GCharacter.h"
+//#include "GTimer.h"
+//#include "GObjMgr.h"
+#include "_stdafx.h"
+
+#ifdef G_MACRO_CHAR_ADD
 
 void GCharacter::SetActionFrame( int iStart, int iEnd, 
 								 int iCharacterMatrixIndex,
@@ -108,3 +111,4 @@ GCharacter::~GCharacter(void)
 {
 }
 
+#endif

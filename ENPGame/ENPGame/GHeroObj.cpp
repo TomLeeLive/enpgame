@@ -1,4 +1,9 @@
-#include "GHeroObj.h"
+//#include "GHeroObj.h"
+#include "_stdafx.h"
+
+#ifdef G_MACRO_CHAR_ADD
+
+
 inline void DXUT_SetDebugName(ID3D11DeviceChild* pObj, const CHAR* pstrName)
 {
 	if (pObj)
@@ -212,3 +217,5 @@ GHeroObj::GHeroObj()
 GHeroObj::~GHeroObj()
 {
 }
+
+#endif
