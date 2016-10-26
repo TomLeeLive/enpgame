@@ -201,7 +201,7 @@ bool GProjMain::Init()
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
 	m_pMainCamera = make_shared<GCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 10.0f, 100.0f));
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(10.0f, 10.0f, -10.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 
 	float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
@@ -219,7 +219,7 @@ bool GProjMain::Init()
 	// 노이즈 맵 생성
 	//--------------------------------------------------------------------------------------
 	m_NoiseMap.Init(GetDevice(), m_pImmediateContext);
-	TMapDesc MapDesc = { pow(2.0f,7.0f) + 1, pow(2.0f,7.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
+	TMapDesc MapDesc = { pow(2.0f,5.0f) + 1, pow(2.0f,5.0f) + 1, 50.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
 	//TMapDesc MapDesc = { pow(2.0f,3.0f) + 1, pow(2.0f,3.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
 	if (!m_NoiseMap.Load(MapDesc))
 	{
@@ -329,10 +329,15 @@ bool GProjMain::Render()
 
 
 #ifdef G_MACRO_CHAR_ADD 
+
+	D3DXMATRIX matCharWld;
+	matCharWld = m_matWorld;
+	matCharWld._42 = 20.0f;
+
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
 #endif
@@ -355,6 +360,10 @@ bool GProjMain::Render()
 	ApplyRS(GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(GetContext(), GDxState::g_pDSSDepthEnable);
 
+	D3DXMATRIX matEffectWld;
+	matEffectWld = m_matWorld;
+	matEffectWld._42 = 10.0f;
+	m_pSprite.get()->SetMatrix(&matEffectWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_pSprite.get()->Render(m_pImmediateContext);
 	
 	//	m_RT.Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
