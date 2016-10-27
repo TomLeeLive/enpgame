@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisStd.h"
+#include "GCoreStd.h"
 enum STAGE_TYPE { t_VS, t_HS, t_DS, t_GS, t_PS, t_CS };
 
 class GDxShader

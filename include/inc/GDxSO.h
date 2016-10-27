@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisStd.h"
+#include "GCoreStd.h"
 namespace DX
 {
 	class GDxSO

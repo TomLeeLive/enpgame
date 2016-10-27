@@ -235,13 +235,13 @@ void GSelect::Update()
 		// Compute the vector of the pick ray in screen space
 		D3DXVECTOR3 v;
 		// 规过 1
-		/*v.x =  ( ( ( 2.0f * ptCursor.x ) / GBASIS::g_iClientWidth  ) - 1 );
-		v.y = -( ( ( 2.0f * ptCursor.y ) / GBASIS::g_iClientHeight ) - 1 );
+		/*v.x =  ( ( ( 2.0f * ptCursor.x ) / GCORESTD::g_iClientWidth  ) - 1 );
+		v.y = -( ( ( 2.0f * ptCursor.y ) / GCORESTD::g_iClientHeight ) - 1 );
 		v.z =  1.0f;
 		D3DXVec3TransformCoord( &v, &v, &m );*/
 		// 规过 2
-		v.x = (((2.0f * ptCursor.x) / GBASIS::g_iClientWidth) - 1) / m_matProj._11;
-		v.y = -(((2.0f * ptCursor.y) / GBASIS::g_iClientHeight) - 1) / m_matProj._22;
+		v.x = (((2.0f * ptCursor.x) / GCORESTD::g_iClientWidth) - 1) / m_matProj._11;
+		v.y = -(((2.0f * ptCursor.y) / GCORESTD::g_iClientHeight) - 1) / m_matProj._22;
 		v.z = 1.0f;
 
 		// Get the inverse view matrix

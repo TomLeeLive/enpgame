@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisStd.h"
+#include "GCoreStd.h"
 
 enum SET_DATA_TYPES
 {

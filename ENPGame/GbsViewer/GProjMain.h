@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisLib_0.h"
+#include "GCoreLibV2.h"
 #include "GModelViewCamera.h"
 #include "GObject.h"
 
@@ -10,7 +10,7 @@
 #endif
 
 //속성:디버깅:명령->C:\Program Files\Autodesk\3ds Max 2016\3dsmax.exe
-class GProjMain : public GBasisLib_0
+class GProjMain : public GCoreLibV2
 {
 public:
 	GGbsObj		m_tbsobj;

@@ -2,7 +2,7 @@
 
 
 
-class GProjMain : public GBasisLib_0
+class GProjMain : public GCoreLibV2
 {
 #ifdef G_MACRO_EFFECT_ADD
 public:

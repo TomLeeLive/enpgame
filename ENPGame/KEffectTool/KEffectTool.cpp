@@ -136,7 +136,7 @@ BOOL CKEffectToolApp::InitInstance()
 	GWindow::m_iWindowWidth = rcClient.Width();
 	GWindow::m_iWindowHeight = rcClient.Height();
 	m_LineShaderFile = L"data/shader/line.hlsl";
-	GBasisLib_0::GInit();
+	GCoreLibV2::GInit();
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);

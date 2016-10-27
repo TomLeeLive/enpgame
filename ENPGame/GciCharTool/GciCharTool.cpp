@@ -150,7 +150,7 @@ BOOL CGciCharToolApp::InitInstance()
 	GWindow::m_iWindowWidth = rcClient.Width();
 	GWindow::m_iWindowHeight = rcClient.Height();
 	m_LineShaderFile = L"data/shader/line.hlsl";
-	GBasisLib_0::GInit();
+	GCoreLibV2::GInit();
 
 
 	

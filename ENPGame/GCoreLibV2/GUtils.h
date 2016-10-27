@@ -1,7 +1,7 @@
 #pragma once
 #define DIRECTINPUT_VERSION 0x0800
 #ifndef UNICODE
-#error "TBASIS는 유니코드로 컴파일 해야 합니다."
+#error "GCore 는 유니코드로 컴파일 해야 합니다."
 #endif
 #pragma warning( disable:4005)
 
@@ -28,7 +28,7 @@
 using namespace Microsoft::WRL;
 using namespace std;
 
-namespace GBASIS
+namespace GCORESTD
 {
 	typedef basic_string<TCHAR> T_STR;
 	typedef basic_string<wchar_t> W_STG;
@@ -72,8 +72,8 @@ namespace GBASIS
 	static bool GetWtM(WCHAR* src, char* pDest)
 	{
 		// 변형되는 문자열의 크기가 반환된다.
-		int iLength = WideCharToMultiByte(CP_ACP, 0,
-			src, -1, 0, 0, NULL, NULL);
+		int iLength = WideCharToMultiByte(CP_ACP, 0,src, -1, 0, 0, NULL, NULL);
+		
 		int iRet = WideCharToMultiByte(CP_ACP, 0,
 			src, -1,  //  소스
 			pDest, iLength, // 대상
@@ -94,8 +94,8 @@ namespace GBASIS
 	static bool GetMtW(char* pSrc, WCHAR* pDest)
 	{
 		// 변형되는 문자열의 크기가 반환된다.
-		int iLength = MultiByteToWideChar(CP_ACP, 0,
-			pSrc, -1, 0, 0);
+		int iLength = MultiByteToWideChar(CP_ACP, 0, pSrc, -1, 0, 0);
+		
 		int iRet = MultiByteToWideChar(CP_ACP, 0,
 			pSrc, -1,  //  소스
 			pDest, iLength); // 대상		

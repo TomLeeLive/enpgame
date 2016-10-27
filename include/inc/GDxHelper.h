@@ -20,7 +20,7 @@
 #pragma comment( lib, "d2d1.lib" )
 #pragma comment( lib, "dwrite.lib" )
 
-namespace GBASIS
+namespace GCORESTD
 {
 	extern ID3D11Device*			g_pd3dDevice;
 	extern ID3D11DeviceContext*		g_pImmediateContext;

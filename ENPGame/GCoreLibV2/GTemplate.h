@@ -1,6 +1,6 @@
 #pragma once
-#include "GBasisStd.h"
-namespace GBASIS {
+#include "GCoreStd.h"
+namespace GCORESTD {
 
 	template< typename T > void Swap(T* a, T* b)
 	{

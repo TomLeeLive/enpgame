@@ -25,6 +25,8 @@ public:
 	// 윈도우 위치 화면 중앙으로 이동
 	void				CenterWindow(HWND hwnd);
 	bool				CheckWindowSize();
+
+public:
 	
 public:
 	virtual int			WndProc( HWND, UINT, WPARAM, LPARAM );

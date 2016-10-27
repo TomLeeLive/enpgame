@@ -1,5 +1,5 @@
 #include "GTimer.h"
-namespace GBASIS {
+namespace GCORESTD {
 float g_fSecPerFrame = 0.0f;
 float g_fDurationTime = 0.0f;
 }

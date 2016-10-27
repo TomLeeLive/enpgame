@@ -105,7 +105,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GArcBall.cpp" />
     <ClCompile Include="GBackViewCamera.cpp" />
     <ClCompile Include="GBaseObj.cpp" />
-    <ClCompile Include="GBasisLib_0.cpp" />
+    <ClCompile Include="GCoreLibV2.cpp" />
     <ClCompile Include="GBoxObj.cpp" />
     <ClCompile Include="GCamera.cpp" />
     <ClCompile Include="GDevice.cpp" />
@@ -116,6 +116,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GDxShader.cpp" />
     <ClCompile Include="GDxSO.cpp" />
     <ClCompile Include="GDxState.cpp" />
+    <ClCompile Include="GEnumeration.cpp" />
     <ClCompile Include="GFrustum.cpp" />
     <ClCompile Include="GInput.cpp" />
     <ClCompile Include="GLightObj.cpp" />
@@ -137,8 +138,8 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GArcBall.h" />
     <ClInclude Include="GBackViewCamera.h" />
     <ClInclude Include="GBaseObj.h" />
-    <ClInclude Include="GBasisLib_0.h" />
-    <ClInclude Include="GBasisStd.h" />
+    <ClInclude Include="GCoreLibV2.h" />
+    <ClInclude Include="GCoreStd.h" />
     <ClInclude Include="GBoxObj.h" />
     <ClInclude Include="GCamera.h" />
     <ClInclude Include="GDevice.h" />
@@ -149,6 +150,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GDxShader.h" />
     <ClInclude Include="GDxSO.h" />
     <ClInclude Include="GDxState.h" />
+    <ClInclude Include="GEnumeration.h" />
     <ClInclude Include="GFrustum.h" />
     <ClInclude Include="GInput.h" />
     <ClInclude Include="GLightObj.h" />
