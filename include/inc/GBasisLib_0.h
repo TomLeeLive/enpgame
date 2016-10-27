@@ -14,7 +14,8 @@ public:
 	UINT					m_iCullMode;
 	UINT					m_iSamplerMode;
 	bool					m_bWireFrameRender;
-	bool					m_bDebugPrint;
+	bool					m_bDebugFpsPrint;
+	bool					m_bDebugInfoPrint;
 	GDirectionLineShape		m_AxisLine;
 	T_STR					m_LineShaderFile;
 public:
@@ -33,6 +34,7 @@ public:
 	virtual bool		Update(ID3D11DeviceContext*    pContext);
 	virtual	bool		PreRender();
 	virtual bool		DrawDebug();
+	virtual	bool		DrawInfo();
 	virtual bool		DrawDebugRect(RECT* rcDest = NULL, TCHAR* pString = 0, D3DXCOLOR color = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f) );
 	virtual	bool		PostRender();
 

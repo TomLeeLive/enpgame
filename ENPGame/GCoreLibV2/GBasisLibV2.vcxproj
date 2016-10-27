@@ -116,6 +116,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GDxShader.cpp" />
     <ClCompile Include="GDxSO.cpp" />
     <ClCompile Include="GDxState.cpp" />
+    <ClCompile Include="GEnumeration.cpp" />
     <ClCompile Include="GFrustum.cpp" />
     <ClCompile Include="GInput.cpp" />
     <ClCompile Include="GLightObj.cpp" />
@@ -149,6 +150,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GDxShader.h" />
     <ClInclude Include="GDxSO.h" />
     <ClInclude Include="GDxState.h" />
+    <ClInclude Include="GEnumeration.h" />
     <ClInclude Include="GFrustum.h" />
     <ClInclude Include="GInput.h" />
     <ClInclude Include="GLightObj.h" />

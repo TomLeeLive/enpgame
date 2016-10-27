@@ -6,6 +6,47 @@ namespace GBASIS
 	UINT					g_iClientWidth;
 	UINT					g_iClientHeight;
 }
+
+static HMODULE                              s_hModDXGI = NULL;
+static HMODULE                              s_hModD3D11 = NULL;
+
+typedef HRESULT(WINAPI* LPCREATEDXGIFACTORY)(REFIID, void**);
+typedef HRESULT(WINAPI* LPD3D11CREATEDEVICE)(__in_opt IDXGIAdapter* pAdapter,
+	D3D_DRIVER_TYPE DriverType,
+	HMODULE Software,
+	UINT Flags,
+	__in_ecount_opt(FeatureLevels) CONST D3D_FEATURE_LEVEL* pFeatureLevels,
+	UINT FeatureLevels,
+	UINT SDKVersion,
+	__out_opt ID3D11Device** ppDevice,
+	__out_opt D3D_FEATURE_LEVEL* pFeatureLevel,
+	__out_opt ID3D11DeviceContext** ppImmediateContext);
+
+static LPCREATEDXGIFACTORY                  s_DynamicCreateDXGIFactory = NULL;
+static LPD3D11CREATEDEVICE                  s_DynamicD3D11CreateDevice = NULL;
+
+static bool EnsureD3D10APIs(void)
+{
+	if (s_hModD3D11 != NULL || s_hModDXGI != NULL)
+		return true;
+
+	// This may fail if Direct3D 10 isn't installed
+	s_hModD3D11 = LoadLibrary(L"d3d11.dll");
+	if (s_hModD3D11 != NULL)
+	{
+		s_DynamicD3D11CreateDevice = (LPD3D11CREATEDEVICE)GetProcAddress(s_hModD3D11, "D3D11CreateDevice");
+	}
+
+	s_hModDXGI = LoadLibrary(L"dxgi.dll");
+	if (s_hModDXGI)
+	{
+		s_DynamicCreateDXGIFactory = (LPCREATEDXGIFACTORY)GetProcAddress(s_hModDXGI, "CreateDXGIFactory");
+	}
+	return (s_hModDXGI != NULL) && (s_hModD3D11 != NULL);
+}
+
+
+
 HRESULT GDevice::InitDevice( HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsFullScreen )
 {	
 	HRESULT hr = S_OK;	
@@ -121,22 +162,77 @@ IDXGIFactory* GDevice::GetGIFactory()
 	return m_pGIFactory;
 }
 
+
+bool GDevice::Start() {
+	if (!EnsureD3D10APIs()) {
+		WCHAR strBuffer[512];
+		wcscpy_s(strBuffer, ARRAYSIZE(strBuffer),
+			L"This application requires a Direct3D 11 class\ndevice (hardware or reference rasterizer) running on Windows Vista Or Window7 (or later).");
+		MessageBox(0, strBuffer, L"Could not initialize Direct3D 11", MB_OK);
+		return false;
+	}
+	return false;
+}
+DXGI_MODE_DESC GDevice::FindClosestMatchingMode(DXGI_MODE_DESC& Desc, ID3D11Device* pd3dDevice) {
+	HRESULT	hr;
+	DXGI_MODE_DESC FindDesc;
+	GEnumAdapter* pAdapterInfo;
+
+	for (int i = 0; i < m_Enumeration.m_AdapterInfoList.size(); i++)
+	{
+		pAdapterInfo = m_Enumeration.m_AdapterInfoList[i];
+
+		LARGE_INTEGER DriverVersion;//user mode driver version 
+		if (pAdapterInfo->m_pAdapter->CheckInterfaceSupport(__uuidof(ID3D11Device), &DriverVersion) != DXGI_ERROR_UNSUPPORTED)
+		{
+			continue;
+		}
+		GEnumOutput* pOutputInfo;
+		for (int i = 0; i < pAdapterInfo->m_OutputInfoList.size(); i++)
+		{
+			pOutputInfo = pAdapterInfo->m_OutputInfoList[i];
+			if (SUCCEEDED(pOutputInfo->m_pOutput->FindClosestMatchingMode(&Desc, &FindDesc, pd3dDevice)))
+			{
+				return FindDesc;
+			}
+		}
+	}
+	return FindDesc;
+}
+
 //--------------------------------------------------------------------------------------
 // DXGIFactory 인터페이스로부터 IDXGISwapChain 인터페이스를 생성한다.
 //--------------------------------------------------------------------------------------
 HRESULT GDevice::CreateSwapChain( HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsFullScreen)
 {	
 	HRESULT hr = S_OK;
+	if (m_pGIFactory == NULL) return E_FAIL;
+
 	SetFullScreenFlag( IsFullScreen );
+
+	DXGI_MODE_DESC BufferDesc;
+	ZeroMemory(&BufferDesc, sizeof(BufferDesc));
+	BufferDesc.Width = iWidth;
+	BufferDesc.Height = iHeight;
+	BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	BufferDesc.RefreshRate.Numerator = 60;
+	BufferDesc.RefreshRate.Denominator = 1;
+
+	//적절한 화면 모드를 검색한다.
+	//DXGI_MODE_DESC FindBufferDesc;
+	ZeroMemory(&m_FindBufferDesc, sizeof(m_FindBufferDesc));
+	m_FindBufferDesc = FindClosestMatchingMode(BufferDesc, m_pd3dDevice);
+
 	if( m_pGIFactory == NULL ) return S_FALSE;
 	DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width		= iWidth;
-    sd.BufferDesc.Height	= iHeight;
-    sd.BufferDesc.Format	= DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
+	ZeroMemory(&sd, sizeof(sd));
+	sd.BufferCount = 1;
+	sd.BufferDesc = m_FindBufferDesc;
+	sd.BufferDesc.Width = iWidth;
+	sd.BufferDesc.Height = iHeight;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
     sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     sd.OutputWindow = hWnd;
     sd.SampleDesc.Count = 1;
@@ -301,6 +397,13 @@ HRESULT GDevice::CreateGIFactory()
 	IDXGIFactory * pIDXGIFactory;
 	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory), (void **)&m_pGIFactory);
 	
+	// 추가 for HW info 출력
+	if (FAILED(m_Enumeration.Enumerate(m_pGIFactory)))
+	{
+		return hr;
+	}
+
+
 	pDXGIDevice->Release();
 	pDXGIAdapter->Release();
 
@@ -340,6 +443,9 @@ HRESULT GDevice::SetViewPort()
 
 bool GDevice::CleanupDevice()
 {
+	// 추가함 m_Enumeration은 HW info 출력을 위해 추가하였음.
+	m_Enumeration.ClearAdapterInfoList();
+
 	ClearD3D11DeviceContext(m_pImmediateContext);
 	// 바인딩되어 있는 각종 뷰리소스를 해제한다.
 	if( FAILED( DeleteDxResource()))

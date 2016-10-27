@@ -1,11 +1,15 @@
 #pragma once
 #include "GBasisStd.h"
 #include "GDxHelperEx.h"
+#include "GEnumeration.h"
+
 using namespace DX;
 
 class GDevice 
 {
 public:
+	DXGI_MODE_DESC			m_FindBufferDesc;
+	GEnumeration			m_Enumeration;
 	GDxRT					m_DefaultRT;
 	//--------------------------------------------------------------------------------------
 	// Global Variables
@@ -30,6 +34,10 @@ public:
 	ID3D11DepthStencilView**	GetDepthStencilViewAddress() { return  m_DefaultRT.m_pDepthStencilView.GetAddressOf(); }
 	IDXGIFactory*			GetGIFactory();
 public:
+	// 추가함수 for HW info 출력
+	bool Start();
+	DXGI_MODE_DESC FindClosestMatchingMode(DXGI_MODE_DESC& Desc, ID3D11Device* pd3dDevice);
+
 	//--------------------------------------------------------------------------------------
 	// 디바이스 및 스왑체인 생성 : InitDevice()
 	//--------------------------------------------------------------------------------------

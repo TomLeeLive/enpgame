@@ -1,20 +1,22 @@
 #include "GBasisLib_0.h"
 
+#define G_MACRO_DEBUG_STR_INTERVAL 30
+
 T_STR RasterizerState[] =
 {
-	_T("g_pRSBackCullSolid"),
-	_T("g_pRSNoneCullSolid"),
-	_T("g_pRSFrontCullSolid"),
+	_T("RS_BackCullSolid"),
+	_T("RS_NoneCullSolid"),
+	_T("RS_FrontCullSolid"),
 };
 
 T_STR SamplerState[] =
 {
-	_T("g_pSSWrapLinear"),
-	_T("g_pSSWrapPoint"),
-	_T("g_pSSMirrorLinear"),
-	_T("g_pSSMirrorPoint"),
-	_T("g_pSSClampLinear"),
-	_T("g_pSSClampPoint"),
+	_T("SS_WrapLinear"),
+	_T("SS_WrapPoint"),
+	_T("SS_MirrorLinear"),
+	_T("SS_MirrorPoint"),
+	_T("SS_ClampLinear"),
+	_T("SS_ClampPoint"),
 };
 
 int GBasisLib_0::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
@@ -28,6 +30,57 @@ bool GBasisLib_0::PreInit()
 		MessageBox( 0, _T("CreateDevice  실패"), _T("Fatal error"), MB_OK );
 		return false;
 	}
+
+
+
+
+	// ─────────────────────────────────
+	// for HW 정보 출력.
+	// ─────────────────────────────────
+	FILE	*fp;
+	fp = _tfopen(_T("HWInfo.txt"), _T("wt"));
+	if (!fp)
+	{
+		MessageBox(NULL, _T("HWInfo.txt 파일을 생성 실패."), _T("파일생성에러"), MB_ICONERROR);
+		return FALSE;
+	}
+	GEnumAdapter* pAdapterInfo;
+	_ftprintf(fp, L"Num Adapter : %d\n", m_Enumeration.m_AdapterInfoList.size());
+
+	for (int i = 0; i < m_Enumeration.m_AdapterInfoList.size(); i++)
+	{
+		pAdapterInfo = m_Enumeration.m_AdapterInfoList[i];
+		_ftprintf(fp, L"Description[%d] : %s,  Num Output:%d\n", i, pAdapterInfo->m_AdapterDesc.Description,
+			pAdapterInfo->m_OutputInfoList.size());
+
+		GEnumOutput* pOutputInfo;
+		for (int i = 0; i < pAdapterInfo->m_OutputInfoList.size(); i++)
+		{
+			pOutputInfo = pAdapterInfo->m_OutputInfoList[i];
+			_ftprintf(fp, L"\n\tOutput[%d] m_Desc:%s\t DesktopCoordinates:%d,%d,%d,%d : NumDisplayMode:%d\t\n", i, pOutputInfo->m_Desc.DeviceName,
+				pOutputInfo->m_Desc.DesktopCoordinates.left,
+				pOutputInfo->m_Desc.DesktopCoordinates.top,
+				pOutputInfo->m_Desc.DesktopCoordinates.right,
+				pOutputInfo->m_Desc.DesktopCoordinates.bottom,
+				pOutputInfo->m_DisplayModeList.size());
+
+			// 연장시는 left:1680, right == 3360;
+
+			DXGI_MODE_DESC* pModeDesc;
+			for (int i = 0; i < pOutputInfo->m_DisplayModeList.size(); i++)
+			{
+				pModeDesc = &pOutputInfo->m_DisplayModeList[i];
+				_ftprintf(fp, L"\t\tDisplayMode[%d] Width:%d height:%d FORMAT:%d RefreshRate:%d-%d\t\n", i,
+					pModeDesc->Width, pModeDesc->Height,
+					pModeDesc->Format,
+					pModeDesc->RefreshRate.Numerator, pModeDesc->RefreshRate.Denominator);
+			}
+		}
+	}
+
+	fclose(fp);
+	//MessageBox(NULL, _T("DeviceInfo.txt 파일을 성공적으로 생성하였습니다."), _T("파일생성"), MB_OK);
+
 	if( !m_Timer.Init() )	return false;	
 
 	// DirectX Input 초기화
@@ -150,9 +203,14 @@ bool GBasisLib_0::GRender()
 	Render();
 	if (I_Input.KeyCheck(DIK_V))
 	{
-		m_bDebugPrint = !m_bDebugPrint;
+		m_bDebugFpsPrint = !m_bDebugFpsPrint;
 	}
-	if( m_bDebugPrint )	DrawDebug();
+	if (I_Input.KeyCheck(DIK_I))
+	{
+		m_bDebugInfoPrint = !m_bDebugInfoPrint;
+	}
+	if( m_bDebugFpsPrint )	DrawDebug();
+	if (m_bDebugInfoPrint)	DrawInfo();
 	PostRender();	
 	return true;
 }
@@ -172,21 +230,113 @@ bool GBasisLib_0::PreRender()
 	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthEnable);
 	return true;
 }
+bool GBasisLib_0::DrawInfo() {
+
+	TCHAR pHWInfoBuffer[256];		// HW 정보 출력
+	TCHAR pScreenInfoBuffer[256];	// Screen Resolution 정보 출력
+
+	memset(pHWInfoBuffer, 0, sizeof(TCHAR) * 256);
+	memset(pScreenInfoBuffer, 0, sizeof(TCHAR) * 256);
+	//-----------------------------------------------------------------------
+	// 적용되어 RasterizerState 타입 표시
+	//-----------------------------------------------------------------------	
+	RECT rc;
+	rc.top = m_DefaultRT.m_vp.Height - 60;
+	rc.bottom = m_DefaultRT.m_vp.Height;
+	rc.left = 0;
+	rc.right = m_DefaultRT.m_vp.Width;
+	T_STR str = RasterizerState[m_iCullMode];
+	//_tcsncat(pRSBuffer, str.c_str(), _tcslen(str.c_str()));
+	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	//DrawDebugRect(&rc, pRSBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//-----------------------------------------------------------------------
+	// 적용되어 SamplerState 타입 표시
+	//-----------------------------------------------------------------------	
+	rc.top = m_DefaultRT.m_vp.Height - G_MACRO_DEBUG_STR_INTERVAL;
+	rc.bottom = m_DefaultRT.m_vp.Height;
+	rc.left = 0;
+	rc.right = m_DefaultRT.m_vp.Width;
+	str = SamplerState[m_iSamplerMode];
+	//_tcsncat(pSSBuffer, str.c_str(), _tcslen(str.c_str()));
+	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	//DrawDebugRect(&rc, pSSBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+
+
+	GEnumAdapter* pAdapterInfo;
+
+	int iPos = G_MACRO_DEBUG_STR_INTERVAL;
+	for (int i = 0; i < m_Enumeration.m_AdapterInfoList.size(); i++)
+	{
+		pAdapterInfo = m_Enumeration.m_AdapterInfoList[i];
+
+		_stprintf_s(pHWInfoBuffer, L"Desc[%d] : %s,  DispCnt:%d\n", i, pAdapterInfo->m_AdapterDesc.Description, pAdapterInfo->m_OutputInfoList.size());
+		iPos += (i * G_MACRO_DEBUG_STR_INTERVAL); rc.top = iPos;
+		DrawDebugRect(&rc, pHWInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+
+		_stprintf_s(pHWInfoBuffer, L"DXGI_FORMAT:%d, Refresh:%u/%u Hz\n", m_FindBufferDesc.Format, m_FindBufferDesc.RefreshRate.Numerator, m_FindBufferDesc.RefreshRate.Denominator);
+		iPos += G_MACRO_DEBUG_STR_INTERVAL; rc.top = iPos;
+		DrawDebugRect(&rc, pHWInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+
+	iPos += G_MACRO_DEBUG_STR_INTERVAL; rc.top = iPos;//rc.bottom = m_DefaultRT.m_vp.Height;rc.left = 0;rc.right = m_DefaultRT.m_vp.Width;
+
+	switch (m_driverType)
+	{
+	case D3D_DRIVER_TYPE_UNKNOWN:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_UNKNOWN", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	case D3D_DRIVER_TYPE_HARDWARE:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_HARDWARE", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	case D3D_DRIVER_TYPE_REFERENCE:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_REFERENCE", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	case D3D_DRIVER_TYPE_NULL:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_NULL", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	case D3D_DRIVER_TYPE_SOFTWARE:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_SOFTWARE", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	case D3D_DRIVER_TYPE_WARP:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_WARP", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	default:
+		DrawDebugRect(&rc, L"D3D_DRIVER_TYPE_?????", D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		break;
+	}
+
+	iPos += G_MACRO_DEBUG_STR_INTERVAL; rc.top = iPos;
+	_stprintf_s(pScreenInfoBuffer, _T("(%d x %d)"), (int)m_DefaultRT.m_vp.Width, (int)m_DefaultRT.m_vp.Height);
+	DrawDebugRect(&rc, pScreenInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+
+	return true;
+}
 bool GBasisLib_0::DrawDebug()
 {
+	TCHAR pFPSBuffer[256];			// FPS 출력
 
-	// FPS 출력
-	TCHAR pBuffer[256];
-	memset( pBuffer, 0, sizeof( TCHAR ) * 256 );
-	_stprintf_s( pBuffer, _T("FPS:%d"), m_Timer.GetFPS() );	
+	//TCHAR pRSBuffer[256];
+	//TCHAR pSSBuffer[256];
+
+	memset(pFPSBuffer, 0, sizeof( TCHAR ) * 256 );
+
+	//memset(pRSBuffer, 0, sizeof(TCHAR) * 256);
+	//memset(pSSBuffer, 0, sizeof(TCHAR) * 256);
+
+	//_stprintf_s(pRSBuffer, _T("RS:"));
+	//_stprintf_s(pSSBuffer, _T("SS:"));
+
+	_stprintf_s( pFPSBuffer, _T("FPS:%d"), m_Timer.GetFPS() );	
 	
 	m_Font.Begin();
 
 	//m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
-	RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
-	m_Font.SetText(D2D1::Point2F(rc1.right, rc1.bottom), pBuffer, D2D1::ColorF(1, 1, 0, 1));
+	//RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
+	RECT rc1 = { 0,0, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height };
+	m_Font.SetText(D2D1::Point2F(rc1.right, rc1.bottom), pFPSBuffer, D2D1::ColorF(1, 1, 0, 1));
 	m_Font.SetFont(L"Impact");
 	m_Font.SetBold(true);
 	//m_Font.SetFontSize(100);
@@ -195,26 +345,10 @@ bool GBasisLib_0::DrawDebug()
 	m_Font.DrawText(D2D1::Point2F(rc1.left, rc1.top), D2D1::ColorF(1.0f, 0.0f, 0.0f,1.0f));
 	m_Font.End();
 
-	//-----------------------------------------------------------------------
-	// 적용되어 RasterizerState 타입 표시
-	//-----------------------------------------------------------------------	
-	RECT rc;
-	rc.top = 30;
-	rc.bottom = 600;
-	rc.left = 0;
-	rc.right = 800;
-	T_STR str = RasterizerState[m_iCullMode];
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	
 
-	//-----------------------------------------------------------------------
-	// 적용되어 SamplerState 타입 표시
-	//-----------------------------------------------------------------------	
-	rc.top = 50;
-	rc.bottom = 600;
-	rc.left = 0;
-	rc.right = 800;
-	str = SamplerState[m_iSamplerMode];
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+
+
 
 	return true;
 }
@@ -231,7 +365,7 @@ bool GBasisLib_0::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
         int height = static_cast <int> (rtSize.height);
 
 		m_Font.Begin();
-		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 		m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 		//RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
 
@@ -269,7 +403,13 @@ bool GBasisLib_0::ToolRun()
 bool GBasisLib_0::Run()
 {
 	I_Input.m_hWnd = m_hWnd;
+
+	GDevice::Start();
+
 	if( !GInit() ) return false;
+
+	
+
 	// Main message loop
     MSG msg = {0};
     while( WM_QUIT != msg.message )
@@ -325,7 +465,8 @@ GBasisLib_0::GBasisLib_0(void)
 	m_iCullMode = 1;
 	m_iSamplerMode = 0;
 	m_bWireFrameRender = false;
-	m_bDebugPrint = true;
+	m_bDebugFpsPrint = true;
+	m_bDebugInfoPrint = true;
 	m_LineShaderFile = L"data/shader/line.hlsl";
 }
 
