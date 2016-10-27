@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisStd.h"
+#include "GCoreStd.h"
 #include <dinput.h>
 #pragma comment (lib, "dinput8.lib")
 

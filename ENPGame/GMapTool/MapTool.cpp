@@ -371,7 +371,7 @@ bool CMapToolApp::DrawDebug()
 	rc.bottom = m_DefaultRT.m_vp.Height;
 	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(1.0f, 0.5f, 0.5f, 1.0f));
 
-	return GBasisLib_0::DrawDebug();
+	return GCoreLibV2::DrawDebug();
 }
 
 CMapToolApp::CMapToolApp()
@@ -496,7 +496,7 @@ BOOL CMapToolApp::InitInstance()
 	GWindow::m_iWindowWidth = rcClient.Width();
 	GWindow::m_iWindowHeight = rcClient.Height();
 
-	GBasisLib_0::GInit();
+	GCoreLibV2::GInit();
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);

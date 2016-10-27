@@ -28,7 +28,7 @@
 using namespace Microsoft::WRL;
 using namespace std;
 
-namespace GBASIS
+namespace GCORESTD
 {
 	typedef basic_string<TCHAR> T_STR;
 	typedef basic_string<wchar_t> W_STG;

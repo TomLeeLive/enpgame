@@ -5,7 +5,7 @@
 #include "GDirectWrite.h"
 #include "GShape.h"
 
-class GBasisLib_0 : public GWindow
+class GCoreLibV2 : public GWindow
 {
 public:
 	GTimer					m_Timer;
@@ -51,6 +51,6 @@ public:
 	virtual		HRESULT		DeleteResource();
 	
 public:
-	GBasisLib_0(void);
-	virtual ~GBasisLib_0(void);
+	GCoreLibV2(void);
+	virtual ~GCoreLibV2(void);
 };

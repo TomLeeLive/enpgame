@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisStd.h"
+#include "GCoreStd.h"
 #include "GDxHelperEx.h"
 #include "GEnumeration.h"
 

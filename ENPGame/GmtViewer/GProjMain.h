@@ -1,5 +1,5 @@
 #pragma once
-#include "GBasisLib_0.h"
+#include "GCoreLibV2.h"
 #include "GObject.h"
 #include "GModelViewCamera.h"
 
@@ -9,7 +9,7 @@
 #pragma comment( lib, "GCharCore32.lib" )
 #endif
 
-class GProjMain : public GBasisLib_0
+class GProjMain : public GCoreLibV2
 {
 public:
 	GBoneObj		m_tObject;

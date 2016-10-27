@@ -1,6 +1,6 @@
 #include "GInput.h"
 
-namespace GBASIS {
+namespace GCORESTD {
 	TBASIS_INPUT_MAP g_InputData;
 }
 

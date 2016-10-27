@@ -3,7 +3,7 @@
 
 GWindow* g_pWindow = NULL;
 
-namespace GBASIS
+namespace GCORESTD
 {
 	HWND		g_hWnd;
 	HINSTANCE	g_hInstance;

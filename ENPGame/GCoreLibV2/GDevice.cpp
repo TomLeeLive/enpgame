@@ -1,5 +1,5 @@
 #include "GDevice.h"
-namespace GBASIS
+namespace GCORESTD
 {
 	ID3D11Device*			g_pd3dDevice = NULL;
 	ID3D11DeviceContext*    g_pImmediateContext = NULL;
@@ -117,8 +117,8 @@ HRESULT GDevice::ResizeDevice( UINT iWidth, UINT iHeight)
 	{
 		return hr;
 	}
-	GBASIS::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
-	GBASIS::g_iClientHeight = m_SwapChainDesc.BufferDesc.Height;
+	GCORESTD::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
+	GCORESTD::g_iClientHeight = m_SwapChainDesc.BufferDesc.Height;
 
 	// 랜더타켓뷰 생성 및 적용한다.
     if( FAILED( hr = SetRenderTargetView() ) ) 
@@ -249,8 +249,8 @@ HRESULT GDevice::CreateSwapChain( HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsF
 	{
 		return hr;
 	}
-	GBASIS::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
-	GBASIS::g_iClientHeight = m_SwapChainDesc.BufferDesc.Height;
+	GCORESTD::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
+	GCORESTD::g_iClientHeight = m_SwapChainDesc.BufferDesc.Height;
 	return hr;
 }
 //--------------------------------------------------------------------------------------
@@ -321,10 +321,10 @@ HRESULT GDevice::CreateDeviceAndSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, 
 	{
 		return hr;
 	}
-	GBASIS::g_pd3dDevice = m_pd3dDevice;
-	GBASIS::g_pImmediateContext = m_pImmediateContext;
-	GBASIS::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
-	GBASIS::g_iClientHeight = m_SwapChainDesc.BufferDesc.Height;
+	GCORESTD::g_pd3dDevice = m_pd3dDevice;
+	GCORESTD::g_pImmediateContext = m_pImmediateContext;
+	GCORESTD::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
+	GCORESTD::g_iClientHeight = m_SwapChainDesc.BufferDesc.Height;
 	return hr;
 }
 
@@ -374,8 +374,8 @@ HRESULT GDevice::CreateDevice()
     }
     if( FAILED( hr ) )       return hr;
 
-	GBASIS::g_pd3dDevice = m_pd3dDevice;
-	GBASIS::g_pImmediateContext = m_pImmediateContext;
+	GCORESTD::g_pd3dDevice = m_pd3dDevice;
+	GCORESTD::g_pImmediateContext = m_pImmediateContext;
 
 	if (FAILED( hr=GDxState::SetState(m_pd3dDevice))) return hr;
 

@@ -114,9 +114,6 @@
     <ClCompile Include="GSelect.cpp">
       <Filter>Common\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="GBasisLib_0.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GDevice.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -136,6 +133,9 @@
       <Filter>Common\Object</Filter>
     </ClCompile>
     <ClCompile Include="GEnumeration.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GCoreLibV2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,12 +218,6 @@
     <ClInclude Include="GUtils.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GBasisStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GBasisLib_0.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GDevice.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -243,6 +237,12 @@
       <Filter>Common\Object</Filter>
     </ClInclude>
     <ClInclude Include="GEnumeration.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GCoreLibV2.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GCoreStd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -59,7 +59,7 @@
 #endif
 
 //Main
-#include "GBasisLib_0.h"
+#include "GCoreLibV2.h"
 #include "GProjMain.h"
 
 #endif

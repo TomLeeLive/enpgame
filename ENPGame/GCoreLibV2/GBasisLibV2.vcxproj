@@ -105,7 +105,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GArcBall.cpp" />
     <ClCompile Include="GBackViewCamera.cpp" />
     <ClCompile Include="GBaseObj.cpp" />
-    <ClCompile Include="GBasisLib_0.cpp" />
+    <ClCompile Include="GCoreLibV2.cpp" />
     <ClCompile Include="GBoxObj.cpp" />
     <ClCompile Include="GCamera.cpp" />
     <ClCompile Include="GDevice.cpp" />
@@ -138,8 +138,8 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GArcBall.h" />
     <ClInclude Include="GBackViewCamera.h" />
     <ClInclude Include="GBaseObj.h" />
-    <ClInclude Include="GBasisLib_0.h" />
-    <ClInclude Include="GBasisStd.h" />
+    <ClInclude Include="GCoreLibV2.h" />
+    <ClInclude Include="GCoreStd.h" />
     <ClInclude Include="GBoxObj.h" />
     <ClInclude Include="GCamera.h" />
     <ClInclude Include="GDevice.h" />

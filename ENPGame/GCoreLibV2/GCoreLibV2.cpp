@@ -1,4 +1,4 @@
-#include "GBasisLib_0.h"
+#include "GCoreLibV2.h"
 
 #define G_MACRO_DEBUG_STR_INTERVAL 30
 
@@ -19,11 +19,11 @@ T_STR SamplerState[] =
 	_T("SS_ClampPoint"),
 };
 
-int GBasisLib_0::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+int GCoreLibV2::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 	return -1;
 }
-bool GBasisLib_0::PreInit()
+bool GCoreLibV2::PreInit()
 {
 	if( FAILED( InitDevice(m_hWnd,this->m_iWindowWidth, this->m_iWindowHeight) ) )
 	{
@@ -96,15 +96,15 @@ bool GBasisLib_0::PreInit()
 	}
 	return true;
 }
-bool GBasisLib_0::Init()
+bool GCoreLibV2::Init()
 {
 	return true;
 }
-bool GBasisLib_0::PostInit()
+bool GCoreLibV2::PostInit()
 {
 	return true;
 }
-bool GBasisLib_0::GInit()
+bool GCoreLibV2::GInit()
 {
 	if( !PreInit() ) return false;
 	if( !Init() ) return false;
@@ -112,14 +112,14 @@ bool GBasisLib_0::GInit()
 	return true;
 }
 
-bool GBasisLib_0::PreFrame()
+bool GCoreLibV2::PreFrame()
 {
 	if( !m_Timer.Frame() ) return false;
 	if( !I_Input.Frame() ) return false;	
 	if (!Update(m_pImmediateContext)) return false;
 	return true;
 }
-bool GBasisLib_0::Update(ID3D11DeviceContext*    pContext)
+bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 {
 	if (I_Input.KeyCheck(DIK_1) == KEY_UP)
 	{
@@ -166,19 +166,19 @@ bool GBasisLib_0::Update(ID3D11DeviceContext*    pContext)
 	pContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iPrimitiveType);
 	return true;
 }
-bool GBasisLib_0::PostFrame()
+bool GCoreLibV2::PostFrame()
 {
 	return true;
 }
-bool GBasisLib_0::Frame()
+bool GCoreLibV2::Frame()
 {
 	return true;
 }
-bool GBasisLib_0::Release()
+bool GCoreLibV2::Release()
 {
 	return true;
 }
-bool GBasisLib_0::GRelease()
+bool GCoreLibV2::GRelease()
 {
 	CleanupDevice();
 	if( !m_Timer.Release() ) return false;		
@@ -187,14 +187,14 @@ bool GBasisLib_0::GRelease()
 	if( !I_Input.Release() ) return false;	
 	return Release();
 }
-bool GBasisLib_0::GFrame()
+bool GCoreLibV2::GFrame()
 {
 	PreFrame();
 	Frame();
 	PostFrame();
 	return true;
 }
-bool GBasisLib_0::GRender()
+bool GCoreLibV2::GRender()
 {
 	I_Input.Render();
 	m_Timer.Render();
@@ -215,11 +215,11 @@ bool GBasisLib_0::GRender()
 	return true;
 }
 
-bool GBasisLib_0::Render()
+bool GCoreLibV2::Render()
 {
 	return true;
 }
-bool GBasisLib_0::PreRender()
+bool GCoreLibV2::PreRender()
 {
 	// Just clear the backbuffer
     float ClearColor[4] = { 0.5f, 1.0f, 0.5f, 1.0f }; //red,green,blue,alpha
@@ -230,7 +230,7 @@ bool GBasisLib_0::PreRender()
 	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthEnable);
 	return true;
 }
-bool GBasisLib_0::DrawInfo() {
+bool GCoreLibV2::DrawInfo() {
 
 	TCHAR pHWInfoBuffer[256];		// HW 정보 출력
 	TCHAR pScreenInfoBuffer[256];	// Screen Resolution 정보 출력
@@ -312,7 +312,7 @@ bool GBasisLib_0::DrawInfo() {
 
 	return true;
 }
-bool GBasisLib_0::DrawDebug()
+bool GCoreLibV2::DrawDebug()
 {
 	TCHAR pFPSBuffer[256];			// FPS 출력
 
@@ -353,7 +353,7 @@ bool GBasisLib_0::DrawDebug()
 	return true;
 }
 
-bool GBasisLib_0::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
+bool GCoreLibV2::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
 {
 	if( rcDest == NULL ) return false;	
 
@@ -382,7 +382,7 @@ bool GBasisLib_0::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
 
 	return true;
 }
-bool GBasisLib_0::PostRender()
+bool GCoreLibV2::PostRender()
 {	
 	HRESULT hr;
 	if (FAILED(hr = GetSwapChain()->Present(0, 0)))
@@ -391,7 +391,7 @@ bool GBasisLib_0::PostRender()
 	}
 	return true;
 }
-bool GBasisLib_0::ToolRun()
+bool GCoreLibV2::ToolRun()
 {
 	if( !GInit() ) return false;
 	
@@ -400,7 +400,7 @@ bool GBasisLib_0::ToolRun()
 	
 	return true;
 }
-bool GBasisLib_0::Run()
+bool GCoreLibV2::Run()
 {
 	I_Input.m_hWnd = m_hWnd;
 
@@ -428,7 +428,7 @@ bool GBasisLib_0::Run()
 	if( !GRelease() ) return false;
 	return true;
 }
-HRESULT GBasisLib_0::CreateDxResource()
+HRESULT GCoreLibV2::CreateDxResource()
 {
 	IDXGISurface1*		pBackBuffer=NULL;
 	HRESULT hr = GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), (LPVOID*)&pBackBuffer);	
@@ -446,20 +446,20 @@ HRESULT GBasisLib_0::CreateDxResource()
 	}
 	return CreateResource();
 }
-HRESULT GBasisLib_0::DeleteDxResource()
+HRESULT GCoreLibV2::DeleteDxResource()
 {
 	if( !m_Font.Release() ) return false;		
 	return DeleteResource();
 }
-HRESULT GBasisLib_0::CreateResource()
+HRESULT GCoreLibV2::CreateResource()
 {
 	return S_OK;
 }
-HRESULT GBasisLib_0::DeleteResource()
+HRESULT GCoreLibV2::DeleteResource()
 {
 	return S_OK;
 }
-GBasisLib_0::GBasisLib_0(void)
+GCoreLibV2::GCoreLibV2(void)
 {	
 	m_iPrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	m_iCullMode = 1;
@@ -470,6 +470,6 @@ GBasisLib_0::GBasisLib_0(void)
 	m_LineShaderFile = L"data/shader/line.hlsl";
 }
 
-GBasisLib_0::~GBasisLib_0(void)
+GCoreLibV2::~GCoreLibV2(void)
 {
 }

@@ -1,5 +1,5 @@
-#ifndef GBASIS_H
-#define GBASIS_H
+#ifndef GCORESTD_H
+#define GCORESTD_H
 #include "GUtils.h"
 #include "GDxHelper.h"
 
@@ -10,7 +10,7 @@
 #else
 #pragma comment( lib, "GCoreLib32.lib" )
 #endif
-namespace GBASIS
+namespace GCORESTD
 {
 	extern float		g_fSecPerFrame;
 	extern float		g_fDurationTime;
@@ -19,7 +19,7 @@ namespace GBASIS
 	extern UINT			g_iClientWidth;
 	extern UINT			g_iClientHeight;
 }
-using namespace GBASIS;
+using namespace GCORESTD;
 //////////////////////////////////////////////
 // WinMain ∏≈≈©∑Œ
 //////////////////////////////////////////////
@@ -27,4 +27,4 @@ using namespace GBASIS;
 #define GBASIS_WIN(x) if( !gProjMain.InitWindow( hInstance, nCmdShow,  L#x ) )	{	return 0;	}	ShowCursor ( TRUE );gProjMain.Run();	return 1; }
 #define GBASIS_RUN(x) GBASIS_START; GBASIS_WIN(x);
 
-#endif //GBASIS_H
+#endif //GCORESTD_H

@@ -8,7 +8,7 @@
 #endif
 
 #include "resource.h"       // 주 기호입니다.
-#include "GBasisLib_0.h"
+#include "GCoreLibV2.h"
 #include "GciAnimation/GHeroObj.h"
 #include "GCamera.h"
 
@@ -22,7 +22,7 @@
 // 이 클래스의 구현에 대해서는 GciCharTool.cpp을 참조하십시오.
 //
 
-class CGciCharToolApp : public CWinAppEx, public GBasisLib_0
+class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
 	shared_ptr<GCamera > m_pMainCamera;

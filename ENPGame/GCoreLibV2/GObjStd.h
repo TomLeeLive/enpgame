@@ -17,7 +17,7 @@
 #define ID_TBASIS_GN 12  // Generic
 #define ID_TBASIS_EV 13  // EnvMap
 
-using namespace GBASIS;
+using namespace GCORESTD;
 
 const enum OBJECTCLASSTYPE {
 	CLASS_GEOM = 0,
