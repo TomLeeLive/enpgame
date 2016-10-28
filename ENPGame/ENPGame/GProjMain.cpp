@@ -574,7 +574,7 @@ int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return -1;
 }
-GBASIS_RUN(ENP Game);
+GCORE_RUN(ENP Game);
 
 
 

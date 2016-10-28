@@ -169,7 +169,7 @@ bool GSkinObj::LoadMesh(FILE	*fp, GMesh* pMesh, tSkmMesh* pData, const TCHAR* sz
 		loadFile += Dir;
 		loadFile += pMesh->m_szTexName[itex];
 		// 디퓨즈 텍스쳐
-		if (pMesh->m_iTexType[itex] == ID_TBASIS_DI)
+		if (pMesh->m_iTexType[itex] == ID_GCORE_DI)
 		{
 			pMesh->m_iDiffuseTex = I_Texture.Add(g_pd3dDevice, loadFile.c_str());
 		}

@@ -623,13 +623,13 @@ bool GGbsObj::SetMaterial()
 				GMesh* pSubMesh = pMesh->m_pSubMesh[iSubMesh].get();
 				if( pSubMesh )
 				{
-					pSubMesh->m_iDiffuseTex = GetMapID( &m_Material[pMesh->m_iMtrlRef].m_SubMaterial[pSubMesh->m_iMtrlRef], ID_TBASIS_DI );
+					pSubMesh->m_iDiffuseTex = GetMapID( &m_Material[pMesh->m_iMtrlRef].m_SubMaterial[pSubMesh->m_iMtrlRef], ID_GCORE_DI );
 				}	
 			}
 		}		
 		else
 		{
-			pMesh->m_iDiffuseTex = GetMapID( &m_Material[pMesh->m_iMtrlRef], ID_TBASIS_DI );			
+			pMesh->m_iDiffuseTex = GetMapID( &m_Material[pMesh->m_iMtrlRef], ID_GCORE_DI );			
 		}		
 	}
 	return true;

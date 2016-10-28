@@ -1,7 +1,7 @@
 #include "GInput.h"
 
 namespace GCORESTD {
-	TBASIS_INPUT_MAP g_InputData;
+	GCORE_INPUT_MAP g_InputData;
 }
 
 bool   GInput::InitDirectInput()
@@ -154,7 +154,7 @@ bool		GInput::Frame()
 	}
 #endif
 
-	ZeroMemory(&g_InputData, sizeof(TBASIS_INPUT_MAP));
+	ZeroMemory(&g_InputData, sizeof(GCORE_INPUT_MAP));
 
 	if (m_MouseState[0] == KEY_PUSH) 	g_InputData.bLeftClick = true;
 	if (m_MouseState[1] == KEY_PUSH) 	g_InputData.bRightClick = true;

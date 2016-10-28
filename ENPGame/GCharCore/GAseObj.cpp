@@ -314,7 +314,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 			{
 				pData->SetUniqueBuffer(pData->m_TriList, -1, 0);
 				pMesh->m_iDiffuseTex = -1;
-				if (pMtrl)	pMesh->m_iDiffuseTex = GetMapID(pMtrl, ID_TBASIS_DI);
+				if (pMtrl)	pMesh->m_iDiffuseTex = GetMapID(pMtrl, ID_GCORE_DI);
 				m_iMaxVertex += pData->m_VertexArray.size();
 				m_iMaxIndex += pData->m_IndexArray.size();
 			}
@@ -332,7 +332,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 					_ASSERT(pSubMtrl);
 					pSubMesh->m_iDiffuseTex = -1;
 					if (pSubMtrl)
-						pSubMesh->m_iDiffuseTex = GetMapID(pSubMtrl, ID_TBASIS_DI);
+						pSubMesh->m_iDiffuseTex = GetMapID(pSubMtrl, ID_GCORE_DI);
 
 					m_iMaxVertex += pSubData->m_VertexArray.size();
 					m_iMaxIndex += pSubData->m_IndexArray.size();

@@ -23,7 +23,7 @@ public:
 	HRESULT					SetInputLayout();
 	HRESULT					LoadTextures(ID3D11Device* pDevice, const TCHAR* pLoadTextureString);
 	void					SetTriangleBuffer(GMesh* pMesh, tAseData* pData, TAseMesh* pAseMesh,DWORD dwMask = 0x00000000);
-	int						GetMapID(TMtrl* pMtrl, int iTexMapType = ID_TBASIS_DI);
+	int						GetMapID(TMtrl* pMtrl, int iTexMapType = ID_GCORE_DI);
 	//--------------------------------------------------------------------------------------																					
 	// 에니메이션 관련 함수 																					
 	//--------------------------------------------------------------------------------------

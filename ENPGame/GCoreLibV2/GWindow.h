@@ -18,7 +18,7 @@ public:
 	// 윈도우 생성
 	bool				InitWindow(		HINSTANCE hInstance, 
 										int nCmdShow, 
-										TCHAR* strWindowTitle = _T("GBasis GProjMain"), 										
+										TCHAR* strWindowTitle = _T("GCore GProjMain"), 										
 										int iWidth = 800,
 										int iHeight=600,
 										BOOL IsFullScreen = FALSE);	

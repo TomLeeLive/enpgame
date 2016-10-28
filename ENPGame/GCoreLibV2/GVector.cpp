@@ -58,11 +58,11 @@ Vector3 Vector3::operator ^ ( Vector3 const &v0 )
 
 bool	Vector3::operator == ( Vector3 const &v0 )
 {
-	if( fabs( x-v0.x ) < GBASIS_EPSILON ) 
+	if( fabs( x-v0.x ) < GCORE_EPSILON ) 
 	{ 
-		if( fabs( y-v0.y ) < GBASIS_EPSILON )
+		if( fabs( y-v0.y ) < GCORE_EPSILON )
 		{
-			if( fabs( z-v0.z )< GBASIS_EPSILON )
+			if( fabs( z-v0.z )< GCORE_EPSILON )
 			{
 				return true;
 			}			
@@ -148,13 +148,13 @@ float Vector4::operator | ( Vector4 const &v0 )
 
 bool	Vector4::operator == ( Vector4 const &v0 )
 {
-	if( fabs( x-v0.x ) < GBASIS_EPSILON ) 
+	if( fabs( x-v0.x ) < GCORE_EPSILON ) 
 	{ 
-		if( fabs( y-v0.y ) < GBASIS_EPSILON )
+		if( fabs( y-v0.y ) < GCORE_EPSILON )
 		{
-			if( fabs( z-v0.z )< GBASIS_EPSILON )
+			if( fabs( z-v0.z )< GCORE_EPSILON )
 			{
-				if( fabs( w-v0.w )< GBASIS_EPSILON )
+				if( fabs( w-v0.w )< GCORE_EPSILON )
 				{
 					return true;
 				}			

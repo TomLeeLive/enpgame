@@ -103,5 +103,5 @@ int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return -1;
 }
-GBASIS_RUN(GBS Viewer);
+GCORE_RUN(GBS Viewer);
 

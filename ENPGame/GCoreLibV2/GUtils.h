@@ -134,7 +134,7 @@ namespace GCORESTD
 			return theSingleInstance;
 		}
 	};
-	struct TBASIS_INPUT_MAP
+	struct GCORE_INPUT_MAP
 	{
 		bool bUpKey;
 		bool bDownKey;
@@ -170,7 +170,7 @@ namespace GCORESTD
 		bool bChangeCameraType;
 		bool bDebugRender;
 	};
-	extern TBASIS_INPUT_MAP g_InputData;
+	extern GCORE_INPUT_MAP g_InputData;
 }
 
 //////////////////////////////////////////////
