@@ -42,7 +42,7 @@ public:
 	bool		Convert(ID3D11Device* pd3dDevice);
 	// 매터리얼 세팅
 	bool		SetMaterial();
-	int			GetMapID( TMtrl* pMtrl, int iTexMapType=ID_TBASIS_DI ); // 맵 인덱스 검색
+	int			GetMapID( TMtrl* pMtrl, int iTexMapType=ID_GCORE_DI ); // 맵 인덱스 검색
     // 상속관계 구축
 	bool		InheriteCollect();
 	GMesh*		SearchToCollects(T_STR	m_strParentName );
