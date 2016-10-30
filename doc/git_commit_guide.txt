@@ -1,0 +1,12 @@
+커밋 제목에 앞에 각 기능별 태그를 붙여야함.
+[eng] : 엔진
+[cha] : 캐릭터
+[map] : 맵
+[eff] : 이펙트
+[AI]  : AI
+[UI]  : UI
+[etc] : 기타
+
+ex) 아래와 같이.
+
+[eng] change some comment lines and change DIK_V and DIK_I code location for key input working

@@ -8,6 +8,11 @@
 class GCoreLibV2 : public GWindow
 {
 public:
+	float m_fScreenColor[4];		// 스크린 컬러 R,G,B,A
+	TCHAR m_pFPSBuffer[256];		// FPS 출력
+	TCHAR m_pHWInfoBuffer[256];		// HW 정보 출력
+	TCHAR m_pScreenInfoBuffer[256];	// Screen Resolution 정보 출력
+
 	GTimer					m_Timer;
 	GDirectWrite			m_Font;
 	UINT					m_iPrimitiveType;

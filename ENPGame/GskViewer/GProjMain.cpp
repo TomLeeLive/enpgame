@@ -152,7 +152,7 @@ int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return -1;
 }
-GBASIS_RUN(GSK Viewer);
+GCORE_RUN(GSK Viewer);
 
 
 

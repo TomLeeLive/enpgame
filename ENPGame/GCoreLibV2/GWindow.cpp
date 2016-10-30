@@ -154,7 +154,7 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             hMenu = GetMenu( hWnd );
             if( hMenu != NULL )      DestroyMenu( hMenu );
             DestroyWindow( hWnd );
-            UnregisterClass( L"TBasis3D11_Sample", NULL );            
+            UnregisterClass( L"GCore3D11_Project", NULL );            
             return 0;
         }
 		case WM_DESTROY:
@@ -195,7 +195,7 @@ bool GWindow::InitWindow(HINSTANCE hInstance, int nCmdShow, TCHAR* strWindowTitl
     wcex.hCursor = LoadCursor( NULL, IDC_ARROW );
     wcex.hbrBackground = ( HBRUSH )( COLOR_WINDOW + 1 );
     wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = L"TBasis3D11_Sample";
+    wcex.lpszClassName = L"GCore3D11_Project";
     wcex.hIconSm = LoadIcon( wcex.hInstance,MAKEINTRESOURCE(IDI_APPLICATION) );
     if( !RegisterClassEx( &wcex ) )
         return false;
@@ -206,7 +206,7 @@ bool GWindow::InitWindow(HINSTANCE hInstance, int nCmdShow, TCHAR* strWindowTitl
 	// 작업영역(  타이틀 바/경계선/메뉴/스크롤 바 등의 영역을 제외한 영역), 윈도우 스타일, 메뉴여부
 	// AdjustWindowRect()함수의 호출이 있기 때문에 윈도우 작업영역과 D3D 디바이스의 백버퍼의 영역이 일치하게된다.
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
-    m_hWnd = CreateWindow( L"TBasis3D11_Sample",strWindowTitle, WS_OVERLAPPEDWINDOW,
+    m_hWnd = CreateWindow( L"GCore3D11_Project",strWindowTitle, WS_OVERLAPPEDWINDOW,
                            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance,
                            NULL );
     if( !m_hWnd )

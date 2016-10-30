@@ -10,7 +10,7 @@ Sample::Sample()
 Sample::~Sample()
 {
 }
-GBASIS_RUN(L"GMapSample_0");
+GCORE_RUN(L"GMapSample_0");
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {

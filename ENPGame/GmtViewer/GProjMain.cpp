@@ -152,4 +152,4 @@ int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return -1;
 }
-GBASIS_RUN( GMT Viewer );
+GCORE_RUN( GMT Viewer );

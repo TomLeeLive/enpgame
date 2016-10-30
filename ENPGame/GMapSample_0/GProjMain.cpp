@@ -10,4 +10,4 @@ GProjMain::GProjMain()
 GProjMain::~GProjMain()
 {
 }
-GBASIS_RUN(L"GMapSample_0")
+GCORE_RUN(L"GMapSample_0")

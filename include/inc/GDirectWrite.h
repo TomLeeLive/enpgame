@@ -24,17 +24,25 @@ public:
 	wstring					m_wszText;
     UINT32					m_cTextLength;
 public:
+	//--------------------------------------------
 	// 초기화
+	//--------------------------------------------
 	bool			Set(HWND hWnd, int iWidth, int iHeight,IDXGISurface1*	m_pSurface);
     bool			Init();
+	//--------------------------------------------
 	// 랜더링
+	//--------------------------------------------
 	bool			Begin();
 	HRESULT			DrawText(RECT rc, TCHAR* pText, D2D1::ColorF Color= D2D1::ColorF( 1,0,0,1 ) );
 	HRESULT			DrawText(D2D1_POINT_2F origin, D2D1::ColorF Color= D2D1::ColorF( 1,0,0,1 ) );
 	bool			End();
+	//--------------------------------------------
 	// 전체 소멸
+	//--------------------------------------------
 	bool			Release();	
+	//--------------------------------------------
 	// 객체 생성 및 소멸
+	//--------------------------------------------
     HRESULT			CreateDeviceIndependentResources();
     void			DiscardDeviceIndependentResources();    
 	HRESULT			CreateDeviceResources(IDXGISurface1*	m_pSurface);

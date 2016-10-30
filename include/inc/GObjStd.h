@@ -2,20 +2,20 @@
 #include "GTemplate.h"
 #include "GDxHelperEx.h"
 // Sub texture types
-#define ID_TBASIS_AM 0   // ambient
-#define ID_TBASIS_DI 1   // diffuse
-#define ID_TBASIS_SP 2   // specular
-#define ID_TBASIS_SH 3   // shininesNs
-#define ID_TBASIS_SS 4   // shininess strength
-#define ID_TBASIS_SI 5   // self-illumination
-#define ID_TBASIS_OP 6   // opacity
-#define ID_TBASIS_FI 7   // filter color
-#define ID_TBASIS_BU 8   // bump 
-#define ID_TBASIS_RL 9   // reflection
-#define ID_TBASIS_RR 10  // refraction 
-#define ID_TBASIS_DP 11  // displacement
-#define ID_TBASIS_GN 12  // Generic
-#define ID_TBASIS_EV 13  // EnvMap
+#define ID_GCORE_AM 0   // ambient
+#define ID_GCORE_DI 1   // diffuse
+#define ID_GCORE_SP 2   // specular
+#define ID_GCORE_SH 3   // shininesNs
+#define ID_GCORE_SS 4   // shininess strength
+#define ID_GCORE_SI 5   // self-illumination
+#define ID_GCORE_OP 6   // opacity
+#define ID_GCORE_FI 7   // filter color
+#define ID_GCORE_BU 8   // bump 
+#define ID_GCORE_RL 9   // reflection
+#define ID_GCORE_RR 10  // refraction 
+#define ID_GCORE_DP 11  // displacement
+#define ID_GCORE_GN 12  // Generic
+#define ID_GCORE_EV 13  // EnvMap
 
 using namespace GCORESTD;
 

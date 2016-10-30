@@ -39,9 +39,9 @@ namespace GCORESTD
 	typedef basic_string<char>::iterator	C_ITOR;
 	typedef vector<T_STR>		T_ARRAY_ITOR;
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//--------------------------------------------
 	// static
-	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//--------------------------------------------
 	// 멀티바이트 문자집합 사용경우
 	// ABC홍길동 = 9
 	// [A][B][C] [0]
@@ -134,7 +134,7 @@ namespace GCORESTD
 			return theSingleInstance;
 		}
 	};
-	struct TBASIS_INPUT_MAP
+	struct GCORE_INPUT_MAP
 	{
 		bool bUpKey;
 		bool bDownKey;
@@ -163,19 +163,19 @@ namespace GCORESTD
 
 		int  iMouseValue[3];
 
-		bool bFullScreen;
-		bool bChangeFillMode;
-		bool bChangePrimitive;
-		bool bChangeCullMode;
-		bool bChangeCameraType;
-		bool bDebugRender;
+		//bool bFullScreen;
+		//bool bChangeFillMode;
+		//bool bChangePrimitive;
+		//bool bChangeCullMode;
+		//bool bChangeCameraType;
+		//bool bDebugRender;
 	};
-	extern TBASIS_INPUT_MAP g_InputData;
+	extern GCORE_INPUT_MAP g_InputData;
 }
 
-//////////////////////////////////////////////
+//--------------------------------------------
 //  매크로
-//////////////////////////////////////////////
+//--------------------------------------------
 #define str(x) L#x
 #define xstr(x) str(x)
 #define randf(x) (x*rand()/(float)RAND_MAX)
@@ -183,9 +183,9 @@ namespace GCORESTD
 #define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
 #define clamp(x,MinX,MaxX) if (x>MaxX) x=MaxX; else if (x<MinX) x=MinX;
 
-//////////////////////////////////////////////
+//--------------------------------------------
 // Assert
-//////////////////////////////////////////////
+//--------------------------------------------
 #ifndef Assert
 #if defined( _DEBUG ) || defined( _DEBUG )
 #define Assert(b) do {if (!(b)) {OutputDebugStringW(L"Assert: " #b L"\n");}} while(0)
@@ -193,9 +193,9 @@ namespace GCORESTD
 #define Assert(b)
 #endif //_DEBUG || _DEBUG
 #endif
-///////////////////////////////////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------------------------------------
 // 디버그 메세지( 오류가 예상되는 곳에서 사용함 ) : 파일명과 라인 및 문자열이 출력되며 강제 종료됨.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+//-------------------------------------------------------------------------------------------------
 #ifdef _DEBUG
 #define	DEBUGMSG(lpText)															\
 	{																						\
@@ -211,9 +211,9 @@ namespace GCORESTD
 #define DEBUGMSG(lpText)
 #endif
 
-//////////////////////////////////////////////
+//--------------------------------------------
 // 객체 및 배열 할당과 삭제 및 소멸 매크로
-//////////////////////////////////////////////
+//--------------------------------------------
 #ifndef SAFE_ZERO
 #define SAFE_ZERO(A)				{ A = 0; }
 #endif

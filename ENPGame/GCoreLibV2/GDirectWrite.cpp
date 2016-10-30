@@ -12,7 +12,7 @@ bool GDirectWrite::Set(HWND hWnd, int iWidth, int iHeight, IDXGISurface1*	pSurfa
 	
 	CreateDeviceIndependentResources();
 	CreateDeviceResources( pSurface );
-	SetText(D2D1::Point2F(iWidth, iHeight), L"TBasisSample!",D2D1::ColorF( 1,1,1,1 ));
+	SetText(D2D1::Point2F(iWidth, iHeight), L"GCoreSample!",D2D1::ColorF( 1,1,1,1 ));
 	return true;	
 }
 
@@ -29,7 +29,8 @@ bool GDirectWrite::Release()
 
 bool GDirectWrite::Init()
 {   	
-    const wchar_t defaultText [] = L"Times New Roman";   
+    //const wchar_t defaultText [] = L"Times New Roman";
+	const wchar_t defaultText[] = L"Consolas";
 	m_wszFontFamily = defaultText;
     return true;
 }
@@ -326,7 +327,7 @@ void GDirectWrite::OnResize(UINT width, UINT height, IDXGISurface1*	pSurface)
 {	
 	DiscardDeviceResources();
 	CreateDeviceResources( pSurface );
-	SetText(D2D1::Point2F(width, height), L"TBasisSample!",D2D1::ColorF( 1,1,1,1 ));
+	SetText(D2D1::Point2F(width, height), L"GCoreSample!",D2D1::ColorF( 1,1,1,1 ));
 }
 GDirectWrite::GDirectWrite()  
 {	

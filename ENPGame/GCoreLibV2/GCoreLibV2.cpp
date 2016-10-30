@@ -33,7 +33,7 @@ bool GCoreLibV2::PreInit()
 
 
 
-
+#if defined( DEBUG ) || defined( _DEBUG )
 	// ─────────────────────────────────
 	// for HW 정보 출력.
 	// ─────────────────────────────────
@@ -80,6 +80,7 @@ bool GCoreLibV2::PreInit()
 
 	fclose(fp);
 	//MessageBox(NULL, _T("DeviceInfo.txt 파일을 성공적으로 생성하였습니다."), _T("파일생성"), MB_OK);
+#endif
 
 	if( !m_Timer.Init() )	return false;	
 
@@ -154,6 +155,17 @@ bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 		}
 	}
 
+	if (I_Input.KeyCheck(DIK_V) == KEY_PUSH)
+	{
+		m_bDebugFpsPrint = !m_bDebugFpsPrint;
+	}
+
+	if (I_Input.KeyCheck(DIK_I) == KEY_PUSH)
+	{
+		m_bDebugInfoPrint = !m_bDebugInfoPrint;
+	}
+
+
 	if (m_bWireFrameRender)
 	{
 		ApplyRS(pContext, GDxState::g_pRSWireFrame);
@@ -201,14 +213,7 @@ bool GCoreLibV2::GRender()
 
 	PreRender();
 	Render();
-	if (I_Input.KeyCheck(DIK_V))
-	{
-		m_bDebugFpsPrint = !m_bDebugFpsPrint;
-	}
-	if (I_Input.KeyCheck(DIK_I))
-	{
-		m_bDebugInfoPrint = !m_bDebugInfoPrint;
-	}
+
 	if( m_bDebugFpsPrint )	DrawDebug();
 	if (m_bDebugInfoPrint)	DrawInfo();
 	PostRender();	
@@ -222,7 +227,7 @@ bool GCoreLibV2::Render()
 bool GCoreLibV2::PreRender()
 {
 	// Just clear the backbuffer
-    float ClearColor[4] = { 0.5f, 1.0f, 0.5f, 1.0f }; //red,green,blue,alpha
+    float ClearColor[4] = { m_fScreenColor[0], m_fScreenColor[1], m_fScreenColor[2], m_fScreenColor[3] }; //red,green,blue,alpha
 	m_pImmediateContext->ClearRenderTargetView( GetRenderTargetView(), ClearColor );	
 	m_pImmediateContext->ClearDepthStencilView(m_DefaultRT.m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_pImmediateContext->OMSetRenderTargets(1, GetRenderTargetViewAddress(), m_DefaultRT.m_pDepthStencilView.Get() );
@@ -232,11 +237,8 @@ bool GCoreLibV2::PreRender()
 }
 bool GCoreLibV2::DrawInfo() {
 
-	TCHAR pHWInfoBuffer[256];		// HW 정보 출력
-	TCHAR pScreenInfoBuffer[256];	// Screen Resolution 정보 출력
-
-	memset(pHWInfoBuffer, 0, sizeof(TCHAR) * 256);
-	memset(pScreenInfoBuffer, 0, sizeof(TCHAR) * 256);
+	memset(m_pHWInfoBuffer, 0, sizeof(TCHAR) * 256);
+	memset(m_pScreenInfoBuffer, 0, sizeof(TCHAR) * 256);
 	//-----------------------------------------------------------------------
 	// 적용되어 RasterizerState 타입 표시
 	//-----------------------------------------------------------------------	
@@ -270,13 +272,13 @@ bool GCoreLibV2::DrawInfo() {
 	{
 		pAdapterInfo = m_Enumeration.m_AdapterInfoList[i];
 
-		_stprintf_s(pHWInfoBuffer, L"Desc[%d] : %s,  DispCnt:%d\n", i, pAdapterInfo->m_AdapterDesc.Description, pAdapterInfo->m_OutputInfoList.size());
+		_stprintf_s(m_pHWInfoBuffer, L"Desc[%d] : %s,  DispCnt:%d\n", i, pAdapterInfo->m_AdapterDesc.Description, pAdapterInfo->m_OutputInfoList.size());
 		iPos += (i * G_MACRO_DEBUG_STR_INTERVAL); rc.top = iPos;
-		DrawDebugRect(&rc, pHWInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		DrawDebugRect(&rc, m_pHWInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
-		_stprintf_s(pHWInfoBuffer, L"DXGI_FORMAT:%d, Refresh:%u/%u Hz\n", m_FindBufferDesc.Format, m_FindBufferDesc.RefreshRate.Numerator, m_FindBufferDesc.RefreshRate.Denominator);
+		_stprintf_s(m_pHWInfoBuffer, L"DXGI_FORMAT:%d, Refresh:%u/%u Hz\n", m_FindBufferDesc.Format, m_FindBufferDesc.RefreshRate.Numerator, m_FindBufferDesc.RefreshRate.Denominator);
 		iPos += G_MACRO_DEBUG_STR_INTERVAL; rc.top = iPos;
-		DrawDebugRect(&rc, pHWInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		DrawDebugRect(&rc, m_pHWInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
 	iPos += G_MACRO_DEBUG_STR_INTERVAL; rc.top = iPos;//rc.bottom = m_DefaultRT.m_vp.Height;rc.left = 0;rc.right = m_DefaultRT.m_vp.Width;
@@ -307,19 +309,17 @@ bool GCoreLibV2::DrawInfo() {
 	}
 
 	iPos += G_MACRO_DEBUG_STR_INTERVAL; rc.top = iPos;
-	_stprintf_s(pScreenInfoBuffer, _T("(%d x %d)"), (int)m_DefaultRT.m_vp.Width, (int)m_DefaultRT.m_vp.Height);
-	DrawDebugRect(&rc, pScreenInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	_stprintf_s(m_pScreenInfoBuffer, _T("(%d x %d)"), (int)m_DefaultRT.m_vp.Width, (int)m_DefaultRT.m_vp.Height);
+	DrawDebugRect(&rc, m_pScreenInfoBuffer, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
 	return true;
 }
 bool GCoreLibV2::DrawDebug()
 {
-	TCHAR pFPSBuffer[256];			// FPS 출력
-
 	//TCHAR pRSBuffer[256];
 	//TCHAR pSSBuffer[256];
 
-	memset(pFPSBuffer, 0, sizeof( TCHAR ) * 256 );
+	memset(m_pFPSBuffer, 0, sizeof( TCHAR ) * 256 );
 
 	//memset(pRSBuffer, 0, sizeof(TCHAR) * 256);
 	//memset(pSSBuffer, 0, sizeof(TCHAR) * 256);
@@ -327,7 +327,7 @@ bool GCoreLibV2::DrawDebug()
 	//_stprintf_s(pRSBuffer, _T("RS:"));
 	//_stprintf_s(pSSBuffer, _T("SS:"));
 
-	_stprintf_s( pFPSBuffer, _T("FPS:%d"), m_Timer.GetFPS() );	
+	_stprintf_s( m_pFPSBuffer, _T("FPS:%d"), m_Timer.GetFPS() );	
 	
 	m_Font.Begin();
 
@@ -336,7 +336,7 @@ bool GCoreLibV2::DrawDebug()
 	m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 	//RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
 	RECT rc1 = { 0,0, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height };
-	m_Font.SetText(D2D1::Point2F(rc1.right, rc1.bottom), pFPSBuffer, D2D1::ColorF(1, 1, 0, 1));
+	m_Font.SetText(D2D1::Point2F(rc1.right, rc1.bottom), m_pFPSBuffer, D2D1::ColorF(1, 1, 0, 1));
 	m_Font.SetFont(L"Impact");
 	m_Font.SetBold(true);
 	//m_Font.SetFontSize(100);
@@ -370,7 +370,7 @@ bool GCoreLibV2::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
 		//RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
 
 		m_Font.SetText(D2D1::Point2F(rcDest->right, rcDest->bottom), pString, D2D1::ColorF(1, 1, 0, 1));
-		m_Font.SetFont(L"Consolas");
+		//m_Font.SetFont(L"Consolas");
 		m_Font.SetBold(false);
 		//m_Font.SetFontSize(100);
 		m_Font.SetItalic(false);
@@ -461,6 +461,11 @@ HRESULT GCoreLibV2::DeleteResource()
 }
 GCoreLibV2::GCoreLibV2(void)
 {	
+	m_fScreenColor[0] = 0.5f; // R
+	m_fScreenColor[1] = 1.0f; // G
+	m_fScreenColor[2] = 0.5f; // B
+	m_fScreenColor[3] = 1.0f; // A
+
 	m_iPrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	m_iCullMode = 1;
 	m_iSamplerMode = 0;
