@@ -74,7 +74,10 @@
 md "..\\..\\include\\Inc"
 copy "*.h" "..\\..\\include\\Inc"
 md "..\\..\\Output\\data\\shader"
-copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
+copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"
+md "..\\..\\include\\Inc_map"
+copy "*.h" "..\\..\\include\\Inc_map"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
