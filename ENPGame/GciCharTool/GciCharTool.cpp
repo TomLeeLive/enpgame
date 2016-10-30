@@ -152,8 +152,10 @@ BOOL CGciCharToolApp::InitInstance()
 	m_LineShaderFile = L"data/shader/line.hlsl";
 	GCoreLibV2::GInit();
 
-
-	
+	GCoreLibV2::m_fScreenColor[0] = 0.0f;
+	GCoreLibV2::m_fScreenColor[1] = 0.125f;
+	GCoreLibV2::m_fScreenColor[2] = 0.3f;
+	GCoreLibV2::m_fScreenColor[3] = 1.0f;
 
 	//Load();
 
@@ -316,8 +318,8 @@ bool CGciCharToolApp::Frame() {
 	return true;
 }
 bool CGciCharToolApp::Render() {
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
-	g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
+	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
+	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{

@@ -223,7 +223,7 @@ bool GCoreLibV2::Render()
 bool GCoreLibV2::PreRender()
 {
 	// Just clear the backbuffer
-    float ClearColor[4] = { 0.5f, 1.0f, 0.5f, 1.0f }; //red,green,blue,alpha
+    float ClearColor[4] = { m_fScreenColor[0], m_fScreenColor[1], m_fScreenColor[2], m_fScreenColor[3] }; //red,green,blue,alpha
 	m_pImmediateContext->ClearRenderTargetView( GetRenderTargetView(), ClearColor );	
 	m_pImmediateContext->ClearDepthStencilView(m_DefaultRT.m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_pImmediateContext->OMSetRenderTargets(1, GetRenderTargetViewAddress(), m_DefaultRT.m_pDepthStencilView.Get() );
@@ -457,6 +457,11 @@ HRESULT GCoreLibV2::DeleteResource()
 }
 GCoreLibV2::GCoreLibV2(void)
 {	
+	m_fScreenColor[0] = 0.5f; // R
+	m_fScreenColor[1] = 1.0f; // G
+	m_fScreenColor[2] = 0.5f; // B
+	m_fScreenColor[3] = 1.0f; // A
+
 	m_iPrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	m_iCullMode = 1;
 	m_iSamplerMode = 0;
