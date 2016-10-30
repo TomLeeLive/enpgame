@@ -155,6 +155,17 @@ bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 		}
 	}
 
+	if (I_Input.KeyCheck(DIK_V) == KEY_PUSH)
+	{
+		m_bDebugFpsPrint = !m_bDebugFpsPrint;
+	}
+
+	if (I_Input.KeyCheck(DIK_I) == KEY_PUSH)
+	{
+		m_bDebugInfoPrint = !m_bDebugInfoPrint;
+	}
+
+
 	if (m_bWireFrameRender)
 	{
 		ApplyRS(pContext, GDxState::g_pRSWireFrame);
@@ -202,14 +213,7 @@ bool GCoreLibV2::GRender()
 
 	PreRender();
 	Render();
-	if (I_Input.KeyCheck(DIK_V))
-	{
-		m_bDebugFpsPrint = !m_bDebugFpsPrint;
-	}
-	if (I_Input.KeyCheck(DIK_I))
-	{
-		m_bDebugInfoPrint = !m_bDebugInfoPrint;
-	}
+
 	if( m_bDebugFpsPrint )	DrawDebug();
 	if (m_bDebugInfoPrint)	DrawInfo();
 	PostRender();	

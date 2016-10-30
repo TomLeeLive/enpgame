@@ -173,7 +173,7 @@ bool		GInput::Frame()
 	g_InputData.bEKey = KeyCheck(DIK_E);
 	g_InputData.bZKey = KeyCheck(DIK_Z);
 	g_InputData.bCKey = KeyCheck(DIK_C);
-	g_InputData.bDebugRender = KeyCheck(DIK_V);
+	//g_InputData.bDebugRender = KeyCheck(DIK_V);
 
 	g_InputData.bLeftKey = KeyCheck(DIK_LEFT);
 	g_InputData.bRightKey = KeyCheck(DIK_RIGHT);
@@ -187,11 +187,11 @@ bool		GInput::Frame()
 	g_InputData.iMouseValue[1] = m_DIMouseState.lY;
 	g_InputData.iMouseValue[2] = m_DIMouseState.lZ;
 
-	if (KeyCheck(DIK_F12 == KEY_PUSH))	g_InputData.bChangeCameraType = true;
-	if (KeyCheck(DIK_F5 == KEY_PUSH))	g_InputData.bChangeFillMode = true;
-	if (KeyCheck(DIK_F6 == KEY_PUSH))	g_InputData.bChangePrimitive = true;
-	if (KeyCheck(DIK_F7 == KEY_PUSH))	g_InputData.bChangeCullMode = true;
-	if (KeyCheck(DIK_F8 == KEY_PUSH))	g_InputData.bChangeCameraType = true;
+	//if (KeyCheck(DIK_F12 == KEY_PUSH))	g_InputData.bChangeCameraType = true;
+	//if (KeyCheck(DIK_F5 == KEY_PUSH))	g_InputData.bChangeFillMode = true;
+	//if (KeyCheck(DIK_F6 == KEY_PUSH))	g_InputData.bChangePrimitive = true;
+	//if (KeyCheck(DIK_F7 == KEY_PUSH))	g_InputData.bChangeCullMode = true;
+	//if (KeyCheck(DIK_F8 == KEY_PUSH))	g_InputData.bChangeCameraType = true;
 
 	return true;
 };
