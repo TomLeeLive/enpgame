@@ -24,24 +24,24 @@ public:
 #endif
 	}
 private:
-	LARGE_INTEGER m_liPerFreq;    // 초당 계수
-	LARGE_INTEGER m_liPerfStart;   // 시작 계수
+	LARGE_INTEGER m_liPerFreq;		// 초당 계수
+	LARGE_INTEGER m_liPerfStart;	// 시작 계수
 };
 class GTimer
 {
 public:
-	LARGE_INTEGER	m_Frequency;	// 초당 주파수 
-	LARGE_INTEGER	m_Current;		// 현재 시간 
-	LARGE_INTEGER	m_Frame;		// 이전 프레임의 시간 체크 
-	float			m_fSecPerFrame;	// 프레임 경과 시간 
-	float			m_fDurationTime;// 실행된 경과 시간
+	LARGE_INTEGER	m_Frequency;		// 초당 주파수 
+	LARGE_INTEGER	m_Current;			// 현재 시간 
+	LARGE_INTEGER	m_Frame;			// 이전 프레임의 시간 체크 
+	float			m_fSecPerFrame;		// 프레임 경과 시간 
+	float			m_fDurationTime;	// 실행된 경과 시간
 	LARGE_INTEGER	m_FPS;				// FPS 체크 타이머		
 	int				m_iFramePerSecond;	// 초당 프레임	
 	int				m_iFPSElapse;		// 초당 경과된 프레임 
 	
 
-	LARGE_INTEGER	m_Start;		// 이벤트 타이머 시작 시간
-	LARGE_INTEGER	m_Elapse;		// 이베트 타이머 경과 시간
+	LARGE_INTEGER	m_Start;			// 이벤트 타이머 시작 시간
+	LARGE_INTEGER	m_Elapse;			// 이베트 타이머 경과 시간
 	bool			m_bStarted;			// 이벤트 타이머 작동여부
 	float			m_fEventTime;
 	
