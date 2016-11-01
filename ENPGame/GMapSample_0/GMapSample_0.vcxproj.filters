@@ -18,10 +18,19 @@
     <ClInclude Include="GProjMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GMap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GProjMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="CustomizeMap.hlsl" />
   </ItemGroup>
 </Project>
