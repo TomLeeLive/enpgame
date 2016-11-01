@@ -5,6 +5,7 @@
 [eff] : 이펙트
 [AI]  : AI
 [UI]  : UI
+[doc] : 문서
 [etc] : 기타
 
 ex) 아래와 같이.

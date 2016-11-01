@@ -154,7 +154,10 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClInclude Include="GAseObj.h" />
     <ClInclude Include="GAseParser.h" />
     <ClInclude Include="GBoneObj.h" />
+    <ClInclude Include="GCharacter.h" />
+    <ClInclude Include="GCharMgr.h" />
     <ClInclude Include="GGbsObj.h" />
+    <ClInclude Include="GHeroObj.h" />
     <ClInclude Include="GLoadMgr.h" />
     <ClInclude Include="GLoadToken.h" />
     <ClInclude Include="GMesh.h" />
@@ -167,7 +170,10 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClCompile Include="GAseObj.cpp" />
     <ClCompile Include="GAseParser.cpp" />
     <ClCompile Include="GBoneObj.cpp" />
+    <ClCompile Include="GCharacter.cpp" />
+    <ClCompile Include="GCharMgr.cpp" />
     <ClCompile Include="GGbsObj.cpp" />
+    <ClCompile Include="GHeroObj.cpp" />
     <ClCompile Include="GLoadToken.cpp" />
     <ClCompile Include="GObject.cpp" />
     <ClCompile Include="GObjMgr.cpp" />

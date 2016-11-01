@@ -51,6 +51,15 @@
     <ClInclude Include="GSkinObj.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GCharMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GHeroObj.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GAnimation.cpp">
@@ -78,6 +87,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GSkinObj.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GCharacter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GCharMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GHeroObj.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
