@@ -10,7 +10,14 @@
 #include "resource.h"       // 주 기호입니다.
 #include "GCoreLibV2.h"
 #include "GHeroObj.h"
+
+//#define G_MACRO_MODELVIEW 1
+
+#ifdef G_MACRO_MODELVIEW
+#include "GModelViewCamera.h"
+#else
 #include "GCamera.h"
+#endif
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment( lib, "GCharCore32d.lib" )	
@@ -25,7 +32,11 @@
 class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+#ifdef G_MACRO_MODELVIEW
+	shared_ptr<GModelViewCamera > m_pMainCamera;
+#else
 	shared_ptr<GCamera > m_pMainCamera;
+#endif
 	D3DXMATRIX  m_matWorld;
 	vector<shared_ptr<GHeroObj>>	m_HeroObj;
 
