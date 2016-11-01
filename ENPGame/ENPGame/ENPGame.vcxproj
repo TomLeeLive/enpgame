@@ -108,15 +108,9 @@
     <None Include="CharTable.gci" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GCharacter.cpp" />
-    <ClCompile Include="GCharMgr.cpp" />
-    <ClCompile Include="GHeroObj.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GCharacter.h" />
-    <ClInclude Include="GCharMgr.h" />
-    <ClInclude Include="GHeroObj.h" />
     <ClInclude Include="GProjMain.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>

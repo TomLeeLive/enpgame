@@ -195,9 +195,6 @@
   <ItemGroup>
     <ClInclude Include="GAniCtrlControl.h" />
     <ClInclude Include="GAniCtrlForm.h" />
-    <ClInclude Include="GciAnimation\GCharacter.h" />
-    <ClInclude Include="GciAnimation\GCharMgr.h" />
-    <ClInclude Include="GciAnimation\GHeroObj.h" />
     <ClInclude Include="GciCharToolDoc.h" />
     <ClInclude Include="GciCharTool.h" />
     <ClInclude Include="GciCharToolView.h" />
@@ -213,9 +210,6 @@
   <ItemGroup>
     <ClCompile Include="GAniCtrlControl.cpp" />
     <ClCompile Include="GAniCtrlForm.cpp" />
-    <ClCompile Include="GciAnimation\GCharacter.cpp" />
-    <ClCompile Include="GciAnimation\GCharMgr.cpp" />
-    <ClCompile Include="GciAnimation\GHeroObj.cpp" />
     <ClCompile Include="GciCharToolDoc.cpp" />
     <ClCompile Include="GciCharTool.cpp" />
     <ClCompile Include="GciCharToolView.cpp" />

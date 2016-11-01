@@ -9,7 +9,7 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GCoreLibV2.h"
-#include "GciAnimation/GHeroObj.h"
+#include "GHeroObj.h"
 #include "GCamera.h"
 
 #if defined(DEBUG) || defined(_DEBUG)

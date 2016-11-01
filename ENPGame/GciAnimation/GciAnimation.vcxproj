@@ -101,15 +101,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GCharacter.cpp" />
-    <ClCompile Include="GCharMgr.cpp" />
-    <ClCompile Include="GHeroObj.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GCharacter.h" />
-    <ClInclude Include="GCharMgr.h" />
-    <ClInclude Include="GHeroObj.h" />
     <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <ItemGroup>
