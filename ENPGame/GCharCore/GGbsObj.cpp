@@ -111,7 +111,7 @@ bool GGbsObj::LoadMaterial()
 	}
 	return true;
 }
-void GGbsObj::LoadMaterialHeader(TMtrl* pMtrl)
+void GGbsObj::LoadMaterialHeader(GMtrl* pMtrl)
 {
 	TCHAR strName[256] = _T("");
 	TCHAR strClassName[256] = _T("");
@@ -123,12 +123,12 @@ void GGbsObj::LoadMaterialHeader(TMtrl* pMtrl)
 	pMtrl->m_strName = strName;
 	pMtrl->m_strClassName = strClassName;
 }
-void GGbsObj::LoadTexMap(TMtrl* pMtrl, T_STR szDirName )
+void GGbsObj::LoadTexMap(GMtrl* pMtrl, T_STR szDirName )
 {
 	for( DWORD dwTex = 0; dwTex < pMtrl->m_dwTexMapCount; dwTex++ )
 	{
 		TCHAR strName[256] = _T("");
-		TTextexMap TexMap;
+		GTextexMap TexMap;
 		_fgetts( m_Parser.m_pBuffer, 256, m_Parser.m_pStream );		
 		_stscanf(m_Parser.m_pBuffer, _T("%d%s"),&TexMap.m_dwType, strName);
 
@@ -301,12 +301,12 @@ int GGbsObj::LoadVertexIndex(tTbsData* pData)
 	}	
 	return iNumSubFaces;
 }
-bool GGbsObj::LoadAnimationTrack( int iNumTrack, vector<shared_ptr<TAnimTrack>>& pTrackList )
+bool GGbsObj::LoadAnimationTrack( int iNumTrack, vector<shared_ptr<GAnimTrack>>& pTrackList )
 {
-	TAnimTrack* pPrevTrack = NULL;		
+	GAnimTrack* pPrevTrack = NULL;		
 	for( int iTrack = 0; iTrack < iNumTrack; iTrack++ )
 	{				
-		auto pTrack = make_shared<TAnimTrack>(); 		
+		auto pTrack = make_shared<GAnimTrack>(); 		
 		_fgetts( m_Parser.m_pBuffer, 256, m_Parser.m_pStream );	
 		_stscanf( m_Parser.m_pBuffer, _T("%d%f%f%f%f%f%f%f"), 
 			&pTrack->iTick,
@@ -342,8 +342,8 @@ D3DXMATRIX GGbsObj::Interpolate( GMesh* pMesh, D3DXMATRIX* matParents, float fFr
 	float fStartTick = m_Scene.iFirstFrame * m_Scene.iTickPerFrame;
 	float fEndTick   = 0.0f;
 
-	TAnimTrack* pStartTrack = NULL;
-	TAnimTrack* pEndTrack   = NULL;
+	GAnimTrack* pStartTrack = NULL;
+	GAnimTrack* pEndTrack   = NULL;
 	if( pMesh->m_pRotTrack.size() ) 
 	{
 		// pStartTrack를 찾을수 있으면
@@ -459,11 +459,11 @@ D3DXMATRIX GGbsObj::Interpolate( GMesh* pMesh, D3DXMATRIX* matParents, float fFr
 	return pMesh->m_matCalculation;
 }
 // pEndTrack 트랙이 없으면 flase 리턴( 보간할 대상이 없을 때 )
-bool GGbsObj::GetAnimationTrack(float fFrame, vector<shared_ptr<TAnimTrack>> pTrackList, TAnimTrack** pStartTrack, TAnimTrack** pEndTrack )
+bool GGbsObj::GetAnimationTrack(float fFrame, vector<shared_ptr<GAnimTrack>> pTrackList, GAnimTrack** pStartTrack, GAnimTrack** pEndTrack )
 {
 	for( DWORD dwTrack = 0; dwTrack < pTrackList.size(); dwTrack++ ) 
 	{
-		TAnimTrack *pTrack = pTrackList[dwTrack].get();		
+		GAnimTrack *pTrack = pTrackList[dwTrack].get();		
 		_ASSERT( pTrack );		
 		// fFrame 보다 큰 Tick 트랙이 있다면 이전 트랙을 넘겨 주어야 하기 때문에 break한다.
 		if( pTrack->iTick > fFrame )	
@@ -525,7 +525,7 @@ bool GGbsObj::Convert(ID3D11Device* pd3dDevice)
 	}
 	return true;
 }
-TAnimTrack* GGbsObj::SetDoublyLinkedList( TAnimTrack* pCurrentTrack, TAnimTrack* pPrev )
+GAnimTrack* GGbsObj::SetDoublyLinkedList( GAnimTrack* pCurrentTrack, GAnimTrack* pPrev )
 {	
 	if( pPrev )
 	{
@@ -536,7 +536,7 @@ TAnimTrack* GGbsObj::SetDoublyLinkedList( TAnimTrack* pCurrentTrack, TAnimTrack*
 }
 
 
-int	GGbsObj::GetMapID( TMtrl* pMtrl, int iTexMapType )
+int	GGbsObj::GetMapID( GMtrl* pMtrl, int iTexMapType )
 {
 	_ASSERT( pMtrl );
 	if( pMtrl->m_TexMaps.size() <= 0 ) return -1;

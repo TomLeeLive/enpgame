@@ -7,7 +7,7 @@ bool GAseParser::Load(const TCHAR* strFileName)
 	return LoadBuffer(strFileName);
 }
 
-bool GAseParser::LoadScene(TScene& tScene)
+bool GAseParser::LoadScene(GScene& tScene)
 {
 	GetData(_T("SCENE_FIRSTFRAME"), &tScene.iFirstFrame, INT_DATA);
 	GetData(_T("SCENE_LASTFRAME"), &tScene.iLastFrame, INT_DATA);
@@ -15,14 +15,14 @@ bool GAseParser::LoadScene(TScene& tScene)
 	GetData(_T("SCENE_TICKSPERFRAME"), &tScene.iTickPerFrame, INT_DATA);
 	return true;
 }
-bool GAseParser::LoadMaterialList(vector<TMtrl>&	tMaterialList)
+bool GAseParser::LoadMaterialList(vector<GMtrl>&	tMaterialList)
 {
 	int		iMaterialCount = 0;
 	GetData(_T("MATERIAL_COUNT"), &iMaterialCount, INT_DATA);
 
 	for (int i = 0; i<iMaterialCount; i++)
 	{
-		TMtrl Material;
+		GMtrl Material;
 		if (LoadMaterial(&Material))
 		{
 			tMaterialList.push_back(Material);
@@ -34,15 +34,15 @@ bool GAseParser::LoadMaterialList(vector<TMtrl>&	tMaterialList)
 //static TCHAR* AseMaterialTokens[] = { _T("NUMSUBMTLS"),	_T("MATERIAL "),_T("SUBMATERIAL"),_T("}"), };	
 //enum AseMaterialType				{ NUM_SUBMTRLS = 10,MATERIAL,		SUB_MATERIAL, };	
 
-bool GAseParser::LoadMaterial(TMtrl*	pMaterial)
+bool GAseParser::LoadMaterial(GMtrl*	pMaterial)
 {
 	if (!pMaterial) return false;
 	int iObjectType = -1;
 	int iNumTypes = sizeof(AseMaterialTokens) / sizeof(AseMaterialTokens[0]);
 
 	TCHAR szTexName[256] = _T("");
-	TMtrl*			pCurrentMtrl = NULL;
-	TTextexMap*	pCurrentTexMap = NULL;
+	GMtrl*			pCurrentMtrl = NULL;
+	GTextexMap*	pCurrentTexMap = NULL;
 
 	GetData(_T("MATERIAL_NAME"), &szTexName, STRING_DATA);
 	pMaterial->m_strName = szTexName;
@@ -61,7 +61,7 @@ bool GAseParser::LoadMaterial(TMtrl*	pMaterial)
 
 			for (int i = 0; i<iSubMaterialCount; i++)
 			{
-				TMtrl SubMaterial;
+				GMtrl SubMaterial;
 				if (LoadMaterial(&SubMaterial))
 				{
 					pMaterial->m_SubMaterial.push_back(SubMaterial);
@@ -71,7 +71,7 @@ bool GAseParser::LoadMaterial(TMtrl*	pMaterial)
 		}break;
 		case MAP:
 		{
-			TTextexMap TexMap;
+			GTextexMap TexMap;
 			if (LoadTexture(TexMap))
 			{
 				pMaterial->m_TexMaps.push_back(TexMap);
@@ -91,7 +91,7 @@ bool GAseParser::LoadMaterial(TMtrl*	pMaterial)
 //static TCHAR* AseTextureTokens[] =	{_T("MAP_NAME"),_T("MAP_SUBNO"),_T("BITMAP "), _T("}"), };	
 //enum AseTextureType					{MAP_NAME=20,	MAP_SUBNO,		BITMAP_FILE, };	
 
-bool GAseParser::LoadTexture(TTextexMap& TexMap)
+bool GAseParser::LoadTexture(GTextexMap& TexMap)
 {
 	int iObjectType = -1;
 	int iNumTypes = sizeof(AseTextureTokens) / sizeof(AseTextureTokens[0]);
@@ -202,7 +202,7 @@ bool GAseParser::GetVertexListFromString(TCHAR* strVertexList, DWORD dwNumVertex
 	}
 	return true;
 }
-bool GAseParser::GetFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, TVertexList& VertexList, TCHAR* strToken)
+bool GAseParser::GetFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, GVertexList& VertexList, TCHAR* strToken)
 {
 	if (dwNumFace >0 && GetData(strFaceList))
 	{
@@ -210,7 +210,7 @@ bool GAseParser::GetFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, TVer
 
 		for (DWORD dwFaceCount = 0; dwFaceCount < dwNumFace; dwFaceCount++)
 		{
-			TFaceList vFaceList;
+			GFaceList vFaceList;
 			_stscanf(GetNextTokenString(), _T("%s%d %d%d%d"), m_pString, &m_iData,
 				&vFaceList._0,
 				&vFaceList._2,
@@ -220,7 +220,7 @@ bool GAseParser::GetFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, TVer
 	}
 	return true;
 }
-bool GAseParser::GetPositionFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, TVertexList& VertexList, TCHAR* strToken)
+bool GAseParser::GetPositionFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, GVertexList& VertexList, TCHAR* strToken)
 {
 	if (dwNumFace > 0 && GetData(strFaceList))
 	{
@@ -228,7 +228,7 @@ bool GAseParser::GetPositionFaceListFromString(TCHAR* strFaceList, DWORD dwNumFa
 
 		for (DWORD dwFaceCount = 0; dwFaceCount < dwNumFace; dwFaceCount++)
 		{
-			TFaceList vFaceList;
+			GFaceList vFaceList;
 			// *MESH_FACE
 			_stscanf(GetNextTokenString(), _T("%s %s%s %d %s %d %s %d"),
 				m_pString, m_pString, m_pString,
@@ -288,12 +288,12 @@ GAseParser::~GAseParser()
 
 
 
-bool GAseParser::GetTrackListFromString(vector<TAnimTrack>& vTrack,
+bool GAseParser::GetTrackListFromString(vector<GAnimTrack>& vTrack,
 	AseTrackType TrackType)
 {
 	for (;;)
 	{
-		TAnimTrack Track;
+		GAnimTrack Track;
 
 		if (TrackType == POS_SAMLE_TRACK)
 		{

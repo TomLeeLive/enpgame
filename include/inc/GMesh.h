@@ -71,10 +71,10 @@ public:
 	
 	vector<shared_ptr<GMesh>>		m_pSubMesh;
 	vector<GMesh*>		m_pChildMesh;
-	vector<shared_ptr<TAnimTrack>>		m_pPosTrack;
-	vector<shared_ptr<TAnimTrack>>		m_pRotTrack;
-	vector<shared_ptr<TAnimTrack>>		m_pSclTrack;
-	vector<shared_ptr<TAnimTrack>>		m_pVisTrack;
+	vector<shared_ptr<GAnimTrack>>		m_pPosTrack;
+	vector<shared_ptr<GAnimTrack>>		m_pRotTrack;
+	vector<shared_ptr<GAnimTrack>>		m_pSclTrack;
+	vector<shared_ptr<GAnimTrack>>		m_pVisTrack;
 	float					m_fVisibility;
 
 	//TBS

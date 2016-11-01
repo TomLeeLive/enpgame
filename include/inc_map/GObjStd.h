@@ -38,7 +38,7 @@ const enum FILETYPE {
 };
 
 
-struct TScene
+struct GScene
 {
 	int iVersion;		// 버전
 	int	iFirstFrame;    // 시작 프레임
@@ -55,7 +55,7 @@ struct VersionMark
 	TCHAR	description[128];
 };
 
-struct TTextexMap
+struct GTextexMap
 {
 	// 오브젝트 텍스쳐 관리자에서 매터리얼의 텍스쳐파일명을 보고 DX텍스쳐 생성 후 참조인덱스를 저장한다.
 	DWORD		m_dwIndex;
@@ -67,25 +67,25 @@ struct TTextexMap
 	T_STR		m_strClassName;
 	// 맵 텍스쳐 이름.
 	T_STR		m_strTextureName;
-	TTextexMap() : m_dwType(1), m_dwIndex(0) {}
+	GTextexMap() : m_dwType(1), m_dwIndex(0) {}
 };
-struct TMtrl
+struct GMtrl
 {
 	// 메터리얼 이름
 	T_STR		m_strName;
 	// 메터리얼 클래스 이름
 	T_STR		m_strClassName;
 	// 맵타입들
-	vector<TTextexMap>	m_TexMaps;
+	vector<GTextexMap>	m_TexMaps;
 	// 서브 매터리얼 저장벡터
-	vector<TMtrl>		m_SubMaterial;
+	vector<GMtrl>		m_SubMaterial;
 	//TBS
 	DWORD m_dwSubCount;
 	DWORD m_dwTexMapCount;
 	DWORD m_dwIndex;
 
-	TMtrl() {}
-	~TMtrl()
+	GMtrl() {}
+	~GMtrl()
 	{
 		stl_wipe_vector(m_SubMaterial);
 		stl_wipe_vector(m_TexMaps);
@@ -93,7 +93,7 @@ struct TMtrl
 };
 
 
-struct TFaceList
+struct GFaceList
 {
 	union
 	{
@@ -101,30 +101,30 @@ struct TFaceList
 		DWORD v[3];
 	};
 	DWORD   dwMtrl;
-	TFaceList() : dwMtrl(0), _0(0), _1(0), _2(0)
+	GFaceList() : dwMtrl(0), _0(0), _1(0), _2(0)
 	{}
 };
 
-struct TVertexList
+struct GVertexList
 {
 	DWORD					dwNumVertex;
 	DWORD					dwNumFace;
 	vector<D3DXVECTOR3>		pVertexList;
-	vector<TFaceList>		pFaceList;
+	vector<GFaceList>		pFaceList;
 	vector<DWORD>			pSubListMtl;
-	TVertexList() : dwNumVertex(0), dwNumFace(0)
+	GVertexList() : dwNumVertex(0), dwNumFace(0)
 	{
 	}
-	~TVertexList() { stl_wipe_vector(pVertexList); stl_wipe_vector(pVertexList); }
+	~GVertexList() { stl_wipe_vector(pVertexList); stl_wipe_vector(pVertexList); }
 };
 
-struct TAnimTrack
+struct GAnimTrack
 {
 	int					iTick;
 	D3DXQUATERNION		qRotate;
 	D3DXVECTOR3			vVector;
-	TAnimTrack*			pNext;
-	TAnimTrack*			pPrev;
+	GAnimTrack*			pNext;
+	GAnimTrack*			pPrev;
 };
 
 //--------------------------------------------------------------------------------------
