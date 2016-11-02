@@ -153,16 +153,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GMap.h" />
+    <ClInclude Include="GHeight.h" />
     <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GMap.cpp" />
+    <ClCompile Include="GHeight.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CustomizeMap.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="HeightMap.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

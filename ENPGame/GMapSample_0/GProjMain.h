@@ -19,11 +19,15 @@
 #endif
 
 #include "GCoreLibV2.h"
-#include "GMap.h"
+
+#include "GShape.h"
+#include "GHeight.h"
 #include "GCamera.h"
 
 class GProjMain : public GCoreLibV2
 {
+public:
+	GHeight m_HeightMap;	
 public:
 	GMap m_CustomMap;
 	GCamera* m_pMainCamera;

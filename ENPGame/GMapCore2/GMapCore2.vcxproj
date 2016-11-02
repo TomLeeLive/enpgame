@@ -151,10 +151,10 @@ copy "*.h" "..\\..\\include\\Inc_map\\map"</Command>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GNode.h" />
+    <ClCompile Include="GMap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GNode.cpp" />
+    <ClInclude Include="GMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
