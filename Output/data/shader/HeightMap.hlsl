@@ -1,7 +1,8 @@
 #define WIDEN(x) g_##x
 
-Texture2D g_txDiffuse: register(t0);
-SamplerState samLinear : register(s0);
+Texture2D g_txDiffuse : register (t0);
+SamplerState samLinear: register (s0);
+
 cbuffer cb0
 {
 	matrix g_matWorld : packoffset(c0);
@@ -14,7 +15,7 @@ struct VS_INPUT
 {
 	float4 p : POSITION;
 	float3 n : NORMAL;
-	float4 c : COLOR;
+	float4 c: COLOR;
 	float2 t : TEXCOORD;
 };
 
@@ -33,21 +34,20 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	output.p = mul(output.p, WIDEN(matView));
 	output.p = mul(output.p, WIDEN(matProj));
 	output.n = vIn.n;
-	output.t = vIn.t;
+	output.t = vIn.t * 10;
 	output.c = vIn.c * g_MeshColor;
 	return output;
 }
 
-float4 PS(VS_OUTPUT vIn) : SV_Target
+float4 PS(VS_OUTPUT vIn): SV_Target
 {
-	return g_txDiffuse.Sample(samLinear, vIn.t)	* vIn.c;
+	return g_txDiffuse.Sample(samLinear, vIn.t)* vIn.c;
 }
-
-float4 PS_Texture(VS_OUTPUT vIn) : SV_Target
+float4	PS_Texture(VS_OUTPUT vIn) : SV_Target
 {
 	return g_txDiffuse.Sample(samLinear, vIn.t);
 }
-float4 PS_Color(VS_OUTPUT vIn): SV_Taget
+float4	PS_Color(VS_OUTPUT vIn): SV_Taget
 {
 	return vIn.c;
 }
