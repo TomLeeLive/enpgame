@@ -13,6 +13,8 @@
 
 #define G_MACRO_MODELVIEW 1
 
+//#define G_MACRO_MODELROT 1
+
 #ifdef G_MACRO_MODELVIEW
 //#include "GModelViewCamera.h"
 #include "GModelCamera.h"

@@ -177,10 +177,10 @@ BOOL CGciCharToolApp::InitInstance()
 	GCoreLibV2::m_bDebugInfoPrint = false;
 	GCoreLibV2::m_bDebugFpsPrint = false;
 
-	//GCoreLibV2::m_fScreenColor[0] = 0.0f;
-	//GCoreLibV2::m_fScreenColor[1] = 0.125f;
-	//GCoreLibV2::m_fScreenColor[2] = 0.3f;
-	//GCoreLibV2::m_fScreenColor[3] = 1.0f;
+	GCoreLibV2::m_fScreenColor[0] = 0.0f;
+	GCoreLibV2::m_fScreenColor[1] = 0.125f;
+	GCoreLibV2::m_fScreenColor[2] = 0.3f;
+	GCoreLibV2::m_fScreenColor[3] = 1.0f;
 
 	//Load();
 
@@ -340,7 +340,11 @@ bool CGciCharToolApp::Frame() {
 	//m_pMainCamera->Update(g_fSecPerFrame);
 
 	// 90도 회전
+#ifdef	G_MACRO_MODELROT
 	D3DXMatrixRotationY(&m_World[0], t*0.1f);
+#else
+	D3DXMatrixIdentity(&m_World[0]);
+#endif
 
 	//--------------------------------------------------------------------------------------
 	// 카메라 타입 선택
@@ -357,11 +361,19 @@ bool CGciCharToolApp::Frame() {
 
 	if (I_Input.KeyCheck(DIK_A))
 	{
-		m_vObjectPosition.x += (m_Timer.GetSPF() * 2.0f);
+		m_vObjectPosition.x += (m_Timer.GetSPF() * 20.0f);
 	}
 	if (I_Input.KeyCheck(DIK_D))
 	{
-		m_vObjectPosition.x += (-m_Timer.GetSPF() * 2.0f);
+		m_vObjectPosition.x += (-m_Timer.GetSPF() * 20.0f);
+	}
+	if (I_Input.KeyCheck(DIK_Z))
+	{
+		m_vObjectPosition.y += (m_Timer.GetSPF() * 20.0f);
+	}
+	if (I_Input.KeyCheck(DIK_X))
+	{
+		m_vObjectPosition.y += (-m_Timer.GetSPF() * 20.0f);
 	}
 	m_pMainCamera->SetTargetPos(m_vObjectPosition);
 	//--------------------------------------------------------------------------------------
@@ -369,11 +381,11 @@ bool CGciCharToolApp::Frame() {
 	//--------------------------------------------------------------------------------------
 	if (I_Input.KeyCheck(DIK_W))
 	{
-		m_fRadius += (m_Timer.GetSPF() * 2.0f);
+		m_fRadius += (m_Timer.GetSPF() * 20.0f);
 	}
 	if (I_Input.KeyCheck(DIK_S))
 	{
-		m_fRadius += (-m_Timer.GetSPF() * 2.0f);
+		m_fRadius += (-m_Timer.GetSPF() * 20.0f);
 	}
 
 	//m_fRadius += m_Timer.GetSPF() * I_Input.m_DIMouseState.lZ;
@@ -448,7 +460,17 @@ bool CGciCharToolApp::Render() {
 	HRESULT hr;
 
 	m_World[0]._41 = m_World[1]._41 = m_vObjectPosition.x;
+	m_World[0]._42 = m_World[1]._42 = m_vObjectPosition.y;
 
+	D3DXMATRIX matTrans;
+	D3DXMatrixIdentity(&matTrans);
+	matTrans._41 = m_vObjectPosition.x;
+	matTrans._42 = m_vObjectPosition.y;
+
+	m_World[0] *= matTrans;
+	m_World[1] *= matTrans;
+
+	
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
@@ -457,7 +479,7 @@ bool CGciCharToolApp::Render() {
 	}
 
 	if (GCoreLibV2::m_bDebugFpsPrint) {
-		m_pDirectionLine.SetMatrix(NULL, &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
+		m_pDirectionLine.SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
 		m_pDirectionLine.Render(m_pImmediateContext);
 	}
 
@@ -804,11 +826,11 @@ BOOL CGciCharToolApp::InitCamera() {
 		m_pCamera[iCamera].get()->SetProjMatrix(D3DX_PI * 0.25f,
 			(float)m_ViewPort[iCamera].m_vp.Width / (float)m_ViewPort[iCamera].m_vp.Height,
 			1.0f,
-			100.0f);
+			1000.0f);
 	}
 	m_pMainCamera.get()->SetProjMatrix(D3DX_PI * 0.25f,
 		Desc.BufferDesc.Width / (float)(Desc.BufferDesc.Height),
-		0.1f, 100.0f);
+		0.1f, 1000.0f);
 
 	D3DXMATRIX matRotX, matScale;
 	D3DXMatrixRotationX(&matRotX, D3DXToRadian(90));
