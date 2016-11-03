@@ -12,8 +12,9 @@ void GProjMain::AddObject()
 bool GProjMain::Init()
 {
 	m_tbsobj.Init();	
-	if(!m_tbsobj.Load(GetDevice(),_T("data/turret.GBS"), L"data/shader/box.hlsl")  )
-		
+	//if(!m_tbsobj.Load(GetDevice(),_T("data/turret.GBS"), L"data/shader/box.hlsl")  )
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/obj/h_biotech.gbs"), L"data/shader/obj.hlsl"))
+	if (!m_tbsobj.Load(GetDevice(), _T("data/obj/3bricks.gbs"), L"data/shader/obj.hlsl"))
 	{
 		return false;
 	}
