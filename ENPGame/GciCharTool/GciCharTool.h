@@ -37,6 +37,7 @@ class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
 #ifdef G_MACRO_MODELVIEW
+	BOOL				InitCamera();
 
 	//--------------------------------------------------------------------------------------
 	// ViewStyle
@@ -96,6 +97,8 @@ public:
 	bool		Load();
 	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
 
+	HRESULT CreateResource();
+	HRESULT DeleteResource();
 public:
 	CGciCharToolApp();
 

@@ -32,6 +32,28 @@ END_MESSAGE_MAP()
 
 // CAIToolApp 생성
 
+HRESULT CGciCharToolApp::CreateResource()
+{
+#ifdef G_MACRO_MODELVIEW
+	HRESULT hr;
+	if (FAILED(hr = ScreenViewPort(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height)))
+	{
+		return hr;
+	}
+#endif
+	return S_OK;
+}
+
+HRESULT CGciCharToolApp::DeleteResource()
+{
+	HRESULT hr = S_OK;
+	// 아래의 경고는 GetDevice()->ClearState();를 호출하지 않을 때 발생한다.
+	//D3D10: INFO: ID3D11Device::RSSetState: The currently bound RasterizerState is being deleted; 
+	//so naturally, will no longer be bound. [ STATE_SETTING INFO #46: RSSETSTATE_UNBINDDELETINGOBJECT ]
+	if (m_pImmediateContext) m_pImmediateContext->ClearState();
+	return S_OK;
+}
+
 CGciCharToolApp::CGciCharToolApp()
 {
 	m_bHiColorIcons = TRUE;
@@ -151,11 +173,14 @@ BOOL CGciCharToolApp::InitInstance()
 	GWindow::m_iWindowHeight = rcClient.Height();
 	m_LineShaderFile = L"data/shader/line.hlsl";
 	GCoreLibV2::GInit();
+	
+	GCoreLibV2::m_bDebugInfoPrint = false;
+	GCoreLibV2::m_bDebugFpsPrint = false;
 
-	GCoreLibV2::m_fScreenColor[0] = 0.0f;
-	GCoreLibV2::m_fScreenColor[1] = 0.125f;
-	GCoreLibV2::m_fScreenColor[2] = 0.3f;
-	GCoreLibV2::m_fScreenColor[3] = 1.0f;
+	//GCoreLibV2::m_fScreenColor[0] = 0.0f;
+	//GCoreLibV2::m_fScreenColor[1] = 0.125f;
+	//GCoreLibV2::m_fScreenColor[2] = 0.3f;
+	//GCoreLibV2::m_fScreenColor[3] = 1.0f;
 
 	//Load();
 
@@ -196,64 +221,8 @@ BOOL CGciCharToolApp::InitInstance()
 	m_vObjectPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 
+	InitCamera();
 
-
-
-	// 4 종류의 카메라 세팅
-	D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
-	D3DXVECTOR3 vCameraPosition = D3DXVECTOR3(0.0f, 1.0f, -0.1f);
-
-	//  좌측 뷰포트 4개의 각 카메라 행렬
-	// Top g_matView	
-	m_pCamera[0] = make_shared<GModelCamera>();
-	m_pCamera[0].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
-	// Front g_matView
-	m_pCamera[1] = make_shared<GModelCamera>();
-	vCameraPosition = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-	m_pCamera[1].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
-	// Side g_matView
-	m_pCamera[2] = make_shared<GModelCamera>();
-	vCameraPosition = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-	m_pCamera[2].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
-	// User g_matView
-	m_pCamera[3] = make_shared<GModelCamera>();
-	vCameraPosition = D3DXVECTOR3(0.0f, 1.0f, -1.0f);
-	m_pCamera[3].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
-
-	// 뷰포트에 들어 맞게 카메라 조정.
-	m_pCamera[0].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
-	m_pCamera[1].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
-	m_pCamera[2].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
-	m_pCamera[3].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
-
-	// 메인 카메라 뷰 행렬 세팅
-	m_pMainCamera = make_shared<GModelCamera>();
-	m_pMainCamera->SetViewMatrix(m_pCamera[m_iCameraType].get()->m_vCameraPos,
-		m_pCamera[m_iCameraType].get()->m_vTargetPos,
-		vUpVector);
-	m_fRadius = D3DXVec3Length(&(m_pMainCamera.get()->m_vCameraPos - m_pMainCamera.get()->m_vTargetPos));
-
-	// 투영행렬 세팅
-	DXGI_SWAP_CHAIN_DESC Desc;
-	if (FAILED(GetSwapChain()->GetDesc(&Desc)))
-	{
-		return false;
-	}
-	for (int iCamera = 0; iCamera < 4; iCamera++)
-	{
-		m_pCamera[iCamera].get()->SetProjMatrix(D3DX_PI * 0.25f,
-			(float)m_ViewPort[iCamera].m_vp.Width / (float)m_ViewPort[iCamera].m_vp.Height,
-			1.0f,
-			100.0f);
-	}
-	m_pMainCamera.get()->SetProjMatrix(D3DX_PI * 0.25f,
-		Desc.BufferDesc.Width / (float)(Desc.BufferDesc.Height),
-		0.1f, 100.0f);
-
-	D3DXMATRIX matRotX, matScale;
-	D3DXMatrixRotationX(&matRotX, D3DXToRadian(90));
-	D3DXMatrixScaling(&matScale, 2.0f, 2.0f, 2.0f);
-	D3DXMatrixMultiply(&m_World[1], &matScale, &matRotX);
 #else
 	m_pMainCamera = make_shared<GCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 10.0f, 100.0f));
@@ -406,7 +375,9 @@ bool CGciCharToolApp::Frame() {
 	{
 		m_fRadius += (-m_Timer.GetSPF() * 2.0f);
 	}
-	m_fRadius += m_Timer.GetSPF() * I_Input.m_DIMouseState.lZ;
+
+	//m_fRadius += m_Timer.GetSPF() * I_Input.m_DIMouseState.lZ;
+
 	//--------------------------------------------------------------------------------------
 	// 카메라 Y, X 축 회전 앵글
 	//--------------------------------------------------------------------------------------
@@ -418,7 +389,8 @@ bool CGciCharToolApp::Frame() {
 	//--------------------------------------------------------------------------------------
 	// 카메라 행렬 계산
 	//--------------------------------------------------------------------------------------
-	m_pMainCamera->Update(D3DXVECTOR4(m_fCameraPitch, m_fCameraYaw, m_fCameraRoll, m_fRadius));
+	m_pMainCamera->Update(D3DXVECTOR4(m_fCameraPitch, m_fCameraYaw, m_fCameraRoll, m_fRadius /*6.0f*/));
+	
 #else
 	m_pMainCamera->Frame();
 
@@ -465,6 +437,7 @@ bool CGciCharToolApp::Frame() {
 		I_CharMgr.Release();
 
 		Load();
+
 	}
 	return true;
 }
@@ -472,24 +445,23 @@ bool CGciCharToolApp::Render() {
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
 #ifdef G_MACRO_MODELVIEW
-
 	HRESULT hr;
+
 	m_World[0]._41 = m_World[1]._41 = m_vObjectPosition.x;
-	for (int iObj = 0; iObj < 2; iObj++)
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-		{
-			//m_matWorld._41 = -50.0f + iChar * 25.0f;
-			m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
-			m_HeroObj[iChar]->Render(m_pImmediateContext);
-		}
-
-		//m_pBox.SetMatrix(&m_World[0], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		//m_pBox.Render(m_pImmediateContext);
-
-		//m_pPlane.SetMatrix(&m_World[1], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		//m_pPlane.Render(m_pImmediateContext);
+		//m_matWorld._41 = -50.0f + iChar * 25.0f;
+		m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
+		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
+
+	//m_pBox.SetMatrix(&m_World[0], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	//m_pBox.Render(m_pImmediateContext);
+
+	//m_pPlane.SetMatrix(&m_World[1], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	//m_pPlane.Render(m_pImmediateContext);
+
 	//-----------------------------------------------------------------------
 	// 현재 세팅된 뷰포트 정보 저장
 	//-----------------------------------------------------------------------
@@ -575,6 +547,8 @@ bool CGciCharToolApp::Render() {
 	rc.right = m_DefaultRT.m_vp.Width;
 	rc.bottom = m_DefaultRT.m_vp.Height;
 	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
+	
+	
 
 #else
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
@@ -643,6 +617,8 @@ bool CGciCharToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 	SetCurrentDirectory(lpCurBuffer);
 	return true;
 }
+#ifdef G_MACRO_MODELVIEW
+
 HRESULT CGciCharToolApp::ScreenViewPort(UINT iWidth, UINT iHeight)
 {
 	HRESULT hr = S_OK;
@@ -657,6 +633,8 @@ HRESULT CGciCharToolApp::ScreenViewPort(UINT iWidth, UINT iHeight)
 
 	return hr;
 }
+#endif
+
 bool CGciCharToolApp::Load()
 {
 	I_CharMgr.Init();
@@ -727,6 +705,7 @@ bool CGciCharToolApp::Load()
 	pChar3->m_pBoneObject->m_Scene.iFirstFrame,
 	pChar3->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjF);*/
+
 	return true;
 }
 
@@ -745,3 +724,63 @@ void CGciCharToolApp::OnCharsave()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
+#ifdef G_MACRO_MODELVIEW
+BOOL CGciCharToolApp::InitCamera() {
+	// 4 종류의 카메라 세팅
+	D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
+	D3DXVECTOR3 vCameraPosition = D3DXVECTOR3(0.0f, 1.0f, -0.1f);
+
+	//  좌측 뷰포트 4개의 각 카메라 행렬
+	// Top g_matView	
+	m_pCamera[0] = make_shared<GModelCamera>();
+	m_pCamera[0].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
+	// Front g_matView
+	m_pCamera[1] = make_shared<GModelCamera>();
+	vCameraPosition = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	m_pCamera[1].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
+	// Side g_matView
+	m_pCamera[2] = make_shared<GModelCamera>();
+	vCameraPosition = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+	m_pCamera[2].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
+	// User g_matView
+	m_pCamera[3] = make_shared<GModelCamera>();
+	vCameraPosition = D3DXVECTOR3(0.0f, 1.0f, -1.0f);
+	m_pCamera[3].get()->SetViewMatrix(vCameraPosition, m_vObjectPosition, vUpVector);
+
+	// 뷰포트에 들어 맞게 카메라 조정.
+	m_pCamera[0].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
+	m_pCamera[1].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
+	m_pCamera[2].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
+	m_pCamera[3].get()->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
+
+	// 메인 카메라 뷰 행렬 세팅
+	m_pMainCamera = make_shared<GModelCamera>();
+	m_pMainCamera->SetViewMatrix(m_pCamera[m_iCameraType].get()->m_vCameraPos,
+		m_pCamera[m_iCameraType].get()->m_vTargetPos,
+		vUpVector);
+	m_fRadius = D3DXVec3Length(&(m_pMainCamera.get()->m_vCameraPos - m_pMainCamera.get()->m_vTargetPos));
+
+	// 투영행렬 세팅
+	DXGI_SWAP_CHAIN_DESC Desc;
+	if (FAILED(GetSwapChain()->GetDesc(&Desc)))
+	{
+		return false;
+	}
+	for (int iCamera = 0; iCamera < 4; iCamera++)
+	{
+		m_pCamera[iCamera].get()->SetProjMatrix(D3DX_PI * 0.25f,
+			(float)m_ViewPort[iCamera].m_vp.Width / (float)m_ViewPort[iCamera].m_vp.Height,
+			1.0f,
+			100.0f);
+	}
+	m_pMainCamera.get()->SetProjMatrix(D3DX_PI * 0.25f,
+		Desc.BufferDesc.Width / (float)(Desc.BufferDesc.Height),
+		0.1f, 100.0f);
+
+	D3DXMATRIX matRotX, matScale;
+	D3DXMatrixRotationX(&matRotX, D3DXToRadian(90));
+	D3DXMatrixScaling(&matScale, 2.0f, 2.0f, 2.0f);
+	D3DXMatrixMultiply(&m_World[1], &matScale, &matRotX);
+
+}
+#endif
