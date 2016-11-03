@@ -198,6 +198,7 @@
     <ClInclude Include="GciCharToolDoc.h" />
     <ClInclude Include="GciCharTool.h" />
     <ClInclude Include="GciCharToolView.h" />
+    <ClInclude Include="GModelCamera.h" />
     <ClInclude Include="GModelControl.h" />
     <ClInclude Include="GModelForm.h" />
     <ClInclude Include="MainFrm.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="GciCharToolDoc.cpp" />
     <ClCompile Include="GciCharTool.cpp" />
     <ClCompile Include="GciCharToolView.cpp" />
+    <ClCompile Include="GModelCamera.cpp" />
     <ClCompile Include="GModelControl.cpp" />
     <ClCompile Include="GModelForm.cpp" />
     <ClCompile Include="MainFrm.cpp" />
