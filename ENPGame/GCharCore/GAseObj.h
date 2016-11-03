@@ -10,7 +10,7 @@ class GAseObj : public GModel
 public:
 	tAseMeshData	m_pData;
 	GAseParser		m_Parser;
-	vector<TMtrl>	m_Material;
+	vector<GMtrl>	m_Material;
 public:
 	bool					Init();
 	bool					Frame();
@@ -23,12 +23,12 @@ public:
 	HRESULT					SetInputLayout();
 	HRESULT					LoadTextures(ID3D11Device* pDevice, const TCHAR* pLoadTextureString);
 	void					SetTriangleBuffer(GMesh* pMesh, tAseData* pData, TAseMesh* pAseMesh,DWORD dwMask = 0x00000000);
-	int						GetMapID(TMtrl* pMtrl, int iTexMapType = ID_GCORE_DI);
+	int						GetMapID(GMtrl* pMtrl, int iTexMapType = ID_GCORE_DI);
 	//--------------------------------------------------------------------------------------																					
 	// 에니메이션 관련 함수 																					
 	//--------------------------------------------------------------------------------------
-	TAnimTrack*				SetDoublyLinkedList(TAnimTrack* pCurrentTrack, TAnimTrack* pPrev);//이중 연결 리스트 구축
-	bool					GetAnimationTrack(float fFrame,	vector<shared_ptr<TAnimTrack>> pTrackList,	TAnimTrack** ppStartTrack,	TAnimTrack** ppEndTrack);
+	GAnimTrack*				SetDoublyLinkedList(GAnimTrack* pCurrentTrack, GAnimTrack* pPrev);//이중 연결 리스트 구축
+	bool					GetAnimationTrack(float fFrame,	vector<shared_ptr<GAnimTrack>> pTrackList,	GAnimTrack** ppStartTrack,	GAnimTrack** ppEndTrack);
 	void					Interpolate(GMesh* pMesh,	D3DXMATRIX* matParent,	float fFrameTick);
 	bool					InheriteCollect();
 	GMesh*		SearchToCollects(T_STR	m_strParentName);

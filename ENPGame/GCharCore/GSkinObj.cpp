@@ -53,7 +53,7 @@ bool GSkinObj::Load(ID3D11Device* pDevice, const TCHAR* szLoadName, const TCHAR*
 	fread(&newtime, sizeof(tm), 1, fp);
 	T_STR today = _tasctime(&newtime);	// The date string has a \n appended.
 	today[today.size() - 1] = 0;
-	fread(&m_Scene, sizeof(TScene), 1, fp);
+	fread(&m_Scene, sizeof(GScene), 1, fp);
 
 	TCHAR szBuffer[128] = { 0, };
 	size_t convertedChars = 0;

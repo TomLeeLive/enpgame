@@ -55,19 +55,19 @@ struct TAseMesh
 	T_STR					m_strNodeName;
 	DWORD					m_iNumFace;
 	INT						m_iMtrlRef;
-	TVertexList				m_PosVertexList;
-	TVertexList				m_TexVertexList;
-	TVertexList				m_ColVertexList;
-	TVertexList				m_NorVertexList;
+	GVertexList				m_PosVertexList;
+	GVertexList				m_TexVertexList;
+	GVertexList				m_ColVertexList;
+	GVertexList				m_NorVertexList;
 
 	D3DXMATRIX				m_matWorldTrans;	// 월드 이동 행렬
 	D3DXMATRIX				m_matWorldRotate;	// 월드 회전 행렬
 	D3DXMATRIX				m_matWorldScale;	// 월드 신축 행렬
 
-	vector<TAnimTrack>		m_PosTrack;		// 이동 트랙 
-	vector<TAnimTrack>		m_RotTrack;		// 회전 트랙
-	vector<TAnimTrack>		m_SclTrack;		// 신축 트랙												
-	vector<TAnimTrack>		m_VisTrack;		// 알파 트랙
+	vector<GAnimTrack>		m_PosTrack;		// 이동 트랙 
+	vector<GAnimTrack>		m_RotTrack;		// 회전 트랙
+	vector<GAnimTrack>		m_SclTrack;		// 신축 트랙												
+	vector<GAnimTrack>		m_VisTrack;		// 알파 트랙
 	OBJECTCLASSTYPE			m_ClassType;		// 본 : 더미 : 지오메트리 지정	
 	T_STR					m_strParentName;	// 부모이름
 	G_BOX					m_BBox;
@@ -84,10 +84,10 @@ public:
 public:
 	bool			Release();
 	bool			Load(const TCHAR* strFileName);
-	bool			LoadScene(TScene& tScene);
-	bool			LoadMaterialList(vector<TMtrl>&	tMaterialList);
-	bool			LoadMaterial(TMtrl* pMaterial);
-	bool			LoadTexture(TTextexMap& TexMap);
+	bool			LoadScene(GScene& tScene);
+	bool			LoadMaterialList(vector<GMtrl>&	tMaterialList);
+	bool			LoadMaterial(GMtrl* pMaterial);
+	bool			LoadTexture(GTextexMap& TexMap);
 	bool			LoadGeomObject();
 	bool			LoadHelperObject();
 	void			LoadTM(TAseMesh* pObject);
@@ -99,10 +99,10 @@ public:
 	bool			GetData(VOID* pData = NULL, INT DataType = NULL_DATA);
 	bool			GetVertexFromIndexData(TCHAR* strToken, DWORD dwSearchIndex, VOID* pData, INT DataType);
 	bool			GetVertexListFromString(TCHAR* strVertexList, DWORD dwNumVertex, vector<D3DXVECTOR3>& VertexList, TCHAR* strToken = _T("*"));
-	bool			GetFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, TVertexList& VertexList, TCHAR* strToken = _T("*"));
-	bool			GetPositionFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, TVertexList& VertexList, TCHAR* strToken = _T("*"));
+	bool			GetFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, GVertexList& VertexList, TCHAR* strToken = _T("*"));
+	bool			GetPositionFaceListFromString(TCHAR* strFaceList, DWORD dwNumFace, GVertexList& VertexList, TCHAR* strToken = _T("*"));
 	bool			GetNormalListFromString(TCHAR* strFaceList, DWORD dwNumFace, TAseMesh* pGeomObject, TCHAR* strToken = _T("*"));
-	bool			GetTrackListFromString(vector<TAnimTrack>& PosTrack,
+	bool			GetTrackListFromString(vector<GAnimTrack>& PosTrack,
 		AseTrackType TrackType);
 
 public:

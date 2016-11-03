@@ -105,8 +105,8 @@ void GAseObj::Interpolate(GMesh* pMesh,
 	float fStartTick = m_Scene.iFirstFrame * m_Scene.iTickPerFrame;
 	float fEndTick = 0.0f;
 
-	TAnimTrack* pStartTrack = NULL;
-	TAnimTrack* pEndTrack = NULL;
+	GAnimTrack* pStartTrack = NULL;
+	GAnimTrack* pEndTrack = NULL;
 	if (pMesh->m_pRotTrack.size())
 	{
 		// pStartTrack를 찾을수 있으면
@@ -223,13 +223,13 @@ void GAseObj::Interpolate(GMesh* pMesh,
 }
 // pEndTrack 트랙이 없으면 flase 리턴( 보간할 대상이 없을 때 )
 bool GAseObj::GetAnimationTrack(float fFrame,
-	vector<shared_ptr<TAnimTrack>> pTrackList,
-	TAnimTrack** pStartTrack,
-	TAnimTrack** pEndTrack)
+	vector<shared_ptr<GAnimTrack>> pTrackList,
+	GAnimTrack** pStartTrack,
+	GAnimTrack** pEndTrack)
 {
 	for (DWORD dwTrack = 0; dwTrack < pTrackList.size(); dwTrack++)
 	{
-		TAnimTrack *pTrack = pTrackList[dwTrack].get();
+		GAnimTrack *pTrack = pTrackList[dwTrack].get();
 		_ASSERT(pTrack);
 		// fFrame 보다 큰 Tick 트랙이 있다면 이전 트랙을 넘겨 주어야 하기 때문에 break한다.
 		if (pTrack->iTick > fFrame)
@@ -299,7 +299,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 
 		int iRootMtrRef = m_Parser.m_pAseMesh[dwObject]->m_iMtrlRef;
 
-		TMtrl* pMtrl = NULL;
+		GMtrl* pMtrl = NULL;
 		if (iRootMtrRef >= 0 && iRootMtrRef < m_Material.size())
 		{
 			pMtrl = &m_Material[iRootMtrRef];
@@ -328,7 +328,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 
 					iAddCount += pSubData->SetUniqueBuffer(pData->m_TriList, iSub, iAddCount);
 
-					TMtrl* pSubMtrl = &pMtrl->m_SubMaterial[iSub];
+					GMtrl* pSubMtrl = &pMtrl->m_SubMaterial[iSub];
 					_ASSERT(pSubMtrl);
 					pSubMesh->m_iDiffuseTex = -1;
 					if (pSubMtrl)
@@ -350,10 +350,10 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 		}
 		watch.Output(L"Sub Mesh");
 		// 에니메이션 트랙 복사		
-		TAnimTrack* pPrevTrack = NULL;
+		GAnimTrack* pPrevTrack = NULL;
 		for (int iTrack = 0; iTrack < m_Parser.m_pAseMesh[dwObject]->m_PosTrack.size(); iTrack++)
 		{
-			auto pTrack = make_shared<TAnimTrack>();
+			auto pTrack = make_shared<GAnimTrack>();
 			pTrack->iTick = m_Parser.m_pAseMesh[dwObject]->m_PosTrack[iTrack].iTick;
 			pTrack->vVector = m_Parser.m_pAseMesh[dwObject]->m_PosTrack[iTrack].vVector;
 
@@ -364,7 +364,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 		pPrevTrack = NULL;
 		for (int iTrack = 0; iTrack < m_Parser.m_pAseMesh[dwObject]->m_RotTrack.size(); iTrack++)
 		{
-			auto pTrack = make_shared<TAnimTrack>();
+			auto pTrack = make_shared<GAnimTrack>();
 
 			pTrack->iTick = m_Parser.m_pAseMesh[dwObject]->m_RotTrack[iTrack].iTick;
 
@@ -387,7 +387,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 		pPrevTrack = NULL;
 		for (int iTrack = 0; iTrack < m_Parser.m_pAseMesh[dwObject]->m_SclTrack.size(); iTrack++)
 		{
-			auto pTrack = make_shared<TAnimTrack>();
+			auto pTrack = make_shared<GAnimTrack>();
 
 			pTrack->iTick = m_Parser.m_pAseMesh[dwObject]->m_SclTrack[iTrack].iTick;
 			pTrack->vVector = m_Parser.m_pAseMesh[dwObject]->m_SclTrack[iTrack].vVector;
@@ -408,7 +408,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 		pPrevTrack = NULL;
 		for (int iTrack = 0; iTrack < m_Parser.m_pAseMesh[dwObject]->m_VisTrack.size(); iTrack++)
 		{
-			auto pTrack = make_shared<TAnimTrack>();
+			auto pTrack = make_shared<GAnimTrack>();
 			pTrack->iTick = m_Parser.m_pAseMesh[dwObject]->m_VisTrack[iTrack].iTick;
 			pTrack->vVector = m_Parser.m_pAseMesh[dwObject]->m_VisTrack[iTrack].vVector;
 
@@ -421,7 +421,7 @@ bool GAseObj::Convert(ID3D11Device* pDevice)
 	m_Scene.iNumMesh = m_pMesh.size();
 	return InheriteCollect();
 }
-TAnimTrack* GAseObj::SetDoublyLinkedList(TAnimTrack* pCurrentTrack, TAnimTrack* pPrev)
+GAnimTrack* GAseObj::SetDoublyLinkedList(GAnimTrack* pCurrentTrack, GAnimTrack* pPrev)
 {
 	if (pPrev)
 	{
@@ -508,7 +508,7 @@ void GAseObj::SetTriangleBuffer(GMesh* pMesh, tAseData* pData, TAseMesh* pAseMes
 	}
 	std::sort(pData->m_TriList.begin(), pData->m_TriList.end(),	DescendingTriSort<PNCT_VERTEX>());
 }
-int	GAseObj::GetMapID(TMtrl* pMtrl, int iTexMapType)
+int	GAseObj::GetMapID(GMtrl* pMtrl, int iTexMapType)
 {
 	_ASSERT(pMtrl);
 	if (pMtrl->m_TexMaps.size() <= 0) return -1;

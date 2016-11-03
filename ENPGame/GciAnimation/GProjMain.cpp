@@ -140,12 +140,18 @@ bool GProjMain::Init()
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
+
+#ifdef G_MACRO_MODELVIEW
+	m_pMainCamera = make_shared<GModelViewCamera>();
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+#else
 	m_pMainCamera = make_shared<GCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 10.0f, 100.0f));
-
+#endif
 	float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f);
-	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);	
+	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);
+
 	return true;
 }
 bool GProjMain::Render()
@@ -171,8 +177,13 @@ bool GProjMain::Frame()
 {	
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
-	//m_pMainCamera->Update(g_fSecPerFrame);
+	
+#ifdef G_MACRO_MODELVIEW
+	m_pMainCamera->Update(g_fSecPerFrame);
+#else
 	m_pMainCamera->Frame();
+#endif
+
 	m_matWorld = *m_pMainCamera->GetWorldMatrix();
 	m_matWorld._41 = 0.0f;
 	m_matWorld._42 = 0.0f;

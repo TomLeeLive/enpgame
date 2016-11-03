@@ -1,7 +1,7 @@
 #define WIDEN(x) g_##x
 
 Texture2D g_txDiffuse: register(t0);
-SamplerState samLinear : register(s0);
+SamplerState samLinear : register(t1);
 cbuffer cb0
 {
 	matrix g_matWorld : packoffset(c0);
@@ -30,8 +30,8 @@ VS_OUTPUT VS(VS_INPUT vIn)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
 	output.p = mul(vIn.p, WIDEN(matWorld));
-	output.p = mul(output.p, WIDEN(matView));
-	output.p = mul(output.p, WIDEN(matProj));
+	output.p = mul(vIn.p, WIDEN(matView));
+	output.p = mul(vIn.p, WIDEN(matProj));
 	output.n = vIn.n;
 	output.t = vIn.t;
 	output.c = vIn.c * g_MeshColor;
