@@ -36,6 +36,7 @@
 class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	bool DrawDebug();
 #ifdef G_MACRO_MODELVIEW
 	BOOL				InitCamera();
 
@@ -44,10 +45,10 @@ public:
 	//--------------------------------------------------------------------------------------
 	T_STR ViewStyle[4] =
 	{
-		_T("Top g_matView"),
-		_T("Front g_matView"),
-		_T("Side g_matView"),
-		_T("User g_matView"),
+		_T("Top View "),
+		_T("Front View "),
+		_T("Side View "),
+		_T("User View "),
 	};
 
 	//shared_ptr<GModelViewCamera > m_pMainCamera;

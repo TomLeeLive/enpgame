@@ -9,6 +9,7 @@ gci 파일안 모델 리스트를 보여준다.
 
 선택된 모델 구조 보여줄것
 
+체크박스 모델회전 on/off
 체크박스 viewport on/off 
 
 체크박스 Attachment

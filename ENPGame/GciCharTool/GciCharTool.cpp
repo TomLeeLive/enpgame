@@ -456,6 +456,11 @@ bool CGciCharToolApp::Render() {
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
 
+	if (GCoreLibV2::m_bDebugFpsPrint) {
+		m_pDirectionLine.SetMatrix(NULL, &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
+		m_pDirectionLine.Render(m_pImmediateContext);
+	}
+
 	//m_pBox.SetMatrix(&m_World[0], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	//m_pBox.Render(m_pImmediateContext);
 
@@ -725,6 +730,34 @@ void CGciCharToolApp::OnCharsave()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
 #ifdef G_MACRO_MODELVIEW
+bool CGciCharToolApp::DrawDebug()
+{
+	D3D11_VIEWPORT vpOld[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
+	UINT nViewPorts = 1;
+	m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
+
+	m_ViewPort[0].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[0]->m_matView, &m_pCamera[0]->m_matProj);
+	m_pDirectionLine.Render(m_pImmediateContext);
+
+	m_ViewPort[1].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[1]->m_matView, &m_pCamera[1]->m_matProj);
+	m_pDirectionLine.Render(m_pImmediateContext);
+
+	m_ViewPort[2].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[2]->m_matView, &m_pCamera[2]->m_matProj);
+	m_pDirectionLine.Render(m_pImmediateContext);
+
+	m_ViewPort[3].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[3]->m_matView, &m_pCamera[3]->m_matProj);
+	m_pDirectionLine.Render(m_pImmediateContext);
+
+	//-----------------------------------------------------------------------
+	// 기본 뷰포트 정보로 복원
+	//-----------------------------------------------------------------------
+	m_pImmediateContext->RSSetViewports(nViewPorts, vpOld);
+	return GCoreLibV2::DrawDebug();
+}
 BOOL CGciCharToolApp::InitCamera() {
 	// 4 종류의 카메라 세팅
 	D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
