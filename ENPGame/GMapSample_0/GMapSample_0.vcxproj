@@ -153,15 +153,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GHeightMap.h" />
     <ClInclude Include="GMap.h" />
     <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GHeightMap.cpp" />
     <ClCompile Include="GMap.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CustomizeMap.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="HeightMap.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>

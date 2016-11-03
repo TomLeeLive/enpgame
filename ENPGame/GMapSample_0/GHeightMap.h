@@ -1,6 +1,6 @@
 #pragma once
 #include "map/GMap.h"
-class GHeight : public GMap
+class GHeightMap : public GMap
 {
 public:
 	vector<float> m_fHeightList;
@@ -10,7 +10,7 @@ public:
 	D3DXVECTOR4 GetColorOfVertex(UINT Index);
 	float GetHeightmap(int row, int col);
 public:
-	GHeight();
-	virtual ~GHeight();
+	GHeightMap();
+	virtual ~GHeightMap();
 };
 

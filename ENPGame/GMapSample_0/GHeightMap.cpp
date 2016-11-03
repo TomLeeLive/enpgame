@@ -1,6 +1,6 @@
-#include "GHeight.h"
+#include "GHeightMap.h"
 
-bool GHeight::CreateHeightMap(TCHAR* strHeightMap)
+bool GHeightMap::CreateHeightMap(TCHAR* strHeightMap)
 {
 	HRESULT hr; 
 	D3DX11_IMAGE_INFO ImageInfo;
@@ -56,24 +56,24 @@ bool GHeight::CreateHeightMap(TCHAR* strHeightMap)
 	SAFE_RELEASE(pTexture2D);
 	return true;
 }
-float GHeight::GetHeightOfVertex(UINT Index)
+float GHeightMap::GetHeightOfVertex(UINT Index)
 {
 	return m_fHeightList[Index] * m_MapDesc.fScaleHeight;
 }
-D3DXVECTOR4 GHeight::GetColorOfVertex(UINT Index)
+D3DXVECTOR4 GHeightMap::GetColorOfVertex(UINT Index)
 {
 	return D3DXVECTOR4(1, 1, 1, 1.0f);
 }
-float GHeight::GetHeightmap(int row, int col)
+float GHeightMap::GetHeightmap(int row, int col)
 {
 	return m_fHeightList[row * m_iNumRows + col] * m_MapDesc.fScaleHeight;
 }
 
-GHeight::GHeight()
+GHeightMap::GHeightMap()
 {
 }
 
 
-GHeight::~GHeight()
+GHeightMap::~GHeightMap()
 {
 }
