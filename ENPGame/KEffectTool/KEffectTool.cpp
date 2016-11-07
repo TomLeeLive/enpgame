@@ -437,3 +437,7 @@ void CKEffectToolApp::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceCon
 	pd3dDeviceContext->OMSetDepthStencilState(NULL, 0);
 	pd3dDeviceContext->RSSetState(NULL);
 }
+bool CKEffectToolApp::ChagePositionData(float x,float y, float z)
+{
+
+}

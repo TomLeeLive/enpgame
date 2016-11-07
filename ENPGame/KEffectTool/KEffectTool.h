@@ -54,6 +54,9 @@ public:
 	virtual bool Render();
 	virtual bool Release();
 	bool RenderPlane();
+	bool ChagePositionData(float x, float y, float z);
+
+
 	HRESULT	SetBlendState();
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
