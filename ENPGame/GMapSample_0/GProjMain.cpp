@@ -88,6 +88,7 @@ bool GProjMain::Frame()
 			 }
 		 }
 		 m_HeightMap.ReLoadVBuffer();
+		 //m_HeightMap.UpdateBuffer();
 	 }
 	 return m_HeightMap.Frame();
 }
@@ -162,6 +163,8 @@ HRESULT GProjMain::DeleteResource()
 GProjMain::GProjMain(void)
 {
 	m_pMainCamera = nullptr;
+	GCoreLibV2::m_bDebugInfoPrint = false;
+	//GCoreLibV2::m_bDebugFpsPrint = false;
 }
 
 GProjMain::~GProjMain(void)
