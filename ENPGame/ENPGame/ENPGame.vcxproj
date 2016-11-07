@@ -109,9 +109,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GProjMain.cpp" />
+    <ClCompile Include="GSeq.cpp" />
+    <ClCompile Include="GSeqGameEnd.cpp" />
+    <ClCompile Include="GSeqGameOver.cpp" />
+    <ClCompile Include="GSeqHowTo.cpp" />
+    <ClCompile Include="GSeqIntro.cpp" />
+    <ClCompile Include="GSeqMenu.cpp" />
+    <ClCompile Include="GSeqSinglePlay.cpp" />
+    <ClCompile Include="GSeqSurvivalMode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h" />
+    <ClInclude Include="GSeq.h" />
+    <ClInclude Include="GSeqGameEnd.h" />
+    <ClInclude Include="GSeqGameOver.h" />
+    <ClInclude Include="GSeqHowTo.h" />
+    <ClInclude Include="GSeqIntro.h" />
+    <ClInclude Include="GSeqMenu.h" />
+    <ClInclude Include="GSeqSinglePlay.h" />
+    <ClInclude Include="GSeqSurvivalMode.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
