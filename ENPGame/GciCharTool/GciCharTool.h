@@ -13,6 +13,8 @@
 
 #define G_MACRO_MODELVIEW 1
 
+//#define G_MACRO_MODELROT 1
+
 #ifdef G_MACRO_MODELVIEW
 //#include "GModelViewCamera.h"
 #include "GModelCamera.h"
@@ -36,17 +38,19 @@
 class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	bool DrawDebug();
 #ifdef G_MACRO_MODELVIEW
+	BOOL				InitCamera();
 
 	//--------------------------------------------------------------------------------------
 	// ViewStyle
 	//--------------------------------------------------------------------------------------
 	T_STR ViewStyle[4] =
 	{
-		_T("Top g_matView"),
-		_T("Front g_matView"),
-		_T("Side g_matView"),
-		_T("User g_matView"),
+		_T("Top View "),
+		_T("Front View "),
+		_T("Side View "),
+		_T("User View "),
 	};
 
 	//shared_ptr<GModelViewCamera > m_pMainCamera;
@@ -96,6 +100,8 @@ public:
 	bool		Load();
 	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
 
+	HRESULT CreateResource();
+	HRESULT DeleteResource();
 public:
 	CGciCharToolApp();
 
