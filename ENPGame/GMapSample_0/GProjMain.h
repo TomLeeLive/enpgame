@@ -19,11 +19,30 @@
 #endif
 
 #include "GCoreLibV2.h"
+#include"GHeightMap.h"
+#include "GCamera.h"
 
 class GProjMain : public GCoreLibV2
 {
 public:
+	GHeightMap		m_HeightMap;
+	//GMap m_CustomMap;
+public:
+	GCamera* m_pMainCamera;
+	GLineShape m_LineDraw;
+public:
+	bool Init();
+	bool Frame();
+	bool Render();
+	bool Release();
+	bool DrawDebug();
+
+	HRESULT CreateResource();
+	HRESULT DeleteResource();
+public:
 	GProjMain();
 	virtual ~GProjMain();
 };
+
+extern GProjMain*	g_pMain; //외부 연결 범위 선언
 

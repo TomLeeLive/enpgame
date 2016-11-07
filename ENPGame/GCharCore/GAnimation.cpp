@@ -1,10 +1,10 @@
 #include "GAnimation.h"
 // pEndTrack 트랙이 없으면 flase 리턴( 보간할 대상이 없을 때 )
-bool GAnimation::GetAnimationTrack(float fFrame, vector<shared_ptr<TAnimTrack>>& pTrackList, TAnimTrack** pStartTrack, TAnimTrack** pEndTrack)
+bool GAnimation::GetAnimationTrack(float fFrame, vector<shared_ptr<GAnimTrack>>& pTrackList, GAnimTrack** pStartTrack, GAnimTrack** pEndTrack)
 {
 	for (DWORD dwTrack = 0; dwTrack < pTrackList.size(); dwTrack++)
 	{
-		TAnimTrack *pTrack = pTrackList[dwTrack].get();
+		GAnimTrack *pTrack = pTrackList[dwTrack].get();
 		_ASSERT(pTrack);
 		// fFrame 보다 큰 Tick 트랙이 있다면 이전 트랙을 넘겨 주어야 하기 때문에 break한다.
 		if (pTrack->iTick > fFrame)
@@ -17,7 +17,7 @@ bool GAnimation::GetAnimationTrack(float fFrame, vector<shared_ptr<TAnimTrack>>&
 	}
 	return (*pStartTrack != NULL) ? true : false;
 }
-D3DXMATRIX GAnimation::Interpolate(GMesh* pMesh, D3DXMATRIX* matParents, float fFrameTick, TScene tScene)
+D3DXMATRIX GAnimation::Interpolate(GMesh* pMesh, D3DXMATRIX* matParents, float fFrameTick, GScene tScene)
 {
 
 	// TM		= AnimMat * ParentTM;
@@ -38,8 +38,8 @@ D3DXMATRIX GAnimation::Interpolate(GMesh* pMesh, D3DXMATRIX* matParents, float f
 	float fStartTick = tScene.iFirstFrame * tScene.iTickPerFrame;
 	float fEndTick = 0.0f;
 
-	TAnimTrack* pStartTrack = NULL;
-	TAnimTrack* pEndTrack = NULL;
+	GAnimTrack* pStartTrack = NULL;
+	GAnimTrack* pEndTrack = NULL;
 	if (pMesh->m_pRotTrack.size())
 	{
 		// pStartTrack를 찾을수 있으면
@@ -154,7 +154,7 @@ D3DXMATRIX GAnimation::Interpolate(GMesh* pMesh, D3DXMATRIX* matParents, float f
 	}
 	return matCalculation;
 }
-D3DXMATRIX GAnimation::Update(float fElapseTime, GMesh* pMesh, D3DXMATRIX &matParent, TScene &tScene)
+D3DXMATRIX GAnimation::Update(float fElapseTime, GMesh* pMesh, D3DXMATRIX &matParent, GScene &tScene)
 {
 	D3DXMATRIX mat, matReturn;
 	D3DXMatrixIdentity(&mat);

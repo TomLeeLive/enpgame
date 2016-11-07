@@ -1,0 +1,13 @@
+2016.11.07
+
+엔진 수정사항 공지.
+
+전역으로 GProjMain 객체 접근하려고 코어 수정 했음.
+
+샘플 프로젝트 만들때 아래와 같이 하면 됨. (ENPGame 프로젝트 참고)
+
+GProjMain.h 하단에.. 아래 한줄 추가.
+extern GProjMain*	g_pMain;
+
+GProjMain.cpp 상단에 아래 한줄 추가
+GProjMain* g_pMain;

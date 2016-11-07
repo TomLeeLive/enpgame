@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="GameSequence">
+      <UniqueIdentifier>{5beeaea9-a7b9-4fff-b316-034762a4521c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Character.hlsl" />
@@ -22,34 +25,64 @@
     <None Include="CharTable.gci" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GCharacter.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GCharMgr.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GHeroObj.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GProjMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GSeq.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqGameEnd.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqGameOver.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqHowTo.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqIntro.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqMenu.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSinglePlay.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSurvivalMode.cpp">
+      <Filter>GameSequence</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GCharacter.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GCharMgr.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GHeroObj.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GProjMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="_stdafx.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeq.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqGameEnd.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqGameOver.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqHowTo.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqMenu.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSinglePlay.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSurvivalMode.h">
+      <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqIntro.h">
+      <Filter>GameSequence</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

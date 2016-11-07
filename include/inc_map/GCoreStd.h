@@ -20,10 +20,10 @@ namespace GCORESTD
 	extern UINT			g_iClientHeight;
 }
 using namespace GCORESTD;
-//////////////////////////////////////////////
+//--------------------------------------------
 // WinMain ∏≈≈©∑Œ
-//////////////////////////////////////////////
-#define GCORE_START int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow ){ GProjMain gProjMain;
+//--------------------------------------------
+#define GCORE_START int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow ){ GProjMain gProjMain; g_pMain = &gProjMain;
 #define GCORE_WIN(x) if( !gProjMain.InitWindow( hInstance, nCmdShow,  L#x ) )	{	return 0;	}	ShowCursor ( TRUE );gProjMain.Run();	return 1; }
 #define GCORE_RUN(x) GCORE_START; GCORE_WIN(x);
 

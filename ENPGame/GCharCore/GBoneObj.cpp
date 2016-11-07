@@ -141,7 +141,7 @@ bool GBoneObj::Load(ID3D11Device* pDevice,const TCHAR* szLoadName,const TCHAR* p
 	fread(&newtime, sizeof(tm), 1, fp);
 	T_STR today = _tasctime(&newtime);	// The date string has a \n appended.
 	today[today.size() - 1] = 0;
-	fread(&m_Scene, sizeof(TScene), 1, fp);
+	fread(&m_Scene, sizeof(GScene), 1, fp);
 
 	// 시작 프레임이 0일 아닐 경우가 있기 때문에 무조건 
 	// 시작 프레임을 0으로 맞춘다.( 해당 프레임 만큼만 배열 할당 된다.)

@@ -12,7 +12,7 @@ struct TObjWM
 {
 	GModel*				m_pModel;
 	float				m_fElapseTime;
-	TScene				m_Scene;
+	GScene				m_Scene;
 	vector<D3DXMATRIX>	m_matCalculation;
 	vector<D3DXMATRIX>	m_matAnim;
 	vector<int>			m_iParent;
@@ -46,7 +46,7 @@ public:
 	D3DXMATRIX					m_matProj;
 	vector<DWORD>				m_IndexList;
 	vector<PNCT_VERTEX>			m_VertexList;
-	TScene				m_Scene;
+	GScene				m_Scene;
 	FILETYPE			m_ObjType;
 	float				m_fElapseTime;
 	int					m_iStartFrame;

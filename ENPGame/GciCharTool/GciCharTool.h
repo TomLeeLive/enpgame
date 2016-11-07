@@ -9,8 +9,18 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GCoreLibV2.h"
-#include "GciAnimation/GHeroObj.h"
+#include "GHeroObj.h"
+
+#define G_MACRO_MODELVIEW 1
+
+//#define G_MACRO_MODELROT 1
+
+#ifdef G_MACRO_MODELVIEW
+//#include "GModelViewCamera.h"
+#include "GModelCamera.h"
+#else
 #include "GCamera.h"
+#endif
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment( lib, "GCharCore32d.lib" )	
@@ -22,10 +32,67 @@
 // 이 클래스의 구현에 대해서는 GciCharTool.cpp을 참조하십시오.
 //
 
+
+
+
 class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	bool DrawDebug();
+#ifdef G_MACRO_MODELVIEW
+	BOOL				InitCamera();
+
+	//--------------------------------------------------------------------------------------
+	// ViewStyle
+	//--------------------------------------------------------------------------------------
+	T_STR ViewStyle[4] =
+	{
+		_T("Top View "),
+		_T("Front View "),
+		_T("Side View "),
+		_T("User View "),
+	};
+
+	//shared_ptr<GModelViewCamera > m_pMainCamera;
+
+	//GBoxShape					m_pBox;
+	//GPlaneShape					m_pPlane;
+	GDirectionLineShape			m_pDirectionLine;
+	//--------------------------------------------------------------------------------------
+	// 각종 지원 객체 
+	//--------------------------------------------------------------------------------------
+	shared_ptr<GModelCamera >			m_pCamera[4];
+	shared_ptr<GModelCamera >			m_pMainCamera;
+	//--------------------------------------------------------------------------------------
+	// Matrix
+	//--------------------------------------------------------------------------------------
+	D3DXMATRIX					m_World[2];
+	//--------------------------------------------------------------------------------------
+	// 뷰포트 설정
+	//--------------------------------------------------------------------------------------	
+	GDxRT						m_ViewPort[4];
+	HRESULT						ScreenViewPort(UINT iWidth, UINT iHeight);
+	//--------------------------------------------------------------------------------------
+	// 카메라 
+	//--------------------------------------------------------------------------------------	
+	UINT						m_iCameraType;
+	//--------------------------------------------------------------------------------------
+	// 카메라 회전 정보
+	//--------------------------------------------------------------------------------------
+	float						m_fCameraYaw;
+	float						m_fCameraPitch;
+	float						m_fCameraRoll;
+	float						m_fRadius;
+	//--------------------------------------------------------------------------------------
+	// 오브젝트 회전 정보
+	//--------------------------------------------------------------------------------------
+	D3DXVECTOR3					m_vObjectPosition;
+	float						m_fYaw;
+	float						m_fPitch;
+	float						m_fRoll;
+#else
 	shared_ptr<GCamera > m_pMainCamera;
+#endif
 	D3DXMATRIX  m_matWorld;
 	vector<shared_ptr<GHeroObj>>	m_HeroObj;
 
@@ -33,6 +100,8 @@ public:
 	bool		Load();
 	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
 
+	HRESULT CreateResource();
+	HRESULT DeleteResource();
 public:
 	CGciCharToolApp();
 

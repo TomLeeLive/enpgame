@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="GciAnimation">
-      <UniqueIdentifier>{d696b512-724a-4c25-b4da-8ac9b331b1fa}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -48,15 +45,6 @@
     <ClInclude Include="GCreateMapDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GciAnimation\GCharacter.h">
-      <Filter>GciAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="GciAnimation\GCharMgr.h">
-      <Filter>GciAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="GciAnimation\GHeroObj.h">
-      <Filter>GciAnimation</Filter>
-    </ClInclude>
     <ClInclude Include="GModelForm.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -68,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="GAniCtrlForm.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GModelCamera.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,15 +83,6 @@
     <ClCompile Include="GCreateMapDlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GciAnimation\GCharacter.cpp">
-      <Filter>GciAnimation</Filter>
-    </ClCompile>
-    <ClCompile Include="GciAnimation\GCharMgr.cpp">
-      <Filter>GciAnimation</Filter>
-    </ClCompile>
-    <ClCompile Include="GciAnimation\GHeroObj.cpp">
-      <Filter>GciAnimation</Filter>
-    </ClCompile>
     <ClCompile Include="GModelForm.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -111,6 +93,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GAniCtrlForm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GModelCamera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,6 +6,7 @@
 [AI]  : AI
 [UI]  : UI
 [doc] : 문서
+[main] : 메인게임
 [etc] : 기타
 
 ex) 아래와 같이.
