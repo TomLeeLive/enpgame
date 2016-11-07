@@ -4,7 +4,9 @@ GProjMain* g_pMain;
 
 bool GProjMain::Init()
 {
-	m_pCurrentSeq->Init();
+	for (int i = 0; i < G_SEQ_CNT; i++)
+		m_pGameSeq[i]->Init();
+	
 	return true;
 }
 
@@ -15,7 +17,9 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
-	m_pCurrentSeq->Release();
+	for (int i = 0; i < G_SEQ_CNT; i++)
+		SAFE_RELEASE(m_pGameSeq[i]);
+
 	return true;
 }
 
@@ -45,6 +49,10 @@ HRESULT GProjMain::DeleteResource()
 }
 GProjMain::GProjMain(void)
 {
+	for (int i = 0; i < G_SEQ_CNT; i++)
+		m_pGameSeq[i] = 0;
+	
+
 	m_pGameSeq[G_SEQ_END] = GSeqGameEnd::CreateInstance();
 	m_pGameSeq[G_SEQ_OVER] = GSeqGameOver::CreateInstance();
 	m_pGameSeq[G_SEQ_HOWTO] = GSeqHowTo::CreateInstance();
