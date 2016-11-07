@@ -1,5 +1,7 @@
 #include "GProjMain.h"
 
+GProjMain* g_pMain;
+
 void GProjMain::AddObject()
 {
 	if (!m_tObj.Load(GetDevice(), _T("../../data/Turret_Deploy.tbs"), L"../../data/shader/box.hlsl"))

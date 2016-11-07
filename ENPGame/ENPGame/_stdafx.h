@@ -2,6 +2,13 @@
 #define	 _STDAFX_H_
 
 
+#define GMAIN			g_pMain
+#define GHINST			g_pMain->m_hInstance
+#define GHWND			g_pMain->m_hWnd
+#define GDEVICE			g_pMain->m_pd3dDevice
+#define GCONTEXT		g_pMain->m_pImmediateContext
+
+
 //각 기능별 코드 넣고/빼고 용도 for debugging
 #define G_MACRO_MAP_ADD		1
 #define G_MACRO_EFFECT_ADD   1
@@ -57,6 +64,16 @@
 
 #include "GSprite.h"
 #endif
+
+//게임 플로우에 따른 각시퀀스를 GSeq 클래스를 상속하여 구현한다.(공통구조) FSM 쓰려고 함.
+#include "GSeq.h"
+#include "GSeqGameEnd.h"
+#include "GSeqGameOver.h"
+#include "GSeqHowTo.h"
+#include "GSeqIntro.h"
+#include "GSeqMenu.h"
+#include "GSeqSinglePlay.h"
+#include "GSeqSurvivalMode.h"
 
 //Main
 #include "GCoreLibV2.h"

@@ -1,5 +1,7 @@
 #include "GProjMain.h"
 
+GProjMain* g_pMain;
+
 bool GProjMain::LoadFileDlg( TCHAR* szExt, TCHAR* szTitle )
 {
 	OPENFILENAME    ofn;

@@ -48,3 +48,6 @@ public:
 	GProjMain(void);
 	virtual ~GProjMain(void);
 };
+
+extern GProjMain*	g_pMain; //외부 연결 범위 선언
+

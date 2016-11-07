@@ -1,5 +1,7 @@
 #include "GProjMain.h"
 
+GProjMain* g_pMain;
+
 bool GProjMain::Init()
 {
 	if (FAILED(m_LineDraw.Create(GetDevice(), L"data/shader/line.hlsl")))
