@@ -377,40 +377,40 @@ void GMap::GetNormalLookupTalbe()
 		m_pNormalLookupTable = NULL;
 	}
 
-	// Each vertex may be a part of up to 6 triangles in the grid, so
-	// create a buffer to hold a pointer to the normal of each neighbor.
+	//정점 룩업 테이블 생성 
 	int buffersize = m_iNumRows*m_iNumCols * 6;
 
+	//[전체 정점 *6만큼 할당]
+	//SAFE_NEW_ARRAY(m_pNormalLookupTagble, int, buffersize);
 	m_pNormalLookupTable = (int *)malloc(sizeof(void *) * buffersize);
+
 	for (int i = 0; i<buffersize; i++)
-		m_pNormalLookupTable[i] = -1;
+		m_pNormalLookupTable[i] = -1; // 초기값은 -1이다.
 
-	// Now that the table is initialized, populate it with the triangle data.
-
-	// For each triangle
-	//   For each vertex in that triangle
-	//     Append the triangle number to lookuptable[vertex]
+	//3개의 정점 인덱스 값을 저장하고 있는 페이스 리스트 는 페이스 단위로 저장되어있다.
+	//그렇기 때문에 전체 페이스를 3개씩 순회하게 되면 각 페이스를 구성하는 정점들을 모두 순회
+	//
 	for (int i = 0; i < m_iNumFace; i++)
-	{
+	{// face 개수만큼
 		for (int j = 0; j<3; j++)
-		{
-			// Find the next empty slot in the vertex's lookup table "slot"
+		{ // 3개의 정점 			
 			for (int k = 0; k<6; k++)
 			{
+				// 배열의
 				int vertex = m_IndexList[i * 3 + j];
 				if (m_pNormalLookupTable[vertex * 6 + k] == -1)
-				{
+				{//만약 배열 값으 -1 일 경우 faceindex 값을 저장한다.
 					m_pNormalLookupTable[vertex * 6 + k] = i;
 					break;
 				}
 			}
-		}  // For each vertex that is part of the current triangle
-	} // For each triangle
+		}  
+	} 
 }
 
-//--------------------------------------------------------------------------------------
+
 // Compute vertex normals from the fast normal lookup table
-//--------------------------------------------------------------------------------------
+// 정점 노말 계산
 void GMap::CalcPerVertexNormalsFastLookup()
 {
 	// First, calculate the face normals for each triangle.

@@ -40,6 +40,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ENPMain", "ENPMain", "{168B6BAA-0C67-4182-9203-15735F4F8753}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GMapSample_0", "GMapSample_0\GMapSample_0.vcxproj", "{7C08FAC7-EBB0-4E74-BFD0-548213AE3483}"
+	ProjectSection(ProjectDependencies) = postProject
+		{890FB844-596D-4266-9969-35A1654472D3} = {890FB844-596D-4266-9969-35A1654472D3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
