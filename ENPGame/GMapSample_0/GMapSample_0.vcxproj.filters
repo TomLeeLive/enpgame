@@ -21,12 +21,30 @@
     <ClInclude Include="GHeightMap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GQuadTree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GNode.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GMapLOD.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GProjMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GHeightMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GQuadTree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GNode.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GMapLOD.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

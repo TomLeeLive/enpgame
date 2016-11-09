@@ -154,11 +154,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GHeightMap.h" />
+    <ClInclude Include="GMapLOD.h" />
+    <ClInclude Include="GNode.h" />
     <ClInclude Include="GProjMain.h" />
+    <ClInclude Include="GQuadTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GHeightMap.cpp" />
+    <ClCompile Include="GMapLOD.cpp" />
+    <ClCompile Include="GNode.cpp" />
     <ClCompile Include="GProjMain.cpp" />
+    <ClCompile Include="GQuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="CustomizeMap.hlsl">
