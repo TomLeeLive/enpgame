@@ -19,17 +19,48 @@
 #endif
 
 #include "GCoreLibV2.h"
-#include"GHeightMap.h"
+//#include"GHeightMap.h"
+#include "GQuadTree.h"
 #include "GCamera.h"
+
+#define NUM_OBJECTS 1000
+
+class G_BoxObject :public GBaseObj
+{
+public:
+	D3DXMATRIX m_matWorld;
+	D3DXVECTOR3 m_vPosition;
+	D3DXVECTOR4 m_vColor;
+public:
+	G_BoxObject();
+};
 
 class GProjMain : public GCoreLibV2
 {
 public:
-	GHeightMap		m_HeightMap;
+	//GHeightMap		m_HeightMap;
 	//GMap m_CustomMap;
+
+	GQuadTree m_QuadTree;	
+	D3DXMATRIX m_matWorld;
+
+	GShape* m_pBoxShape;
+	ID3D11DepthStencilState* m_pDepthStencilStateDepthEnable;
+	GShape* m_pLine;
+	int m_iDrawDepth;
+	ComPtr<ID3D11PixelShader> m_pPixelShader;
+
+	G_BoxObject* m_pObject;
+	G_BOX m_GBoxBase;
+
 public:
-	GCamera* m_pMainCamera;
+	shared_ptr<GCamera> m_pMainCamera;
 	GLineShape m_LineDraw;
+
+public:
+	void DrawObject();
+	void DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj);
+
 public:
 	bool Init();
 	bool Frame();
