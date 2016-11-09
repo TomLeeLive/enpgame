@@ -2,6 +2,7 @@
 
 #include "GShape.h"
 #include "GBackViewCamera.h"
+#include "GBBox.h"
 
 //--------------------------------------------------------------------------------------
 // CameraViewStyle
@@ -14,10 +15,21 @@ T_STR CameraViewStyle[] =
 	_T("User g_matView"),
 };
 
+#define G_MACRO_ENEMYBOX 1
+
+
 class GProjMain : public GCoreLibV2
 {
 public:
+	GBBox						m_pBBox;
 	GBoxShape					m_pBox;
+
+#ifdef G_MACRO_ENEMYBOX
+	D3DXMATRIX					m_matWorldEnemy;
+	GBBox						m_pBBoxEnemy;
+	GBoxShape					m_pBoxEnemy;
+#endif
+
 	GPlaneShape					m_pPlane;
 	GDirectionLineShape			m_pDirectionLine;
 	GCamera*					m_pCamera[4];
@@ -28,11 +40,7 @@ public:
 	D3DXMATRIX					m_matWorld;
 	D3DXMATRIX					m_World[2];
 	D3DXMATRIX					m_matWorldPlaneBase;
-	//--------------------------------------------------------------------------------------
-	// 뷰포트 설정
-	//--------------------------------------------------------------------------------------	
-	GDxRT						m_ViewPort[4];
-	HRESULT						ScreenViewPort(UINT iWidth, UINT iHeight);
+
 	//--------------------------------------------------------------------------------------
 	// 카메라 
 	//--------------------------------------------------------------------------------------	

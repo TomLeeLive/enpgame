@@ -4,6 +4,7 @@ GProjMain* g_pMain;
 
 bool GProjMain::Init()
 {
+
 	if (FAILED(m_pDirectionLine.Create(GetDevice(), L"data/shader/Line.hlsl")))
 	{
 		MessageBox(0, _T("m_pDirectionLIne 실패"), _T("Fatal error"), MB_OK);
@@ -20,6 +21,18 @@ bool GProjMain::Init()
 		MessageBox(0, _T("m_pBox 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
+
+#ifdef G_MACRO_ENEMYBOX
+	if (FAILED(m_pBoxEnemy.Create(GetDevice(), L"data/shader/Box.hlsl", L"data/checker_with_numbers.bmp")))
+	{
+		MessageBox(0, _T("m_pBoxEnemy 실패"), _T("Fatal error"), MB_OK);
+		return 0;
+	}
+
+	D3DXMatrixIdentity(&m_matWorldEnemy);
+
+	D3DXMatrixTranslation(&m_matWorldEnemy, 10.0f, 0.0f, 10.0f);
+#endif
 
 	D3DXMatrixIdentity(&m_World[0]);
 	D3DXMatrixIdentity(&m_matWorld);
@@ -55,14 +68,6 @@ bool GProjMain::Init()
 	m_pCamera[2]->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
 	m_pCamera[3]->SetObjectView(D3DXVECTOR3(2.0f, 2.0f, 2.0f), D3DXVECTOR3(-2.0f, -2.0f, -2.0f));
 
-	// 투영행렬 세팅
-	for (int iCamera = 0; iCamera < 4; iCamera++)
-	{
-		m_pCamera[iCamera]->SetProjMatrix(D3DX_PI * 0.25f,
-			(float)m_ViewPort[iCamera].m_vp.Width / (float)m_ViewPort[iCamera].m_vp.Height,
-			1.0f,
-			100.0f);
-	}
 
 	// 메인 카메라 뷰 행렬 세팅
 	SAFE_NEW(m_pMainCamera, GBackViewCamera);
@@ -75,6 +80,16 @@ bool GProjMain::Init()
 	float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
 	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);
+
+
+	m_pBBox.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+
+
+#ifdef G_MACRO_ENEMYBOX
+	m_pBBoxEnemy.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+
+#endif
+
 	return true;
 }
 
@@ -84,89 +99,22 @@ bool GProjMain::Render()
 	//-----------------------------------------------------------------------
 	// 메인 뷰포트
 	//-----------------------------------------------------------------------	
+
 	m_pBox.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_pBox.Render(m_pImmediateContext);
+	m_pBBox.Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+
+#ifdef G_MACRO_ENEMYBOX
+	m_pBoxEnemy.SetMatrix(&m_matWorldEnemy, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	m_pBoxEnemy.Render(m_pImmediateContext);
+	m_pBBoxEnemy.Render(&m_matWorldEnemy, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+#endif
+
 	m_pPlane.SetMatrix(&m_matWorldPlaneBase, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_pPlane.Render(m_pImmediateContext);
-	//-----------------------------------------------------------------------
-	// 현재 세팅된 뷰포트 정보 저장
-	//-----------------------------------------------------------------------
-	D3D11_VIEWPORT vpOld[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
-	UINT nViewPorts = 1;
-	m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
-	//-----------------------------------------------------------------------
-	// 상단 뷰포트
-	//-----------------------------------------------------------------------	
-	for (int iVp = 0; iVp < 4; iVp++)
-	{
-		m_ViewPort[iVp].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
 
-		m_pBox.SetMatrix(&m_matWorld, &m_pCamera[iVp]->m_matView, &m_pCamera[iVp]->m_matProj);
-		m_pBox.Render(m_pImmediateContext);
 
-		m_pPlane.SetMatrix(&m_matWorld, &m_pCamera[iVp]->m_matView, &m_pCamera[iVp]->m_matProj);
-		m_pPlane.Render(m_pImmediateContext);
-	}
 
-	//-----------------------------------------------------------------------
-	// 기본 뷰포트 정보로 복원
-	//-----------------------------------------------------------------------
-	m_pImmediateContext->RSSetViewports(nViewPorts, vpOld);
-
-	//-----------------------------------------------------------------------
-	// 뷰포트 번호 출력
-	//-----------------------------------------------------------------------
-	RECT rc;
-	for (int iVp = 0; iVp < 4; iVp++)
-	{
-		rc.left = m_ViewPort[iVp].m_vp.TopLeftX + m_ViewPort[iVp].m_vp.Width*0.5f;
-		rc.top = m_ViewPort[iVp].m_vp.TopLeftY;
-		rc.right = m_ViewPort[iVp].m_vp.Width + rc.left;
-		rc.bottom = m_ViewPort[iVp].m_vp.Height + rc.top;
-		T_STR str = CameraViewStyle[iVp];
-		TCHAR strNumber[32];
-		str += _itow(iVp, strNumber, 10);// _wtoi
-		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
-	}
-	//-----------------------------------------------------------------------
-	// 적용되어 있는 카메라 타입 표시
-	//-----------------------------------------------------------------------	
-	rc.left = m_DefaultRT.m_vp.TopLeftX + m_DefaultRT.m_vp.Width*0.5f;
-	rc.top = m_DefaultRT.m_vp.TopLeftY;
-	rc.right = m_DefaultRT.m_vp.Width;
-	rc.bottom = m_DefaultRT.m_vp.Height;
-	T_STR str = CameraViewStyle[m_iCameraType];
-	TCHAR strNumber[32];
-	str += _itow(m_iCameraType, strNumber, 10);// _wtoi
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
-	//-----------------------------------------------------------------------
-	// 적용되어 있는 카메라의 방향벡터 표시
-	//-----------------------------------------------------------------------
-	str.clear();
-	TCHAR pBuffer[256];
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Look:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera->m_vLookVector.x,
-		m_pMainCamera->m_vLookVector.y,
-		m_pMainCamera->m_vLookVector.z);
-	str += pBuffer;
-
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Up:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera->m_vUpVector.x,
-		m_pMainCamera->m_vUpVector.y,
-		m_pMainCamera->m_vUpVector.z);
-	str += pBuffer;
-
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Right:%10.4f,%10.4f,%10.4f "), m_pMainCamera->m_vRightVector.x,
-		m_pMainCamera->m_vRightVector.y,
-		m_pMainCamera->m_vRightVector.z);
-	str += pBuffer;
-
-	rc.left = m_DefaultRT.m_vp.TopLeftX + m_DefaultRT.m_vp.Width*0.5f;
-	rc.top = m_DefaultRT.m_vp.Height - 75;
-	rc.right = m_DefaultRT.m_vp.Width;
-	rc.bottom = m_DefaultRT.m_vp.Height;
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
 	return true;
 }
 bool GProjMain::Release()
@@ -195,11 +143,28 @@ bool GProjMain::Frame()
 		m_pMainCamera->m_vCameraDestination = *m_pCamera[m_iCameraType]->GetEyePt();
 	}
 
+
 	//--------------------------------------------------------------------------------------
 	// 엔진에 있는 뷰 및 투영 행렬 갱신
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Update(m_Timer.GetSPF());
 	m_matWorld = *m_pMainCamera->GetWorldMatrix();//(const_cast< D3DXMATRIX* > (m_pMainCamera->GetWorldMatrix()));	
+
+	m_pBBox.Frame(&m_matWorld);
+#ifdef G_MACRO_ENEMYBOX
+	m_pBBoxEnemy.Frame(&m_matWorldEnemy);
+
+	int nRet = GBBOXFUNC::BoxBoxIntersectionTest(m_pBBoxEnemy, m_pBBox);
+	if (nRet == 1) {
+		// 충돌시 처리할 코드 add
+		int a = 10;
+	}
+	else {
+		int a = 10;
+	}
+
+#endif
+
 	return true;
 }
 
@@ -209,10 +174,7 @@ bool GProjMain::Frame()
 HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
-	if (FAILED(hr = ScreenViewPort(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height)))
-	{
-		return hr;
-	}
+
 	if (m_pMainCamera)
 	{
 		// Setup the camera's projection parameters
@@ -270,21 +232,7 @@ bool GProjMain::DrawDebug()
 	UINT nViewPorts = 1;
 	m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
 
-	m_ViewPort[0].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
-	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[0]->m_matView, &m_pCamera[0]->m_matProj);
-	m_pDirectionLine.Render(m_pImmediateContext);
 
-	m_ViewPort[1].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
-	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[1]->m_matView, &m_pCamera[1]->m_matProj);
-	m_pDirectionLine.Render(m_pImmediateContext);
-
-	m_ViewPort[2].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
-	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[2]->m_matView, &m_pCamera[2]->m_matProj);
-	m_pDirectionLine.Render(m_pImmediateContext);
-
-	m_ViewPort[3].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
-	m_pDirectionLine.SetMatrix(NULL, &m_pCamera[3]->m_matView, &m_pCamera[3]->m_matProj);
-	m_pDirectionLine.Render(m_pImmediateContext);
 
 	//-----------------------------------------------------------------------
 	// 기본 뷰포트 정보로 복원
@@ -306,20 +254,7 @@ bool GProjMain::DrawDebug()
 	m_pDirectionLine.Render(m_pImmediateContext);
 	return GCoreLibV2::DrawDebug();
 }
-HRESULT GProjMain::ScreenViewPort(UINT iWidth, UINT iHeight)
-{
-	HRESULT hr = S_OK;
 
-	UINT iRectWidth = iWidth / 5;
-	UINT iRectHeight = iHeight / 4;
-
-	m_ViewPort[0].Set(GetDevice(), 0, 0, iRectWidth, iRectHeight, 0.0f, 1.0f);
-	m_ViewPort[1].Set(GetDevice(), 0, iRectHeight, iRectWidth, iRectHeight, 0.0f, 1.0f);
-	m_ViewPort[2].Set(GetDevice(), 0, iRectHeight * 2, iRectWidth, iRectHeight, 0.0f, 1.0f);
-	m_ViewPort[3].Set(GetDevice(), 0, iRectHeight * 3, iRectWidth, iRectHeight, 0.0f, 1.0f);
-
-	return hr;
-}
 
 GCORE_RUN(ENP Test);
 
