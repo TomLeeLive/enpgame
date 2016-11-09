@@ -154,7 +154,8 @@ bool GProjMain::Frame()
 #ifdef G_MACRO_ENEMYBOX
 	m_pBBoxEnemy.Frame(&m_matWorldEnemy);
 
-	int nRet = GBBOXFUNC::BoxBoxIntersectionTest(m_pBBoxEnemy, m_pBBox);
+	int nRet = GBBOXFUNC::ColCheck(&m_pBBoxEnemy, &m_pBBox);
+
 	if (nRet == 1) {
 		// 面倒矫 贸府且 内靛 add
 		int a = 10;
