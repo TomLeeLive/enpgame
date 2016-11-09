@@ -8,6 +8,7 @@ enum G_AI {
 };
 class GProjMain : public GCoreLibV2
 {
+public:
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
 	D3DXMATRIX  m_matWorld1;

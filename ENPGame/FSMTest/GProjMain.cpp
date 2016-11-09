@@ -1,6 +1,7 @@
 #include "_stdafx.h"
 
 GProjMain* g_pMain;
+
 bool GProjMain::Init()
 {
 	//--------------------------------------------------------------------------------------
@@ -87,37 +88,5 @@ int GProjMain::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return -1;
 
-	/*if (m_pMainCamera != nullptr)
-	{
-		m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
-	}*/
-
-	switch (msg)
-	{
-		case WM_KEYDOWN:
-		{
-			switch (wParam)
-			{
-				case VK_RIGHT:
-				{
-					m_matWorld._41 += 1.0f;
-				}break;
-				case VK_LEFT:
-				{
-					m_matWorld._41 += 1.0f;
-				}break;
-				case VK_UP:
-				{
-					m_matWorld._41 += 1.0f;
-				}break;
-				case VK_DOWN:
-				{
-					m_matWorld._41 += 1.0f;
-				}break;
-			}
-			break;
-		}
-	}
-	return -1;
 }
 GCORE_RUN(FSM TEST);

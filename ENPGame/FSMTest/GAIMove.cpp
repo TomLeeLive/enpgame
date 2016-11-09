@@ -2,6 +2,7 @@
 
 
 GAIMove * GAIMove::pInstance_ = 0;
+
 bool GAIMove::Init()
 {
 
