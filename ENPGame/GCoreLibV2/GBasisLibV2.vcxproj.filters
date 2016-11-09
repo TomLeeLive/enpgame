@@ -43,6 +43,9 @@
     <Filter Include="Common\math">
       <UniqueIdentifier>{83c72e03-3140-437e-bb27-33d13ff41d1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\BBox">
+      <UniqueIdentifier>{ae81e570-be95-4832-81ad-9215b120ae3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GArcBall.cpp">
@@ -137,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="GCoreLibV2.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GBBox.cpp">
+      <Filter>Common\BBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="GCoreStd.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GBBox.h">
+      <Filter>Common\BBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
