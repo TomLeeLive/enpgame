@@ -24,6 +24,12 @@
 #define IDC_2DTime                      1011
 #define IDC_2DFI                        1012
 #define IDC_2DFO                        1013
+#define IDC_CHECK1                      1014
+#define IDC_2D_X                        1015
+#define IDC_2D_Y                        1016
+#define IDC_2D_Z                        1017
+#define IDC_OnBnClick2DP_Input          1021
+#define IDC_SOnBnClick2DT_Input         1022
 
 // Next default values for new objects
 // 
@@ -31,7 +37,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        317
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif
