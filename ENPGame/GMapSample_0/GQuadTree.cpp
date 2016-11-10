@@ -179,21 +179,25 @@ int GQuadTree::CheckRect(GNode* pNode, GBaseObj* pObj)
 
 void GQuadTree::VisibleNode(GNode* pNode)
 {
-
-}
-void GQuadTree::VisibleObject(GNode* pNode)
-{
 	assert(m_pCamera);
-	if (pNode->m_dwDepth < m_iRenderDepth)
-	{
-		return;
-	}
+	if (pNode->m_dwDepth < m_iRenderDepth) return;
+
 	if (m_pCamera->CheckOBBInPlane(&pNode->m_gBox))
 	{
 		VisibleObject(pNode);
 		for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
 		{
 			VisibleNode(pNode->m_ChildList[iNode]);
+		}
+	}
+}
+void GQuadTree::VisibleObject(GNode* pNode)
+{
+	for (int iObj = 0; iObj < pNode->m_ObjectList.size(); iObj++)
+	{
+		if (m_pCamera->CheckOBBInPlane(&pNode->m_ObjectList[iObj]->m_tBox))
+		{
+			m_DrawObjList.push_back(pNode->m_ObjectList[iObj]);
 		}
 	}
 }
