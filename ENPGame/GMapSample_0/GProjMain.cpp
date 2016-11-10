@@ -67,11 +67,24 @@ G_BoxObject::G_BoxObject()
 
 void GProjMain::DrawObject()
 {
-
+	for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
+	{
+		m_pBoxShape->SetMatrix(&m_pObject[iBox].m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		if (m_pMainCamera->CheckOBBInPlane(&m_pObject[iBox].m_tBox))
+		{
+			m_pBoxShape->Render(m_pImmediateContext);
+		}
+	}
 }
 void GProjMain::DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj)
 {
-
+	for (int iObj = 0; iObj < m_QuadTree.m_DrawObjList.size(); iObj++)
+	{
+		G_BoxObject* pBox = dynamic_cast<G_BoxObject*>(m_QuadTree.m_DrawObjList[iObj]);
+		m_pBoxShape->m_cbData.Color = pBox->m_vColor;
+		m_pBoxShape->SetMatrix(&pBox->m_matWorld, pView, pProj);
+		m_pBoxShape->Render(m_pImmediateContext);
+	}
 }
 
 bool GProjMain::Init()
@@ -130,6 +143,8 @@ bool GProjMain::Frame()
 }
 bool GProjMain::Render()
 {
+	
+	DrawSelectTreeLevel(m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());	
 	//DrawQuadLine(m_QuadTree.m_pRootNode);
 	return true;
 }
@@ -171,8 +186,10 @@ HRESULT GProjMain::DeleteResource()
 GProjMain::GProjMain(void)
 {
 	//QuadTree
+	SAFE_ZERO(m_pBoxShape);
+	SAFE_ZERO(m_pObject);
 	SAFE_ZERO(m_pLine);
-	m_iDrawDepth = 0;
+	m_iDrawDepth = 0;	
 
 	// 기본 인터페이스
 	m_pMainCamera = nullptr;
