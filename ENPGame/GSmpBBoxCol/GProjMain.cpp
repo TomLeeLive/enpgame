@@ -107,14 +107,13 @@ bool GProjMain::Release()
 bool GProjMain::Frame()
 {	
 
-
-
-
 	//--------------------------------------------------------------------------------------
 	// 엔진에 있는 뷰 및 투영 행렬 갱신
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
+
+		
 	if (I_Input.KeyCheck(DIK_RIGHT)) {
 
 		m_matWorld._41 += 2.0f*g_fSecPerFrame;
@@ -131,14 +130,14 @@ bool GProjMain::Frame()
 
 		m_matWorld._43 -= 2.0f*g_fSecPerFrame;
 	}
-		
 
 	m_vPosCurrent.x = m_matWorld._41;
 	m_vPosCurrent.y = m_matWorld._42;
 	m_vPosCurrent.z = m_matWorld._43;
 
-	D3DXVECTOR3 vDir = m_vPosBefore - m_vPosCurrent;
-	D3DXVec3Normalize(&vDir, &vDir);
+	m_vDir = m_vPosCurrent - m_vPosBefore;
+	D3DXVec3Normalize(&m_vDir, &m_vDir);
+
 
 
 #ifdef G_MACRO_ENEMYBOX
@@ -148,27 +147,44 @@ bool GProjMain::Frame()
 
 	if (nRet == 1) {
 		// 충돌시 처리할 코드 add
-		int a = 10;
+		
+		G_RAY  ray;
+		D3DXVECTOR3 vIntersect = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		D3DXVECTOR3 vSliding = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-		D3DXVECTOR3 vTemp = m_vPosCurrent + 0.1f* vDir;
+		ray.vOrigin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		ray.vDirection = D3DXVECTOR3(m_vDir.x, m_vDir.y, m_vDir.z);
+		D3DXVec3TransformCoord(&ray.vOrigin, &ray.vOrigin, &m_matWorld);
+		D3DXVec3TransformNormal(&ray.vDirection, &ray.vDirection, &m_matWorld);
+		D3DXVec3Normalize(&ray.vDirection, &ray.vDirection);
 
-		D3DXMATRIX matTemp;
-		D3DXMatrixIdentity(&matTemp);
-		D3DXMatrixTranslation(&matTemp, vTemp.x, vTemp.y, vTemp.z);
-		m_matWorld *= matTemp;
+		if (GBBOXFUNC::RaytoBox(&vIntersect, &m_pBBoxEnemy, &ray)) {
+			vSliding = GBBOXFUNC::GetSlidingVector(&m_pBBoxEnemy, &m_vDir, &vIntersect);
+
+			D3DXVECTOR3 vTemp = m_vPosCurrent + 0.5f*g_fSecPerFrame* vSliding;
+
+			D3DXMATRIX matTemp;
+			D3DXMatrixIdentity(&matTemp);
+			D3DXMatrixTranslation(&matTemp, vTemp.x, vTemp.y, vTemp.z);
+			m_matWorld *= matTemp;
+		}
 
 
 	}
 	else {
-		int a = 10;
+
+
+
+
+
 	}
 
 #endif
 
-	
 	m_vPosBefore.x = m_vPosCurrent.x;
 	m_vPosBefore.y = m_vPosCurrent.y;
 	m_vPosBefore.z = m_vPosCurrent.y;
+
 
 	m_pBBox.Frame(&m_matWorld);
 
