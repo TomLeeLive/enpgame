@@ -11,16 +11,17 @@ typedef	float real;
 class GBBox
 {
 private:
-	D3DXVECTOR4 m_vColor;
-	shared_ptr<GShape>						m_pLine;
+	D3DXVECTOR4			m_vColor;		//선색
+	shared_ptr<GShape>	m_pLine;		//디버그용 선.
 public:
-	D3DXVECTOR3 m_vMin;
-	D3DXVECTOR3 m_vMax;
+	float				m_fRadius;		//반지름
+	D3DXVECTOR3			m_vMin;
+	D3DXVECTOR3			m_vMax;
 
-	real		center[3];
-	real		axis[3][3];//transformation matrix
-	real		extent[3];//half full size-eqivalent to radius not diameter
-	real		translation[3];// translation vector
+	D3DXVECTOR3			center;
+	D3DXVECTOR3			axis[3];//transformation matrix
+	D3DXVECTOR3			extent;//half full size-eqivalent to radius not diameter
+	D3DXVECTOR3			translation;// translation vector
  void GetTransform(real t[16])
  {
   t[0]=axis[0][0];
@@ -48,7 +49,10 @@ public:
 };
 
 namespace GBBOXFUNC {
-	int BoxBoxIntersectionTest(const GBBox& box0, const GBBox& box1);
+	float CalcDistance(const D3DXVECTOR3* v1, const D3DXVECTOR3* v2);
+	int ColCheck(const GBBox* box0, const GBBox* box1);
+	int BoxBoxColCheck(const GBBox* box0, const GBBox* box1);			//반지름을 이용한 거리 테스트후 OBB vs OBB
+	int BoxBoxIntersectionTest(const GBBox& box0, const GBBox& box1);	//OBB vs OBB
 	inline real DotProduct(const real v0[3], const real v1[3]);
 	// bounding box 관련 함수들
 	D3DXMATRIX* GetBoxTransform(D3DXMATRIX *pMat, GBBox* pBox);

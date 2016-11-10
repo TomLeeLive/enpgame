@@ -20,6 +20,8 @@ bool GBBox::Init(D3DXVECTOR3 &min, D3DXVECTOR3 &max)
 
 	GBBOXFUNC::initBox(this, min, max);
 
+	 m_fRadius = GBBOXFUNC::CalcDistance(&min, &max) / 2;
+
 	return true;
 }
 bool GBBox::Frame(D3DXMATRIX* mat)
@@ -69,6 +71,33 @@ namespace GBBOXFUNC {
 	inline real DotProduct(const real v0[3], const real v1[3])
 	{//=v0.v1
 		return v0[0] * v1[0] + v0[1] * v1[1] + v0[2] * v1[2];
+	}
+
+	float CalcDistance(const D3DXVECTOR3* v1, const D3DXVECTOR3* v2) {
+		float fDisX, fDisY, fDisZ;
+
+		fDisX = v2->x - v1->x;
+		fDisY = v2->y - v1->y;
+		fDisZ = v2->z - v1->z;
+
+		return sqrt(fDisX*fDisX + fDisY*fDisY + fDisZ*fDisZ);
+	}
+
+	int ColCheck(const GBBox* box0, const GBBox* box1) {
+		//return GBBOXFUNC::BoxBoxIntersectionTest(*box0, *box1);
+		return GBBOXFUNC::BoxBoxColCheck(box0, box1);
+	}
+
+	int BoxBoxColCheck(const GBBox* box0, const GBBox* box1) {
+		
+		int ret = 0;
+
+		float fDis = GBBOXFUNC::CalcDistance(&(box0->center), &(box1->center));
+
+		if (fDis < box0->m_fRadius + box1->m_fRadius)
+			return BoxBoxIntersectionTest(*box0, *box1);
+
+		return 0;
 	}
 
 	int BoxBoxIntersectionTest(const GBBox& box0, const GBBox& box1)

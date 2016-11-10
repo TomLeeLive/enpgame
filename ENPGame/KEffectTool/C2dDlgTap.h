@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 // C2dDlgTap 대화 상자입니다.
@@ -11,12 +12,18 @@ public:
 	virtual ~C2dDlgTap();
 
 public:
+	CKEffectToolApp* p_CParctice = (CKEffectToolApp*)AfxGetApp();
 	CListBox m_list;
-	CString m_strValue;
-	CString m_strPath;
-	CString m_strPath2;
+	CString m_strOpen;
+	CString m_strSave;
+	CString m_strPlay;
+	CString m_result;
+	CString m_temp;
+	CString m_FileName;
+
 	CStdioFile file;
-	CListBox *InsertList;
+
+	CListBox *OpenList;
 	CListBox *SaveList;
 	CListBox *PlayList;
 
@@ -36,4 +43,8 @@ public:
 	afx_msg void OnBnClickedOnbnclick2dopen();
 	afx_msg void OnBnClickedOnbnclick2dsave();
 	afx_msg void OnBnClickedOnbnclick2dplay();
+	afx_msg void OnEnUpdate2dX();
+	float LblValue_X;
+	float LblValue_Y;
+	float LblValue_Z;
 };
