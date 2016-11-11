@@ -15,8 +15,13 @@ bool GProjMain::Init()
 {
 	m_tbsobj.Init();	
 	//if(!m_tbsobj.Load(GetDevice(),_T("data/turret.GBS"), L"data/shader/box.hlsl")  )
-	//if (!m_tbsobj.Load(GetDevice(), _T("data/obj/h_biotech.gbs"), L"data/shader/obj.hlsl"))
-	if (!m_tbsobj.Load(GetDevice(), _T("data/obj/3bricks.gbs"), L"data/shader/obj.hlsl"))
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl"))
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/dropship/dropship_fly.GBS"), L"data/shader/box.hlsl"))
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/shuttle/shuttle.GBS"), L"data/shader/box.hlsl"))
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/ship/spaceship.GBS"), L"data/shader/box.hlsl"))
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/car/car.GBS"), L"data/shader/box.hlsl"))
+	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/mars/mars.GBS"), L"data/shader/box.hlsl"))
+	if (!m_tbsobj.Load(GetDevice(), _T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl"))
 	{
 		return false;
 	}
@@ -36,7 +41,7 @@ bool GProjMain::Init()
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 100.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
-	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
+	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);
 	
 	return true;
