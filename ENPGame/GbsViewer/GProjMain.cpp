@@ -22,6 +22,7 @@ bool GProjMain::Init()
 	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/car/car.GBS"), L"data/shader/box.hlsl"))
 	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/mars/mars.GBS"), L"data/shader/box.hlsl"))
 	//if (!m_tbsobj.Load(GetDevice(), _T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl"))
+	if (!m_tbsobj.Load(GetDevice(), _T("data/object/fps_shotgun/shotgun3.GBS"), L"data/shader/box.hlsl"))
 	{
 		return false;
 	}
