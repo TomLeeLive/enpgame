@@ -1,13 +1,13 @@
 #pragma once
 
-class GAIIdle : public GSeq
+class GAIRun : public GSeq
 {
 private:
-	static GAIIdle *pInstance_;
+	static GAIRun *pInstance_;
 public:
 	static GSeq* CreateInstance()
 	{
-		if (pInstance_ == 0) pInstance_ = new GAIIdle;
+		if (pInstance_ == 0) pInstance_ = new GAIRun;
 		return pInstance_;
 	}
 	shared_ptr<GCamera > m_pMainCamera;
@@ -19,16 +19,16 @@ public:
 	bool Release();
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	D3DXVECTOR3 RandomPoint;
-	float TimeCount = 0.0f;
+
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	virtual ~GAIIdle();
+	virtual ~GAIRun();
 protected:
-	GAIIdle();
+	GAIRun();
 };
 
 

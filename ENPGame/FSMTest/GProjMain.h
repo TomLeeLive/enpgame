@@ -12,14 +12,19 @@ public:
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
 	D3DXMATRIX  m_matWorld1;
+	D3DXMATRIX  m_Rotation;
+	D3DXMATRIX  m_Result;
 	D3DXMATRIX  m_temp;
+
 	GShape*		m_Box;
 	GShape*		m_Box1;
+
 
 
 public:
 	GSeq * m_GameSeq[G_AI_CNT];
 	GSeq * m_pCurrentSeq;
+	float m_fSecondPerFrmae;
 
 public:
 	static GProjMain* CreateInstance() { return 0; }

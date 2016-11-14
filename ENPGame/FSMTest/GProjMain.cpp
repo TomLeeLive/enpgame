@@ -4,18 +4,23 @@ GProjMain* g_pMain;
 
 bool GProjMain::Init()
 {
+	m_fSecondPerFrmae = g_fSecPerFrame;
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
 	m_pMainCamera = make_shared<GCamera>();
 
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
-	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 100000.0f);
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 20.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 	SAFE_NEW(m_Box, GBoxShape);
 	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/flagstone.bmp");
+	D3DXMatrixIdentity(&m_matWorld);
+	m_matWorld._41 = 10.0f;
+	m_matWorld._43 = 10.0f;
+
 	SAFE_NEW(m_Box1, GBoxShape);
 	m_Box1->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/cncr21S.bmp");
 	D3DXMatrixIdentity(&m_matWorld1);
@@ -25,24 +30,50 @@ bool GProjMain::Init()
 }
 bool GProjMain::Frame()
 {
-	D3DXMATRIX Trans;
-	
+	D3DXMATRIX Logic;
+	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
+	{
+		g_pMain->m_matWorld._43 += 10.0f * g_fSecPerFrame;
+		Logic._43 = g_pMain->m_matWorld._43;
+	}
+
+	if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
+	{
+		g_pMain->m_matWorld._43 -= 10.0f * g_fSecPerFrame;
+		Logic._43 = g_pMain->m_matWorld._43;
+	}
+
+	if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
+	{
+		g_pMain->m_matWorld._41 -= 10.0f * g_fSecPerFrame;
+		Logic._41 = g_pMain->m_matWorld._41;
+	}
+
+	if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
+	{
+		g_pMain->m_matWorld._41 += 10.0f * g_fSecPerFrame;
+		Logic._41 = g_pMain->m_matWorld._41;
+	}
+
 	m_pMainCamera->Frame();
-	m_matWorld = *m_pMainCamera->GetWorldMatrix(); // 주인공 박스
-	//m_matWorld1 = *m_pMainCamera->GetWorldMatrix(); // enemy 박스
-
-
-	if (I_Input.KeyCheck(DIK_RIGHT))
-		m_matWorld1._41 += 1.0f*g_fSecPerFrame;
-
 
 	m_pCurrentSeq->Frame();
+
+	m_Result = m_Rotation * m_matWorld1;
+
+	if (Logic._41 = m_Result._41)
+	{
+		//m_pCurrentSeq = m_GameSeq[G_AI_IDLE];
+	}
+	
 	return true;
 }
 bool GProjMain::Render()
 {
+
 	m_Box->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-	m_Box1->SetMatrix(&m_matWorld1, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+    
+	m_Box1->SetMatrix(&m_Result, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 
 	m_Box->Render(m_pImmediateContext);
 	m_Box1->Render(m_pImmediateContext);
@@ -72,7 +103,8 @@ GProjMain::GProjMain(void)
 {
 	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
 	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
-	m_pCurrentSeq = m_GameSeq[G_AI_IDLE];
+	m_GameSeq[G_AI_ATTACK] = GAIAttack::CreateInstance();
+	m_pCurrentSeq = m_GameSeq[G_AI_MOVE];
 }
 
 GProjMain::~GProjMain(void)
