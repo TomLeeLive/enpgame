@@ -20,6 +20,7 @@
 
 #include "GCoreLibV2.h"
 //#include"GHeightMap.h"
+#include "map/GMap.h"
 #include "GQuadTree.h"
 #include "GCamera.h"
 
@@ -39,7 +40,7 @@ class GProjMain : public GCoreLibV2
 {
 public:
 	//GHeightMap		m_HeightMap;
-	//GMap m_CustomMap;
+	GMap m_CustomMap;
 
 	GQuadTree m_QuadTree;	
 	D3DXMATRIX m_matWorld;
@@ -67,6 +68,7 @@ public:
 	bool Render();
 	bool Release();
 	bool DrawDebug();
+	bool		DrawQuadLine(GNode* pNode);
 
 	HRESULT CreateResource();
 	HRESULT DeleteResource();

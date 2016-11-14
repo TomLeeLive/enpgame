@@ -220,17 +220,19 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// 노이즈 맵 생성
 	//--------------------------------------------------------------------------------------
-	m_NoiseMap.Init(g_pd3dDevice, g_pImmediateContext);
-	TMapDesc MapDesc = { pow(2.0f,5.0f) + 1, pow(2.0f,5.0f) + 1, 50.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
-	//TMapDesc MapDesc = { pow(2.0f,3.0f) + 1, pow(2.0f,3.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
-	if (!m_NoiseMap.Load(MapDesc))
+	TMapDesc MapDesc = { 50, 50, 1.0f, 0.1f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
+	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
+	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
 		return false;
 	}
-	m_QuadTree.SetMinDivideSize(10);
-	m_QuadTree.SetMaxDepthLimit(7);
+	//--------------------------------------------------------------------------------------
+	//  쿼드 트리
+	//--------------------------------------------------------------------------------------
+	m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
+
+
 	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera.get());
-	m_QuadTree.Build(&m_NoiseMap, m_NoiseMap.m_iNumCols, m_NoiseMap.m_iNumRows); //가져오기
 #endif
 
 	return true;
@@ -307,25 +309,16 @@ bool GSeqSinglePlay::Render()
 
 
 #ifdef G_MACRO_MAP_ADD
-	m_NoiseMap.SetMatrix(0, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	if (m_QuadTree.m_bDynamicUpdateIB == true)
-	{
-		if (!m_NoiseMap.Render(g_pImmediateContext)) return false;
-	}
-	else
-	{
-		if (!m_QuadTree.Render(g_pImmediateContext)) return false;
-	}
-	//--------------------------------------------------------------------------------------
-	// 쿼드트리의 임의의 레벨 선텍 랜더링
-	//--------------------------------------------------------------------------------------
-	DrawSelectTreeLevel(m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 
+	m_CustomMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(),
+		m_pMainCamera->GetProjMatrix());
+	m_CustomMap.Render(g_pImmediateContext);
+
+	DrawSelectTreeLevel(m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	if (m_bDebugRender)
 	{
 		DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
-
 
 #endif
 
@@ -396,7 +389,7 @@ bool GSeqSinglePlay::Render()
 bool GSeqSinglePlay::Release()
 {
 #ifdef G_MACRO_MAP_ADD
-	m_NoiseMap.Release();
+	m_CustomMap.Release();
 	m_QuadTree.Release();
 #endif
 #ifdef G_MACRO_CHAR_ADD 
@@ -421,35 +414,7 @@ bool GSeqSinglePlay::Frame()
 	}
 	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera.get());
 
-	//--------------------------------------------------------------------------------------
-	// 화면 디버그 정보 출력 
-	//--------------------------------------------------------------------------------------
-	if (I_Input.KeyCheck(DIK_F2) == KEY_UP)
-		m_NoiseMap.SetHurstIndex(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	if (I_Input.KeyCheck(DIK_F3) == KEY_UP)
-		m_NoiseMap.SetHurstIndex(false); //가져오기
-	m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-
-	if (I_Input.KeyCheck(DIK_F4) == KEY_UP)m_NoiseMap.SetLacunarity(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)m_NoiseMap.SetLacunarity(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-
-	if (I_Input.KeyCheck(DIK_F6) == KEY_UP)m_NoiseMap.SetOctaves(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	if (I_Input.KeyCheck(DIK_F7) == KEY_UP)m_NoiseMap.SetOctaves(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-
-	if (I_Input.KeyCheck(DIK_F8) == KEY_UP)m_NoiseMap.SetPersistence(), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	if (I_Input.KeyCheck(DIK_F9) == KEY_UP)m_NoiseMap.SetPersistence(false), m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-
-
-	if (I_Input.KeyCheck(DIK_U) == KEY_UP)
-	{
-		m_NoiseMap.SetNoiseType(0);
-		m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	}
-	if (I_Input.KeyCheck(DIK_I) == KEY_UP)
-	{
-		m_NoiseMap.SetNoiseType(1);
-		m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	}
+	
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
 		m_bDebugRender = !m_bDebugRender;
@@ -462,11 +427,7 @@ bool GSeqSinglePlay::Frame()
 
 
 	m_QuadTree.Frame();
-	if (m_QuadTree.m_bDynamicUpdateIB == true)
-	{
-		m_NoiseMap.UpdateIndexBuffer(g_pImmediateContext, m_QuadTree.m_IndexList, m_QuadTree.m_iNumFace);
-	}
-	m_NoiseMap.Frame();
+	
 #endif
 
 	m_matWorld = *m_pMainCamera->GetWorldMatrix();
