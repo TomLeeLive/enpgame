@@ -2,8 +2,8 @@
 
 enum G_OBJECT {
 	G_OBJ_LAB = 0,
-	G_OBJ_DROPSHIP,
-	G_OBJ_CAR,
+	//G_OBJ_DROPSHIP,
+	//G_OBJ_CAR,
 	G_OBJ_CNT
 };
 
@@ -24,7 +24,13 @@ public:
 	D3DXVECTOR4						m_vMaterial;
 	D3DXMATRIX						m_matPlaneWorld;
 	D3DXMATRIX						m_mPlanWorld;
-	//D3DXMATRIX				m_matWorld;
+	
+	D3DXMATRIX matScale, matRotation,matTrans, matWorld;
+	D3DXMATRIX						m_matWorld_LAB;
+	D3DXMATRIX						m_matWorld_DROPSHIP;
+	D3DXMATRIX						m_matWorld_CAR;
+
+
 	shared_ptr<GPlaneShape>			m_pPlane;
 	shared_ptr<GPlaneShape>			m_pScreen;
 	//public:
