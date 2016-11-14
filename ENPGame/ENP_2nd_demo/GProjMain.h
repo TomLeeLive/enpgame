@@ -11,9 +11,12 @@ enum G_SEQ {
 	G_SEQ_CNT
 };
 
+
+
 class GProjMain : public GCoreLibV2
 {
 public:
+
 	GSeq * m_pGameSeq[G_SEQ_CNT];
 	GSeq * m_pCurrentSeq;
 
