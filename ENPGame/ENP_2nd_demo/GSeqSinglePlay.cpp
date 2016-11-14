@@ -227,7 +227,7 @@ bool GSeqSinglePlay::Init()
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/box.hlsl", "PS_Color"));
 
 	//--------------------------------------------------------------------------------------
-	// 노이즈 맵 생성
+	// 커스텀맵 생성
 	//--------------------------------------------------------------------------------------
 	TMapDesc MapDesc = { 50, 50, 100.0f, 0.1f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
 	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
@@ -236,10 +236,19 @@ bool GSeqSinglePlay::Init()
 		return false;
 	}
 	//--------------------------------------------------------------------------------------
+	// 오브젝트 생성
+	//--------------------------------------------------------------------------------------
+	m_tbsobj.Init();
+	if (!m_tbsobj.Load(g_pd3dDevice, _T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl"))
+	{
+		return false;
+	}
+	//--------------------------------------------------------------------------------------
 	//  쿼드 트리
 	//--------------------------------------------------------------------------------------
 	m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
 
+	//m_QuadTree.AddObject(&m_tbsobj[iBox]);
 
 	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera.get());
 #endif
