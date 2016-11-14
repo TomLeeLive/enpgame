@@ -131,10 +131,10 @@ bool GProjMain::Init()
 	//  Äõµå Æ®¸®
 	//--------------------------------------------------------------------------------------
 	m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
-	//for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
-	//{
-	//	m_QuadTree.AddObject(&m_pObject[iBox]);
-	//}
+	for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
+	{
+		m_QuadTree.AddObject(&m_pObject[iBox]);
+	}
 
 	m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
 	
