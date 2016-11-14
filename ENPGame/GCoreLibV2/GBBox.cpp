@@ -18,6 +18,8 @@ bool GBBox::Init(D3DXVECTOR3 &min, D3DXVECTOR3 &max)
 		return false;
 	}
 
+
+	
 	GBBOXFUNC::initBox(this, min, max);
 
 	 m_fRadius = GBBOXFUNC::CalcDistance(&min, &max) / 2;
@@ -29,37 +31,43 @@ bool GBBox::Frame(D3DXMATRIX* mat)
 	GBBOXFUNC::initBox(this, this->m_vMin, this->m_vMax);
 	GBBOXFUNC::moveBox(this, *mat);
 
+	m_vPoint[0] = D3DXVECTOR3(this->m_vMin.x, this->m_vMax.y, this->m_vMax.z);
+	m_vPoint[1] = D3DXVECTOR3(this->m_vMax.x, this->m_vMax.y, this->m_vMax.z);
+	m_vPoint[2] = D3DXVECTOR3(this->m_vMin.x, this->m_vMax.y, this->m_vMin.z);
+	m_vPoint[3] = D3DXVECTOR3(this->m_vMax.x, this->m_vMax.y, this->m_vMin.z);
+
+	m_vPoint[4] = D3DXVECTOR3(this->m_vMin.x, this->m_vMin.y, this->m_vMax.z);
+	m_vPoint[5] = D3DXVECTOR3(this->m_vMax.x, this->m_vMin.y, this->m_vMax.z);
+	m_vPoint[6] = D3DXVECTOR3(this->m_vMin.x, this->m_vMin.y, this->m_vMin.z);
+	m_vPoint[7] = D3DXVECTOR3(this->m_vMax.x, this->m_vMin.y, this->m_vMin.z);
+
+	
+
+	  
 	return true;
 }
 bool GBBox::Render(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
 {
+
 	m_pLine->SetMatrix(pWorld, pView, pProj);
 
-	D3DXVECTOR3 vPoint[8];
-	vPoint[0] = D3DXVECTOR3(this->m_vMin.x, this->m_vMax.y, this->m_vMax.z);
-	vPoint[1] = D3DXVECTOR3(this->m_vMax.x, this->m_vMax.y, this->m_vMax.z);
-	vPoint[2] = D3DXVECTOR3(this->m_vMin.x, this->m_vMax.y, this->m_vMin.z);
-	vPoint[3] = D3DXVECTOR3(this->m_vMax.x, this->m_vMax.y, this->m_vMin.z);
+	//D3DXVECTOR3 m_vPoint[8];
 
-	vPoint[4] = D3DXVECTOR3(this->m_vMin.x, this->m_vMin.y, this->m_vMax.z);
-	vPoint[5] = D3DXVECTOR3(this->m_vMax.x, this->m_vMin.y, this->m_vMax.z);
-	vPoint[6] = D3DXVECTOR3(this->m_vMin.x, this->m_vMin.y, this->m_vMin.z);
-	vPoint[7] = D3DXVECTOR3(this->m_vMax.x, this->m_vMin.y, this->m_vMin.z);
 
-	m_pLine->Draw(g_pImmediateContext, vPoint[0], vPoint[1], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[1], vPoint[3], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[2], vPoint[3], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[0], vPoint[2], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[0], m_vPoint[1], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[1], m_vPoint[3], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[2], m_vPoint[3], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[0], m_vPoint[2], m_vColor);
 
-	m_pLine->Draw(g_pImmediateContext, vPoint[4], vPoint[5], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[5], vPoint[7], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[6], vPoint[7], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[4], vPoint[6], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[4], m_vPoint[5], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[5], m_vPoint[7], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[6], m_vPoint[7], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[4], m_vPoint[6], m_vColor);
 
-	m_pLine->Draw(g_pImmediateContext, vPoint[0], vPoint[4], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[1], vPoint[5], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[2], vPoint[6], m_vColor);
-	m_pLine->Draw(g_pImmediateContext, vPoint[3], vPoint[7], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[0], m_vPoint[4], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[1], m_vPoint[5], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[2], m_vPoint[6], m_vColor);
+	m_pLine->Draw(g_pImmediateContext, m_vPoint[3], m_vPoint[7], m_vColor);
 
 	return true;
 }
@@ -72,7 +80,155 @@ namespace GBBOXFUNC {
 	{//=v0.v1
 		return v0[0] * v1[0] + v0[1] * v1[1] + v0[2] * v1[2];
 	}
+	
+	bool CheckValueValid(float fValue) {
+		if (fValue > G_MACRO_INVALID_FLOAT - 1.0f) {
+			return false;
+		}
+		else
+			return true;
+	}
+	/*
+	bool IntersectTriangle(const D3DXVECTOR3& RayOrigin, const D3DXVECTOR3& RayDirection,
+		D3DXVECTOR3& v0, D3DXVECTOR3& v1, D3DXVECTOR3& v2, float& t, float& u, float& v)
 
+	{
+		D3DXVECTOR3 edge1 = v1 - v0;
+		D3DXVECTOR3 edge2 = v2 - v0;
+
+		D3DXVECTOR3 pvec;
+		D3DXVec3Cross(&pvec, &RayDirection, &edge2);
+
+		FLOAT det = D3DXVec3Dot(&edge1, &pvec);
+
+		D3DXVECTOR3 tvec;
+		if (det > 0) tvec = RayOrigin - v0;
+		else {
+			tvec = v0 - RayOrigin;
+			det = -det;
+		}
+
+		if (det < 0.0001f) return false;
+
+		u = D3DXVec3Dot(&tvec, &pvec);
+		if (u < 0.0f || u > det) return false;
+
+		D3DXVECTOR3 qvec;
+		D3DXVec3Cross(&qvec, &tvec, &edge1);
+
+		v = D3DXVec3Dot(&RayDirection, &qvec);
+		if (v < 0.0f || u + v > det) return false;
+
+		t = D3DXVec3Dot(&edge2, &qvec);
+		FLOAT fInvDet = 1.0f / det;
+		t *= fInvDet;
+		u *= fInvDet;
+		v *= fInvDet;
+
+		return true;
+	}
+	*/
+	bool segment_plane(D3DXVECTOR3* org, D3DXVECTOR3* dir, G_PLANE* p, D3DXVECTOR3* out_res)
+	{
+		D3DXVECTOR3 vNormal = D3DXVECTOR3(p->fA, p->fB, p->fC);
+		float t = (-D3DXVec3Dot(&vNormal, org) - p->fD) / D3DXVec3Dot(&vNormal, dir);
+		//if (t >= 0.0f && t <= 1.0f)
+		if (t >= 0.0f)
+		{
+			*out_res = *org + t * (*dir);
+			return true;
+		}
+		return false;
+	}
+
+	bool RaytoBox(D3DXVECTOR3* vSliding,GBBox* pBox, G_RAY* pRay) {
+		pBox->m_Plane[G_OBB_UP].CreatePlane(pBox->m_vPoint[2], pBox->m_vPoint[0], pBox->m_vPoint[3]);
+		pBox->m_Plane[G_OBB_DOWN].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[6], pBox->m_vPoint[5]);
+		pBox->m_Plane[G_OBB_LEFT].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[0], pBox->m_vPoint[6]);
+		pBox->m_Plane[G_OBB_RIGHT].CreatePlane(pBox->m_vPoint[7], pBox->m_vPoint[3], pBox->m_vPoint[5]);
+		pBox->m_Plane[G_OBB_FRONT].CreatePlane(pBox->m_vPoint[5], pBox->m_vPoint[1], pBox->m_vPoint[4]);
+		pBox->m_Plane[G_OBB_BACK].CreatePlane(pBox->m_vPoint[6], pBox->m_vPoint[2], pBox->m_vPoint[7]);
+
+
+		bool bResult[G_OBB_SIDE_CNT];
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++)
+			bResult[i] = false;
+
+
+		D3DXVECTOR3 vIntSec[G_OBB_SIDE_CNT];//교점
+		float fDistance[G_OBB_SIDE_CNT];//거리
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
+			vIntSec[i] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			fDistance[i] = G_MACRO_INVALID_FLOAT;
+		}
+		float fShortestDist = G_MACRO_INVALID_FLOAT;//최단거리
+
+		int	  iShortest = -1;//최단거리 넘버.
+
+
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++){
+			if (segment_plane(&pRay->vOrigin, &pRay->vDirection, &pBox->m_Plane[i], &vIntSec[i]))
+				bResult[i] = true;
+		}
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
+			if (bResult[i])
+				fDistance[i] = CalcDistance(&pRay->vOrigin, &vIntSec[i]);
+		}
+
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
+			if (bResult[i] == false)
+				continue;
+
+			if (fShortestDist > fDistance[i]) {
+				fShortestDist = fDistance[i];
+				iShortest = i;
+			}
+
+		}
+
+		if (iShortest == -1) {
+			return false;
+		}
+		else {
+			D3DXVECTOR3 vNormal = D3DXVECTOR3(pBox->m_Plane[iShortest].fA, pBox->m_Plane[iShortest].fB, pBox->m_Plane[iShortest].fC);
+			float fCalc = vNormal.x* vIntSec[iShortest].x + vNormal.y* vIntSec[iShortest].y + vNormal.z* vIntSec[iShortest].z + pBox->m_Plane[iShortest].fD;
+			if (fCalc < 0.001f)
+			{
+				*vSliding = pRay->vDirection - ((D3DXVec3Dot(&pRay->vDirection, &vNormal) )*vNormal);
+				return true;
+			}
+		}
+		return false;
+		
+	}
+/*
+	D3DXVECTOR3 GetSlidingVector(GBBox* pBox, D3DXVECTOR3* vDir, D3DXVECTOR3* vIntersec) {
+		pBox->m_Plane[G_OBB_UP].CreatePlane(pBox->m_vPoint[2], pBox->m_vPoint[0], pBox->m_vPoint[3]);
+		pBox->m_Plane[G_OBB_DOWN].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[6], pBox->m_vPoint[5]);
+		pBox->m_Plane[G_OBB_LEFT].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[0], pBox->m_vPoint[6]);
+		pBox->m_Plane[G_OBB_RIGHT].CreatePlane(pBox->m_vPoint[7], pBox->m_vPoint[3], pBox->m_vPoint[5]);
+		pBox->m_Plane[G_OBB_FRONT].CreatePlane(pBox->m_vPoint[5], pBox->m_vPoint[1], pBox->m_vPoint[4]);
+		pBox->m_Plane[G_OBB_BACK].CreatePlane(pBox->m_vPoint[6], pBox->m_vPoint[2], pBox->m_vPoint[7]);
+
+
+		D3DXVECTOR3 vNormal;
+		float fCalc = 0.0f;
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
+			vNormal = D3DXVECTOR3(pBox->m_Plane[i].fA, pBox->m_Plane[i].fB, pBox->m_Plane[i].fC);
+			float fCalc = vNormal.x* vIntersec->x + vNormal.y* vIntersec->y + vNormal.z* vIntersec->z + pBox->m_Plane[i].fD;
+			if (fCalc < 0.001f)
+			{
+				return *vDir - (((D3DXVec3Dot(vDir, &vNormal) / D3DXVec3Dot(&vNormal, &vNormal)))*vNormal);
+			}
+		}
+	}
+*/
 	float CalcDistance(const D3DXVECTOR3* v1, const D3DXVECTOR3* v2) {
 		float fDisX, fDisY, fDisZ;
 
@@ -287,6 +443,8 @@ namespace GBBOXFUNC {
 		pBox->m_vMin.x = pBox->center[0] - pBox->extent[0];
 		pBox->m_vMin.y = pBox->center[1] - pBox->extent[1];
 		pBox->m_vMin.z = pBox->center[2] - pBox->extent[2];
+
+
 	}
 
 	void moveBox(GBBox *pBox, const D3DXMATRIX& mat)
