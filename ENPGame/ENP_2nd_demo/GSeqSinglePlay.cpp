@@ -159,14 +159,28 @@ bool GSeqSinglePlay::Init()
 		m_Obj[i].Init();
 	}
 
-	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, _T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl");
-	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, _T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
-	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, _T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, 
+		_T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl");
+	D3DXMatrixScaling(&m_matWorld_LAB, 1, 1, 1);
+	m_matWorld_LAB._41 = 1000.0f;
+	m_matWorld_LAB._42 = 0.0f;
+	m_matWorld_LAB._43 = 1000.0f;
+
+	//D3DXMatrixIdentity(&matWorld);
+	//m_matWorld_LAB = matWorld*matScale;// *matTrans;
+
+	//m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, 
+	//	_T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
+	//m_matWorld_DROPSHIP._41 = 1.0f;
+	//m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
+	//	_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	//m_matWorld_CAR._41 = 1.0f;
 
 #endif
 
 #ifdef G_MACRO_EFFECT_ADD
-	m_pPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/Blend.hlsl", "PS_MATERIAL"));
+	m_pPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, 
+		L"data/shader/Blend.hlsl", "PS_MATERIAL"));
 	//--------------------------------------------------------------------------------------
 	// 배경 부분
 	//--------------------------------------------------------------------------------------
@@ -212,7 +226,7 @@ bool GSeqSinglePlay::Init()
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
 	m_pMainCamera = make_shared<GCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(10.0f, 10.0f, -10.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(-100.0f, 100.0f, -100.0f), D3DXVECTOR3(1000.0f, 10.0f, 1000.0f));
 
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
@@ -229,7 +243,7 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// 커스텀맵 생성
 	//--------------------------------------------------------------------------------------
-	TMapDesc MapDesc = { 50, 50, 100.0f, 0.1f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
+	TMapDesc MapDesc = { 50, 50, 50.0f, 0.0f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
 	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
@@ -354,7 +368,7 @@ bool GSeqSinglePlay::Render()
 		m_HeroObj[iChar]->Render(g_pImmediateContext);
 	}
 	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].SetMatrix(NULL, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_Obj[i].SetMatrix(&m_matWorld_LAB, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_Obj[i].Render(g_pImmediateContext);
 	}
 
