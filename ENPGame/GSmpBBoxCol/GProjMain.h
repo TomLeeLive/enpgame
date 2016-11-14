@@ -21,6 +21,7 @@ T_STR CameraViewStyle[] =
 class GProjMain : public GCoreLibV2
 {
 public:
+	D3DXVECTOR3 m_vDir;
 	D3DXVECTOR3					m_vPosBefore;
 	D3DXVECTOR3					m_vPosCurrent;
 
