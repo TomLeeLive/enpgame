@@ -21,9 +21,8 @@ T_STR CameraViewStyle[] =
 class GProjMain : public GCoreLibV2
 {
 public:
-	D3DXVECTOR3 m_vDir;
-	D3DXVECTOR3					m_vPosBefore;
-	D3DXVECTOR3					m_vPosCurrent;
+	D3DXVECTOR3					m_vLook;
+
 
 	GBBox						m_pBBox;
 	GBoxShape					m_pBox;
@@ -36,10 +35,14 @@ public:
 
 	GPlaneShape					m_pPlane;
 	GDirectionLineShape			m_pDirectionLine;
-	GCamera*			m_pMainCamera;
+	GCamera*					m_pMainCamera;
 	//--------------------------------------------------------------------------------------
 	// Matrix
 	//--------------------------------------------------------------------------------------
+	D3DXMATRIX					m_matScale;
+	D3DXMATRIX					m_matRotation;
+	D3DXMATRIX					m_matTrans;
+
 	D3DXMATRIX					m_matWorld;
 	D3DXMATRIX					m_World[2];
 	D3DXMATRIX					m_matWorldPlaneBase;

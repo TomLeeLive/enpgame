@@ -33,6 +33,11 @@ bool GProjMain::Init()
 
 	D3DXMatrixTranslation(&m_matWorldEnemy, 10.0f, 0.0f, 10.0f);
 #endif
+	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	D3DXMatrixIdentity(&m_matScale);
+	D3DXMatrixIdentity(&m_matRotation);
+	D3DXMatrixIdentity(&m_matTrans);
 
 	D3DXMatrixIdentity(&m_World[0]);
 	D3DXMatrixIdentity(&m_matWorld);
@@ -65,11 +70,7 @@ bool GProjMain::Init()
 
 #endif
 
-	m_vPosBefore = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_vPosCurrent = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-
-	//m_matWorld = *m_pMainCamera->GetWorldMatrix(); // 주인공 박스
 	return true;
 }
 
@@ -104,40 +105,23 @@ bool GProjMain::Release()
 	return true;
 }
 
+#define G_MACRO_CAR_SPEED 10.0f			//박스 Speed
+
 bool GProjMain::Frame()
 {	
+	static float fSpeed = G_MACRO_CAR_SPEED;//박스 이동 스피드
+	static float angle = 0.0f;//for 박스 회전 각도
+	static D3DXVECTOR3 vPos = D3DXVECTOR3(0.0f,0.0f,0.0f);// 박스 위치.
+
+	//float 누적발생에 대한 오차를 줄이기 위해..
+	if (angle > 360.0f || angle < -360.0f) {
+		angle = 0.0f; D3DXMatrixIdentity(&m_matRotation);; m_vLook = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	}
 
 	//--------------------------------------------------------------------------------------
 	// 엔진에 있는 뷰 및 투영 행렬 갱신
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
-
-
-		
-	if (I_Input.KeyCheck(DIK_RIGHT)) {
-
-		m_matWorld._41 += 2.0f*g_fSecPerFrame;
-	}
-	if (I_Input.KeyCheck(DIK_LEFT)) {
-
-		m_matWorld._41 -= 2.0f*g_fSecPerFrame;
-	}
-	if (I_Input.KeyCheck(DIK_UP)) {
-
-		m_matWorld._43 += 2.0f*g_fSecPerFrame;
-	}
-	if (I_Input.KeyCheck(DIK_DOWN)) {
-
-		m_matWorld._43 -= 2.0f*g_fSecPerFrame;
-	}
-
-	m_vPosCurrent.x = m_matWorld._41;
-	m_vPosCurrent.y = m_matWorld._42;
-	m_vPosCurrent.z = m_matWorld._43;
-
-	m_vDir = m_vPosCurrent - m_vPosBefore;
-	D3DXVec3Normalize(&m_vDir, &m_vDir);
-
 
 
 #ifdef G_MACRO_ENEMYBOX
@@ -147,44 +131,86 @@ bool GProjMain::Frame()
 
 	if (nRet == 1) {
 		// 충돌시 처리할 코드 add
-		
+
 		G_RAY  ray;
-		D3DXVECTOR3 vIntersect = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		D3DXVECTOR3 vSliding = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		ray.vOrigin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		ray.vDirection = D3DXVECTOR3(m_vDir.x, m_vDir.y, m_vDir.z);
+		ray.vDirection = m_vLook;
 		D3DXVec3TransformCoord(&ray.vOrigin, &ray.vOrigin, &m_matWorld);
 		D3DXVec3TransformNormal(&ray.vDirection, &ray.vDirection, &m_matWorld);
 		D3DXVec3Normalize(&ray.vDirection, &ray.vDirection);
 
-		if (GBBOXFUNC::RaytoBox(&vIntersect, &m_pBBoxEnemy, &ray)) {
-			vSliding = GBBOXFUNC::GetSlidingVector(&m_pBBoxEnemy, &m_vDir, &vIntersect);
+		if (GBBOXFUNC::RaytoBox(&vSliding, &m_pBBoxEnemy, &ray)) {
 
-			D3DXVECTOR3 vTemp = m_vPosCurrent + 0.5f*g_fSecPerFrame* vSliding;
 
-			D3DXMATRIX matTemp;
-			D3DXMatrixIdentity(&matTemp);
-			D3DXMatrixTranslation(&matTemp, vTemp.x, vTemp.y, vTemp.z);
-			m_matWorld *= matTemp;
+		}
+		else {
+			vSliding = m_vLook;
 		}
 
+		D3DXMATRIX matTran, matRot;
+		D3DXMatrixIdentity(&matTran);
+		D3DXMatrixIdentity(&matRot);
 
+		D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		D3DXVec3Cross(&vRight, &vUp, &vSliding);
+		D3DXVec3Cross(&vUp, &vSliding, &vRight);
+
+		matRot._11 = vRight.x;		    matRot._12 = vRight.y;			matRot._13 = vRight.z;
+		matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
+		matRot._31 = vSliding.x;		matRot._32 = vSliding.y;		matRot._33 = vSliding.z;
+
+		if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD) {
+
+			vPos = vPos + m_Timer.GetSPF()*fSpeed* vSliding;
+		}
+		if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD) {
+
+			vPos = vPos - m_Timer.GetSPF()*fSpeed* vSliding;
+		}
+
+		D3DXMatrixTranslation(&matTran, vPos.x, vPos.y, vPos.z);
+		m_matWorld = m_matScale * matRot * matTran;
+		m_matRotation = matRot;
+		m_matTrans = matTran;
 	}
 	else {
 
 
 
+		if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
+		{
+			D3DXMatrixRotationY(&m_matRotation, D3DXToRadian(angle -= 20.0f*m_Timer.GetSPF()*fSpeed));
+		}
+		else if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
+		{
+			D3DXMatrixRotationY(&m_matRotation, D3DXToRadian(angle += 20.0f*m_Timer.GetSPF()*fSpeed));
+
+		}
+
+		m_vLook.x = m_matRotation._31;
+		m_vLook.y = m_matRotation._32;
+		m_vLook.z = m_matRotation._33;
 
 
+
+		if (I_Input.KeyCheck(DIK_UP)) {
+
+			vPos = vPos + m_Timer.GetSPF()*fSpeed * m_vLook;
+		}
+		if (I_Input.KeyCheck(DIK_DOWN)) {
+
+			vPos = vPos - m_Timer.GetSPF()*fSpeed * m_vLook;
+		}
+		D3DXMatrixTranslation(&m_matTrans, vPos.x, vPos.y, vPos.z);
+
+
+
+		m_matWorld = m_matScale * m_matRotation * m_matTrans;
 	}
 
 #endif
-
-	m_vPosBefore.x = m_vPosCurrent.x;
-	m_vPosBefore.y = m_vPosCurrent.y;
-	m_vPosBefore.z = m_vPosCurrent.y;
-
 
 	m_pBBox.Frame(&m_matWorld);
 

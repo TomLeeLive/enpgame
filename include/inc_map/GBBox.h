@@ -35,10 +35,6 @@ Bounding Box size를 initBox min max로 넘겨서 계산되도록 한다.
 class GBBox
 {
 public:
-	//D3DXPLANE			m_Plane[G_OBB_SIDE_CNT];			//평면
-	//D3DXVECTOR4			m_vPlaneNormal[G_OBB_SIDE_CNT];		//평면의 법선 벡터
-
-	//shared_ptr<GShape>	m_pPlane[G_OBB_SIDE_CNT];
 	D3DXVECTOR3			m_vPoint[8];
 	G_PLANE				m_Plane[G_OBB_SIDE_CNT];
 
@@ -80,11 +76,8 @@ public:
 };
 
 namespace GBBOXFUNC {
-	bool IntersectTriangle(const D3DXVECTOR3& RayOrigin, const D3DXVECTOR3& RayDirection,
-		D3DXVECTOR3& v0, D3DXVECTOR3& v1, D3DXVECTOR3& v2, float& t, float& u, float& v);
 	bool CheckValueValid(float fValue);
-	D3DXVECTOR3 GetSlidingVector(GBBox* pBox, D3DXVECTOR3* vDir, D3DXVECTOR3* vIntersec); //슬라이딩벡터를 구하는 함수
-	bool RaytoBox(D3DXVECTOR3* vIntersec,GBBox* box, G_RAY* pRay);
+	bool RaytoBox(D3DXVECTOR3* vSliding,GBBox* box, G_RAY* pRay);
 	float CalcDistance(const D3DXVECTOR3* v1, const D3DXVECTOR3* v2);
 	int ColCheck(const GBBox* box0, const GBBox* box1);
 	int BoxBoxColCheck(const GBBox* box0, const GBBox* box1);			//반지름을 이용한 거리 테스트후 OBB vs OBB
