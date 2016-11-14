@@ -154,6 +154,15 @@ bool GSeqSinglePlay::Init()
 	I_CharMgr.Init();
 
 	Load();
+
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[i].Init();
+	}
+
+	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, _T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, _T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, _T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+
 #endif
 
 #ifdef G_MACRO_EFFECT_ADD
@@ -220,7 +229,7 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ¸Ê »ý¼º
 	//--------------------------------------------------------------------------------------
-	TMapDesc MapDesc = { 50, 50, 1.0f, 0.1f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
+	TMapDesc MapDesc = { 50, 50, 100.0f, 0.1f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
 	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
@@ -344,6 +353,12 @@ bool GSeqSinglePlay::Render()
 		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(g_pImmediateContext);
 	}
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[i].SetMatrix(NULL, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_Obj[i].Render(g_pImmediateContext);
+	}
+
+
 #endif
 
 
@@ -403,6 +418,14 @@ bool GSeqSinglePlay::Release()
 #endif
 #ifdef G_MACRO_CHAR_ADD 
 	I_CharMgr.Release();
+
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[i].Release();
+	}
+
+
+
+
 #endif
 	return true;
 }
@@ -465,6 +488,12 @@ bool GSeqSinglePlay::Frame()
 
 
 #ifdef G_MACRO_CHAR_ADD 
+
+
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[i].Frame();
+	}
+
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		if (I_Input.KeyCheck(DIK_ADD))

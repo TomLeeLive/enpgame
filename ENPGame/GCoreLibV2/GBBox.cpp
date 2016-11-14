@@ -80,6 +80,7 @@ namespace GBBOXFUNC {
 	{//=v0.v1
 		return v0[0] * v1[0] + v0[1] * v1[1] + v0[2] * v1[2];
 	}
+	
 	bool CheckValueValid(float fValue) {
 		if (fValue > G_MACRO_INVALID_FLOAT - 1.0f) {
 			return false;
@@ -87,6 +88,7 @@ namespace GBBOXFUNC {
 		else
 			return true;
 	}
+	/*
 	bool IntersectTriangle(const D3DXVECTOR3& RayOrigin, const D3DXVECTOR3& RayDirection,
 		D3DXVECTOR3& v0, D3DXVECTOR3& v1, D3DXVECTOR3& v2, float& t, float& u, float& v)
 
@@ -125,47 +127,51 @@ namespace GBBOXFUNC {
 
 		return true;
 	}
-	bool RaytoBox(D3DXVECTOR3* vIntersec,GBBox* pBox, G_RAY* pRay) {
-		//pBox->m_Plane[G_OBB_UP].CreatePlane(pBox->m_vPoint[2], pBox->m_vPoint[0], pBox->m_vPoint[3]);
-		//pBox->m_Plane[G_OBB_DOWN].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[6], pBox->m_vPoint[5]);
-		//pBox->m_Plane[G_OBB_LEFT].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[0], pBox->m_vPoint[6]);
-		//pBox->m_Plane[G_OBB_RIGHT].CreatePlane(pBox->m_vPoint[7], pBox->m_vPoint[3], pBox->m_vPoint[5]);
-		//pBox->m_Plane[G_OBB_FRONT].CreatePlane(pBox->m_vPoint[5], pBox->m_vPoint[1], pBox->m_vPoint[4]);
-		//pBox->m_Plane[G_OBB_BACK].CreatePlane(pBox->m_vPoint[6], pBox->m_vPoint[2], pBox->m_vPoint[7]);
+	*/
+	bool segment_plane(D3DXVECTOR3* org, D3DXVECTOR3* dir, G_PLANE* p, D3DXVECTOR3* out_res)
+	{
+		D3DXVECTOR3 vNormal = D3DXVECTOR3(p->fA, p->fB, p->fC);
+		float t = (-D3DXVec3Dot(&vNormal, org) - p->fD) / D3DXVec3Dot(&vNormal, dir);
+		//if (t >= 0.0f && t <= 1.0f)
+		if (t >= 0.0f)
+		{
+			*out_res = *org + t * (*dir);
+			return true;
+		}
+		return false;
+	}
 
-		float ft[G_OBB_SIDE_CNT], fu, fv;
+	bool RaytoBox(D3DXVECTOR3* vSliding,GBBox* pBox, G_RAY* pRay) {
+		pBox->m_Plane[G_OBB_UP].CreatePlane(pBox->m_vPoint[2], pBox->m_vPoint[0], pBox->m_vPoint[3]);
+		pBox->m_Plane[G_OBB_DOWN].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[6], pBox->m_vPoint[5]);
+		pBox->m_Plane[G_OBB_LEFT].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[0], pBox->m_vPoint[6]);
+		pBox->m_Plane[G_OBB_RIGHT].CreatePlane(pBox->m_vPoint[7], pBox->m_vPoint[3], pBox->m_vPoint[5]);
+		pBox->m_Plane[G_OBB_FRONT].CreatePlane(pBox->m_vPoint[5], pBox->m_vPoint[1], pBox->m_vPoint[4]);
+		pBox->m_Plane[G_OBB_BACK].CreatePlane(pBox->m_vPoint[6], pBox->m_vPoint[2], pBox->m_vPoint[7]);
+
 
 		bool bResult[G_OBB_SIDE_CNT];
 
 		for (int i = 0; i < G_OBB_SIDE_CNT; i++)
 			bResult[i] = false;
 
-		if(IntersectTriangle(pRay->vOrigin, pRay->vDirection, pBox->m_vPoint[2], pBox->m_vPoint[0], pBox->m_vPoint[3], ft[G_OBB_UP], fu, fv))
-			bResult[G_OBB_UP] = true;
-		if (IntersectTriangle(pRay->vOrigin, pRay->vDirection, pBox->m_vPoint[4], pBox->m_vPoint[6], pBox->m_vPoint[5], ft[G_OBB_DOWN], fu, fv))
-			bResult[G_OBB_DOWN] = true;
-		if (IntersectTriangle(pRay->vOrigin, pRay->vDirection, pBox->m_vPoint[4], pBox->m_vPoint[0], pBox->m_vPoint[6], ft[G_OBB_LEFT], fu, fv))
-			bResult[G_OBB_LEFT] = true;
-		if (IntersectTriangle(pRay->vOrigin, pRay->vDirection, pBox->m_vPoint[7], pBox->m_vPoint[3], pBox->m_vPoint[5], ft[G_OBB_RIGHT], fu, fv))
-			bResult[G_OBB_RIGHT] = true;
-		if (IntersectTriangle(pRay->vOrigin, pRay->vDirection, pBox->m_vPoint[5], pBox->m_vPoint[1], pBox->m_vPoint[4], ft[G_OBB_FRONT], fu, fv))
-			bResult[G_OBB_FRONT] = true;
-		if (IntersectTriangle(pRay->vOrigin, pRay->vDirection, pBox->m_vPoint[6], pBox->m_vPoint[2], pBox->m_vPoint[7], ft[G_OBB_BACK], fu, fv))
-			bResult[G_OBB_BACK] = true;
-		
-
 
 		D3DXVECTOR3 vIntSec[G_OBB_SIDE_CNT];//교점
-
 		float fDistance[G_OBB_SIDE_CNT];//거리
 
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
+			vIntSec[i] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			fDistance[i] = G_MACRO_INVALID_FLOAT;
+		}
 		float fShortestDist = G_MACRO_INVALID_FLOAT;//최단거리
 
 		int	  iShortest = -1;//최단거리 넘버.
 
-		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
-			if (bResult[i])
-				vIntSec[G_OBB_SIDE_CNT] = pRay->vOrigin + ft[i] * pRay->vDirection;
+
+
+		for (int i = 0; i < G_OBB_SIDE_CNT; i++){
+			if (segment_plane(&pRay->vOrigin, &pRay->vDirection, &pBox->m_Plane[i], &vIntSec[i]))
+				bResult[i] = true;
 		}
 
 		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
@@ -173,14 +179,6 @@ namespace GBBOXFUNC {
 				fDistance[i] = CalcDistance(&pRay->vOrigin, &vIntSec[i]);
 		}
 
-		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
-			if (bResult[i])
-			{
-				fShortestDist = fDistance[i];
-				iShortest = i;
-				break;
-			}
-		}
 
 		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
 			if (bResult[i] == false)
@@ -197,96 +195,18 @@ namespace GBBOXFUNC {
 			return false;
 		}
 		else {
-			*vIntersec = vIntSec[iShortest];
-			return true;
-		}
-		return true;
-
-
-		/*
-		D3DXVECTOR3 vNormal;
-		float		fResultT[G_OBB_SIDE_CNT];
-		bool		bFound = false;
-
-		for (int i = 0; i < G_OBB_SIDE_CNT; i++)
-			fResultT[i] = G_MACRO_INVALID_FLOAT;
-
-		for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
-
-			vNormal = D3DXVECTOR3(pBox->m_Plane[i].fA, pBox->m_Plane[i].fB, pBox->m_Plane[i].fC);
-
-			if (D3DXVec3Dot(&pRay->vDirection, &vNormal) < 0.001f) {
-
+			D3DXVECTOR3 vNormal = D3DXVECTOR3(pBox->m_Plane[iShortest].fA, pBox->m_Plane[iShortest].fB, pBox->m_Plane[iShortest].fC);
+			float fCalc = vNormal.x* vIntSec[iShortest].x + vNormal.y* vIntSec[iShortest].y + vNormal.z* vIntSec[iShortest].z + pBox->m_Plane[iShortest].fD;
+			if (fCalc < 0.001f)
+			{
+				*vSliding = pRay->vDirection - ((D3DXVec3Dot(&pRay->vDirection, &vNormal) )*vNormal);
+				return true;
 			}
-			else {
-
-				fResultT[i] = (    (-1.0f*pBox->m_Plane[i].fD - D3DXVec3Dot(&vNormal, &pRay->vOrigin) )) / D3DXVec3Dot(&vNormal, &pRay->vDirection) ;
-
-				if (0.0f < fResultT[i] && fResultT[i] < 1.001f) {
-					
-					if (false == bFound) {
-						bFound = true;
-					}
-
-				}
-				else {
-					fResultT[i] = G_MACRO_INVALID_FLOAT;
-				}
-
-
-			}
-
 		}
+		return false;
 		
-		
-		D3DXVECTOR3 vIntSec[G_OBB_SIDE_CNT];
-
-		float fDistance[G_OBB_SIDE_CNT];
-
-		float fShortestDist = G_MACRO_INVALID_FLOAT;
-
-		int	  iShortest = 0;
-
-		//for (int i = 0; i < G_OBB_SIDE_CNT; i++)
-		//	vIntSec[i].x = G_MACRO_INVALID_FLOAT;
-
-		//for (int i = 0; i < G_OBB_SIDE_CNT; i++)
-		//	fDistance[i] = G_MACRO_INVALID_FLOAT;
-
-
-		if (true == bFound) {
-			
-			
-			for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
-				if(CheckValueValid(fResultT[i]))
-					vIntSec[G_OBB_SIDE_CNT] = pRay->vOrigin + fResultT[i]*pRay->vDirection;
-			}
-
-			for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
-				if (CheckValueValid(fResultT[i]))
-					fDistance[i] = CalcDistance(&pRay->vOrigin, &vIntSec[i]);
-			}
-
-			fShortestDist = fDistance[0];
-			iShortest = 0;
-
-			for (int i = 1; i < G_OBB_SIDE_CNT; i++) {
-				if (fShortestDist > fDistance[i]) {
-					fShortestDist = fDistance[i];
-					iShortest = i;
-				}
-
-			}
-			*vIntersec  = vIntSec[iShortest];
-
-			return true;
-		}
-		else {
-			return false;
-		}
-		*/
 	}
-
+/*
 	D3DXVECTOR3 GetSlidingVector(GBBox* pBox, D3DXVECTOR3* vDir, D3DXVECTOR3* vIntersec) {
 		pBox->m_Plane[G_OBB_UP].CreatePlane(pBox->m_vPoint[2], pBox->m_vPoint[0], pBox->m_vPoint[3]);
 		pBox->m_Plane[G_OBB_DOWN].CreatePlane(pBox->m_vPoint[4], pBox->m_vPoint[6], pBox->m_vPoint[5]);
@@ -308,7 +228,7 @@ namespace GBBOXFUNC {
 			}
 		}
 	}
-
+*/
 	float CalcDistance(const D3DXVECTOR3* v1, const D3DXVECTOR3* v2) {
 		float fDisX, fDisY, fDisZ;
 

@@ -1,4 +1,12 @@
 #pragma once
+
+enum G_OBJECT {
+	G_OBJ_LAB = 0,
+	G_OBJ_DROPSHIP,
+	G_OBJ_CAR,
+	G_OBJ_CNT
+};
+
 class GSeqSinglePlay : public GSeq
 {
 private:
@@ -54,6 +62,8 @@ public:
 	D3DXMATRIX  m_matWorld;
 #ifdef G_MACRO_CHAR_ADD	
 public:
+	GGbsObj m_Obj[G_OBJ_CNT];
+
 	//--------------------------------------------------------------------------------------
 	// 파일 선택하여 로드( 단축기 : O )
 	//--------------------------------------------------------------------------------------

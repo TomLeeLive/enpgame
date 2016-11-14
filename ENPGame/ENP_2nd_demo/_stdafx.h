@@ -11,7 +11,7 @@
 
 //각 기능별 코드 넣고/빼고 용도 for debugging
 #define G_MACRO_MAP_ADD		1
-//#define G_MACRO_EFFECT_ADD   1
+#define G_MACRO_EFFECT_ADD   1
 #define G_MACRO_CHAR_ADD     1
 
 
