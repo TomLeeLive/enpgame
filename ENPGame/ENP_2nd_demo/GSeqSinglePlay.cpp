@@ -365,13 +365,13 @@ bool GSeqSinglePlay::Render()
 	DX::ApplyBS(g_pImmediateContext, DX::GDxState::g_pAlphaBlend);
 
 	g_pImmediateContext->PSSetSamplers(0, 1, &DX::GDxState::g_pSSWrapLinear);
-	m_pSkyBoxObj->SetMatrix(0, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSkyBoxObj->SetMatrix(0, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSkyBoxObj->Render(g_pImmediateContext);
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ ¸Ê
 	//--------------------------------------------------------------------------------------
-	m_CustomMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(),
-		m_pMainCamera->GetProjMatrix());
+	m_CustomMap.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(),
+		m_pCamera->GetProjMatrix());
 	m_CustomMap.Render(g_pImmediateContext);
 
 	DrawSelectTreeLevel(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
