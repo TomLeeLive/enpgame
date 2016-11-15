@@ -101,6 +101,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <FxCompile Include="..\..\Output\data\shader\SkyBox.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Character.hlsl" />
     <FxCompile Include="MatrixViewer.hlsl" />
   </ItemGroup>
@@ -118,6 +121,7 @@
     <ClCompile Include="GSeqMenu.cpp" />
     <ClCompile Include="GSeqSinglePlay.cpp" />
     <ClCompile Include="GSeqSurvivalMode.cpp" />
+    <ClCompile Include="GN2Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GFPSCamera.h" />
@@ -130,6 +134,7 @@
     <ClInclude Include="GSeqMenu.h" />
     <ClInclude Include="GSeqSinglePlay.h" />
     <ClInclude Include="GSeqSurvivalMode.h" />
+    <ClInclude Include="GN2Skybox.h" />
     <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>

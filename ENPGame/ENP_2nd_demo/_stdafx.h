@@ -52,6 +52,7 @@
 //#include "GMiniMap.h"
 //#include "map/GNoiseMap.h"
 //#include "map/GQuadTreeIndex.h"
+#include "GN2Skybox.h"
 #include "map/GMap.h"
 #include "map/GQuadTree.h"
 #include "map/GMapObject.h"
