@@ -1,6 +1,7 @@
 #pragma once
 #include "GCoreLibV2.h"
-#include "GModelViewCamera.h"
+//#include "GModelViewCamera.h"
+#include "GFPSCamera.h"
 #include "GObject.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -14,9 +15,11 @@ class GProjMain : public GCoreLibV2
 {
 public:
 	GGbsObj		m_tbsobj;
-	shared_ptr<GModelViewCamera >		m_pMainCamera;
+	shared_ptr<GFPSCamera>		m_pMainCamera;
 	D3DXMATRIX m_matWorld;
-public:	
+
+	bool		UpdateGunPosition();
+public:
 	bool		Init();
 	bool		Frame();
 	bool		Render();

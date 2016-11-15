@@ -52,6 +52,9 @@
     <ClCompile Include="GSeqSurvivalMode.cpp">
       <Filter>GameSequence</Filter>
     </ClCompile>
+    <ClCompile Include="GFPSCamera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h">
@@ -85,6 +88,9 @@
       <Filter>GameSequence</Filter>
     </ClInclude>
     <ClInclude Include="_resources.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GFPSCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

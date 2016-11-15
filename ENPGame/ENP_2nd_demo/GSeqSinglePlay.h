@@ -17,6 +17,11 @@ public:
 		if (pInstance_ == 0) pInstance_ = new GSeqSinglePlay;
 		return pInstance_;
 	}
+
+public:
+	bool		m_bDebugCamera;
+	GGbsObj		m_ObjGun;
+	bool UpdateGunPosition();
 #ifdef G_MACRO_EFFECT_ADD
 public:
 	GPlaneShape						m_BigPlane;
@@ -68,7 +73,9 @@ public:
 	void		DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj);
 	bool		DrawQuadLine(GNode* pNode);
 #endif
-	shared_ptr<GCamera > m_pMainCamera;
+	GCamera*				m_pCamera;
+	shared_ptr<GCamera >	m_pDebugCamera;
+	shared_ptr<GFPSCamera > m_pFPSCamera;
 	D3DXMATRIX  m_matWorld;
 #ifdef G_MACRO_CHAR_ADD	
 public:

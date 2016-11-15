@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GFPSCamera.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GFPSCamera.h" />
     <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

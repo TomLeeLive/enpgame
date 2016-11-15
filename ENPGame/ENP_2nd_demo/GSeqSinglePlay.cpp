@@ -2,6 +2,44 @@
 
 GSeqSinglePlay * GSeqSinglePlay::pInstance_ = 0;
 
+
+bool GSeqSinglePlay::UpdateGunPosition() {
+
+	D3DXMATRIX matWorld, matScl, matRot;
+
+	D3DXVECTOR3 vScl, vTrans;
+	D3DXQUATERNION qRot;
+
+	D3DXQUATERNION  qRotation; //쿼터니온 생성
+	D3DXQuaternionRotationYawPitchRoll(&qRotation,  // 이과정에서 X축과 Y축의 회전을 사용
+		(float)D3DXToRadian(180.0f),    // 하여 사원수를 만듦
+		0.0f,
+		0.0f);
+
+	D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+
+	if (!m_pCamera)
+		return false;
+
+	D3DXMatrixInverse(&matWorld, NULL, m_pCamera->GetViewMatrix());
+	D3DXMatrixDecompose(&vScl, &qRot, &vTrans, &matWorld);
+
+	D3DXMatrixScaling(&matScl, vScl.x, vScl.y, vScl.z);
+
+	//vTrans.x += 10.0f;
+	vTrans.y -= 5.0f;
+	vTrans.z += 10.0f;
+	qRot = qRot * qRotation;
+
+	D3DXMatrixAffineTransformation(&matRot, 1.0f, NULL, &qRot, &vTrans);
+
+	m_ObjGun.m_matWorld = matScl * matRot;// *matTrans;
+
+	return true;
+}
+
 #ifdef G_MACRO_CHAR_ADD
 bool GSeqSinglePlay::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 {
@@ -65,29 +103,6 @@ bool GSeqSinglePlay::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 
 bool GSeqSinglePlay::Load()
 {
-	//if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
-	//{
-	//	return false;
-	//}
-
-
-
-	//int iLoad = m_LoadFiles.size() - 1;
-	//if (!m_tObject.Load(g_pd3dDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
-	//{
-	//	return false;
-	//}
-
-
-
-	//int iLoad = m_LoadFiles.size() - 1;
-
-
-
-	//if (!I_CharMgr.Load(g_pd3dDevice(), g_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
-	//{
-	//	return false;
-	//}
 
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharTable3.gci") /*_T("CharTable.gci")*/))
 	{
@@ -95,9 +110,7 @@ bool GSeqSinglePlay::Load()
 	}
 
 	GCharacter* pChar0 = I_CharMgr.GetPtr(L"TESTCHAR6");
-	//GCharacter* pChar1 = I_CharMgr.GetPtr(L"TEST_CHAR1");
-	//GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
-	//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
+
 
 	shared_ptr<GHeroObj> pObjA = make_shared<GHeroObj>();
 	pObjA->Set(pChar0,
@@ -105,43 +118,6 @@ bool GSeqSinglePlay::Load()
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjA);
-	/*
-	shared_ptr<GHeroObj> pObjB = make_shared<GHeroObj>();
-	pObjB->Set(pChar1,
-	pChar1->m_pBoneObject,
-	pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-	60);
-	m_HeroObj.push_back(pObjB);
-
-
-	shared_ptr<GHeroObj> pObjC = make_shared<GHeroObj>();
-	pObjC->Set(pChar1,
-	pChar1->m_pBoneObject,
-	61,
-	90);
-	m_HeroObj.push_back(pObjC);
-
-	shared_ptr<GHeroObj> pObjD = make_shared<GHeroObj>();
-	pObjD->Set(pChar1,
-	pChar1->m_pBoneObject,
-	62,
-	116);
-	m_HeroObj.push_back(pObjD);
-
-
-	shared_ptr<GHeroObj> pObjE = make_shared<GHeroObj>();
-	pObjE->Set(	pChar2,
-	pChar2->m_pBoneObject,
-	pChar2->m_pBoneObject->m_Scene.iFirstFrame,
-	pChar2->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjE);
-
-	shared_ptr<GHeroObj> pObjF = make_shared<GHeroObj>();
-	pObjF->Set( pChar3,
-	pChar3->m_pBoneObject,
-	pChar3->m_pBoneObject->m_Scene.iFirstFrame,
-	pChar3->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjF);*/
 	return true;
 }
 #endif 
@@ -149,7 +125,12 @@ bool GSeqSinglePlay::Init()
 {
 
 
+	m_ObjGun.Init();
 
+	if (!m_ObjGun.Load(g_pd3dDevice, _T("data/object/fps_shotgun/shotgun3.GBS"), L"data/shader/box.hlsl"))
+	{
+		return false;
+	}
 #ifdef G_MACRO_CHAR_ADD
 	I_CharMgr.Init();
 
@@ -195,10 +176,6 @@ bool GSeqSinglePlay::Init()
 		D3DXMatrixIdentity(&matObjRotation[i]);
 		D3DXMatrixIdentity(&matObjTrans[i]);
 	}
-	
-
-
-
 
 	m_iDrawDepth = 0;
 	m_bDebugRender = false;
@@ -216,19 +193,29 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
-	m_pMainCamera = make_shared<GCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
+	m_pDebugCamera = make_shared<GCamera>();
+	m_pDebugCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
 
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
-	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+	m_pDebugCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+	m_pDebugCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 
+	m_pFPSCamera = make_shared<GFPSCamera>();
+	m_pFPSCamera->SetViewMatrix(D3DXVECTOR3(10.0f, 2500.0f, -2500.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
+
+	fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
+	m_pFPSCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+	m_pFPSCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+
+
+
+	m_pCamera = m_pDebugCamera.get();
 #ifdef G_MACRO_MAP_ADD
 	//--------------------------------------------------------------------------------------
 	// 카메라 프로스텀 랜더링용 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
-	m_pMainCamera->CreateRenderBox(g_pd3dDevice, g_pImmediateContext);
+	m_pCamera->CreateRenderBox(g_pd3dDevice, g_pImmediateContext);
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, G_SHA_BOX, "PS_Color"));
 
 	//--------------------------------------------------------------------------------------
@@ -278,9 +265,11 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
 
+	m_QuadTree.Update(g_pd3dDevice, m_pCamera);
+
 	//m_QuadTree.AddObject(&m_tbsobj[iBox]);
 
-	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera.get());
+
 #endif
 
 	return true;
@@ -304,7 +293,7 @@ bool GSeqSinglePlay::DrawQuadLine(GNode* pNode)
 	if (m_QuadTree.m_iRenderDepth == pNode->m_iDepth ||
 		(pNode->m_isLeaf &&  m_QuadTree.m_iRenderDepth < 0))
 	{
-		m_DrawLine.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_DrawLine.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 
 		D3DXVECTOR4 vColor = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
 		if (pNode->m_iDepth == 1) vColor = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -358,18 +347,18 @@ bool GSeqSinglePlay::Render()
 
 #ifdef G_MACRO_MAP_ADD
 
-	m_CustomMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(),
-		m_pMainCamera->GetProjMatrix());
+	m_CustomMap.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(),
+		m_pCamera->GetProjMatrix());
 	m_CustomMap.Render(g_pImmediateContext);
 
-	DrawSelectTreeLevel(m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	DrawSelectTreeLevel(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	if (m_bDebugRender)
 	{
 		DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
 
 	for (int i = 0; i < G_OBJ_CNT; i++) {
-	m_Obj[i].SetMatrix(&m_matObjWorld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_Obj[i].SetMatrix(&m_matObjWorld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_Obj[i].Render(g_pImmediateContext);		
 	}
 
@@ -385,12 +374,15 @@ bool GSeqSinglePlay::Render()
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(g_pImmediateContext);
 	}
 #endif
 
-
+	m_ObjGun.SetMatrix(NULL, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	
+	//if(!m_bDebugCamera)
+	//	m_ObjGun.Render(g_pImmediateContext);
 
 #ifdef G_MACRO_EFFECT_ADD
 	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
@@ -411,7 +403,7 @@ bool GSeqSinglePlay::Render()
 	D3DXMATRIX matEffectWld;
 	matEffectWld = m_matWorld;
 	matEffectWld._42 = 10.0f;
-	m_pSprite.get()->SetMatrix(&matEffectWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSprite.get()->SetMatrix(&matEffectWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Render(g_pImmediateContext);
 
 	//	m_RT.Apply(g_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
@@ -441,6 +433,7 @@ bool GSeqSinglePlay::Render()
 }
 bool GSeqSinglePlay::Release()
 {
+	m_ObjGun.Release();
 #ifdef G_MACRO_MAP_ADD
 	m_CustomMap.Release();
 	m_QuadTree.Release();
@@ -458,19 +451,39 @@ bool GSeqSinglePlay::Release()
 
 bool GSeqSinglePlay::Frame()
 {
+	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
+		
+		if(m_bDebugCamera){
+			m_pCamera = m_pFPSCamera.get();
+			m_bDebugCamera = false;
+		}
+		else {
+			m_pCamera = m_pDebugCamera.get();
+			m_bDebugCamera = true;
+		}
+	}
+
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;
 	//m_pMainCamera->Update(g_fSecPerFrame);
-	m_pMainCamera->Frame();
 
+
+	m_pCamera->Frame();
+
+
+	UpdateGunPosition();
+	m_ObjGun.Frame();
 
 #ifdef G_MACRO_MAP_ADD
+
+	
+
 	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
 	{
 		if (++m_iDrawDepth > 7) m_iDrawDepth = -1;
 		m_QuadTree.SetRenderDepth(m_iDrawDepth);
 	}
-	m_QuadTree.Update(g_pd3dDevice, m_pMainCamera.get());
+	m_QuadTree.Update(g_pd3dDevice, m_pCamera);
 
 	
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
@@ -492,7 +505,7 @@ bool GSeqSinglePlay::Frame()
 	}
 #endif
 
-	m_matWorld = *m_pMainCamera->GetWorldMatrix();
+	m_matWorld = *m_pCamera->GetWorldMatrix();
 	m_matWorld._41 = 0.0f;
 	m_matWorld._42 = 0.0f;
 	m_matWorld._43 = 0.0f;
@@ -505,14 +518,14 @@ bool GSeqSinglePlay::Frame()
 	//-----------------------------------------------------------------------------------
 	FLOAT fDeterminant;
 	D3DXMATRIX matBillboard;
-	D3DXMatrixInverse(&matBillboard, &fDeterminant, m_pMainCamera->GetViewMatrix());
+	D3DXMatrixInverse(&matBillboard, &fDeterminant, m_pCamera->GetViewMatrix());
 	matBillboard._41 = 0.0f;
 	matBillboard._42 = 0.0f;
 	matBillboard._43 = 0.0f;
 	matBillboard._44 = 1.0f;
 
 
-	m_pSprite.get()->SetMatrix(&matBillboard, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSprite.get()->SetMatrix(&matBillboard, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Frame(g_pImmediateContext, g_pMain->m_Timer.GetElapsedTime(), g_fSecPerFrame);
 #endif
 
@@ -568,11 +581,11 @@ bool GSeqSinglePlay::Frame()
 HRESULT GSeqSinglePlay::CreateResource()
 {
 	HRESULT hr;
-	if (m_pMainCamera)
+	if (m_pCamera)
 	{
 		float fAspectRatio = g_pMain->m_SwapChainDesc.BufferDesc.Width /
 			(float)g_pMain->m_SwapChainDesc.BufferDesc.Height;
-		m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
+		m_pCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
 	}
 	return S_OK;
 }
@@ -587,7 +600,8 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
-
+	m_bDebugCamera = true;
+	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD
 	m_pSprite = nullptr;
 #endif
@@ -598,9 +612,9 @@ GSeqSinglePlay::~GSeqSinglePlay(void)
 }
 int GSeqSinglePlay::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pMainCamera != nullptr)
+	if (m_pCamera != nullptr)
 	{
-		m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
+		m_pCamera->WndProc(hWnd, msg, wParam, lParam);
 	}
 	return -1;
 }

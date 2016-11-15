@@ -2,7 +2,42 @@
 
 GProjMain* g_pMain;
 
+bool GProjMain::UpdateGunPosition() {
 
+	D3DXMATRIX matWorld, matScl, matRot;
+
+	D3DXVECTOR3 vScl, vTrans;
+	D3DXQUATERNION qRot;
+
+	D3DXQUATERNION  qRotation; //쿼터니온 생성
+	D3DXQuaternionRotationYawPitchRoll(&qRotation,  // 이과정에서 X축과 Y축의 회전을 사용
+		(float)D3DXToRadian(180.0f),    // 하여 사원수를 만듦
+		0.0f,
+		0.0f);
+
+	D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+
+	if (!m_pMainCamera)
+		return false;
+
+	D3DXMatrixInverse(&matWorld, NULL, m_pMainCamera->GetViewMatrix());
+	D3DXMatrixDecompose(&vScl, &qRot, &vTrans, &matWorld);
+
+	D3DXMatrixScaling(&matScl, vScl.x, vScl.y, vScl.z);
+
+	//vTrans.x += 10.0f;
+	vTrans.y -= 5.0f;
+	vTrans.z += 10.0f;
+	qRot = qRot * qRotation;
+
+	D3DXMatrixAffineTransformation(&matRot, 1.0f, NULL, &qRot, &vTrans);
+
+	m_tbsobj.m_matWorld = matScl * matRot;// *matTrans;
+
+	return true;
+}
 bool GProjMain::Init()
 {
 	m_tbsobj.Init();	
@@ -12,23 +47,15 @@ bool GProjMain::Init()
 		return false;
 	}
 
-	//m_tObj.Init();
-	//if (!m_tObj.Load(GetDevice(), _T("data/turret.GBS"), L"data/shader/box.hlsl"))
-	//{
-	//	return false;
-	//}
-	//m_tObj.m_matWorld._41 = -30.0f;
-
-
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
-	m_pMainCamera = make_shared<GModelViewCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 100.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pMainCamera = make_shared<GFPSCamera>();
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(10.0f, 10.0f, -10.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 
-	float fAspectRatio = m_iWindowWidth / (FLOAT)m_iWindowHeight;
+	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pMainCamera->SetWindow(m_iWindowWidth, m_iWindowHeight);
+	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 	
 	return true;
 }
@@ -47,8 +74,10 @@ bool GProjMain::Release()
 
 bool GProjMain::Frame()
 {	
-	m_pMainCamera->Update(g_fSecPerFrame);
-	m_matWorld = *m_pMainCamera->GetWorldMatrix();
+	
+	m_pMainCamera->Frame();
+
+	UpdateGunPosition();
 	m_tbsobj.Frame();	
 
 
@@ -62,7 +91,7 @@ HRESULT GProjMain::CreateResource()
 	{
 		float fAspectRatio = m_SwapChainDesc.BufferDesc.Width /
 			(float)m_SwapChainDesc.BufferDesc.Height;
-		m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
+		m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	}
 	return S_OK;
 }
