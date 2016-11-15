@@ -226,6 +226,17 @@ bool GSeqSinglePlay::Init()
 
 #ifdef G_MACRO_MAP_ADD
 	//--------------------------------------------------------------------------------------
+	// 스카이 박스
+	//--------------------------------------------------------------------------------------
+	m_pSkyBoxObj = make_shared<GN2Skybox>();
+	if (m_pSkyBoxObj->Create(g_pd3dDevice, L"data/shader/SkyBox.hlsl") == false)
+	{
+		MessageBox(0, _T("m_pDirectionLIne 실패"), _T("Fatal error"), MB_OK);
+		return 0;
+	}
+	m_pSkyBoxObj->CreateTextureArray(g_pd3dDevice, g_pImmediateContext);
+
+	//--------------------------------------------------------------------------------------
 	// 카메라 프로스텀 랜더링용 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->CreateRenderBox(g_pd3dDevice, g_pImmediateContext);
@@ -234,7 +245,7 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// 커스텀맵 생성
 	//--------------------------------------------------------------------------------------
-	TMapDesc MapDesc = { 50, 50, 50.0f, 0.0f,L"data/sand.jpg", L"CustomizeMap.hlsl" };
+	TMapDesc MapDesc = { 50, 50, 500.0f, 0.0f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
 	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
@@ -357,7 +368,19 @@ bool GSeqSinglePlay::Render()
 
 
 #ifdef G_MACRO_MAP_ADD
+	//--------------------------------------------------------------------------------------
+	// 스카이 박스
+	//--------------------------------------------------------------------------------------
+	DX::ApplyRS(g_pImmediateContext, DX::GDxState::g_pRSNoneCullSolid);
+	DX::ApplyDSS(g_pImmediateContext, DX::GDxState::g_pDSSDepthDisable);
+	DX::ApplyBS(g_pImmediateContext, DX::GDxState::g_pAlphaBlend);
 
+	g_pImmediateContext->PSSetSamplers(0, 1, &DX::GDxState::g_pSSWrapLinear);
+	m_pSkyBoxObj->SetMatrix(0, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_pSkyBoxObj->Render(g_pImmediateContext);
+	//--------------------------------------------------------------------------------------
+	// 커스텀 맵
+	//--------------------------------------------------------------------------------------
 	m_CustomMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(),
 		m_pMainCamera->GetProjMatrix());
 	m_CustomMap.Render(g_pImmediateContext);

@@ -20,6 +20,7 @@
   <ItemGroup>
     <FxCompile Include="Character.hlsl" />
     <FxCompile Include="MatrixViewer.hlsl" />
+    <FxCompile Include="..\..\Output\data\shader\SkyBox.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CharTable.gci" />
@@ -51,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="GSeqSurvivalMode.cpp">
       <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GN2Skybox.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +88,7 @@
     <ClInclude Include="GSeqIntro.h">
       <Filter>GameSequence</Filter>
     </ClInclude>
+    <ClInclude Include="GN2Skybox.h">
     <ClInclude Include="_resources.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
