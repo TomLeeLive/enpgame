@@ -188,6 +188,18 @@ bool GSeqSinglePlay::Init()
 #endif
 
 #ifdef G_MACRO_MAP_ADD
+	
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		D3DXMatrixIdentity(&m_matObjWorld[i]);
+		D3DXMatrixIdentity(&matObjScale[i]);
+		D3DXMatrixIdentity(&matObjRotation[i]);
+		D3DXMatrixIdentity(&matObjTrans[i]);
+	}
+	
+
+
+
+
 	m_iDrawDepth = 0;
 	m_bDebugRender = false;
 
@@ -242,23 +254,20 @@ bool GSeqSinglePlay::Init()
 	m_matObjWorld[G_OBJ_LAB]._43 = 1000.0f;
 
 	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
-	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
-	D3DXMatrixRotationY(&m_matObjWorld[G_OBJ_DROPSHIP], 4.25f);
-	D3DXMatrixRotationY(&matRotation, 4.25f);	
-	m_matObjWorld[G_OBJ_DROPSHIP] * matRotation;
+	D3DXMatrixScaling(&matObjScale[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
+	D3DXMatrixRotationY(&matObjRotation[G_OBJ_DROPSHIP], D3DXToRadian(45.0f+180.0f));
+	m_matObjWorld[G_OBJ_DROPSHIP] = matObjScale[G_OBJ_DROPSHIP] * matObjRotation[G_OBJ_DROPSHIP];
 	m_matObjWorld[G_OBJ_DROPSHIP]._41 = -1000.0f;
 	m_matObjWorld[G_OBJ_DROPSHIP]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_DROPSHIP]._43 = -1000.0f;
 
-	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
-		_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR], 0.3, 0.3, 0.3);
 	m_matObjWorld[G_OBJ_CAR]._41 = 500.0f;
 	m_matObjWorld[G_OBJ_CAR]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_CAR]._43 = -700.0f;
 
-	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice,
-		_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR1], 0.3, 0.3, 0.3);
 	m_matObjWorld[G_OBJ_CAR1]._41 = -900.0f;
 	m_matObjWorld[G_OBJ_CAR1]._42 = 0.0f;
