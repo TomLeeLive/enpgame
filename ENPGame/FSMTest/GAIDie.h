@@ -1,13 +1,13 @@
 #pragma once
 
-class GAIRun : public GSeq
+class GAIDie : public GSeq
 {
 private:
-	static GAIRun *pInstance_;
+	static GAIDie *pInstance_;
 public:
 	static GSeq* CreateInstance()
 	{
-		if (pInstance_ == 0) pInstance_ = new GAIRun;
+		if (pInstance_ == 0) pInstance_ = new GAIDie;
 		return pInstance_;
 	}
 	shared_ptr<GCamera > m_pMainCamera;
@@ -26,9 +26,9 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	virtual ~GAIRun();
+	virtual ~GAIDie();
 protected:
-	GAIRun();
+	GAIDie();
 };
 
 

@@ -8,11 +8,8 @@ bool GAIIdle::Init()
 }
 bool GAIIdle::Frame()
 {
-
 	TimeCount += g_fSecPerFrame;
-
-	if (TimeCount >5.0f)
-		
+	if (TimeCount > 7.0f)
 		g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
 	return true;
 }

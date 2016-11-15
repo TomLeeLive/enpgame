@@ -27,10 +27,10 @@
     <ClCompile Include="GAIMove.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GAIRun.cpp">
+    <ClCompile Include="GAIAttack.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GAIAttack.cpp">
+    <ClCompile Include="GAIDie.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,10 +50,10 @@
     <ClInclude Include="_stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GAIRun.h">
+    <ClInclude Include="GAIAttack.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GAIAttack.h">
+    <ClInclude Include="GAIDie.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

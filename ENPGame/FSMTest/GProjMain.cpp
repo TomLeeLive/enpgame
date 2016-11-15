@@ -55,16 +55,24 @@ bool GProjMain::Frame()
 		Logic._41 = g_pMain->m_matWorld._41;
 	}
 
+
+	if (m_bDead == true)
+	{
+		//m_pCurrentSeq = m_GameSeq[G_AI_DIE];
+	}
+	
+	if (Logic._41 = m_Result._41)
+	{
+		//m_pCurrentSeq = m_GameSeq[G_AI_IDLE];
+	}
+
+
 	m_pMainCamera->Frame();
 
 	m_pCurrentSeq->Frame();
 
 	m_Result = m_Rotation * m_matWorld1;
 
-	if (Logic._41 = m_Result._41)
-	{
-		//m_pCurrentSeq = m_GameSeq[G_AI_IDLE];
-	}
 	
 	return true;
 }
@@ -104,6 +112,7 @@ GProjMain::GProjMain(void)
 	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
 	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
 	m_GameSeq[G_AI_ATTACK] = GAIAttack::CreateInstance();
+	m_GameSeq[G_AI_DIE] = GAIDie::CreateInstance();
 	m_pCurrentSeq = m_GameSeq[G_AI_MOVE];
 }
 

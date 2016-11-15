@@ -6,7 +6,7 @@
 #include "GSeq.h"
 #include "GAIIdle.h"
 #include "GAIMove.h"
-#include "GAIRun.h"
+#include "GAIDie.h"
 #include "GAIAttack.h"
 
 
