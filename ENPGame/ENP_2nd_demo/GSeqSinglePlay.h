@@ -3,7 +3,8 @@
 enum G_OBJECT {
 	G_OBJ_LAB = 0,
 	G_OBJ_DROPSHIP,
-	//G_OBJ_CAR,
+	G_OBJ_CAR,
+	G_OBJ_CAR1,	
 	G_OBJ_CNT
 };
 
