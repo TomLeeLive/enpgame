@@ -155,17 +155,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GAIAttack.cpp" />
+    <ClCompile Include="GAIDie.cpp" />
     <ClCompile Include="GAIIdle.cpp" />
     <ClCompile Include="GAIMove.cpp" />
-    <ClCompile Include="GAIRun.cpp" />
     <ClCompile Include="GProjMain.cpp" />
     <ClCompile Include="GSeq.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GAIAttack.h" />
+    <ClInclude Include="GAIDie.h" />
     <ClInclude Include="GAIIdle.h" />
     <ClInclude Include="GAIMove.h" />
-    <ClInclude Include="GAIRun.h" />
     <ClInclude Include="GProjMain.h" />
     <ClInclude Include="GSeq.h" />
     <ClInclude Include="_stdafx.h" />

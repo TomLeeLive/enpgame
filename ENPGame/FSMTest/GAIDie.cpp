@@ -1,47 +1,48 @@
 #include "_stdafx.h"
 
-GAIRun * GAIRun::pInstance_ = 0;
+GAIDie * GAIDie::pInstance_ = 0;
 
-bool GAIRun::Init()
+bool GAIDie::Init()
 {
 	return true;
 }
-bool GAIRun::Frame()
+bool GAIDie::Frame()
 {
+  // die 애니메이션 연출
 	
 	return true;
 }
-bool GAIRun::Render()
+bool GAIDie::Render()
 {
 
 	return true;
 }
-bool GAIRun::Release()
+bool GAIDie::Release()
 {
 	return true;
 }
-HRESULT GAIRun::CreateResource()
+HRESULT GAIDie::CreateResource()
 {
 	HRESULT hr;
 
 	return S_OK;
 }
-HRESULT GAIRun::DeleteResource()
+HRESULT GAIDie::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();
 	return S_OK;
 }
-GAIRun::GAIRun()
+GAIDie::GAIDie()
 {
 	pInstance_ = 0;
 }
 
 
-GAIRun::~GAIRun()
+GAIDie::~GAIDie()
 {
 }
-int GAIRun::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int GAIDie::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (m_pMainCamera != nullptr)
 	{
