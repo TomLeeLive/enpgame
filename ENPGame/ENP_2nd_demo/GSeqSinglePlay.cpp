@@ -45,12 +45,12 @@ bool GSeqSinglePlay::Load()
 	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 
 
-	shared_ptr<GHeroObj> pObjA = make_shared<GHeroObj>();
+	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
 	pObjA->Set(pChar0,
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjA);
+	m_CharZombie.push_back(pObjA);
 	return true;
 }
 #endif 
@@ -138,15 +138,28 @@ bool GSeqSinglePlay::Init()
 
 
 	m_pFPSCamera = make_shared<GFPSCamera>();
-	m_pFPSCamera->SetViewMatrix(D3DXVECTOR3(10.0f, 2500.0f, -2500.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
+	m_pFPSCamera->SetViewMatrix(D3DXVECTOR3(120.0f, 60.0f, -1400.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 
 	fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pFPSCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	m_pFPSCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 
+	if (!m_bDebugCamera) {
+		m_pCamera = m_pFPSCamera.get();
+		g_pMain->m_bDebugInfoPrint = false;
+		g_pMain->m_bDebugFpsPrint = false;
+	}
+		
+	else {
+		m_pCamera = m_pDebugCamera.get();
+		g_pMain->m_bDebugInfoPrint = true;
+		g_pMain->m_bDebugFpsPrint = true;
+	}
+		
 
-	m_pCamera = m_pDebugCamera.get();
+
+
 #ifdef G_MACRO_MAP_ADD
 	//--------------------------------------------------------------------------------------
 	// 스카이 박스
@@ -330,13 +343,13 @@ bool GSeqSinglePlay::Render()
 
 	D3DXMATRIX matCharWld;
 	matCharWld = m_matWorld;
-	matCharWld._42 = 20.0f;
+	matCharWld._42 = 40.0f;
 
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-		m_HeroObj[iChar]->Render(g_pImmediateContext);
+		m_CharZombie[iChar]->SetMatrix(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_CharZombie[iChar]->Render(g_pImmediateContext);
 	}
 #endif
 
@@ -438,14 +451,14 @@ bool GSeqSinglePlay::Frame()
 
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;
-	//m_pMainCamera->Update(g_fSecPerFrame);
-
 
 	m_pCamera->Frame();
 
+	//총 발사 애니메이션 처리
 	if (g_InputData.bLeftClick) {
 		m_ObjGun.ResetAni();
 	}
+	//총 위치 업데이트
 	UpdateGunPosition();
 	m_ObjGun.Frame();
 
@@ -510,8 +523,9 @@ bool GSeqSinglePlay::Frame()
 
 
 
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
+		/*
 		if (I_Input.KeyCheck(DIK_ADD))
 		{
 			m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
@@ -521,26 +535,86 @@ bool GSeqSinglePlay::Frame()
 			m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
 			if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
 		}
-		m_HeroObj[iChar]->Frame();
+		*/
+		m_CharZombie[iChar]->Frame();
 	}
-	if (I_Input.KeyCheck(DIK_F10) == KEY_UP && m_HeroObj.size() > 1)
+
+
+	enum G_ZOMBIE_STATE {
+		G_ZOMB_IDLE = 0,
+		G_ZOMB_ATTACK,
+		G_ZOMB_WALK,
+		G_ZOMB_DIE,
+		G_ZOMB_CNT
+	};
+	static int iChange = 0;
+
+
+
+	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
-		m_HeroObj[1]->SetActionFrame(120, 205);//jump		
-	}
-	if (I_Input.KeyCheck(DIK_F11) == KEY_UP&& m_HeroObj.size() > 1)
-	{
-		m_HeroObj[1]->SetActionFrame(205, 289);//attack		
+		if (iChange != G_ZOMB_DIE) {
+			iChange++;
+		}
+		else {
+			iChange = 0;
+		}
+
+		switch (iChange) {
+		case G_ZOMB_DIE:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
+
+			m_CharZombie[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		case G_ZOMB_ATTACK:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
+
+			m_CharZombie[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		case G_ZOMB_WALK:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+
+			m_CharZombie[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		case G_ZOMB_IDLE:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+
+			m_CharZombie[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		}
+
+
 	}
 
 	if (I_Input.KeyCheck(DIK_F12) == KEY_UP)
 	{
-		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 		{
-			m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
+			m_CharZombie[iChar]->m_bBoneRender = !m_CharZombie[iChar]->m_bBoneRender;
 		}
 	}
 
-	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
+	if (I_Input.KeyCheck(DIK_F9) == KEY_UP)
 	{
 		Load();
 	}
@@ -575,7 +649,7 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
-	m_bDebugCamera = true;
+	m_bDebugCamera = false;
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD
 	m_pSprite = nullptr;

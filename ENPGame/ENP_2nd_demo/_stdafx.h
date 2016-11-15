@@ -37,7 +37,8 @@
 #include "GObject.h"
 #include "GCharacter.h"
 #include "GCharMgr.h"
-#include "GHeroObj.h"
+//#include "GHeroObj.h"
+#include "GZombie.h"
 #endif
 
 //¸Ê
