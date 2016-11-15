@@ -1,3 +1,4 @@
+//#define Mars 1
 #include "GN2Skybox.h"
 
 DXGI_FORMAT MAKE_TYPELESS(DXGI_FORMAT format)
@@ -175,15 +176,9 @@ HRESULT GN2Skybox::CreateTextureArray(ID3D11Device* pDevice, ID3D11DeviceContext
 {
 	HRESULT hr = S_OK;
 
+#ifdef Mars
 	TCHAR* g_szSkyTextures[] =
 	{
-		//L"data\\cube\\st00_cm_front.bmp",
-		//L"data\\cube\\st00_cm_back.bmp",
-		//L"data\\cube\\st00_cm_right.bmp",
-		//L"data\\cube\\st00_cm_left.bmp",
-		//L"data\\cube\\st00_cm_up.bmp",
-		//L"data\\cube\\st00_cm_down.bmp"
-		
 		L"data\\cube\\Mars_front.png",
 		L"data\\cube\\Mars_back.png",
 		L"data\\cube\\Mars_right.png",
@@ -191,6 +186,19 @@ HRESULT GN2Skybox::CreateTextureArray(ID3D11Device* pDevice, ID3D11DeviceContext
 		L"data\\cube\\Mars_up.png",
 		L"data\\cube\\Mars_down.png"
 	};
+#else
+	TCHAR* g_szSkyTextures[] =
+	{
+		L"data\\cube\\st00_cm_front.bmp",
+		L"data\\cube\\st00_cm_back.bmp",
+		L"data\\cube\\st00_cm_right.bmp",
+		L"data\\cube\\st00_cm_left.bmp",
+		L"data\\cube\\st00_cm_up.bmp",
+		L"data\\cube\\st00_cm_down.bmp"
+	};
+#endif
+
+
 	int iNumTexture = sizeof(g_szSkyTextures) / sizeof(g_szSkyTextures[0]);
 	//--------------------------------------------------------------------------------------
 	// 서브리소스를 사용하는 방법
