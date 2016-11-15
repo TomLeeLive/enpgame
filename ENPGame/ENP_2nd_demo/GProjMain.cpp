@@ -4,6 +4,14 @@ GProjMain* g_pMain;
 
 bool GProjMain::Init()
 {
+	//마우스커서 가두기
+	RECT Clip;
+	GetClientRect(g_hWnd, &Clip);
+	ClientToScreen(g_hWnd, (LPPOINT)&Clip);
+	ClientToScreen(g_hWnd, (LPPOINT)(&Clip.right));
+	ClipCursor(&Clip);
+
+
 	for (int i = 0; i < G_SEQ_CNT; i++)
 		m_pGameSeq[i]->Init();
 	
@@ -17,6 +25,7 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
+
 	for (int i = 0; i < G_SEQ_CNT; i++)
 		m_pGameSeq[i]->Release();
 
@@ -36,6 +45,15 @@ HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
 	m_pCurrentSeq->CreateResource();
+
+
+	//마우스커서 가두기
+	RECT Clip;
+	GetClientRect(g_hWnd, &Clip);
+	ClientToScreen(g_hWnd, (LPPOINT)&Clip);
+	ClientToScreen(g_hWnd, (LPPOINT)(&Clip.right));
+	ClipCursor(&Clip);
+
 	return S_OK;
 }
 //--------------------------------------------------------------------------------------

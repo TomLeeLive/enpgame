@@ -182,11 +182,11 @@ D3DXMATRIX GFPSCamera::Update( D3DXVECTOR4 vDirValue )
 }
 bool GFPSCamera::Frame()
 {
-	if( g_InputData.bRightHold )
-	{
+	//if( g_InputData.bRightHold )
+	//{
 		m_fCameraYawAngle	+=	D3DXToRadian(g_InputData.iMouseValue[0] *0.1f);
 		m_fCameraPitchAngle	+=  D3DXToRadian(g_InputData.iMouseValue[1] *0.1f);
-	}		
+	//}		
 	// 카메라 이동 거리 = 속도 + ( 경과시간 * 마우스 휠 변위값 )
 	float fValue = g_InputData.iMouseValue[2];
 	float fDistance =  m_fSpeed * fValue * g_fSecPerFrame;

@@ -415,8 +415,9 @@ bool GSeqSinglePlay::Frame()
 
 	if (!m_bDebugCamera)
 		ShowCursor(false); // 커서를 화면에서 감추기
-	else
+	else {
 		ShowCursor(true);
+	}
 
 
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
@@ -424,10 +425,14 @@ bool GSeqSinglePlay::Frame()
 		if(m_bDebugCamera){
 			m_bDebugCamera = false;
 			m_pCamera = m_pFPSCamera.get();
+			g_pMain->m_bDebugInfoPrint = false;
+			g_pMain->m_bDebugFpsPrint = false;
 		}
 		else {
 			m_bDebugCamera = true;
 			m_pCamera = m_pDebugCamera.get();
+			g_pMain->m_bDebugInfoPrint = true;
+			g_pMain->m_bDebugFpsPrint = true;
 		}
 	}
 

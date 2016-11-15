@@ -9,73 +9,11 @@
 
 class GFPSCamera : public GCamera
 {
-public:	
-	GArcBall			m_WorldArcBall;
-    GArcBall			m_ViewArcBall;
-	//--------------------------------------------------------------------------------------
-	// 멤버 변수
-	//--------------------------------------------------------------------------------------
-	D3DXVECTOR3			m_vModelCenter;
-    D3DXMATRIX			m_mModelLastRot;        // Last arcball rotation matrix for model 
-    D3DXMATRIX			m_mModelRot;            // Rotation matrix of model
-  	D3DXMATRIX			m_mCameraRotLast;
-
-	// 이동 속도
-	float				m_fSpeed;
-public:
-	//--------------------------------------------------------------------------------------
-	// 뷰 회전에 대한 쿼터니언
-	//--------------------------------------------------------------------------------------
-	D3DXQUATERNION		m_qRotation;
-	//--------------------------------------------------------------------------------------
-	// 각 축에 대한 변위값 w=반지름( 원점으로부터의 거리 )
-	//--------------------------------------------------------------------------------------
-	D3DXVECTOR3			m_vPosDelta;
-           
-	//--------------------------------------------------------------------------------------
-	// 뷰 행렬 및 투영 행렬
-	//--------------------------------------------------------------------------------------
-	D3DXMATRIX			m_matWorld;
-	D3DXMATRIX			m_matView;	
-	D3DXMATRIX			m_matProj;
-	//--------------------------------------------------------------------------------------
-	// 카메라 방향벡터 및 위치 / 타켓 벡터	
-	//--------------------------------------------------------------------------------------
-	D3DXVECTOR3			m_vRightVector;
-	D3DXVECTOR3			m_vLookVector;
-	D3DXVECTOR3			m_vUpVector; 
-	D3DXVECTOR3			m_vCameraPos;
-	D3DXVECTOR3			m_vTargetPos;	
-	D3DXVECTOR3			m_vDefaultEye;          // Default camera eye position
-	D3DXVECTOR3			m_vDefaultLookAt;       // Default LookAt position
-	//--------------------------------------------------------------------------------------
-	// 투영 행렬의 속성값수
-	//--------------------------------------------------------------------------------------	
-	float				m_fFOV;                 // Field of view
-    float				m_fAspect;              // Aspect ratio
-    float				m_fNearPlane;           // Near plane
-    float				m_fFarPlane;            // Far plane
-	// 추가 : 오일러 각 성분 	
-	float				m_fCameraYawAngle;
-	float				m_fCameraPitchAngle;
-	float				m_fCameraRollAngle;
-    // 추가 : 반지름( 초기 원점으로부터의 거리) 에 대한 변수 	
-	float				m_fRadius;   
-    float				m_fDefaultRadius;       // Distance from the camera to model 
-    float				m_fMinRadius;           // Min radius
-    float				m_fMaxRadius;           // Max radius
-	//--------------------------------------------------------------------------------------
-	// 마우스 및 버튼의 사용여부를 판단하는 마스크 값과 마우스 휠 변위값
-	//--------------------------------------------------------------------------------------	
-	int					m_nMouseWheelDelta;     // Amount of middle wheel scroll (+/-) 
-	int					m_nRotateModelButtonMask;
-	int					m_nZoomButtonMask;
-	int					m_nRotateCameraButtonMask;
 public :
 	//--------------------------------------------------------------------------------------
 	// 타켓 위치로 부터 거리(반지름)을 지정한다.
 	//--------------------------------------------------------------------------------------
-	void						SetRadius( float fDefaultRadius=5.0f, float fMinRadius=1.0f, float fMaxRadius=FLT_MAX  );
+	virtual void				SetRadius( float fDefaultRadius=5.0f, float fMinRadius=1.0f, float fMaxRadius=FLT_MAX  );
 public:			
 	//--------------------------------------------------------------------------------------
 	// 추가 : 뷰 방향벡터 저장 
@@ -124,32 +62,32 @@ public:
 	//--------------------------------------------------------------------------------------
 	// 모델 회전 중심위치를 지정한다.
 	//--------------------------------------------------------------------------------------
-    void						SetModelCenter( D3DXVECTOR3 vModelCenter );
+	virtual void				SetModelCenter( D3DXVECTOR3 vModelCenter );
 
-	void						SetTargetPos( D3DXVECTOR3 vPos ) { m_vTargetPos = vPos; };
+	virtual void				SetTargetPos( D3DXVECTOR3 vPos ) { m_vTargetPos = vPos; };
 
 public:
 	//--------------------------------------------------------------------------------------
 	// 멤버함수
 	//--------------------------------------------------------------------------------------
-	D3DXMATRIX*			GetWorldMatrix() 	{ return &m_matWorld; };
-	D3DXMATRIX*			GetViewMatrix() 	{ return &m_matView; }
-	D3DXMATRIX*			GetProjMatrix() 	{ return &m_matProj; }
+	virtual D3DXMATRIX*		GetWorldMatrix() 	{ return &m_matWorld; };
+	virtual D3DXMATRIX*		GetViewMatrix() 	{ return &m_matView; }
+	virtual D3DXMATRIX*		GetProjMatrix() 	{ return &m_matProj; }
 	
-	D3DXVECTOR3*		GetEyePt() 			{ return &m_vCameraPos; }
-	D3DXVECTOR3*		GetLookAtPt() 		{ return &m_vTargetPos; }
-	float				GetNearClip() 		{ return m_fNearPlane; }
-	float				GetFarClip() 		{ return m_fFarPlane; }
+	virtual D3DXVECTOR3*	GetEyePt() 			{ return &m_vCameraPos; }
+	virtual D3DXVECTOR3*	GetLookAtPt() 		{ return &m_vTargetPos; }
+	virtual float			GetNearClip() 		{ return m_fNearPlane; }
+	virtual float			GetFarClip() 		{ return m_fFarPlane; }
 	
-	float				GetYawAngle() 		{ return m_fCameraYawAngle; }
-	float				GetPitchAngle() 	{ return m_fCameraPitchAngle; }
-	float				GetRollAngle() 		{ return m_fCameraRollAngle; }
+	virtual float			GetYawAngle() 		{ return m_fCameraYawAngle; }
+	virtual float			GetPitchAngle() 	{ return m_fCameraPitchAngle; }
+	virtual float			GetRollAngle() 		{ return m_fCameraRollAngle; }
 	
-	D3DXVECTOR3*		GetRightVector() 	{ return &m_vRightVector; }
-	D3DXVECTOR3*		GetLookVector() 	{ return &m_vLookVector; }
-	D3DXVECTOR3*		GetUpVector() 		{ return &m_vUpVector; }
+	virtual D3DXVECTOR3*	GetRightVector() 	{ return &m_vRightVector; }
+	virtual D3DXVECTOR3*	GetLookVector() 	{ return &m_vLookVector; }
+	virtual D3DXVECTOR3*	GetUpVector() 		{ return &m_vUpVector; }
 
-	float				GetRadius() 		{ return m_fRadius; }
+	virtual float			GetRadius() 		{ return m_fRadius; }
 public:
 	GFPSCamera(void);
 	virtual ~GFPSCamera(void);
