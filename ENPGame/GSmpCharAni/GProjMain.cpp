@@ -21,43 +21,7 @@ bool GProjMain::Load()
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjA);
-	/*
-	shared_ptr<GHeroObj> pObjB = make_shared<GHeroObj>();
-	pObjB->Set(pChar1,
-	pChar1->m_pBoneObject,
-	pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-	60);
-	m_HeroObj.push_back(pObjB);
 
-
-	shared_ptr<GHeroObj> pObjC = make_shared<GHeroObj>();
-	pObjC->Set(pChar1,
-	pChar1->m_pBoneObject,
-	61,
-	90);
-	m_HeroObj.push_back(pObjC);
-
-	shared_ptr<GHeroObj> pObjD = make_shared<GHeroObj>();
-	pObjD->Set(pChar1,
-	pChar1->m_pBoneObject,
-	62,
-	116);
-	m_HeroObj.push_back(pObjD);
-
-
-	shared_ptr<GHeroObj> pObjE = make_shared<GHeroObj>();
-	pObjE->Set(	pChar2,
-	pChar2->m_pBoneObject,
-	pChar2->m_pBoneObject->m_Scene.iFirstFrame,
-	pChar2->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjE);
-
-	shared_ptr<GHeroObj> pObjF = make_shared<GHeroObj>();
-	pObjF->Set( pChar3,
-	pChar3->m_pBoneObject,
-	pChar3->m_pBoneObject->m_Scene.iFirstFrame,
-	pChar3->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjF);*/
 	return true;
 }
 
@@ -124,25 +88,9 @@ bool GProjMain::Frame()
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		if (I_Input.KeyCheck(DIK_ADD))
-		{
-			m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;			
-		}
-		if (I_Input.KeyCheck(DIK_SUBTRACT))
-		{
-			m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
-			if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
-		}
 		m_HeroObj[iChar]->Frame();
 	}
-	if(I_Input.KeyCheck( DIK_F3 ) == KEY_UP && m_HeroObj.size() > 1)
-	{
-		m_HeroObj[1]->SetActionFrame( 120, 205 );//jump		
-	}
-	if(I_Input.KeyCheck(DIK_F4) == KEY_UP&& m_HeroObj.size() > 1)
-	{
-		m_HeroObj[1]->SetActionFrame( 205, 289 );//attack		
-	}
+
 
 	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
 	{
@@ -152,10 +100,6 @@ bool GProjMain::Frame()
 		}
 	}
 
-	//if (I_Input.KeyCheck(DIK_O) == KEY_UP)
-	//{
-	//	Load();
-	//}
 
 	enum G_ZOMBIE_STATE {
 		G_ZOMB_IDLE = 0,
@@ -176,6 +120,7 @@ bool GProjMain::Frame()
 		else {
 			iChange = 0;
 		}
+
 		switch (iChange) {
 		case G_ZOMB_DIE:
 		{
@@ -217,19 +162,6 @@ bool GProjMain::Frame()
 				pChar0->m_pBoneObject->m_Scene.iLastFrame);
 		}
 		break;
-		//case G_ZOMB_CNT:
-		//{
-
-		//	GCharacter* pChar0 = I_CharMgr.GetPtr(L"G_ZOMB_DIE");
-
-		//	m_HeroObj[0]->Set(pChar0,
-		//		pChar0->m_pBoneObject,
-		//		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		//		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-
-		//	iChange = 0;
-		//}
-		//break;
 		}
 
 

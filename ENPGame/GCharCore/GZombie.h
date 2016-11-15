@@ -11,6 +11,9 @@ struct CBConstBoneWorld
 class GZombie : public GModel
 {
 public:
+	bool			m_bDead;
+	D3DXVECTOR3		m_vLook;
+public:
 	int				m_iObjectIndex;
 	GCharacter*		m_pChar;
 	T_STR			m_szName;
