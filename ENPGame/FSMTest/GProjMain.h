@@ -4,6 +4,7 @@ enum G_AI {
 	G_AI_IDLE = 0,
 	G_AI_MOVE = 1,
 	G_AI_ATTACK =2,
+	G_AI_DIE =3,
 	G_AI_CNT
 };
 class GProjMain : public GCoreLibV2
@@ -18,7 +19,7 @@ public:
 
 	GShape*		m_Box;
 	GShape*		m_Box1;
-
+	bool m_bDead = true;
 
 
 public:

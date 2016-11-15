@@ -164,6 +164,7 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClInclude Include="GObject.h" />
     <ClInclude Include="GObjMgr.h" />
     <ClInclude Include="GSkinObj.h" />
+    <ClInclude Include="GZombie.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GAnimation.cpp" />
@@ -178,6 +179,7 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClCompile Include="GObject.cpp" />
     <ClCompile Include="GObjMgr.cpp" />
     <ClCompile Include="GSkinObj.cpp" />
+    <ClCompile Include="GZombie.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

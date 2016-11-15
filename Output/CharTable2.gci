@@ -2,6 +2,7 @@
 #CHAR_NAME		TESTCHAR6
 #SHADER_FILE		Character.hlsl
 #MATRIX_FILE		data/character/arctic/arctic2.gmt  
+#ACTION_LOOP		1  
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/arctic/arctic2.gsk null 

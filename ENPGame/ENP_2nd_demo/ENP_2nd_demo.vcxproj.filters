@@ -89,6 +89,7 @@
       <Filter>GameSequence</Filter>
     </ClInclude>
     <ClInclude Include="GN2Skybox.h">
+    <ClInclude Include="_resources.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,8 @@
 #NUM_OF_CHARACTER		1
 #CHAR_NAME		TESTCHAR6
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/shephard11.gmt 
+#MATRIX_FILE		data/character/shephard11.gmt
+#ACTION_LOOP		1   
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/shephard11.gsk null 

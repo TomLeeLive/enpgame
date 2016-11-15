@@ -4,7 +4,8 @@
 class GCharacter : public GObject
 {
 public:
-	T_STR	m_szName;
+	bool			m_iAniLoop;
+	T_STR			m_szName;
 	GBoneObj*		m_pBoneObject;
 	int				m_iStartFrame;
 	int				m_iLastFrame;
@@ -25,7 +26,8 @@ public:
 						const TCHAR* strSkinFileName, 
 						const TCHAR* strSkinShaderName,	
 						int		iMatrixIndex	= -1,
-						int		iModelMatrixIndex = -1 );
+						int		iModelMatrixIndex = -1,
+						int		iAniLoop = 1);
 	// 모델 리스트들에 매트릭스 인덱스 세싱
 	void		SeGModelMaterixID(int iMatrixIndex);
 	void		SetMatrix( D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj );

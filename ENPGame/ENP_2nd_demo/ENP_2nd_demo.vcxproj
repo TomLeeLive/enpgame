@@ -133,6 +133,7 @@
     <ClInclude Include="GSeqSinglePlay.h" />
     <ClInclude Include="GSeqSurvivalMode.h" />
     <ClInclude Include="GN2Skybox.h" />
+    <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -33,7 +33,8 @@ bool GCharacter::Add(	ID3D11Device* pd3dDevice,
 						const TCHAR* strSkinFileName, 
 						const TCHAR* strSkinShaderName, 		
 						int	iMatrixIndex,
-						int iModelMatrixIndex)
+						int iModelMatrixIndex,
+						int iAniLoop)
 {
 	if( !_tcsicmp(strSkinFileName, _T("null")) )
 	{
@@ -50,6 +51,7 @@ bool GCharacter::Add(	ID3D11Device* pd3dDevice,
 	SetActionFrame( m_pBoneObject->m_Scene.iFirstFrame, 
 					m_pBoneObject->m_Scene.iLastFrame,
 					iMatrixIndex,iModelMatrixIndex);
+	m_iAniLoop = iAniLoop;
 	return true;		
 }
 bool GCharacter::Init()
@@ -85,6 +87,7 @@ bool GCharacter::Frame()
 	m_iCurrentFrame = (int)m_fFrame;
 	// 1프레임 사이 간격
 	m_fLerpTime = m_fFrame - m_iCurrentFrame;
+
 	if( m_pBoneObject->AniFrame(	m_iCurrentFrame,
 										m_fLerpTime,
 										m_iStartFrame,
@@ -101,6 +104,7 @@ bool GCharacter::Frame()
 
 GCharacter::GCharacter(void)
 {
+	m_iAniLoop = 1;
 	m_iMatrixIndex = -1;
 }
 
