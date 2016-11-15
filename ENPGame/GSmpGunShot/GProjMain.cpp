@@ -2,22 +2,26 @@
 
 GProjMain* g_pMain;
 
+//#define G_TEST
 bool GProjMain::UpdateGunPosition() {
 
-	D3DXMATRIX matWorld, matScl, matRot;
+	D3DXMATRIX matWorld, matScl, matRot, matTrans, matViewInv;
 
 	D3DXVECTOR3 vScl, vTrans;
 	D3DXQUATERNION qRot;
 
+	D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixIdentity(&matViewInv);
+#ifdef G_TEST
 	D3DXQUATERNION  qRotation; //쿼터니온 생성
 	D3DXQuaternionRotationYawPitchRoll(&qRotation,  // 이과정에서 X축과 Y축의 회전을 사용
 		(float)D3DXToRadian(180.0f),    // 하여 사원수를 만듦
 		0.0f,
 		0.0f);
 
-	D3DXMatrixIdentity(&matWorld);
-	D3DXMatrixIdentity(&matScl);
-	D3DXMatrixIdentity(&matRot);
 
 	if (!m_pMainCamera)
 		return false;
@@ -30,16 +34,35 @@ bool GProjMain::UpdateGunPosition() {
 	//vTrans.x += 10.0f;
 	vTrans.y -= 5.0f;
 	vTrans.z += 10.0f;
-	qRot = qRot * qRotation;
+	//qRot = qRot * qRotation;
 
 	D3DXMatrixAffineTransformation(&matRot, 1.0f, NULL, &qRot, &vTrans);
 
 	m_tbsobj.m_matWorld = matScl * matRot;// *matTrans;
+#else
+	
+
+
+
+	if (!m_pMainCamera)
+		return false;
+
+	D3DXMatrixInverse(&matViewInv, NULL, m_pMainCamera->GetViewMatrix());
+	
+
+	D3DXMatrixTranslation(&matTrans, 5.0f, -5.0f, 10.0f);
+
+	D3DXMatrixRotationY(&matRot, D3DXToRadian(180.0f));
+
+	m_tbsobj.m_matWorld = matScl * matRot * matTrans * matViewInv;// *matTrans;
+#endif
 
 	return true;
 }
 bool GProjMain::Init()
 {
+
+
 	m_tbsobj.Init();	
 
 	m_tbsobj.m_bAniLoop = false;
@@ -76,7 +99,9 @@ bool GProjMain::Release()
 
 bool GProjMain::Frame()
 {	
-	
+	//ShowCursor(true); // 커서를 화면에 출력
+	//ShowCursor(false); // 커서를 화면에서 감추기
+
 	m_pMainCamera->Frame();
 
 	if (g_InputData.bLeftClick) {
