@@ -1,5 +1,4 @@
 #include "_stdafx.h"
-#include "GObjMgr.h"
 GProjMain* g_pMain;
 
 

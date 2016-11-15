@@ -19,7 +19,7 @@ enum G_ZOMBIE_STATE {
 class GProjMain : public GCoreLibV2
 {
 public:
-	static int iChange;
+	int iChange;
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
 	D3DXMATRIX  m_matWorld1;
