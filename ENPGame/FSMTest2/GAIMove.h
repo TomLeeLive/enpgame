@@ -19,6 +19,7 @@ public:
 	HRESULT		DeleteResource();
 	D3DXVECTOR3 RandomPoint;
 	D3DXVECTOR3 RandomDestination;
+	
 
 	GTimer * TIme;
 	float fTime = 15.0f;

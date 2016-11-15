@@ -24,6 +24,9 @@ bool GProjMain::Load()
 
 bool GProjMain::Init()
 {
+	I_CharMgr.Init();
+	Load();
+
 	m_fSecondPerFrmae = g_fSecPerFrame;
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
@@ -32,49 +35,51 @@ bool GProjMain::Init()
 
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 100000.0f);
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 20.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 200.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 	SAFE_NEW(m_Box, GBoxShape);
 	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/flagstone.bmp");
 	D3DXMatrixIdentity(&m_matWorld);
-	m_matWorld._41 = 10.0f;
-	m_matWorld._43 = 10.0f;
 
 	SAFE_NEW(m_Box1, GBoxShape);
 	m_Box1->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/cncr21S.bmp");
 	D3DXMatrixIdentity(&m_matWorld1);
+	D3DXMatrixScaling(&m_matWorld, 10.0f, 10.0f, 10.0f);
 	m_pCurrentSeq->Init();
 
-	I_CharMgr.Init();
 	
+	m_matZombieWorld = *m_pMainCamera->GetWorldMatrix();
+	m_matZombieWorld._41 = 50.0f;
+	m_matZombieWorld._42 = 0.0f;
+	m_matZombieWorld._43 = 50.0f;
 	return true;
 }
 bool GProjMain::Frame()
 {
-	
+
 	D3DXMATRIX Logic;
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._43 += 10.0f * g_fSecPerFrame;
+		g_pMain->m_matWorld._43 += 20.0f * g_fSecPerFrame;
 		Logic._43 = g_pMain->m_matWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._43 -= 10.0f * g_fSecPerFrame;
+		g_pMain->m_matWorld._43 -= 20.0f * g_fSecPerFrame;
 		Logic._43 = g_pMain->m_matWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._41 -= 10.0f * g_fSecPerFrame;
+		g_pMain->m_matWorld._41 -= 20.0f * g_fSecPerFrame;
 		Logic._41 = g_pMain->m_matWorld._41;
 	}
 
 	if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._41 += 10.0f * g_fSecPerFrame;
+		g_pMain->m_matWorld._41 += 20.0f * g_fSecPerFrame;
 		Logic._41 = g_pMain->m_matWorld._41;
 	}
 
@@ -90,6 +95,7 @@ bool GProjMain::Frame()
 	//		m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
 	//	}
 	//}
+	
 
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
@@ -121,26 +127,6 @@ bool GProjMain::Frame()
 				pChar0->m_pBoneObject->m_Scene.iLastFrame);
 		}
 		break;
-		case G_ZOMB_WALK:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-
-			m_HeroObj[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_IDLE:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
-
-			m_HeroObj[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
 		}
 
 
@@ -157,15 +143,15 @@ bool GProjMain::Frame()
 bool GProjMain::Render()
 {
 	m_Box->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-	m_Box1->SetMatrix(&m_Result, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	//m_Box1->SetMatrix(&m_Result, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 
 	m_Box->Render(m_pImmediateContext);
-	m_Box1->Render(m_pImmediateContext);
+	//m_Box1->Render(m_pImmediateContext);
 	
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->SetMatrix(&m_matZombieWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
 

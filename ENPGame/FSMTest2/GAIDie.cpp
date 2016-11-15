@@ -4,6 +4,7 @@ GAIDie * GAIDie::pInstance_ = 0;
 
 bool GAIDie::Init()
 {
+
 	return true;
 }
 bool GAIDie::Frame()
