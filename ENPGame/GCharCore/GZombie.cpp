@@ -89,13 +89,26 @@ bool	GZombie::Set(GCharacter* pChar, GBoneObj* pBone,
 }
 bool		GZombie::Frame()
 {
+
+
 	//m_fLerpTime *= 0.1f;
 	m_fFrame += (g_fSecPerFrame * m_fSpeed * m_pBoneObject->m_Scene.iFrameSpeed);
 	m_iCurrentFrame = (int)m_fFrame;
 	// 1프레임 사이 간격
 	m_fLerpTime = m_fFrame - m_iCurrentFrame;
 
-
+	if (m_pChar->m_iAniLoop != 0 || m_fFrame < m_iLastFrame -1)
+	{
+		if (m_pBoneObject->AniFrame(m_fFrame,
+			m_fLerpTime,
+			m_iStartFrame,
+			m_iLastFrame,
+			m_pMatrix))
+		{
+			m_iCurrentFrame = m_iStartFrame;
+			m_fFrame = (float)m_iStartFrame + m_fLerpTime;
+		}
+	}
 //#ifdef _DEBUG
 //	TCHAR  strMessage[MAX_PATH] = { 0, };
 //	_stprintf_s(strMessage, _T("<===== %d [%10.4f] %d====>\n "), m_iCurrentFrame,m_fLerpTime,  m_iCurrentFrame+1);
@@ -103,15 +116,7 @@ bool		GZombie::Frame()
 //#endif
 
 
-	if (m_pBoneObject->AniFrame(m_fFrame,
-		m_fLerpTime,
-		m_iStartFrame,
-		m_iLastFrame,
-		m_pMatrix))
-	{
-		m_iCurrentFrame = m_iStartFrame;
-		m_fFrame = (float)m_iStartFrame +m_fLerpTime;
-	}
+
 
 
 	//////////////////////////  보간 없이 투박하게////////////////////////////

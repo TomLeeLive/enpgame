@@ -5,7 +5,7 @@ GProjMain* g_pMain;
 
 bool GProjMain::Load()
 {
-	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharTable4.gci")))
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
 	{
 		return false;
 	}

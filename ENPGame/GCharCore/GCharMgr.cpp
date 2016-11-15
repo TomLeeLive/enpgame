@@ -94,6 +94,7 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 
 	int		iNumCharacter = 0;
 	int		iNumActions = 0;
+	int		iAniLoop = 1;
 
 	if( m_Parser.GetDataFromFileLoop(_T("#NUM_OF_CHARACTER"), &iNumCharacter, INT_DATA ) )
 	{
@@ -103,6 +104,7 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 			m_Parser.GetDataFromFileLoop(_T("#CHAR_NAME"),  strCharacterName, STRING_DATA);
 			m_Parser.GetDataFromFileLoop(_T("#SHADER_FILE"), strShaderName, STRING_DATA);
 			m_Parser.GetDataFromFileLoop(_T("#MATRIX_FILE"), strMatrixName, STRING_DATA);
+			m_Parser.GetDataFromFileLoop(_T("#ACTION_LOOP"), &iAniLoop, INT_DATA);
 			m_Parser.GetDataFromFileLoop(_T("#ACTION_TABLE"), &iNumActions, INT_DATA);
 			
 			//m_Parser.GetDataFromFileLoop(_T("*WORLDPOSITION"), 
@@ -141,7 +143,7 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 						pChar->Add(	pd3dDevice, pImmediateContext,
 									strMeshName, strShaderName, 
 									iMatrixIndex, 
-									iModelMatrixIndex);
+									iModelMatrixIndex, iAniLoop);
 					}			
 				}
 			}			
