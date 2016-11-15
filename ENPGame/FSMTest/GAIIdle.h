@@ -1,5 +1,5 @@
 #pragma once
-#include "GSeq.h"
+
 class GAIIdle : public GSeq
 {
 private:
@@ -18,7 +18,8 @@ public:
 	bool Render();
 	bool Release();
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
+	D3DXVECTOR3 RandomPoint;
+	float TimeCount = 0.0f;
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------

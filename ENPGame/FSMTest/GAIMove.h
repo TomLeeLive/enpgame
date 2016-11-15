@@ -17,7 +17,12 @@ public:
 	//----------------------------------------------------
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
+	D3DXVECTOR3 RandomPoint;
+	D3DXVECTOR3 RandomDestination;
 
+	GTimer * TIme;
+	float fTime = 15.0f;
+	float m_fSecondPerFrmae = 0.0f;
 	int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return -1; };
 public:
 	virtual ~GAIMove();

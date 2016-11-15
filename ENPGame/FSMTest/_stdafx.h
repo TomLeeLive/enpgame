@@ -6,7 +6,8 @@
 #include "GSeq.h"
 #include "GAIIdle.h"
 #include "GAIMove.h"
-
+#include "GAIRun.h"
+#include "GAIAttack.h"
 
 
 
@@ -20,3 +21,4 @@
 //Main
 #include "GCoreLibV2.h"
 #include "GProjMain.h"
+

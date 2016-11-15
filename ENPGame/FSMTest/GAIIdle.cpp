@@ -8,9 +8,12 @@ bool GAIIdle::Init()
 }
 bool GAIIdle::Frame()
 {
-	// 물체의 정지상태를 계산한다.
-	float temp = (rand() * 7) % 50;
-	g_pMain->m_matWorld1._41 = temp;
+
+	TimeCount += g_fSecPerFrame;
+
+	if (TimeCount >5.0f)
+		
+		g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
 	return true;
 }
 bool GAIIdle::Render()
