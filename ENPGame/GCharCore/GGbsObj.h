@@ -7,6 +7,9 @@ typedef vector<shared_ptr<tTbsData>>	tTbsMeshData;
 
 class GGbsObj : public GModel
 {
+public:
+	bool			m_bAniLoop;
+	void			ResetAni();
 public:	
 	tTbsMeshData	m_pData;
 	GParser			m_Parser;

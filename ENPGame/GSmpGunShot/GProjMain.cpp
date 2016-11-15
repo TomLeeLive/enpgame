@@ -42,6 +42,8 @@ bool GProjMain::Init()
 {
 	m_tbsobj.Init();	
 
+	m_tbsobj.m_bAniLoop = false;
+
 	if (!m_tbsobj.Load(GetDevice(), _T("data/object/fps_shotgun/shotgun3.GBS"), L"data/shader/box.hlsl"))
 	{
 		return false;
@@ -77,6 +79,9 @@ bool GProjMain::Frame()
 	
 	m_pMainCamera->Frame();
 
+	if (g_InputData.bLeftClick) {
+		m_tbsobj.ResetAni();
+	}
 	UpdateGunPosition();
 	m_tbsobj.Frame();	
 

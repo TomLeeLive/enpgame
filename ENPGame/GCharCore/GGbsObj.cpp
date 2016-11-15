@@ -476,10 +476,14 @@ bool GGbsObj::GetAnimationTrack(float fFrame, vector<shared_ptr<GAnimTrack>> pTr
 	}
 	return ( *pStartTrack != NULL ) ? true : false;
 }
+void GGbsObj::ResetAni() {
+	m_fElapseTime = m_Scene.iFirstFrame * m_Scene.iTickPerFrame;
+}
+
 bool GGbsObj::Frame()
 {
 	m_fElapseTime += g_fSecPerFrame * m_Scene.iFrameSpeed * m_Scene.iTickPerFrame;		
-	if( m_fElapseTime >= m_Scene.iLastFrame* m_Scene.iTickPerFrame ) 
+	if( m_fElapseTime >= m_Scene.iLastFrame* m_Scene.iTickPerFrame && m_bAniLoop == true) 
 	{				
 		m_fElapseTime =  m_Scene.iFirstFrame * m_Scene.iTickPerFrame;
 	}
@@ -775,6 +779,7 @@ bool GGbsObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 }
 GGbsObj::GGbsObj(void)
 {
+	m_bAniLoop = true;
 }
 
 GGbsObj::~GGbsObj(void)
