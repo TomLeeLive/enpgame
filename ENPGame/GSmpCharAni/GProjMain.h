@@ -1,6 +1,7 @@
 #pragma once
 #include "GCoreLibV2.h"
-#include "GHeroObj.h"
+#include "GZombie.h"
+
 
 //#define G_MACRO_MODELVIEW 1
 
@@ -25,7 +26,7 @@ class GProjMain : public GCoreLibV2
 #endif
 	
 	D3DXMATRIX  m_matWorld;
-	vector<shared_ptr<GHeroObj>>	m_HeroObj;
+	vector<shared_ptr<GZombie>>	m_HeroObj;
 public:	
 	bool		Init();
 	bool		Frame();
@@ -41,9 +42,7 @@ public:
 	//--------------------------------------------------------------------------------------
 	// 파일 선택하여 로드( 단축기 : O )
 	//--------------------------------------------------------------------------------------
-	T_STR_VECTOR m_LoadFiles;
 	bool		Load();
-	bool		LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
 public:
 	GProjMain(void);
 	virtual ~GProjMain(void);

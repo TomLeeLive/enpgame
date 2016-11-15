@@ -3,78 +3,9 @@
 
 GProjMain* g_pMain;
 
-bool GProjMain::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
-{
-	OPENFILENAME    ofn;
-	TCHAR           szFile[MAX_PATH] = { 0, };
-	TCHAR			szFileTitle[MAX_PATH] = { 0, };
-	static TCHAR    *szFilter;
-
-	TCHAR lpCurBuffer[256] = { 0, };
-	GetCurrentDirectory(256, lpCurBuffer);
-
-	ZeroMemory(&ofn, sizeof(OPENFILENAME));
-	_tcscpy_s(szFile, _T("*."));
-	_tcscat_s(szFile, szExt);
-	_tcscat_s(szFile, _T("\0"));
-
-	ofn.lStructSize = sizeof(OPENFILENAME);
-	ofn.hwndOwner = GetActiveWindow();
-	ofn.lpstrFilter = szFilter;
-	ofn.lpstrCustomFilter = NULL;
-	ofn.nMaxCustFilter = 0L;
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = MAX_PATH;
-	ofn.lpstrFileTitle = szFileTitle;
-	ofn.nMaxFileTitle = MAX_PATH;
-	ofn.lpstrInitialDir = _T("../../data/Character/");
-	ofn.lpstrTitle = szTitle;
-	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
-	ofn.nFileOffset = 0;
-	ofn.nFileExtension = 0;
-	ofn.lpstrDefExt = szExt;
-
-	if (!GetOpenFileName(&ofn))
-	{
-		return false;
-	}
-	TCHAR* load = _tcstok(szFile, _T("\n"));
-	T_STR dir = szFile;
-	load = &load[_tcslen(load) + 1];
-	if (*load == 0)
-	{
-		m_LoadFiles.push_back(dir);
-	}
-
-	while (*load != 0)
-	{
-		T_STR dir = szFile;
-		load = _tcstok(load, _T("\n"));
-		dir += _T("\\");
-		dir += load;
-		m_LoadFiles.push_back(dir);
-		load = &load[_tcslen(load) + 1];
-	}
-	SetCurrentDirectory(lpCurBuffer);
-	return true;
-}
 bool GProjMain::Load()
 {
-	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
-	{
-		return false;
-	}
-
-	//int iLoad = m_LoadFiles.size() - 1;
-	//if (!m_tObject.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
-	//{
-	//	return false;
-	//}
-
-	int iLoad = m_LoadFiles.size() - 1;
-
-	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharTable4.gci")))
 	{
 		return false;
 	}
@@ -84,7 +15,7 @@ bool GProjMain::Load()
 	//GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
 	//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
 
-	shared_ptr<GHeroObj> pObjA = make_shared<GHeroObj>();
+	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
 	pObjA->Set(pChar0,
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>GciAnimation</ProjectName>
+    <ProjectName>GSmpCharAni</ProjectName>
     <ProjectGuid>{D9A0E299-E72B-4FCF-871C-DF316824D9FA}</ProjectGuid>
     <RootNamespace>SampleBindPoseAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
