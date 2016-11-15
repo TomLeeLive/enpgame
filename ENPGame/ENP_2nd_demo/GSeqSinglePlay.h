@@ -25,10 +25,8 @@ public:
 	D3DXMATRIX						m_matPlaneWorld;
 	D3DXMATRIX						m_mPlanWorld;
 	
-	D3DXMATRIX matScale, matRotation,matTrans, matWorld;
-	D3DXMATRIX						m_matWorld_LAB;
-	D3DXMATRIX						m_matWorld_DROPSHIP;
-	D3DXMATRIX						m_matWorld_CAR;
+	
+
 
 
 	shared_ptr<GPlaneShape>			m_pPlane;
@@ -42,7 +40,12 @@ public:
 	//--------------------------------------------------------------------------------------
 	// 오브젝트
 	//--------------------------------------------------------------------------------------
-	GGbsObj		m_tbsobj;
+	//GGbsObj		m_tbsobj;
+
+	GGbsObj		m_Obj[G_OBJ_CNT];
+	D3DXMATRIX	m_matObjWorld[G_OBJ_CNT];
+	D3DXMATRIX  matObjScale[G_OBJ_CNT], matObjRotation[G_OBJ_CNT], matObjTrans[G_OBJ_CNT];
+
 	//--------------------------------------------------------------------------------------
 	// 쿼드트리
 	//--------------------------------------------------------------------------------------
@@ -68,7 +71,7 @@ public:
 	D3DXMATRIX  m_matWorld;
 #ifdef G_MACRO_CHAR_ADD	
 public:
-	GGbsObj m_Obj[G_OBJ_CNT];
+
 
 	//--------------------------------------------------------------------------------------
 	// 파일 선택하여 로드( 단축기 : O )

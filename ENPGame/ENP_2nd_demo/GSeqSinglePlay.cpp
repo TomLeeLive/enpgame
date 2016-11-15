@@ -155,29 +155,6 @@ bool GSeqSinglePlay::Init()
 
 	Load();
 
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].Init();
-	}
-
-	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, 
-		_T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl");
-	D3DXMatrixScaling(&m_matWorld_LAB, 1, 1, 1);
-	m_matWorld_LAB._41 = 1000.0f;
-	m_matWorld_LAB._42 = 0.0f;
-	m_matWorld_LAB._43 = 1000.0f;
-
-	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, 
-		_T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
-	D3DXMatrixScaling(&m_matWorld_DROPSHIP, 1, 1, 1);
-	D3DXMatrixRotationY(&m_matWorld_DROPSHIP, 4.25f);
-	m_matWorld_DROPSHIP._41 = -1000.0f;
-	m_matWorld_DROPSHIP._42 = 0.0f;
-	m_matWorld_DROPSHIP._43 = -1000.0f;
-
-	//m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
-	//	_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
-	//m_matWorld_CAR._41 = 1.0f;
-
 #endif
 
 #ifdef G_MACRO_EFFECT_ADD
@@ -254,11 +231,30 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// 오브젝트 생성
 	//--------------------------------------------------------------------------------------
-	m_tbsobj.Init();
-	if (!m_tbsobj.Load(g_pd3dDevice, _T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl"))
-	{
-		return false;
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[i].Init();
 	}
+
+	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice,
+		_T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl");
+	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_LAB], 1, 1, 1);
+	m_matObjWorld[G_OBJ_LAB]._41 = 1000.0f;
+	m_matObjWorld[G_OBJ_LAB]._42 = 0.0f;
+	m_matObjWorld[G_OBJ_LAB]._43 = 1000.0f;
+
+	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice,
+		_T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
+	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_DROPSHIP], 1, 1, 1);
+	D3DXMatrixRotationY(&m_matObjWorld[G_OBJ_DROPSHIP], 4.25f);
+	m_matObjWorld[G_OBJ_DROPSHIP]._41 = -1000.0f;
+	m_matObjWorld[G_OBJ_DROPSHIP]._42 = 0.0f;
+	m_matObjWorld[G_OBJ_DROPSHIP]._43 = -1000.0f;
+
+	//m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
+	//	_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	//m_matWorld_CAR._41 = 1.0f;
+
+
 	//--------------------------------------------------------------------------------------
 	//  쿼드 트리
 	//--------------------------------------------------------------------------------------
@@ -354,6 +350,14 @@ bool GSeqSinglePlay::Render()
 		DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
 
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
+	m_Obj[0].SetMatrix(&m_matObjWorld[G_OBJ_LAB], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_Obj[0].Render(g_pImmediateContext);
+
+	m_Obj[1].SetMatrix(&m_matObjWorld[G_OBJ_DROPSHIP], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_Obj[1].Render(g_pImmediateContext);
+	//}
+
 #endif
 
 
@@ -369,15 +373,6 @@ bool GSeqSinglePlay::Render()
 		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(g_pImmediateContext);
 	}
-	//for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[0].SetMatrix(&m_matWorld_LAB, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-		m_Obj[0].Render(g_pImmediateContext);
-
-		m_Obj[1].SetMatrix(&m_matWorld_DROPSHIP, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-		m_Obj[1].Render(g_pImmediateContext);
-	//}
-
-
 #endif
 
 
@@ -434,16 +429,13 @@ bool GSeqSinglePlay::Release()
 #ifdef G_MACRO_MAP_ADD
 	m_CustomMap.Release();
 	m_QuadTree.Release();
-#endif
-#ifdef G_MACRO_CHAR_ADD 
-	I_CharMgr.Release();
 
 	for (int i = 0; i < G_OBJ_CNT; i++) {
 		m_Obj[i].Release();
 	}
-
-
-
+#endif
+#ifdef G_MACRO_CHAR_ADD 
+	I_CharMgr.Release();
 
 #endif
 	return true;
