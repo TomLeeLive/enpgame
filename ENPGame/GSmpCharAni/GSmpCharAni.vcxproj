@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>ENP_2nd_demo</ProjectName>
-    <ProjectGuid>{D075E2BD-D313-4411-87D8-E06B40D5A55A}</ProjectGuid>
+    <ProjectName>GciAnimation</ProjectName>
+    <ProjectGuid>{D9A0E299-E72B-4FCF-871C-DF316824D9FA}</ProjectGuid>
     <RootNamespace>SampleBindPoseAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -101,35 +101,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GProjMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GProjMain.h" />
+  </ItemGroup>
+  <ItemGroup>
     <FxCompile Include="Character.hlsl" />
     <FxCompile Include="MatrixViewer.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CharTable.gci" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="GProjMain.cpp" />
-    <ClCompile Include="GSeq.cpp" />
-    <ClCompile Include="GSeqGameEnd.cpp" />
-    <ClCompile Include="GSeqGameOver.cpp" />
-    <ClCompile Include="GSeqHowTo.cpp" />
-    <ClCompile Include="GSeqIntro.cpp" />
-    <ClCompile Include="GSeqMenu.cpp" />
-    <ClCompile Include="GSeqSinglePlay.cpp" />
-    <ClCompile Include="GSeqSurvivalMode.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GProjMain.h" />
-    <ClInclude Include="GSeq.h" />
-    <ClInclude Include="GSeqGameEnd.h" />
-    <ClInclude Include="GSeqGameOver.h" />
-    <ClInclude Include="GSeqHowTo.h" />
-    <ClInclude Include="GSeqIntro.h" />
-    <ClInclude Include="GSeqMenu.h" />
-    <ClInclude Include="GSeqSinglePlay.h" />
-    <ClInclude Include="GSeqSurvivalMode.h" />
-    <ClInclude Include="_resources.h" />
-    <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

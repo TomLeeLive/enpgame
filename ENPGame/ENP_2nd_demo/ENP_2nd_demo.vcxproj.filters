@@ -84,5 +84,8 @@
     <ClInclude Include="GSeqIntro.h">
       <Filter>GameSequence</Filter>
     </ClInclude>
+    <ClInclude Include="_resources.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

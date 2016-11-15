@@ -164,7 +164,7 @@ bool GSeqSinglePlay::Init()
 	// 배경 부분
 	//--------------------------------------------------------------------------------------
 	m_pScreen = make_shared<GPlaneShape>();
-	if (m_pScreen->Create(g_pd3dDevice, L"data/shader/plane.hlsl") == false)
+	if (m_pScreen->Create(g_pd3dDevice, G_SHA_PLANE) == false)
 	{
 		MessageBox(0, _T("m_pPlane 실패"), _T("Fatal error"), MB_OK);
 		return 0;
@@ -182,7 +182,7 @@ bool GSeqSinglePlay::Init()
 
 
 	//play 버튼시 init() 부분
-	m_pSprite.get()->Create(g_pd3dDevice, L"data/shader/plane.hlsl", L"data/effect/ds1.dds");
+	m_pSprite.get()->Create(g_pd3dDevice, G_SHA_PLANE, L"data/effect/ds1.dds");
 	// 애니메이션 관련, 가로4x4
 	m_pSprite.get()->SetRectAnimation(1.0f, 4, 128, 4, 128);
 #endif
@@ -194,7 +194,7 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// 디버그 라인 생성
 	//--------------------------------------------------------------------------------------
-	if (FAILED(m_DrawLine.Create(g_pd3dDevice, L"data/shader/line.hlsl")))
+	if (FAILED(m_DrawLine.Create(g_pd3dDevice, G_SHA_LINE)))
 	{
 		MessageBox(0, _T("m_DrawLine 실패"), _T("Fatal error"), MB_OK);
 		return 0;
@@ -217,7 +217,7 @@ bool GSeqSinglePlay::Init()
 	// 카메라 프로스텀 랜더링용 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->CreateRenderBox(g_pd3dDevice, g_pImmediateContext);
-	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/box.hlsl", "PS_Color"));
+	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, G_SHA_BOX, "PS_Color"));
 
 	//--------------------------------------------------------------------------------------
 	// 커스텀맵 생성
@@ -235,15 +235,13 @@ bool GSeqSinglePlay::Init()
 		m_Obj[i].Init();
 	}
 
-	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice,
-		_T("data/object/lab/lab.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice,G_OBJ_LOC_LAB, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_LAB], 1, 1, 1);
 	m_matObjWorld[G_OBJ_LAB]._41 = 1000.0f;
 	m_matObjWorld[G_OBJ_LAB]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_LAB]._43 = 1000.0f;
 
-	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice,
-		_T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
+	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_DROPSHIP], 1, 1, 1);
 	D3DXMatrixRotationY(&m_matObjWorld[G_OBJ_DROPSHIP], 4.25f);
 	m_matObjWorld[G_OBJ_DROPSHIP]._41 = -1000.0f;
@@ -251,7 +249,7 @@ bool GSeqSinglePlay::Init()
 	m_matObjWorld[G_OBJ_DROPSHIP]._43 = -1000.0f;
 
 	//m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
-	//	_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	//	G_OBJ_LOC_CAR, L"data/shader/box.hlsl");
 	//m_matWorld_CAR._41 = 1.0f;
 
 
@@ -471,6 +469,10 @@ bool GSeqSinglePlay::Frame()
 
 	m_QuadTree.Frame();
 	
+
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[i].Frame();
+	}
 #endif
 
 	m_matWorld = *m_pMainCamera->GetWorldMatrix();
@@ -501,9 +503,7 @@ bool GSeqSinglePlay::Frame()
 #ifdef G_MACRO_CHAR_ADD 
 
 
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].Frame();
-	}
+
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
