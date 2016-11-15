@@ -360,13 +360,17 @@ bool GSeqSinglePlay::Render()
 	//--------------------------------------------------------------------------------------
 	// ½ºÄ«ÀÌ ¹Ú½º
 	//--------------------------------------------------------------------------------------
-	DX::ApplyRS(g_pImmediateContext, DX::GDxState::g_pRSNoneCullSolid);
-	DX::ApplyDSS(g_pImmediateContext, DX::GDxState::g_pDSSDepthDisable);
-	DX::ApplyBS(g_pImmediateContext, DX::GDxState::g_pAlphaBlend);
+	//DX::ApplyRS(g_pImmediateContext, DX::GDxState::g_pRSNoneCullSolid);
+	//DX::ApplyDSS(g_pImmediateContext, DX::GDxState::g_pDSSDepthDisable);
+	//DX::ApplyBS(g_pImmediateContext, DX::GDxState::g_pAlphaBlend);
 
 	g_pImmediateContext->PSSetSamplers(0, 1, &DX::GDxState::g_pSSWrapLinear);
 	m_pSkyBoxObj->SetMatrix(0, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSkyBoxObj->Render(g_pImmediateContext);
+
+	//DX::ApplyRS(g_pImmediateContext, DX::GDxState::g_pRSNoneCullSolid);
+	//DX::ApplyDSS(g_pImmediateContext, DX::GDxState::g_pDSSDepthEnable);
+	//DX::ApplyBS(g_pImmediateContext, DX::GDxState::g_pAlphaBlend);
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ ¸Ê
 	//--------------------------------------------------------------------------------------
