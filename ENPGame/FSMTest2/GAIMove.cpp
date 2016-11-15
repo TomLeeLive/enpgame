@@ -5,13 +5,16 @@ GAIMove * GAIMove::pInstance_ = 0;
 
 bool GAIMove::Init()
 {
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	g_pMain->m_HeroObj[0]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	return true;
 }
 bool GAIMove::Frame()
 {
 	 m_fSecondPerFrmae += g_fSecPerFrame;
-
-
 
 	// 이동을 위한 임의의 목적지 조성 
 	srand(time(NULL));
@@ -48,7 +51,7 @@ bool GAIMove::Frame()
 
 	//이동할 방향으로 회전 -1
 	// 적 박스의 포지션을 벡터로 저장후 가려는방향(주인공) - vPos 하여 목적지 벡터 구함
-	D3DXVECTOR3 vPos = D3DXVECTOR3(g_pMain->m_matWorld1._41, 0.0f, g_pMain->m_matWorld1._43);
+	D3DXVECTOR3 vPos = D3DXVECTOR3(g_pMain->m_matZombieWorld._41, 0.0f, g_pMain->m_matZombieWorld._43);
 	D3DXVECTOR3 vRandomDest = RandomDestination - vPos;
 	D3DXVECTOR3 vDestLook = RandomDestination - vPos; // 랜덤 목적지 벡터
 	D3DXVec3Normalize(&vDestLook, &vDestLook);
@@ -71,8 +74,8 @@ bool GAIMove::Frame()
 	
 	//적의 위치
 	D3DXVECTOR3 vEnemyBoxPosition;
-	vEnemyBoxPosition.x = g_pMain->m_matWorld1._41;
-	vEnemyBoxPosition.z = g_pMain->m_matWorld1._43;
+	vEnemyBoxPosition.x = g_pMain->m_matZombieWorld._41;
+	vEnemyBoxPosition.z = g_pMain->m_matZombieWorld._43;
 	
 	//두위치를 빼서 방향을 구한 후 거리계산
 	D3DXVECTOR3 ResultLenth = vBoxPosition - vEnemyBoxPosition;
@@ -92,36 +95,42 @@ bool GAIMove::Frame()
 	}
 	
 
-	// 메인박스와의 거리가 5보다 클경우 RandomPoint 로 Rotation 후 이동, 5보다 작을경우 메인 박스를 향해 이동
-	if (Lenth > 10)
+	// 메인박스와의 거리가 30보다 클경우 RandomPoint 로 Rotation 후 이동
+	if (Lenth > 30)
 	{
-		if (RandomDestination.x > 0)
+		if (m_fSecondPerFrmae < 30.0f)
 		{
-			g_pMain->m_matWorld1._41 += 1.0f * g_fSecPerFrame;
+			if (RandomDestination.x > 0)
+			{
+				g_pMain->m_matZombieWorld._41 += 6.0f * g_fSecPerFrame;
+			}
+			else
+			{
+				g_pMain->m_matZombieWorld._41 -= 6.0f  * g_fSecPerFrame;
+			}
+			/*if (g_pMain->m_matZombieWorld._42 <= Destination.y)
+			{
+			g_pMain->m_matZombieWorld._42 += 1.0f * g_fSecPerFrame;
+			}*/
+			if (RandomDestination.z > 0)
+			{
+				g_pMain->m_matZombieWorld._43 += 3.0f * g_fSecPerFrame;
+			}
+			else
+			{
+				g_pMain->m_matZombieWorld._43 -= 3.0f* g_fSecPerFrame;
+			}
 		}
-		else
-		{
-			g_pMain->m_matWorld1._41 -= 1.0f  * g_fSecPerFrame;
-		}
-		/*if (g_pMain->m_matWorld1._42 <= Destination.y)
-		{
-		g_pMain->m_matWorld1._42 += 1.0f * g_fSecPerFrame;
-		}*/
-		if (RandomDestination.z > 0)
-		{
-			g_pMain->m_matWorld1._43 += 1.0f * g_fSecPerFrame;
-		}
-		else
-		{
-			g_pMain->m_matWorld1._43 -= 1.0f* g_fSecPerFrame;
-		}
+		m_fSecondPerFrmae = 0.0f;
+		g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_IDLE];
 	}
-	else if(Lenth <5)
+	// 5보다 작을경우 메인 박스를 향해 이동
+	else if(Lenth <25)
 	{
-		g_pMain->m_matWorld1._41 += ResultLenth.x * g_fSecPerFrame;
-		g_pMain->m_matWorld1._43 += ResultLenth.z * g_fSecPerFrame;
+		g_pMain->m_matZombieWorld._41 += ResultLenth.x * g_fSecPerFrame *2.0f;
+		g_pMain->m_matZombieWorld._43 += ResultLenth.z * g_fSecPerFrame *2.0f;
 	}
-	else if(Lenth <1)
+	else if(Lenth <15)
 	{
 		g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
 	}

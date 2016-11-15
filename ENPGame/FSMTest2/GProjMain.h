@@ -24,6 +24,7 @@ public:
 	D3DXMATRIX  m_matWorld;
 	D3DXMATRIX  m_matWorld1;
 	D3DXMATRIX  m_Rotation;
+	D3DXMATRIX  m_matZombieWorld;
 	D3DXMATRIX  m_Result;
 	D3DXMATRIX  m_temp;
 
