@@ -166,12 +166,14 @@ bool GSeqSinglePlay::Init()
 	m_matWorld_LAB._42 = 0.0f;
 	m_matWorld_LAB._43 = 1000.0f;
 
-	//D3DXMatrixIdentity(&matWorld);
-	//m_matWorld_LAB = matWorld*matScale;// *matTrans;
+	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, 
+		_T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
+	D3DXMatrixScaling(&m_matWorld_DROPSHIP, 1, 1, 1);
+	D3DXMatrixRotationY(&m_matWorld_DROPSHIP, 4.25f);
+	m_matWorld_DROPSHIP._41 = -1000.0f;
+	m_matWorld_DROPSHIP._42 = 0.0f;
+	m_matWorld_DROPSHIP._43 = -1000.0f;
 
-	//m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, 
-	//	_T("data/object/dropship/dropship_land.GBS"), L"data/shader/box.hlsl");
-	//m_matWorld_DROPSHIP._41 = 1.0f;
 	//m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
 	//	_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
 	//m_matWorld_CAR._41 = 1.0f;
@@ -226,7 +228,7 @@ bool GSeqSinglePlay::Init()
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
 	m_pMainCamera = make_shared<GCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(-100.0f, 100.0f, -100.0f), D3DXVECTOR3(1000.0f, 10.0f, 1000.0f));
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(-100.0f, 100.0f, -100.0f), D3DXVECTOR3(-1000.0f, 10.0f, -1000.0f));
 
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
@@ -367,10 +369,13 @@ bool GSeqSinglePlay::Render()
 		m_HeroObj[iChar]->SetMatrix(&matCharWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(g_pImmediateContext);
 	}
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].SetMatrix(&m_matWorld_LAB, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-		m_Obj[i].Render(g_pImmediateContext);
-	}
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
+		m_Obj[0].SetMatrix(&m_matWorld_LAB, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_Obj[0].Render(g_pImmediateContext);
+
+		m_Obj[1].SetMatrix(&m_matWorld_DROPSHIP, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_Obj[1].Render(g_pImmediateContext);
+	//}
 
 
 #endif
