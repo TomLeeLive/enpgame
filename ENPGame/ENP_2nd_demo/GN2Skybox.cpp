@@ -260,6 +260,7 @@ bool GN2Skybox::Render(ID3D11DeviceContext*    pContext)
 		pContext->PSSetShader(m_pPSCubeTexture.Get(), NULL, 0);
 		pContext->DrawIndexed(36, 0, 0);
 	}
+	DX::ApplyDSS(pContext, DX::GDxState::g_pDSSDepthEnable);
 	return true;
 }
 
