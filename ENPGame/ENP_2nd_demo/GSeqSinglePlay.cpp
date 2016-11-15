@@ -205,7 +205,7 @@ bool GSeqSinglePlay::Init()
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
 	m_pMainCamera = make_shared<GCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(-100.0f, 100.0f, -100.0f), D3DXVECTOR3(-1000.0f, 10.0f, -1000.0f));
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
 
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
@@ -236,22 +236,33 @@ bool GSeqSinglePlay::Init()
 	}
 
 	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice,G_OBJ_LOC_LAB, G_SHA_BOX);
-	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_LAB], 1, 1, 1);
+	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_LAB], 2, 2, 2);
 	m_matObjWorld[G_OBJ_LAB]._41 = 1000.0f;
 	m_matObjWorld[G_OBJ_LAB]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_LAB]._43 = 1000.0f;
 
 	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
-	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_DROPSHIP], 1, 1, 1);
+	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
 	D3DXMatrixRotationY(&m_matObjWorld[G_OBJ_DROPSHIP], 4.25f);
+	D3DXMatrixRotationY(&matRotation, 4.25f);	
+	m_matObjWorld[G_OBJ_DROPSHIP] * matRotation;
 	m_matObjWorld[G_OBJ_DROPSHIP]._41 = -1000.0f;
 	m_matObjWorld[G_OBJ_DROPSHIP]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_DROPSHIP]._43 = -1000.0f;
 
-	//m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
-	//	G_OBJ_LOC_CAR, L"data/shader/box.hlsl");
-	//m_matWorld_CAR._41 = 1.0f;
+	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, 
+		_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR], 0.3, 0.3, 0.3);
+	m_matObjWorld[G_OBJ_CAR]._41 = 500.0f;
+	m_matObjWorld[G_OBJ_CAR]._42 = 0.0f;
+	m_matObjWorld[G_OBJ_CAR]._43 = -700.0f;
 
+	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice,
+		_T("data/object/car/car.GBS"), L"data/shader/box.hlsl");
+	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR1], 0.3, 0.3, 0.3);
+	m_matObjWorld[G_OBJ_CAR1]._41 = -900.0f;
+	m_matObjWorld[G_OBJ_CAR1]._42 = 0.0f;
+	m_matObjWorld[G_OBJ_CAR1]._43 = 700.0f;
 
 	//--------------------------------------------------------------------------------------
 	//  쿼드 트리
@@ -348,13 +359,10 @@ bool GSeqSinglePlay::Render()
 		DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
 
-	//for (int i = 0; i < G_OBJ_CNT; i++) {
-	m_Obj[0].SetMatrix(&m_matObjWorld[G_OBJ_LAB], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	m_Obj[0].Render(g_pImmediateContext);
-
-	m_Obj[1].SetMatrix(&m_matObjWorld[G_OBJ_DROPSHIP], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	m_Obj[1].Render(g_pImmediateContext);
-	//}
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+	m_Obj[i].SetMatrix(&m_matObjWorld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_Obj[i].Render(g_pImmediateContext);		
+	}
 
 #endif
 
