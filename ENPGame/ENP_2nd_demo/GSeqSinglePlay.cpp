@@ -367,10 +367,6 @@ bool GSeqSinglePlay::Render()
 	//g_pImmediateContext->PSSetSamplers(0, 1, &DX::GDxState::g_pSSWrapLinear);
 	m_pSkyBoxObj->SetMatrix(0, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSkyBoxObj->Render(g_pImmediateContext);
-
-	//DX::ApplyRS(g_pImmediateContext, DX::GDxState::g_pRSNoneCullSolid);
-	//DX::ApplyDSS(g_pImmediateContext, DX::GDxState::g_pDSSDepthEnable);
-	//DX::ApplyBS(g_pImmediateContext, DX::GDxState::g_pAlphaBlend);
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ ¸Ê
 	//--------------------------------------------------------------------------------------
@@ -612,7 +608,7 @@ HRESULT GSeqSinglePlay::CreateResource()
 	{
 		float fAspectRatio = g_pMain->m_SwapChainDesc.BufferDesc.Width /
 			(float)g_pMain->m_SwapChainDesc.BufferDesc.Height;
-		m_pCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
+		m_pCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	}
 	return S_OK;
 }
