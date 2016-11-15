@@ -1,4 +1,4 @@
-//#define Mars 1
+#define Mars 1
 #include "GN2Skybox.h"
 
 DXGI_FORMAT MAKE_TYPELESS(DXGI_FORMAT format)

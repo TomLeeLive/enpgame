@@ -245,7 +245,7 @@ bool GSeqSinglePlay::Init()
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ¸Ê »ý¼º
 	//--------------------------------------------------------------------------------------
-	TMapDesc MapDesc = { 50, 50, 50.0f, 0.0f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
+	TMapDesc MapDesc = { 50, 50, 500.0f, 0.0f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
 	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
