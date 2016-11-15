@@ -5,111 +5,44 @@ GSeqSinglePlay * GSeqSinglePlay::pInstance_ = 0;
 
 bool GSeqSinglePlay::UpdateGunPosition() {
 
-	D3DXMATRIX matWorld, matScl, matRot;
+	if (!m_pCamera)
+		return false;
+
+	D3DXMATRIX matWorld, matScl, matRot, matTrans, matViewInv;
 
 	D3DXVECTOR3 vScl, vTrans;
 	D3DXQUATERNION qRot;
 
-	D3DXQUATERNION  qRotation; //쿼터니온 생성
-	D3DXQuaternionRotationYawPitchRoll(&qRotation,  // 이과정에서 X축과 Y축의 회전을 사용
-		(float)D3DXToRadian(180.0f),    // 하여 사원수를 만듦
-		0.0f,
-		0.0f);
-
 	D3DXMatrixIdentity(&matWorld);
 	D3DXMatrixIdentity(&matScl);
 	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixIdentity(&matViewInv);
 
-	if (!m_pCamera)
-		return false;
+	D3DXMatrixInverse(&matViewInv, NULL, m_pCamera->GetViewMatrix());
 
-	D3DXMatrixInverse(&matWorld, NULL, m_pCamera->GetViewMatrix());
-	D3DXMatrixDecompose(&vScl, &qRot, &vTrans, &matWorld);
 
-	D3DXMatrixScaling(&matScl, vScl.x, vScl.y, vScl.z);
+	D3DXMatrixTranslation(&matTrans, 5.0f, -5.0f, 10.0f);
 
-	//vTrans.x += 10.0f;
-	vTrans.y -= 5.0f;
-	vTrans.z += 10.0f;
-	qRot = qRot * qRotation;
+	D3DXMatrixRotationY(&matRot, D3DXToRadian(180.0f));
 
-	D3DXMatrixAffineTransformation(&matRot, 1.0f, NULL, &qRot, &vTrans);
-
-	m_ObjGun.m_matWorld = matScl * matRot;// *matTrans;
+	m_ObjGun.m_matWorld = matScl * matRot * matTrans * matViewInv;// *matTrans;
 
 	return true;
 }
 
-#ifdef G_MACRO_CHAR_ADD
-bool GSeqSinglePlay::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
-{
-	OPENFILENAME    ofn;
-	TCHAR           szFile[MAX_PATH] = { 0, };
-	TCHAR			szFileTitle[MAX_PATH] = { 0, };
-	static TCHAR    *szFilter;
-
-	TCHAR lpCurBuffer[256] = { 0, };
-	GetCurrentDirectory(256, lpCurBuffer);
-
-	ZeroMemory(&ofn, sizeof(OPENFILENAME));
-	_tcscpy_s(szFile, _T("*."));
-	_tcscat_s(szFile, szExt);
-	_tcscat_s(szFile, _T("\0"));
-
-	ofn.lStructSize = sizeof(OPENFILENAME);
-	ofn.hwndOwner = GetActiveWindow();
-	ofn.lpstrFilter = szFilter;
-	ofn.lpstrCustomFilter = NULL;
-	ofn.nMaxCustFilter = 0L;
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = MAX_PATH;
-	ofn.lpstrFileTitle = szFileTitle;
-	ofn.nMaxFileTitle = MAX_PATH;
-	ofn.lpstrInitialDir = _T("../../data/Character/");
-	ofn.lpstrTitle = szTitle;
-	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
-	ofn.nFileOffset = 0;
-	ofn.nFileExtension = 0;
-	ofn.lpstrDefExt = szExt;
-
-	if (!GetOpenFileName(&ofn))
-	{
-		return false;
-	}
-	TCHAR* load = _tcstok(szFile, _T("\n"));
-	T_STR dir = szFile;
-	load = &load[_tcslen(load) + 1];
-	if (*load == 0)
-	{
-		m_LoadFiles.push_back(dir);
-	}
-
-	while (*load != 0)
-	{
-		T_STR dir = szFile;
-		load = _tcstok(load, _T("\n"));
-		dir += _T("\\");
-		dir += load;
-		m_LoadFiles.push_back(dir);
-		load = &load[_tcslen(load) + 1];
-	}
-	SetCurrentDirectory(lpCurBuffer);
-	return true;
-}
-#endif
 
 #ifdef G_MACRO_CHAR_ADD
 
 bool GSeqSinglePlay::Load()
 {
 
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharTable3.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharZombie.gci") /*_T("CharTable.gci")*/))
 	{
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"TESTCHAR6");
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 
 
 	shared_ptr<GHeroObj> pObjA = make_shared<GHeroObj>();
@@ -124,8 +57,11 @@ bool GSeqSinglePlay::Load()
 bool GSeqSinglePlay::Init()
 {
 
+	D3DXMatrixIdentity(&m_matWorld);
 
 	m_ObjGun.Init();
+
+	m_ObjGun.m_bAniLoop = false;
 
 	if (!m_ObjGun.Load(g_pd3dDevice, _T("data/object/fps_shotgun/shotgun3.GBS"), L"data/shader/box.hlsl"))
 	{
@@ -352,6 +288,8 @@ bool GSeqSinglePlay::DrawQuadLine(GNode* pNode)
 
 bool GSeqSinglePlay::Render()
 {
+
+
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
 
@@ -405,7 +343,7 @@ bool GSeqSinglePlay::Render()
 	m_ObjGun.SetMatrix(NULL, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	
 	//if(!m_bDebugCamera)
-	//	m_ObjGun.Render(g_pImmediateContext);
+		m_ObjGun.Render(g_pImmediateContext);
 
 #ifdef G_MACRO_EFFECT_ADD
 	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
@@ -474,15 +412,22 @@ bool GSeqSinglePlay::Release()
 
 bool GSeqSinglePlay::Frame()
 {
+
+	if (!m_bDebugCamera)
+		ShowCursor(false); // 커서를 화면에서 감추기
+	else
+		ShowCursor(true);
+
+
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
 		
 		if(m_bDebugCamera){
-			m_pCamera = m_pFPSCamera.get();
 			m_bDebugCamera = false;
+			m_pCamera = m_pFPSCamera.get();
 		}
 		else {
-			m_pCamera = m_pDebugCamera.get();
 			m_bDebugCamera = true;
+			m_pCamera = m_pDebugCamera.get();
 		}
 	}
 
@@ -493,7 +438,9 @@ bool GSeqSinglePlay::Frame()
 
 	m_pCamera->Frame();
 
-
+	if (g_InputData.bLeftClick) {
+		m_ObjGun.ResetAni();
+	}
 	UpdateGunPosition();
 	m_ObjGun.Frame();
 
@@ -528,10 +475,10 @@ bool GSeqSinglePlay::Frame()
 	}
 #endif
 
-	m_matWorld = *m_pCamera->GetWorldMatrix();
-	m_matWorld._41 = 0.0f;
-	m_matWorld._42 = 0.0f;
-	m_matWorld._43 = 0.0f;
+	//m_matWorld = *m_pCamera->GetWorldMatrix();
+	//m_matWorld._41 = 0.0f;
+	//m_matWorld._42 = 0.0f;
+	//m_matWorld._43 = 0.0f;
 
 
 

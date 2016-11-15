@@ -182,7 +182,7 @@ D3DXMATRIX GFPSCamera::Update( D3DXVECTOR4 vDirValue )
 }
 bool GFPSCamera::Frame()
 {
-	if( g_InputData.bLeftHold )
+	if( g_InputData.bRightHold )
 	{
 		m_fCameraYawAngle	+=	D3DXToRadian(g_InputData.iMouseValue[0] *0.1f);
 		m_fCameraPitchAngle	+=  D3DXToRadian(g_InputData.iMouseValue[1] *0.1f);
