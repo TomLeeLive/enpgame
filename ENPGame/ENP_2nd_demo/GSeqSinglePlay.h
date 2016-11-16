@@ -3,8 +3,8 @@
 enum G_OBJECT {
 	G_OBJ_LAB = 0,
 	G_OBJ_DROPSHIP,
-	G_OBJ_CAR,
-	G_OBJ_CAR1,	
+	G_OBJ_CAR1,
+	G_OBJ_CAR2,	
 	G_OBJ_CNT
 };
 
@@ -28,6 +28,9 @@ public:
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
 #ifdef G_MACRO_GAME_ADD
+	GSelect							m_Select;
+	G_RAY							m_Ray;
+	bool							ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
 	bool							m_bDebugCamera;
 	GGbsObj							m_ObjGun;
 
@@ -64,8 +67,9 @@ public:
 	//GGbsObj		m_tbsobj;
 
 	GGbsObj		m_Obj[G_OBJ_CNT];
-	D3DXMATRIX	m_matObjWorld[G_OBJ_CNT];
-	D3DXMATRIX  matObjScale[G_OBJ_CNT], matObjRotation[G_OBJ_CNT], matObjTrans[G_OBJ_CNT];
+	D3DXMATRIX	m_matObjOBB[G_OBJ_CNT];
+	D3DXMATRIX	m_matObjWld[G_OBJ_CNT];
+	D3DXMATRIX  m_matObjScl[G_OBJ_CNT], m_matObjRot[G_OBJ_CNT], m_matObjTrans[G_OBJ_CNT];
 
 	//--------------------------------------------------------------------------------------
 	// ÄõµåÆ®¸®
