@@ -157,6 +157,7 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClInclude Include="GCharacter.h" />
     <ClInclude Include="GCharMgr.h" />
     <ClInclude Include="GGbsObj.h" />
+    <ClInclude Include="GHero.h" />
     <ClInclude Include="GHeroObj.h" />
     <ClInclude Include="GLoadMgr.h" />
     <ClInclude Include="GLoadToken.h" />
@@ -174,6 +175,7 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClCompile Include="GCharacter.cpp" />
     <ClCompile Include="GCharMgr.cpp" />
     <ClCompile Include="GGbsObj.cpp" />
+    <ClCompile Include="GHero.cpp" />
     <ClCompile Include="GHeroObj.cpp" />
     <ClCompile Include="GLoadToken.cpp" />
     <ClCompile Include="GObject.cpp" />
