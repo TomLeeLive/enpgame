@@ -78,43 +78,61 @@ bool GSeqSinglePlay::Init()
 
 	return true;
 }
-bool GSeqSinglePlay::Frame()
-{
-	FrameGame();
-	FrameMap();
-	FrameObj();
-	FrameEffect();
-	FrameChar();
+bool GSeqSinglePlay::FrameGun() {
+
+	//총 위치 업데이트
+	UpdateGunPosition();
+	m_ObjGun.Frame();
 
 	//총 발사 애니메이션 처리
 	if (g_InputData.bLeftClick) {
+
+		if (m_CharHero[m_CurrentHero].get()->m_iBullet <= 0)
+			return false;
+
 		m_ObjGun.ResetAni();
 
-		g_pMain->m_pSound.Play(SND_SHOT1,true, true);
+		g_pMain->m_pSound.Play(SND_SHOT1, true, true);
 
+		m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
 
 		m_Ray.vOrigin = m_pCamera->m_vCameraPos;
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;
 
-		if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
-		{
-			m_iScore += G_DEFINE_SCORE_BASIC;
+		if (m_CharZombie[0].get()->m_bDead == false) {
+			if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
+			{
 
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
+				m_CharZombie[0].get()->m_bDead = true;
 
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+				m_iScore += G_DEFINE_SCORE_BASIC;
+
+				GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
+
+				m_CharZombie[0]->Set(pChar0,
+					pChar0->m_pBoneObject,
+					pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+					pChar0->m_pBoneObject->m_Scene.iLastFrame);
+			}
 		}
+
 		for (int i = 0; i < G_HERO_CNT; i++) {
+
+			if (i == m_CurrentHero)
+				continue;
+
+			if (m_CharHero[i].get()->m_bDead == true)
+				continue;
+
 			if (ChkOBBToRay(&m_CharHero[i].get()->m_OBB, &m_Ray))
 			{
-				if (i == m_CurrentHero)
-					continue;
+				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
 
-				if (i == G_HERO_TOM)
+				if (m_CharHero[i].get()->m_iHP <= 0)
+					m_CharHero[i].get()->m_bDead = true;
+
+				if (i == G_HERO_TOM && m_CharHero[i].get()->m_bDead == true)
 				{
 					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
 
@@ -123,7 +141,7 @@ bool GSeqSinglePlay::Frame()
 						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
 						pChar1->m_pBoneObject->m_Scene.iLastFrame);
 				}
-				else if (i == G_HERO_JAKE)
+				else if (i == G_HERO_JAKE && m_CharHero[i].get()->m_bDead == true)
 				{
 					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_DIE");
 
@@ -135,10 +153,17 @@ bool GSeqSinglePlay::Frame()
 			}
 		}
 	}
-	//총 위치 업데이트
-	UpdateGunPosition();
-	m_ObjGun.Frame();
+	return true;
+}
+bool GSeqSinglePlay::Frame()
+{
+	FrameGame();
+	FrameMap();
+	FrameObj();
+	FrameEffect();
+	FrameChar();
 
+	FrameGun();
 	return true;
 }
 
@@ -509,6 +534,9 @@ bool		GSeqSinglePlay::FrameChar() {
 
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
+		if(m_CharZombie[0]->m_bDead == true)
+			m_CharZombie[0]->m_bDead = false;
+
 		if (iChange != G_ZOMB_DIE) {
 			iChange++;
 		}

@@ -30,7 +30,7 @@ public:
 	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
-
+	bool							FrameGun();
 	GSelect							m_Select;
 	G_RAY							m_Ray;
 	bool							ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
