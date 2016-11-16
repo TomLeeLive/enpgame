@@ -137,6 +137,7 @@
     <ClInclude Include="GN2Skybox.h" />
     <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
+    <ClInclude Include="_values.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

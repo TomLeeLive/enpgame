@@ -8,6 +8,12 @@ enum G_OBJECT {
 	G_OBJ_CNT
 };
 
+enum G_HERO {
+	G_HERO_TOM =0,
+	G_HERO_JAKE,
+	G_HERO_CNT
+};
+
 class GSeqSinglePlay : public GSeq
 {
 private:
@@ -19,9 +25,17 @@ public:
 	}
 
 public:
-	bool		m_bDebugCamera;
-	GGbsObj		m_ObjGun;
-	bool		UpdateGunPosition();
+	D3DXMATRIX						m_matWorld;
+	bool							UpdateGunPosition();
+#ifdef G_MACRO_GAME_ADD
+	bool							m_bDebugCamera;
+	GGbsObj							m_ObjGun;
+
+	G_HERO							m_CurrentHero;
+	GCamera*						m_pCamera;
+	shared_ptr<GCamera >			m_pDebugCamera;
+	vector<shared_ptr<GFPSCamera >> m_pFPSCamera;
+#endif
 #ifdef G_MACRO_EFFECT_ADD
 public:
 	GPlaneShape						m_BigPlane;
@@ -31,9 +45,6 @@ public:
 	D3DXMATRIX						m_matPlaneWorld;
 	D3DXMATRIX						m_mPlanWorld;
 	
-	
-
-
 
 	shared_ptr<GPlaneShape>			m_pPlane;
 	shared_ptr<GPlaneShape>			m_pScreen;
@@ -77,22 +88,38 @@ public:
 	void		DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj);
 	bool		DrawQuadLine(GNode* pNode);
 #endif
-	GCamera*				m_pCamera;
-	shared_ptr<GCamera >	m_pDebugCamera;
-	shared_ptr<GFPSCamera > m_pFPSCamera;
-	D3DXMATRIX				m_matWorld;
 #ifdef G_MACRO_CHAR_ADD	
 public:
-
-
-	//--------------------------------------------------------------------------------------
-	// 파일 선택하여 로드( 단축기 : O )
-	//--------------------------------------------------------------------------------------
 	vector<shared_ptr<GZombie>>	m_CharZombie;
+	vector<shared_ptr<GHero>>	m_CharHero;
 	bool		Load();
-
 #endif
 public:
+
+	bool        InitGame();
+	bool        InitMap();
+	bool		InitChar();
+	bool		InitObj();
+	bool		InitEffect();
+
+	bool        FrameGame();
+	bool        FrameMap();
+	bool		FrameChar();
+	bool		FrameObj();
+	bool		FrameEffect();
+
+	bool        RenderGame();
+	bool        RenderMap();
+	bool		RenderChar();
+	bool		RenderObj();
+	bool		RenderEffect();
+
+	bool        ReleaseGame();
+	bool        ReleaseMap();
+	bool		ReleaseChar();
+	bool		ReleaseObj();
+	bool		ReleaseEffect();
+
 	bool		Init();
 	bool		Frame();
 	bool		Render();

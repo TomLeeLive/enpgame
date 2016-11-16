@@ -3,13 +3,14 @@
 
 #define MAX_BONE_MATRICES 255
 
-struct CBConstBoneWorld
-{
-	D3DXMATRIX    g_mConstBoneWorld[MAX_BONE_MATRICES];
-};
 
 class GZombie : public GModel
 {
+	struct CBConstBoneWorld
+	{
+		D3DXMATRIX    g_mConstBoneWorld[MAX_BONE_MATRICES];
+	};
+
 public:
 	bool			m_bDead;
 	D3DXVECTOR3		m_vLook;
