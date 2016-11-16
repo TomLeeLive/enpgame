@@ -182,12 +182,18 @@ bool		GSeqSinglePlay::InitObj() {
 		m_Obj[i].Init();
 	}
 
+
+	//연구소 로드
 	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_LAB], 2, 2, 2);
 	m_matObjWorld[G_OBJ_LAB]._41 = 1000.0f;
 	m_matObjWorld[G_OBJ_LAB]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_LAB]._43 = 1000.0f;
 
+	//연구소 OBB 사이즈
+	m_Obj[G_OBJ_LAB].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+
+	//드롭십 로드
 	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
 	D3DXMatrixScaling(&matObjScale[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
 	D3DXMatrixRotationY(&matObjRotation[G_OBJ_DROPSHIP], D3DXToRadian(45.0f + 180.0f));
@@ -196,17 +202,28 @@ bool		GSeqSinglePlay::InitObj() {
 	m_matObjWorld[G_OBJ_DROPSHIP]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_DROPSHIP]._43 = -1000.0f;
 
+	//드롭십 OBB 사이즈
+	m_Obj[G_OBJ_DROPSHIP].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+
+	//차량1 로드
 	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR], 0.3, 0.3, 0.3);
 	m_matObjWorld[G_OBJ_CAR]._41 = 500.0f;
 	m_matObjWorld[G_OBJ_CAR]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_CAR]._43 = -700.0f;
 
+	//드롭십 차량1 OBB 사이즈
+	m_Obj[G_OBJ_CAR].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+
+	//차량2 로드
 	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
 	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR1], 0.3, 0.3, 0.3);
 	m_matObjWorld[G_OBJ_CAR1]._41 = -900.0f;
 	m_matObjWorld[G_OBJ_CAR1]._42 = 0.0f;
 	m_matObjWorld[G_OBJ_CAR1]._43 = 700.0f;
+
+	//드롭십 차량2 OBB 사이즈
+	m_Obj[G_OBJ_CAR1].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
 #endif
 	return true;
 };
@@ -547,6 +564,9 @@ bool		GSeqSinglePlay::RenderObj() {
 	for (int i = 0; i < G_OBJ_CNT; i++) {
 		m_Obj[i].SetMatrix(&m_matObjWorld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i].Render(g_pImmediateContext);
+
+		if(m_bDebugCamera)
+			m_Obj[i].m_OBB.Render(&m_matObjWorld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 #endif
 	return true;
