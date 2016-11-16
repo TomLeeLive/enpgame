@@ -14,7 +14,6 @@
 #define G_MACRO_MAP_ADD		1	//맵
 #define G_MACRO_EFFECT_ADD   1	//이펙트
 #define G_MACRO_CHAR_ADD     1	//캐릭터
-//#define G_MACRO_TEXT_ADD	 1  //텍스트 출력
 
 //설정값 define
 #include "_values.h"

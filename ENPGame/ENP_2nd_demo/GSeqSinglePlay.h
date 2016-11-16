@@ -25,14 +25,9 @@ public:
 	}
 
 public:
-	//텍스트----------------------------------------------------------------------------------------
-#ifdef G_MACRO_TEXT_ADD
-	GDirectWrite					m_Font;
-	ComPtr<IDXGISurface1>			m_pBackBuffer = NULL;
-#endif
+	TCHAR							m_pTextOutBuffer[256];
 	int								m_iScore;					//점수 계산용
 	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
-	//----------------------------------------------------------------------------------------------
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
 
