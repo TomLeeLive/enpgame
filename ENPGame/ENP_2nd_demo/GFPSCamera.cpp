@@ -205,6 +205,7 @@ bool GFPSCamera::Frame()
 
 	Update( D3DXVECTOR4( m_fCameraPitchAngle, m_fCameraYawAngle, m_fCameraRollAngle, fDistance) );
 	UpdateVector();	
+	UpdateCameraDir();
 	return true;
 }
 
@@ -234,11 +235,7 @@ D3DXMATRIX GFPSCamera::GetRotMatY()
 	return matRotY;
 }
 
-void GFPSCamera::MoveLook( float fValue )
-{
-	//m_vCameraPos += m_vLookVector * fValue;
-
-
+void GFPSCamera::UpdateCameraDir() {
 	D3DXMATRIX matScl, matRot, matViewInv;
 
 	D3DXVECTOR3 vScl, vTrans;
@@ -254,13 +251,13 @@ void GFPSCamera::MoveLook( float fValue )
 	D3DXMatrixDecompose(&vScl, &qRot, &vTrans, &matViewInv);
 
 	D3DXMatrixScaling(&matScl, vScl.x, vScl.y, vScl.z);
-	
+
 	vTrans = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	D3DXMatrixAffineTransformation(&matRot, 1.0f, NULL, &qRot, &vTrans);
 
 	//m_tbsobj.m_matWorld = matScl * matRot;// *matTrans;
-	
+
 	D3DXMatrixIdentity(&m_matRotY);
 
 	m_matRotY._11 = matRot._11;
@@ -272,7 +269,11 @@ void GFPSCamera::MoveLook( float fValue )
 
 	D3DXVec3TransformCoord(&m_vCameraDir, &m_vCameraDir, &m_matRotY);
 	D3DXVec3Normalize(&m_vCameraDir, &m_vCameraDir);
+}
 
+void GFPSCamera::MoveLook( float fValue )
+{
+	UpdateCameraDir();
 	m_vCameraPos += m_vCameraDir * fValue;
 }
 void GFPSCamera::MoveSide( float fValue )
