@@ -89,12 +89,11 @@ bool GSeqSinglePlay::Frame()
 	if (g_InputData.bLeftClick) {
 		m_ObjGun.ResetAni();
 
-		D3DXVECTOR3 temp = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		
 		m_Ray.vOrigin = m_pCamera->m_vCameraPos;
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;
 
+		//D3DXVECTOR3 temp = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		//D3DXMATRIX matCharWld;
 		//matCharWld = m_matWorld;
 		//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
@@ -102,6 +101,9 @@ bool GSeqSinglePlay::Frame()
 		//for (int i = 0; i < 8;i++){
 		//D3DXVec3TransformCoord(&m_CharZombie[0].get()->m_OBB.m_vPoint[i],&m_CharZombie[0].get()->m_OBB.m_vPoint[i],&matCharWld);
 		//}
+
+		//if (GBBOXFUNC::RaytoBox(&temp, &m_CharZombie[0].get()->m_OBB, &ray))
+		//	int a = 10;
 
 		if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
 		{
@@ -112,9 +114,36 @@ bool GSeqSinglePlay::Frame()
 				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 				pChar0->m_pBoneObject->m_Scene.iLastFrame);
 		}
+		for (int i = 0; i < G_HERO_CNT; i++) {
+			if (ChkOBBToRay(&m_CharHero[i].get()->m_OBB, &m_Ray))
+			{
+				if (i == m_CurrentHero)
+					continue;
 
-		//if (GBBOXFUNC::RaytoBox(&temp, &m_CharZombie[0].get()->m_OBB, &ray))
-		//	int a = 10;
+				if (i == G_HERO_TOM)
+				{
+					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
+
+					m_CharHero[i]->Set(pChar1,
+						pChar1->m_pBoneObject,
+						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+						pChar1->m_pBoneObject->m_Scene.iLastFrame);
+				}
+				else if (i == G_HERO_JAKE)
+				{
+					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_DIE");
+
+					m_CharHero[i]->Set(pChar1,
+						pChar1->m_pBoneObject,
+						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+						pChar1->m_pBoneObject->m_Scene.iLastFrame);
+
+				}
+
+			}
+		}
+
+
 
 	}
 	//총 위치 업데이트
@@ -269,10 +298,10 @@ bool		GSeqSinglePlay::InitChar() {
 	Load();
 
 	for (int i = 0; i < m_CharZombie.size(); i++) {
-		m_CharZombie[i].get()->m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+		m_CharZombie[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
 	}
 	for (int i = 0; i < m_CharHero.size(); i++) {
-		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
 	}
 #endif
 	return true;
