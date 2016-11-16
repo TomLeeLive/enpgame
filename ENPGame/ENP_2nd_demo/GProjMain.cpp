@@ -2,8 +2,33 @@
 
 GProjMain* g_pMain;
 
+bool GProjMain::SoundLoad() {
+
+
+	int iIndex = 0;
+
+	iIndex = m_pSound.Load("data/sound/bgm/bgm1.mp3");				
+	iIndex = m_pSound.Load("data/sound/bgm/theme.mp3");				
+	iIndex = m_pSound.Load("data/sound/intro/intro_the_hell.wav");	
+	iIndex = m_pSound.Load("data/sound/player/boots1.wav");			
+	iIndex = m_pSound.Load("data/sound/player/boots2.wav");			
+	iIndex = m_pSound.Load("data/sound/player/boots3.wav");			
+	iIndex = m_pSound.Load("data/sound/player/boots4.wav");			
+	iIndex = m_pSound.Load("data/sound/weapon/shot1.wav");			
+	iIndex = m_pSound.Load("data/sound/weapon/shot2.wav");			
+
+	return true;
+}
+
 bool GProjMain::Init()
 {
+
+	m_pSound.Init();
+
+	SoundLoad();
+
+	m_pSound.Play(SND_BGM_1, true, true);
+
 	/*
 	//마우스커서 가두기
 	RECT Clip;
@@ -27,6 +52,7 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
+	m_pSound.Release();
 
 	for (int i = 0; i < G_SEQ_CNT; i++)
 		m_pGameSeq[i]->Release();
@@ -37,6 +63,8 @@ bool GProjMain::Release()
 bool GProjMain::Frame()
 {	
 	m_pCurrentSeq->Frame();
+
+	m_pSound.Frame();
 	return true;
 }
 

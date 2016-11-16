@@ -21,6 +21,9 @@ public:
 	GSeq * m_pCurrentSeq;
 
 public:	
+	GSound		m_pSound;				// »ç¿îµå(fmod)
+	bool		SoundLoad();
+
 	bool		Init();
 	bool		Frame();
 	bool		Render();	

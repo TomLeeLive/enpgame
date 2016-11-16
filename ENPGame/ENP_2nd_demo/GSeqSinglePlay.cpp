@@ -89,6 +89,9 @@ bool GSeqSinglePlay::Frame()
 	if (g_InputData.bLeftClick) {
 		m_ObjGun.ResetAni();
 
+		g_pMain->m_pSound.Play(SND_SHOT1,true, true);
+
+
 		m_Ray.vOrigin = m_pCamera->m_vCameraPos;
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;

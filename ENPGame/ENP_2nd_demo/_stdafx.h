@@ -22,6 +22,7 @@
 #include "_resources.h"
 
 //공통 사용 헤더
+#include "GSound.h"
 #include "GCamera.h"
 #include "GFPSCamera.h"
 #include "GTimer.h"
