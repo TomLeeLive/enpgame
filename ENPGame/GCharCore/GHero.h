@@ -1,6 +1,6 @@
 #pragma once
 #include "GCharMgr.h"
-
+#include "GBBox.h"
 #define MAX_BONE_MATRICES 255
 
 
@@ -12,6 +12,7 @@ class GHero : public GModel
 	};
 
 public:
+	GBBox			m_OBB;
 	int				m_iScore;
 	int				m_iBullet;
 	int				m_iHP;

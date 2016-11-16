@@ -68,7 +68,7 @@ void GHero::SetBoneMatrices(vector<D3DXMATRIX>* pList)
 }
 bool		GHero::Init()
 {
-
+	m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
 	return true;
 }
 bool	GHero::Set(GCharacter* pChar, GBoneObj* pBone, 
@@ -158,6 +158,9 @@ bool		GHero::Frame()
 				pModel->GetMatrix());*/
 		}
 	}
+
+	m_OBB.Frame(&m_matWorld);
+
 	return true;
 }
 bool		GHero::Render(ID3D11DeviceContext*    pContext)
