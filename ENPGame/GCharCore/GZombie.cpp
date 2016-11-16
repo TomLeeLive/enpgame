@@ -204,6 +204,7 @@ bool		GZombie::Render(ID3D11DeviceContext*    pContext)
 
 GZombie::GZombie()
 {
+	m_pChar = NULL;
 	m_bDead = false;
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	m_fSpeed = 1.0f;

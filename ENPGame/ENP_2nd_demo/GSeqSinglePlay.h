@@ -19,8 +19,10 @@ public:
 	}
 
 public:
+#ifdef G_MACRO_GAME_ADD
 	bool		m_bDebugCamera;
 	GGbsObj		m_ObjGun;
+#endif
 	bool		UpdateGunPosition();
 #ifdef G_MACRO_EFFECT_ADD
 public:
@@ -31,9 +33,6 @@ public:
 	D3DXMATRIX						m_matPlaneWorld;
 	D3DXMATRIX						m_mPlanWorld;
 	
-	
-
-
 
 	shared_ptr<GPlaneShape>			m_pPlane;
 	shared_ptr<GPlaneShape>			m_pScreen;
@@ -83,14 +82,11 @@ public:
 	D3DXMATRIX				m_matWorld;
 #ifdef G_MACRO_CHAR_ADD	
 public:
-
-
 	//--------------------------------------------------------------------------------------
 	// 파일 선택하여 로드( 단축기 : O )
 	//--------------------------------------------------------------------------------------
 	vector<shared_ptr<GZombie>>	m_CharZombie;
 	bool		Load();
-
 #endif
 public:
 

@@ -562,6 +562,7 @@ bool        GSeqSinglePlay::ReleaseMap() {
 };
 bool		GSeqSinglePlay::ReleaseChar() {
 #ifdef G_MACRO_CHAR_ADD
+
 	I_CharMgr.Release();
 
 #endif
