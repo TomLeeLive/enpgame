@@ -25,12 +25,21 @@ public:
 	}
 
 public:
+	//텍스트----------------------------------------------------------------------------------------
+#ifdef G_MACRO_TEXT_ADD
+	GDirectWrite					m_Font;
+	ComPtr<IDXGISurface1>			m_pBackBuffer = NULL;
+#endif
+	int								m_iScore;					//점수 계산용
+	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
+	//----------------------------------------------------------------------------------------------
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
-#ifdef G_MACRO_GAME_ADD
+
 	GSelect							m_Select;
 	G_RAY							m_Ray;
 	bool							ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
+#ifdef G_MACRO_GAME_ADD
 	bool							m_bDebugCamera;
 	GGbsObj							m_ObjGun;
 

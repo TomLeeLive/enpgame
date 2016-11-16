@@ -75,6 +75,7 @@ bool GSeqSinglePlay::Init()
 	InitEffect();
 	InitMap();
 	InitObj();
+
 	return true;
 }
 bool GSeqSinglePlay::Frame()
@@ -96,20 +97,10 @@ bool GSeqSinglePlay::Frame()
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;
 
-		//D3DXVECTOR3 temp = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		//D3DXMATRIX matCharWld;
-		//matCharWld = m_matWorld;
-		//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
-		
-		//for (int i = 0; i < 8;i++){
-		//D3DXVec3TransformCoord(&m_CharZombie[0].get()->m_OBB.m_vPoint[i],&m_CharZombie[0].get()->m_OBB.m_vPoint[i],&matCharWld);
-		//}
-
-		//if (GBBOXFUNC::RaytoBox(&temp, &m_CharZombie[0].get()->m_OBB, &ray))
-		//	int a = 10;
-
 		if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
 		{
+			m_iScore += G_DEFINE_SCORE_BASIC;
+
 			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
 
 			m_CharZombie[0]->Set(pChar0,
@@ -140,14 +131,9 @@ bool GSeqSinglePlay::Frame()
 						pChar1->m_pBoneObject,
 						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
 						pChar1->m_pBoneObject->m_Scene.iLastFrame);
-
 				}
-
 			}
 		}
-
-
-
 	}
 	//총 위치 업데이트
 	UpdateGunPosition();
@@ -176,14 +162,21 @@ bool GSeqSinglePlay::Release()
 	ReleaseObj();
 	ReleaseChar();
 	ReleaseEffect();
-
+#ifdef G_MACRO_TEXT_ADD
+	m_Font.Release();
+#endif
 	return true;
 }
 
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
 
+#ifdef G_MACRO_TEXT_ADD
+	//텍스트 ---------------------------------------------------------------------------------------------
+	HRESULT hr = g_pMain->GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), (LPVOID*)m_pBackBuffer.GetAddressOf());
+	m_Font.Set(g_hWnd, g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight, m_pBackBuffer.Get());
 
+#endif
 	D3DXMatrixIdentity(&m_matWorld);
 
 	m_ObjGun.Init();
@@ -304,6 +297,8 @@ bool		GSeqSinglePlay::InitChar() {
 		m_CharZombie[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
 	}
 	for (int i = 0; i < m_CharHero.size(); i++) {
+		m_CharHero[i].get()->m_iBullet = 100;
+		m_CharHero[i].get()->m_iHP = 100;
 		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
 	}
 #endif
@@ -405,6 +400,9 @@ bool		GSeqSinglePlay::InitEffect() {
 
 bool        GSeqSinglePlay::FrameGame() {
 #ifdef G_MACRO_GAME_ADD
+	
+	m_fPlayTime = (int)g_fDurationTime;
+
 	if (!m_bDebugCamera)
 		ShowCursor(false); // 커서를 화면에서 감추기
 	else {
@@ -622,6 +620,91 @@ bool        GSeqSinglePlay::RenderGame() {
 
 	//if(!m_bDebugCamera)
 	m_ObjGun.Render(g_pImmediateContext);
+
+#ifdef G_MACRO_TEXT_ADD
+	//텍스트 test
+	TCHAR pBuffer[256];
+	memset(pBuffer, 0, sizeof(TCHAR) * 256);
+	_stprintf_s(pBuffer, _T("PlayTime : %d"), m_fPlayTime);
+	if (m_Font.m_pTextFormat)
+	{
+		D2D1_SIZE_F rtSize = m_Font.m_pRT->GetSize();
+		//Draw a grid background.
+		int width = static_cast <int> (rtSize.width);
+		int height = static_cast <int> (rtSize.height);
+		m_Font.Begin();
+		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		RECT rc1 = { 30,0,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight / 2 };
+		m_Font.DrawText(rc1,
+			pBuffer,
+			D2D1::ColorF(1, 0, 0, 1)
+		);
+
+		RECT rc2 = { 30,225,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+		_stprintf_s(pBuffer, _T("Score : %d"), m_iScore);
+
+		m_Font.DrawText(rc2,
+			pBuffer,
+			D2D1::ColorF(0, 1, 0, 1)
+		);
+
+		RECT rc3 = { 30,250,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+		_stprintf_s(pBuffer, _T("Tom HP : %d"), m_CharHero[G_HERO_TOM].get()->m_iHP);
+
+		m_Font.DrawText(rc3,
+			pBuffer,
+			D2D1::ColorF(0, 0, 1, 1)
+		);
+
+		RECT rc4 = { 30,275,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+		_stprintf_s(pBuffer, _T("Tom Bullet : %d"), m_CharHero[G_HERO_TOM].get()->m_iBullet);
+
+		m_Font.DrawText(rc4,
+			pBuffer,
+			D2D1::ColorF(1, 0, 1, 1)
+		);
+
+		RECT rc5 = { 30,300,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+		_stprintf_s(pBuffer, _T("Jake HP : %d"), m_CharHero[G_HERO_JAKE].get()->m_iHP);
+
+		m_Font.DrawText(rc5,
+			pBuffer,
+			D2D1::ColorF(1, 1, 0, 1)
+		);
+
+		RECT rc6 = { 30,325,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+		_stprintf_s(pBuffer, _T("Jake Bullet : %d"), m_CharHero[G_HERO_JAKE].get()->m_iBullet);
+
+		m_Font.DrawText(rc6,
+			pBuffer,
+			D2D1::ColorF(0, 1, 1, 1)
+		);
+		/*
+		RECT rc7 = { 30,350,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+		_stprintf_s(pBuffer, _T("EnemyTank : %d"), m_TankManager.m_vecCars.size() - 1);
+
+		m_Font.DrawText(rc7,
+			pBuffer,
+			D2D1::ColorF(0, 0, 0, 1)
+		);
+		*/
+
+		/*
+		m_Font.m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		if (m_nWavePhase == WAVE_ST_GAMEOVER) {
+			RECT rc8 = { -80,250,  g_pMain->m_iWindowWidth,  g_pMain->m_iWindowHeight };
+			_stprintf_s(pBuffer, _T("Gave Over. Press \"Enter\" to Return to Menu"));
+
+			m_Font.DrawText(rc8,
+				pBuffer,
+				D2D1::ColorF(0, 0, 0, 1)
+			);
+		}
+		*/
+		m_Font.End();
+	}
+#endif
 #endif
 	return true;
 };
@@ -983,6 +1066,8 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
+	m_iScore = 0;
+	m_fPlayTime = 0.0f;
 	m_CurrentHero = G_HERO_TOM;
 	m_bDebugCamera = false;
 	m_pCamera = nullptr;
