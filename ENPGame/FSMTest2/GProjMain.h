@@ -23,13 +23,15 @@ public:
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
 	D3DXMATRIX  m_matWorld1;
-	D3DXMATRIX  m_Rotation;
+	D3DXMATRIX  m_RandomRotation;
+	D3DXMATRIX  m_BoxRotation;
 	D3DXMATRIX  m_matZombieWorld;
-	D3DXMATRIX  m_Result;
+	D3DXMATRIX  m_RandomRotResult;
+	D3DXMATRIX  m_BoxRotResult;
 	D3DXMATRIX  m_temp;
 
 
-	vector<shared_ptr<GZombie>>m_HeroObj;
+	vector<shared_ptr<GNewZombie>>m_HeroObj;
 
 	GShape*		m_Box;
 	GShape*		m_Box1;

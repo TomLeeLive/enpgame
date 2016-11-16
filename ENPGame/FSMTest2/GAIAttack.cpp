@@ -4,11 +4,12 @@ GAIAttack * GAIAttack::pInstance_ = 0;
 
 bool GAIAttack::Init()
 {
+
 	return true;
 }
 bool GAIAttack::Frame()
 {
-
+	
 	return true;
 }
 bool GAIAttack::Render()

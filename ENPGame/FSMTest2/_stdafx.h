@@ -21,7 +21,7 @@
 #include "GShape.h"
 
 #include "GModel.h"
-#include "GZombie.h"
+#include "GNewZombie.h"
 #include "GObjMgr.h"
 
 //Main
