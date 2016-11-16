@@ -93,6 +93,31 @@ public:
 
 #endif
 public:
+
+	bool        InitGame();
+	bool        InitMap();
+	bool		InitChar();
+	bool		InitObj();
+	bool		InitEffect();
+
+	bool        FrameGame();
+	bool        FrameMap();
+	bool		FrameChar();
+	bool		FrameObj();
+	bool		FrameEffect();
+
+	bool        RenderGame();
+	bool        RenderMap();
+	bool		RenderChar();
+	bool		RenderObj();
+	bool		RenderEffect();
+
+	bool        ReleaseGame();
+	bool        ReleaseMap();
+	bool		ReleaseChar();
+	bool		ReleaseObj();
+	bool		ReleaseEffect();
+
 	bool		Init();
 	bool		Frame();
 	bool		Render();

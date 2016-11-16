@@ -10,9 +10,10 @@
 
 
 //각 기능별 코드 넣고/빼고 용도 for debugging
-#define G_MACRO_MAP_ADD		1
-#define G_MACRO_EFFECT_ADD   1
-#define G_MACRO_CHAR_ADD     1
+#define G_MACRO_GAME_ADD		1	//게임 로직 관련
+#define G_MACRO_MAP_ADD		1	//맵
+#define G_MACRO_EFFECT_ADD   1	//이펙트
+#define G_MACRO_CHAR_ADD     1	//캐릭터
 
 //리소스 경로 define
 #include "_resources.h"
