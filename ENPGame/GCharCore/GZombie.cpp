@@ -68,6 +68,7 @@ void GZombie::SetBoneMatrices(vector<D3DXMATRIX>* pList)
 }
 bool		GZombie::Init()
 {
+	m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
 
 	return true;
 }
@@ -158,6 +159,8 @@ bool		GZombie::Frame()
 				pModel->GetMatrix());*/
 		}
 	}
+	m_OBB.Frame(&m_matWorld);
+
 	return true;
 }
 bool		GZombie::Render(ID3D11DeviceContext*    pContext)
