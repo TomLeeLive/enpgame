@@ -73,16 +73,22 @@ bool        GSeqSinglePlay::InitGame() {
 	m_pDebugCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 
-	m_pFPSCamera = make_shared<GFPSCamera>();
-	m_pFPSCamera->SetViewMatrix(D3DXVECTOR3(120.0f, 60.0f, -1400.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
+	for (int i = 0; i < G_HERO_CNT; i++) {
+		auto FPSCamera = make_shared<GFPSCamera>();
 
-	fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
-	m_pFPSCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pFPSCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+		FPSCamera.get()->SetViewMatrix(D3DXVECTOR3(120.0f + i*20.0f, 60.0f, -1400.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
+
+		fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
+		FPSCamera.get()->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+		FPSCamera.get()->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+
+		m_pFPSCamera.push_back(FPSCamera);
+	}
+
 
 
 	if (!m_bDebugCamera) {
-		m_pCamera = m_pFPSCamera.get();
+		m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 		g_pMain->m_bDebugInfoPrint = false;
 		g_pMain->m_bDebugFpsPrint = false;
 	}
@@ -249,7 +255,7 @@ bool        GSeqSinglePlay::FrameGame() {
 
 		if (m_bDebugCamera) {
 			m_bDebugCamera = false;
-			m_pCamera = m_pFPSCamera.get();
+			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 			g_pMain->m_bDebugInfoPrint = false;
 			g_pMain->m_bDebugFpsPrint = false;
 		}
@@ -261,10 +267,30 @@ bool        GSeqSinglePlay::FrameGame() {
 		}
 	}
 
+	if (I_Input.KeyCheck(DIK_TAB) == KEY_PUSH) {
+
+		if (G_HERO_TOM == m_CurrentHero) {
+			m_CurrentHero = G_HERO_JAKE;
+			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+		}
+		else {
+			m_CurrentHero = G_HERO_TOM;
+			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+		}
+		m_bDebugCamera = false;
+		g_pMain->m_bDebugInfoPrint = false;
+		g_pMain->m_bDebugFpsPrint = false;
+	}
+
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;
 
 	m_pCamera->Frame();
+
+	//for (int i = 0; i < m_pFPSCamera.size(); i++) {
+	//	
+	//	m_pFPSCamera[i].get()->Frame();
+	//}
 
 	//총 발사 애니메이션 처리
 	if (g_InputData.bLeftClick) {
@@ -305,7 +331,10 @@ bool        GSeqSinglePlay::FrameMap() {
 bool		GSeqSinglePlay::FrameChar() {
 #ifdef G_MACRO_CHAR_ADD
 
-
+	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
+	{
+		m_CharHero[iChar]->Frame();
+	}
 
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
@@ -473,11 +502,36 @@ bool        GSeqSinglePlay::RenderMap() {
 #endif
 	return true;
 };
+
 bool		GSeqSinglePlay::RenderChar() {
 #ifdef G_MACRO_CHAR_ADD
 	D3DXMATRIX matCharWld;
 	matCharWld = m_matWorld;
-	matCharWld._42 = 40.0f;
+	matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
+
+	D3DXMATRIX matHeroWld[G_HERO_CNT];
+	D3DXMATRIX matHeroScl[G_HERO_CNT];
+	D3DXMATRIX matHeroRot[G_HERO_CNT];
+	D3DXMATRIX matHeroTrans[G_HERO_CNT];
+
+	for (int i = 0; i < G_HERO_CNT; i++){
+		D3DXMatrixIdentity(&matHeroWld[i]);
+		D3DXMatrixIdentity(&matHeroScl[i]);
+
+		D3DXMatrixIdentity(&matHeroTrans[i]);
+		D3DXMatrixTranslation(&matHeroTrans[i], m_pFPSCamera[i].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[i].get()->m_vCameraPos.z);
+		matHeroRot[i] = m_pFPSCamera[i].get()->GetRotMatY();
+
+		matHeroWld[i] = matHeroScl[i] * matHeroRot[i] * matHeroTrans[i];
+	}
+
+	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
+	{
+		if (iChar == m_CurrentHero && m_bDebugCamera==false)
+			continue;
+		m_CharHero[iChar].get()->SetMatrix(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_CharHero[iChar].get()->Render(g_pImmediateContext);
+	}
 
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
@@ -619,7 +673,7 @@ bool GSeqSinglePlay::UpdateGunPosition() {
 
 bool GSeqSinglePlay::Load()
 {
-
+	//좀비 로드
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharZombie.gci") /*_T("CharTable.gci")*/))
 	{
 		return false;
@@ -634,6 +688,39 @@ bool GSeqSinglePlay::Load()
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	m_CharZombie.push_back(pObjA);
+
+	//주인공1 로드
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero1.gci") /*_T("CharTable.gci")*/))
+	{
+		return false;
+	}
+
+	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_IDLE");
+
+
+	shared_ptr<GHero> pObjB = make_shared<GHero>();
+	pObjB->Set(pChar1,
+		pChar1->m_pBoneObject,
+		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar1->m_pBoneObject->m_Scene.iLastFrame);
+	m_CharHero.push_back(pObjB);
+
+	//주인공2 로드
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero2.gci") /*_T("CharTable.gci")*/))
+	{
+		return false;
+	}
+
+	GCharacter* pChar2 = I_CharMgr.GetPtr(L"HERO2_IDLE");
+
+
+	shared_ptr<GHero> pObjC = make_shared<GHero>();
+	pObjC->Set(pChar2,
+		pChar2->m_pBoneObject,
+		pChar2->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar2->m_pBoneObject->m_Scene.iLastFrame);
+	m_CharHero.push_back(pObjC);
+
 	return true;
 }
 #endif 
@@ -729,6 +816,7 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
+	m_CurrentHero = G_HERO_TOM;
 	m_bDebugCamera = false;
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD

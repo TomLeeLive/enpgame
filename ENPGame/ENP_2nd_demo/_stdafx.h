@@ -15,6 +15,9 @@
 #define G_MACRO_EFFECT_ADD   1	//이펙트
 #define G_MACRO_CHAR_ADD     1	//캐릭터
 
+//설정값 define
+#include "_values.h"
+
 //리소스 경로 define
 #include "_resources.h"
 
@@ -40,6 +43,8 @@
 #include "GCharMgr.h"
 //#include "GHeroObj.h"
 #include "GZombie.h"
+#include "GHero.h"
+
 #endif
 
 //맵

@@ -1,8 +1,8 @@
 #NUM_OF_CHARACTER		6
 //////////////////////////////////////////////////////////
-#CHAR_NAME		HERO_DIE
+#CHAR_NAME		HERO1_DIE
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/hero1/die_backward.gmt
+#MATRIX_FILE		data/character/hero1/hero1_die_backward.gmt
 #ACTION_LOOP		0 
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
@@ -18,9 +18,9 @@
 #SKN_DEFENSE_COUNT		0	
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
-#CHAR_NAME		HERO_IDLE
+#CHAR_NAME		HERO1_IDLE
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/hero1/idle.gmt
+#MATRIX_FILE		data/character/hero1/hero1_idle.gmt
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
@@ -36,9 +36,9 @@
 #SKN_DEFENSE_COUNT		0	
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
-#CHAR_NAME		HERO_WALK
+#CHAR_NAME		HERO1_WALK
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/hero1/walk.gmt 
+#MATRIX_FILE		data/character/hero1/hero1_walk.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
@@ -54,9 +54,9 @@
 #SKN_DEFENSE_COUNT		0	
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
-#CHAR_NAME		HERO_ATTACK
+#CHAR_NAME		HERO1_ATTACK
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/hero1/attack_shotgun.gmt 
+#MATRIX_FILE		data/character/hero1/hero1_attack_shotgun.gmt 
 #ACTION_LOOP		0  
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
@@ -72,9 +72,9 @@
 #SKN_DEFENSE_COUNT		0	
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
-#CHAR_NAME		HERO_RUN
+#CHAR_NAME		HERO1_RUN
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/hero1/run.gmt 
+#MATRIX_FILE		data/character/hero1/hero1_run.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
@@ -90,9 +90,9 @@
 #SKN_DEFENSE_COUNT		0	
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
-#CHAR_NAME		HERO_JUMP
+#CHAR_NAME		HERO1_JUMP
 #SHADER_FILE		Character.hlsl
-#MATRIX_FILE		data/character/hero1/jump.gmt 
+#MATRIX_FILE		data/character/hero1/hero1_jump.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
 #SKN_UPPER_BODY_COUNT	1
