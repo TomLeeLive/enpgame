@@ -87,14 +87,15 @@ bool GSeqSinglePlay::FrameGun() {
 	//총 발사 애니메이션 처리
 	if (g_InputData.bLeftClick) {
 
-		if (m_CharHero[m_CurrentHero].get()->m_iBullet <= 0)
+		if (m_CharHero[m_CurrentHero].get()->m_iBullet <= 0&& m_bDebugMode==false)
 			return false;
 
 		m_ObjGun.ResetAni();
 
 		g_pMain->m_pSound.Play(SND_SHOT1, true, true);
 
-		m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
+		if(m_bDebugMode == false)
+			m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
 
 		m_Ray.vOrigin = m_pCamera->m_vCameraPos;
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
