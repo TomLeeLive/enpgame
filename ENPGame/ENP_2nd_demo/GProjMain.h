@@ -23,6 +23,7 @@ public:
 public:	
 	GSound		m_pSound;				// »ç¿îµå(fmod)
 	bool		SoundLoad();
+	void		ClipMouse(bool bClip);
 
 	bool		Init();
 	bool		Frame();

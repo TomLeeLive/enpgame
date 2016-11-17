@@ -230,7 +230,7 @@ bool        GSeqSinglePlay::InitGame() {
 
 
 
-	if (!m_bDebugCamera) {
+	if (!m_bDebugMode) {
 		m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 		g_pMain->m_bDebugInfoPrint = false;
 		g_pMain->m_bDebugFpsPrint = false;
@@ -250,7 +250,7 @@ bool        GSeqSinglePlay::InitMap() {
 
 
 	m_iDrawDepth = 0;
-	m_bDebugRender = false;
+	m_bMapDebugRender = false;
 
 	//--------------------------------------------------------------------------------------
 	// 디버그 라인 생성
@@ -419,22 +419,25 @@ bool        GSeqSinglePlay::FrameGame() {
 	
 	m_fPlayTime = (int)g_fDurationTime;
 
-	if (!m_bDebugCamera)
+	if (!m_bDebugMode)
 		ShowCursor(false); // 커서를 화면에서 감추기
 	else {
 		ShowCursor(true);
 	}
 
+	//디버그 모드 토글
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
 
-		if (m_bDebugCamera) {
-			m_bDebugCamera = false;
+		if (m_bDebugMode) {
+			m_bDebugMode = false;
+			g_pMain->ClipMouse(true);
 			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 			g_pMain->m_bDebugInfoPrint = false;
 			g_pMain->m_bDebugFpsPrint = false;
 		}
 		else {
-			m_bDebugCamera = true;
+			m_bDebugMode = true;
+			g_pMain->ClipMouse(false);
 			m_pCamera = m_pDebugCamera.get();
 			g_pMain->m_bDebugInfoPrint = true;
 			g_pMain->m_bDebugFpsPrint = true;
@@ -451,7 +454,7 @@ bool        GSeqSinglePlay::FrameGame() {
 			m_CurrentHero = G_HERO_TOM;
 			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 		}
-		m_bDebugCamera = false;
+		m_bDebugMode = false;
 		g_pMain->m_bDebugInfoPrint = false;
 		g_pMain->m_bDebugFpsPrint = false;
 	}
@@ -484,7 +487,7 @@ bool        GSeqSinglePlay::FrameMap() {
 
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
-		m_bDebugRender = !m_bDebugRender;
+		m_bMapDebugRender = !m_bMapDebugRender;
 	}
 	if (I_Input.KeyCheck(DIK_GRAVE) == KEY_UP) //문턱값 사용 ~
 	{
@@ -695,7 +698,7 @@ bool        GSeqSinglePlay::RenderMap() {
 	m_CustomMap.Render(g_pImmediateContext);
 
 	DrawSelectTreeLevel(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	if (m_bDebugRender)
+	if (m_bMapDebugRender)
 	{
 		DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
@@ -730,7 +733,7 @@ bool		GSeqSinglePlay::RenderChar() {
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
-		if (iChar == m_CurrentHero && m_bDebugCamera==false)
+		if (iChar == m_CurrentHero && m_bDebugMode==false)
 			continue;
 		m_CharHero[iChar].get()->SetMatrix(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharHero[iChar].get()->Render(g_pImmediateContext);
@@ -743,7 +746,7 @@ bool		GSeqSinglePlay::RenderChar() {
 		m_CharZombie[iChar]->Render(g_pImmediateContext);
 	}
 
-	if(m_bDebugCamera){
+	if(m_bDebugMode){
 		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++) {
 			m_CharZombie[iChar].get()->m_OBB.Render(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
@@ -761,7 +764,7 @@ bool		GSeqSinglePlay::RenderObj() {
 		m_Obj[i].SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i].Render(g_pImmediateContext);
 
-		if(m_bDebugCamera)
+		if(m_bDebugMode)
 			m_Obj[i].m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 #endif
@@ -1037,7 +1040,7 @@ GSeqSinglePlay::GSeqSinglePlay(void)
 	m_iScore = 0;
 	m_fPlayTime = 0.0f;
 	m_CurrentHero = G_HERO_TOM;
-	m_bDebugCamera = false;
+	m_bDebugMode = false;
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD
 	m_pSprite = nullptr;

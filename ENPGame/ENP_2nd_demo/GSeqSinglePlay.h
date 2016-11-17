@@ -35,7 +35,7 @@ public:
 	G_RAY							m_Ray;
 	bool							ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
 #ifdef G_MACRO_GAME_ADD
-	bool							m_bDebugCamera;
+	bool							m_bDebugMode;		//디버그 모드 토글
 	GGbsObj							m_ObjGun;
 
 	G_HERO							m_CurrentHero;
@@ -88,7 +88,7 @@ public:
 	// 디버깅 용도
 	//--------------------------------------------------------------------------------------
 	GLineShape		m_DrawLine;
-	bool			m_bDebugRender;
+	bool			m_bMapDebugRender;
 	int				m_iDrawDepth;
 	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
 
