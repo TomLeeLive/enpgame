@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Dlg">
+      <UniqueIdentifier>{0de35490-1f4e-43b5-a92f-a673b0067cb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -58,6 +61,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GCreateMapDlg.h">
+      <Filter>소스 파일\Dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="GSaveMapDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -96,6 +102,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GCreateMapDlg.cpp">
+      <Filter>소스 파일\Dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="GSaveMapDlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

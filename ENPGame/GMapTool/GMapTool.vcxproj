@@ -214,6 +214,7 @@
     <ClInclude Include="FileView.h" />
     <ClInclude Include="GCreateMapDlg.h" />
     <ClInclude Include="GMapTileRender.h" />
+    <ClInclude Include="GSaveMapDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapTool.h" />
     <ClInclude Include="MapToolDoc.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="GCreateMapDlg.cpp" />
     <ClCompile Include="GMapTileRender.cpp" />
+    <ClCompile Include="GSaveMapDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapTool.cpp" />
     <ClCompile Include="MapToolDoc.cpp" />

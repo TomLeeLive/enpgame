@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-
+#include "MapTool.h"
 
 // GCreateMapDlg 대화 상자입니다.
 
@@ -22,6 +22,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	//CMapToolApp MapTool;
+public:
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	int m_iTileWidth;
@@ -31,3 +33,4 @@ public:
 	afx_msg void OnBnClickedButton1();
 	CString m_strCharName;
 };
+//extern GCreateMapDlg GCreateDlg;

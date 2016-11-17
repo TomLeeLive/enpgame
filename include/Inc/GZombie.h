@@ -37,14 +37,14 @@ public:
 	ComPtr<ID3D11Buffer>             m_pBoneBuffer;
 	ComPtr<ID3D11ShaderResourceView> m_pBoneBufferRV;
 public:
-	bool		Init();
-	bool		Set(GCharacter* pChar, GBoneObj* pBone,
+	virtual bool		Init();
+	virtual bool		Set(GCharacter* pChar, GBoneObj* pBone,
 						float fStart, float fEnd);
-	void		SetBoneMatrices(vector<D3DXMATRIX>* pList);
-	bool		Frame();
-	bool		Render(ID3D11DeviceContext*    pContext);
-	void		SetActionFrame(int iStart, int iEnd,int iCharacterMatrixIndex = -1,	int iModelMatrixIndex = -1);
-	HRESULT		CreateConstantBuffer();
+	virtual void		SetBoneMatrices(vector<D3DXMATRIX>* pList);
+	virtual bool		Frame();
+	virtual bool		Render(ID3D11DeviceContext*    pContext);
+	virtual void		SetActionFrame(int iStart, int iEnd,int iCharacterMatrixIndex = -1,	int iModelMatrixIndex = -1);
+	virtual HRESULT		CreateConstantBuffer();
 public:
 	GZombie();
 	virtual~GZombie();

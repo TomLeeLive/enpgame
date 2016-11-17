@@ -9,21 +9,23 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GCoreLibV2.h"
-#include "GCamera.h"
-
-#include "GMiniMap.h"
-#include "map/GNoiseMap.h"
-#include "map/GQuadTreeIndex.h"
-#include "map/GMapObject.h"
-
-//추가
-#include "MainFrm.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment( lib, "GMapCore32d.lib" )
 #else
 #pragma comment( lib, "GMapCore32.lib" )
 #endif
+
+
+//#include "map/GNoiseMap.h"
+//#include "map/GQuadTreeIndex.h"
+//#include "map/GMapObject.h"
+#include "map/GMap.h"
+#include "map/GQuadTree.h"
+#include "GCamera.h"
+
+#include "GCreateMapDlg.h"
+#include "GSaveMapDlg.h"
 
 
 // CMapToolApp:
@@ -35,22 +37,20 @@ class CMapToolApp : public CWinAppEx, public GCoreLibV2
 public:
 	shared_ptr<GCamera >	m_pMainCamera;
 	//--------------------------------------------------------------------------------------
-	// 오브젝트
+	// 툴
 	//--------------------------------------------------------------------------------------
-	//GMapObject*			m_pMapObj;
-	//GBoxShape*			m_pBoxs;
+	//GCreateMapDlg GCreateDlg;
+	//GSaveMapDlg GSaveDlg;
+	//--------------------------------------------------------------------------------------
+	// 맵
+	//--------------------------------------------------------------------------------------
+	GMap	 m_CustomMap;
+	TMapDesc m_MapDesc;
 	//--------------------------------------------------------------------------------------
 	// 쿼드트리
 	//--------------------------------------------------------------------------------------
-	GQuadTreeIndex	m_QuadTree;
-	//--------------------------------------------------------------------------------------
-	// 노이즈 맵
-	//--------------------------------------------------------------------------------------
-	GNoiseMap		m_NoiseMap;
-	//--------------------------------------------------------------------------------------
-	// 미니맵
-	//--------------------------------------------------------------------------------------
-	//GMiniMap		m_MiniMap;
+	GQuadTree m_QuadTree;
+	
 	//--------------------------------------------------------------------------------------
 	// 디버깅 용도
 	//--------------------------------------------------------------------------------------
@@ -59,20 +59,21 @@ public:
 	int				m_iDrawDepth;
 	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
 public:
+	bool			CreateInit(int Width, int Height, float Distance, CString strTex);
+public:
 	bool			Init();
 	bool			Frame();
 	bool			Render();
 	bool			Release();
-	void			DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj);
+	
+	bool			DrawQuadLine(GNode* pNode);
+	bool			DrawDebug();
 	//--------------------------------------------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//--------------------------------------------------------------------------------------
 	HRESULT			CreateResource();
 	HRESULT			DeleteResource();
-	bool			DrawDebug();
-
-	bool			DrawQuadLine(GNode* pNode);
-	void			DrawMiniMap(); 
+	
 public:
 	CMapToolApp();
 

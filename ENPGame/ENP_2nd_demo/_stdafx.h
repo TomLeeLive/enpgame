@@ -26,6 +26,7 @@
 #include "GCamera.h"
 #include "GFPSCamera.h"
 #include "GTimer.h"
+#include "GDirectWrite.h"
 
 //Ä³¸¯ÅÍ
 #ifdef G_MACRO_CHAR_ADD
@@ -44,6 +45,7 @@
 #include "GCharMgr.h"
 //#include "GHeroObj.h"
 #include "GZombie.h"
+#include "GN2Zombie.h"
 #include "GHero.h"
 
 #endif

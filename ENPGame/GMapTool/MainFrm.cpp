@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_WM_SETTINGCHANGE()
 	ON_COMMAND(ID_CREATEMAP, &CMainFrame::OnCreatemap)
+	ON_COMMAND(ID_SAVEMAP, &CMainFrame::OnSavemap)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -93,7 +94,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("상태 표시줄을 만들지 못했습니다.\n");
 		return -1;      // 만들지 못했습니다.
 	}
-	m_wndStatusBar.SetIndicators(indicators, sizeof(indicators)/sizeof(UINT));
+	m_wndStatusBar.SetIndicators(indicators, sizeof(indicators) / sizeof(UINT));
 
 	// TODO: 도구 모음 및 메뉴 모음을 도킹할 수 없게 하려면 이 다섯 줄을 삭제하십시오.
 	m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
@@ -180,7 +181,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	if( !CFrameWndEx::PreCreateWindow(cs) )
+	if (!CFrameWndEx::PreCreateWindow(cs))
 		return FALSE;
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
@@ -206,7 +207,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	CString strFileView;
 	bNameValid = strFileView.LoadString(IDS_FILE_VIEW);
 	ASSERT(bNameValid);
-	if (!m_wndFileView.Create(strFileView, this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_FILEVIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT| CBRS_FLOAT_MULTI))
+	if (!m_wndFileView.Create(strFileView, this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_FILEVIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
 	{
 		TRACE0("파일 뷰 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
@@ -276,9 +277,9 @@ void CMainFrame::OnViewCustomize()
 	pDlgCust->Create();
 }
 
-LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
+LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp, LPARAM lp)
 {
-	LRESULT lres = CFrameWndEx::OnToolbarCreateNew(wp,lp);
+	LRESULT lres = CFrameWndEx::OnToolbarCreateNew(wp, lp);
 	if (lres == 0)
 	{
 		return 0;
@@ -373,7 +374,7 @@ void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
 }
 
 
-BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext) 
+BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
 {
 	// 기본 클래스가 실제 작업을 수행합니다.
 
@@ -389,7 +390,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
 	ASSERT(bNameValid);
 
-	for (int i = 0; i < iMaxUserToolbars; i ++)
+	for (int i = 0; i < iMaxUserToolbars; i++)
 	{
 		CMFCToolBar* pUserToolbar = GetUserToolBarByIndex(i);
 		if (pUserToolbar != NULL)
@@ -408,45 +409,56 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 	m_wndOutput.UpdateFonts();
 }
 
-//void CMainFrame::OnMapsave()
-//{
-//	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-//	static GCreateMapDlg dlg;
-//	if (dlg.GetSafeHwnd() == NULL)
-//	{
-//		dlg.Create(IDD_CREATEMAP, this);
-//	}
-//	dlg.ShowWindow(SW_SHOW);
-//}
-
-
-
+// 지형생성 다이얼로그 호출
 void CMainFrame::OnCreatemap()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	GCreateMapDlg dlg;
 	dlg.DoModal();
 
-	//TMapDesc MapDesc = { pow(2.0f,3.0f) + 1, pow(2.0f,3.0f) + 1, 10.0f, 1.0f, L"data/sand.jpg", L"data/shader/box.hlsl" };
-	//if (!m_NoiseMap.Load(MapDesc))
-	//{
-	//	return false;
-	//}
-	//m_QuadTree.SetMinDivideSize(10);
-	//m_QuadTree.SetMaxDepthLimit(7);
-	//m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
-	//m_QuadTree.Build(&m_NoiseMap, m_NoiseMap.m_iNumCols, m_NoiseMap.m_iNumRows); //가져오기
+}
+// 지형 저장 다이얼로그 호출
+void CMainFrame::OnSavemap()
+{
+	// FALSE -> 저장대화상자
+	CFileDialog dlg(FALSE);
+	if (dlg.DoModal() == IDOK)
+	{
+		//dlg.GetPathName();
+		FILE *fp;
+		m_strSaveFileName = dlg.GetPathName();
 
-	////frame
-	//m_NoiseMap.SetHurstIndex(false); //가져오기
-	//m_QuadTree.UpdateBoundingBox(m_QuadTree.m_pRootNode);
-	//m_QuadTree.Frame();
-	//if (m_QuadTree.m_bDynamicUpdateIB == true)
-	//{
-	//	m_NoiseMap.UpdateIndexBuffer(m_pImmediateContext, m_QuadTree.m_IndexList, m_QuadTree.m_iNumFace);
-	//}
-	//m_NoiseMap.Frame();
+	}
 
-	////render
+	//CFile file;
+	//file.Open(m_strSaveFileName, CFile::modeCreate | CFile::modeWrite);
+	//int data1 = 10;
+	//file.Write(&data1, sizeof(int));
+	//file.Close();
+
+	char str[MAX_PATH] = { 0, };
+	//str = _T("Width1234679");
+	////int data_size = strlen(str);
+	//file.Write(str, 10);
+	
+	//int iWidth = theApp.m_MapDesc.iNumCols;
+	//file.Write(&iWidth, sizeof(int));
+
+	//str = NULL;
+	//str = _T("Height");
+	//file.Write(str, sizeof(TCHAR));
+	//file.Write(&GMapDlg.m_iTileHeight, sizeof(int));
+
+	
+	FILE* fp;
+
+	fp = fopen("test.txt", "rt");
+
+	while (!feof(fp))
+	{
+		fgets(str, 256, fp);		
+	}
+	
+	
 
 }

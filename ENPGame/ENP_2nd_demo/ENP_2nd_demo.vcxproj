@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GFPSCamera.cpp" />
+    <ClCompile Include="GN2Zombie.cpp" />
     <ClCompile Include="GProjMain.cpp" />
     <ClCompile Include="GSeq.cpp" />
     <ClCompile Include="GSeqGameEnd.cpp" />
@@ -126,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GFPSCamera.h" />
+    <ClInclude Include="GN2Zombie.h" />
     <ClInclude Include="GProjMain.h" />
     <ClInclude Include="GSeq.h" />
     <ClInclude Include="GSeqGameEnd.h" />

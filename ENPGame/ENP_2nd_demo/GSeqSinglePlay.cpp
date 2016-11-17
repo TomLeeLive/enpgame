@@ -75,55 +75,59 @@ bool GSeqSinglePlay::Init()
 	InitEffect();
 	InitMap();
 	InitObj();
+
 	return true;
 }
-bool GSeqSinglePlay::Frame()
-{
-	FrameGame();
-	FrameMap();
-	FrameObj();
-	FrameEffect();
-	FrameChar();
+bool GSeqSinglePlay::FrameGun() {
+
+	//총 위치 업데이트
+	UpdateGunPosition();
+	m_ObjGun.Frame();
 
 	//총 발사 애니메이션 처리
 	if (g_InputData.bLeftClick) {
+
+		if (m_CharHero[m_CurrentHero].get()->m_iBullet <= 0&& m_bDebugMode==false)
+			return false;
+
 		m_ObjGun.ResetAni();
 
-		g_pMain->m_pSound.Play(SND_SHOT1,true, true);
+		g_pMain->m_pSound.Play(SND_SHOT1, true, true);
 
+		if(m_bDebugMode == false)
+			m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
 
 		m_Ray.vOrigin = m_pCamera->m_vCameraPos;
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;
 
-		//D3DXVECTOR3 temp = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		//D3DXMATRIX matCharWld;
-		//matCharWld = m_matWorld;
-		//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
-		
-		//for (int i = 0; i < 8;i++){
-		//D3DXVec3TransformCoord(&m_CharZombie[0].get()->m_OBB.m_vPoint[i],&m_CharZombie[0].get()->m_OBB.m_vPoint[i],&matCharWld);
-		//}
+		for (int i = 0; i < m_CharZombie.size();i++){
+			if (m_CharZombie[i].get()->m_bDead == false) {
+				if (ChkOBBToRay(&m_CharZombie[i].get()->m_OBB, &m_Ray))
+				{
+					m_iScore += G_DEFINE_SCORE_BASIC;
 
-		//if (GBBOXFUNC::RaytoBox(&temp, &m_CharZombie[0].get()->m_OBB, &ray))
-		//	int a = 10;
-
-		if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+					ChangeZombState(i, G_DEFINE_ANI_ZOMB_DIE);
+				}
+			}
 		}
+
 		for (int i = 0; i < G_HERO_CNT; i++) {
+
+			if (i == m_CurrentHero)
+				continue;
+
+			if (m_CharHero[i].get()->m_bDead == true)
+				continue;
+
 			if (ChkOBBToRay(&m_CharHero[i].get()->m_OBB, &m_Ray))
 			{
-				if (i == m_CurrentHero)
-					continue;
+				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
 
-				if (i == G_HERO_TOM)
+				if (m_CharHero[i].get()->m_iHP <= 0)
+					m_CharHero[i].get()->m_bDead = true;
+
+				if (i == G_HERO_TOM && m_CharHero[i].get()->m_bDead == true)
 				{
 					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
 
@@ -132,7 +136,7 @@ bool GSeqSinglePlay::Frame()
 						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
 						pChar1->m_pBoneObject->m_Scene.iLastFrame);
 				}
-				else if (i == G_HERO_JAKE)
+				else if (i == G_HERO_JAKE && m_CharHero[i].get()->m_bDead == true)
 				{
 					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_DIE");
 
@@ -140,19 +144,58 @@ bool GSeqSinglePlay::Frame()
 						pChar1->m_pBoneObject,
 						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
 						pChar1->m_pBoneObject->m_Scene.iLastFrame);
-
 				}
+			}
+		}
+	}
+	return true;
+}
+bool GSeqSinglePlay::Frame()
+{
+	int  iZombieAliveCnt = 0;
+	for (int i = 0; i < m_CharZombie.size(); i++) {
+		if (m_CharZombie[i].get()->m_bDead == false)
+			iZombieAliveCnt++;
+	}
 
+	if(iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
+		AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
+
+
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		for (int j = 0; j < m_CharZombie.size(); j++) {
+
+			//if (m_CharZombie[j].get()->getState() == G_ZOMB_ST_ATTACK) {
+			//	D3DXVECTOR3 vHeroPos, vZombPos;
+			//	vHeroPos= D3DXVECTOR3(m_CharHero[i].get()->m_matWorld._41, m_CharHero[i].get()->m_matWorld._42, m_CharHero[i].get()->m_matWorld._43);
+			//	vZombPos= D3DXVECTOR3(m_CharZombie[j].get()->m_matWorld._41, m_CharZombie[j].get()->m_matWorld._42, m_CharZombie[j].get()->m_matWorld._43);
+			//	if (GBBOXFUNC::CalcDistance(&vHeroPos, &vZombPos) > 100.0f) {
+			//		ChangeZombState(j, G_DEFINE_ANI_ZOMB_WLK);
+			//	}
+			//}
+			
+			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &m_CharZombie[j].get()->m_OBB)) {
+				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
+
+				m_CharHero[i].get()->m_iHP -= 1;
+			}
+			else {
 			}
 		}
 
-
-
 	}
-	//총 위치 업데이트
-	UpdateGunPosition();
-	m_ObjGun.Frame();
 
+
+
+
+	FrameGame();
+	FrameMap();
+	FrameObj();
+	FrameEffect();
+	FrameChar();
+
+	FrameGun();
 	return true;
 }
 
@@ -176,13 +219,11 @@ bool GSeqSinglePlay::Release()
 	ReleaseObj();
 	ReleaseChar();
 	ReleaseEffect();
-
 	return true;
 }
 
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
-
 
 	D3DXMatrixIdentity(&m_matWorld);
 
@@ -221,7 +262,7 @@ bool        GSeqSinglePlay::InitGame() {
 
 
 
-	if (!m_bDebugCamera) {
+	if (!m_bDebugMode) {
 		m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 		g_pMain->m_bDebugInfoPrint = false;
 		g_pMain->m_bDebugFpsPrint = false;
@@ -241,7 +282,7 @@ bool        GSeqSinglePlay::InitMap() {
 
 
 	m_iDrawDepth = 0;
-	m_bDebugRender = false;
+	m_bMapDebugRender = false;
 
 	//--------------------------------------------------------------------------------------
 	// 디버그 라인 생성
@@ -300,12 +341,7 @@ bool		GSeqSinglePlay::InitChar() {
 
 	Load();
 
-	for (int i = 0; i < m_CharZombie.size(); i++) {
-		m_CharZombie[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
-	}
-	for (int i = 0; i < m_CharHero.size(); i++) {
-		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
-	}
+
 #endif
 	return true;
 };
@@ -405,22 +441,28 @@ bool		GSeqSinglePlay::InitEffect() {
 
 bool        GSeqSinglePlay::FrameGame() {
 #ifdef G_MACRO_GAME_ADD
-	if (!m_bDebugCamera)
+	
+	m_fPlayTime = (int)g_fDurationTime;
+
+	if (!m_bDebugMode)
 		ShowCursor(false); // 커서를 화면에서 감추기
 	else {
 		ShowCursor(true);
 	}
 
+	//디버그 모드 토글
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
 
-		if (m_bDebugCamera) {
-			m_bDebugCamera = false;
+		if (m_bDebugMode) {
+			m_bDebugMode = false;
+			g_pMain->ClipMouse(true);
 			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 			g_pMain->m_bDebugInfoPrint = false;
 			g_pMain->m_bDebugFpsPrint = false;
 		}
 		else {
-			m_bDebugCamera = true;
+			m_bDebugMode = true;
+			g_pMain->ClipMouse(false);
 			m_pCamera = m_pDebugCamera.get();
 			g_pMain->m_bDebugInfoPrint = true;
 			g_pMain->m_bDebugFpsPrint = true;
@@ -437,7 +479,7 @@ bool        GSeqSinglePlay::FrameGame() {
 			m_CurrentHero = G_HERO_TOM;
 			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
 		}
-		m_bDebugCamera = false;
+		m_bDebugMode = false;
 		g_pMain->m_bDebugInfoPrint = false;
 		g_pMain->m_bDebugFpsPrint = false;
 	}
@@ -470,7 +512,7 @@ bool        GSeqSinglePlay::FrameMap() {
 
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
-		m_bDebugRender = !m_bDebugRender;
+		m_bMapDebugRender = !m_bMapDebugRender;
 	}
 	if (I_Input.KeyCheck(DIK_GRAVE) == KEY_UP) //문턱값 사용 ~
 	{
@@ -482,6 +524,70 @@ bool        GSeqSinglePlay::FrameMap() {
 #endif
 	return true;
 };
+void		GSeqSinglePlay::ChangeZombState(int iNum, G_ZOMB_ST state) {
+
+	m_CharZombie[iNum]->setState(state);
+
+	int iState = state;
+	
+	GCharacter* pChar0;
+
+	switch (iState) {
+	case 	G_ZOMB_ST_WALK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
+	}
+		break;
+	case 	G_ZOMB_ST_IDLE: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
+	}
+		break;
+	case 	G_ZOMB_ST_ATTACK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
+	}
+		break;
+	case 	G_ZOMB_ST_DEAD: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
+	}
+		break;
+	}
+
+	m_CharZombie[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+}
+void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
+
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
+	auto pChar0 = I_CharMgr.GetPtr(str);
+
+	m_CharZombie[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_DEAD);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_ATTACK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_WALK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_IDLE);
+	}
+	else {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_IDLE);
+	}
+
+
+
+
+
+}
 bool		GSeqSinglePlay::FrameChar() {
 #ifdef G_MACRO_CHAR_ADD
 
@@ -490,87 +596,55 @@ bool		GSeqSinglePlay::FrameChar() {
 		m_CharHero[iChar]->Frame();
 	}
 
-	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
-	{
-		/*
-		if (I_Input.KeyCheck(DIK_ADD))
-		{
-		m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
-		}
-		if (I_Input.KeyCheck(DIK_SUBTRACT))
-		{
-		m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
-		if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
-		}
-		*/
-		m_CharZombie[iChar]->Frame();
-	}
-
-
-	enum G_ZOMBIE_STATE {
-		G_ZOMB_IDLE = 0,
-		G_ZOMB_ATTACK,
-		G_ZOMB_WALK,
-		G_ZOMB_DIE,
-		G_ZOMB_CNT
-	};
-	static int iChange = 0;
-
-
+	int iChange = 0;
 
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
-		if (iChange != G_ZOMB_DIE) {
-			iChange++;
-		}
-		else {
-			iChange = 0;
-		}
+		for (int i = 0; i < m_CharZombie.size(); i++){
+			iChange = m_CharZombie[i]->getState();
 
-		switch (iChange) {
-		case G_ZOMB_DIE:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
+			//if (m_CharZombie[i]->m_bDead == true)
+			//	m_CharZombie[i]->setState(G_ZOMB_ST_WALK);
+			
+			if (m_CharZombie[i]->m_bDead == true)
+				continue;
 
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_ATTACK:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
+			if (iChange != G_ZOMB_ST_DEAD) {
+				iChange++;
+			}
+			else {
+				iChange = G_ZOMB_ST_WALK;
+			}
 
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+			switch (iChange) {
+			case G_ZOMB_ST_DEAD:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_DIE);
+			}
+			break;
+			case G_ZOMB_ST_ATTACK:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
+			}
+			break;
+			case G_ZOMB_ST_WALK:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
+			}
+			break;
+			case G_ZOMB_ST_IDLE:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_IDL);
+			}
+			break;
+			}
 		}
-		break;
-		case G_ZOMB_WALK:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_IDLE:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		}
+	}
 
 
+	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
+	{
+		m_CharZombie[iChar]->Frame();
 	}
 
 	if (I_Input.KeyCheck(DIK_F12) == KEY_UP)
@@ -581,10 +655,10 @@ bool		GSeqSinglePlay::FrameChar() {
 		}
 	}
 
-	if (I_Input.KeyCheck(DIK_F9) == KEY_UP)
-	{
-		Load();
-	}
+	//if (I_Input.KeyCheck(DIK_F9) == KEY_UP)
+	//{
+	//	Load();
+	//}
 #endif
 	return true;
 };
@@ -622,6 +696,38 @@ bool        GSeqSinglePlay::RenderGame() {
 
 	//if(!m_bDebugCamera)
 	m_ObjGun.Render(g_pImmediateContext);
+
+
+
+	RECT rc;
+	rc.top = g_pMain->m_DefaultRT.m_vp.Height/2;
+	rc.bottom = g_pMain->m_DefaultRT.m_vp.Height;
+	rc.left = 0;
+	rc.right = g_pMain->m_DefaultRT.m_vp.Width;
+
+	_stprintf_s(m_pTextOutBuffer, L"PlayTime : %d", m_fPlayTime);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Score : %d"), m_iScore);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Tom HP : %d"), m_CharHero[G_HERO_TOM].get()->m_iHP);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Tom Bullet : %d"), m_CharHero[G_HERO_TOM].get()->m_iBullet);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Jake HP : %d"), m_CharHero[G_HERO_JAKE].get()->m_iHP);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Jake Bullet : %d"), m_CharHero[G_HERO_JAKE].get()->m_iBullet);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
+
 #endif
 	return true;
 };
@@ -646,7 +752,7 @@ bool        GSeqSinglePlay::RenderMap() {
 	m_CustomMap.Render(g_pImmediateContext);
 
 	DrawSelectTreeLevel(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	if (m_bDebugRender)
+	if (m_bMapDebugRender)
 	{
 		DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
@@ -659,9 +765,9 @@ bool        GSeqSinglePlay::RenderMap() {
 
 bool		GSeqSinglePlay::RenderChar() {
 #ifdef G_MACRO_CHAR_ADD
-	D3DXMATRIX matCharWld;
-	matCharWld = m_matWorld;
-	matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
+	//D3DXMATRIX matCharWld;
+	//matCharWld = m_matWorld;
+	//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
 
 	D3DXMATRIX matHeroWld[G_HERO_CNT];
 	D3DXMATRIX matHeroScl[G_HERO_CNT];
@@ -681,7 +787,7 @@ bool		GSeqSinglePlay::RenderChar() {
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
-		if (iChar == m_CurrentHero && m_bDebugCamera==false)
+		if (iChar == m_CurrentHero && m_bDebugMode==false)
 			continue;
 		m_CharHero[iChar].get()->SetMatrix(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharHero[iChar].get()->Render(g_pImmediateContext);
@@ -690,13 +796,13 @@ bool		GSeqSinglePlay::RenderChar() {
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_CharZombie[iChar]->SetMatrix(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_CharZombie[iChar]->SetMatrix(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharZombie[iChar]->Render(g_pImmediateContext);
 	}
 
-	if(m_bDebugCamera){
+	if(m_bDebugMode){
 		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++) {
-			m_CharZombie[iChar].get()->m_OBB.Render(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_CharZombie[iChar].get()->m_OBB.Render(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
 			m_CharHero[iChar].get()->m_OBB.Render(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
@@ -712,7 +818,7 @@ bool		GSeqSinglePlay::RenderObj() {
 		m_Obj[i].SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i].Render(g_pImmediateContext);
 
-		if(m_bDebugCamera)
+		if(m_bDebugMode)
 			m_Obj[i].m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 #endif
@@ -735,9 +841,24 @@ bool		GSeqSinglePlay::RenderEffect() {
 	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthEnable);
 
+
+#ifdef G_DEFINE_TOMLEE_TEST
+	D3DXMATRIX matEffectWld, matScl,matRot,matTrans,matViewInv;
+	D3DXMatrixIdentity(&matEffectWld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
+
+	D3DXMatrixScaling(&matScl, 10.0f, 10.0f, 10.0f);
+	D3DXMatrixTranslation(&matTrans, m_pCamera->m_vCameraPos.x, m_pCamera->m_vCameraPos.y+40.0f, m_pCamera->m_vCameraPos.z+50.0f);
+
+	D3DXMatrixInverse(&matViewInv, NULL, m_pCamera->GetViewMatrix());
+	matEffectWld = matScl * matRot * matTrans * matViewInv;
+#else
 	D3DXMATRIX matEffectWld;
 	matEffectWld = m_matWorld;
 	matEffectWld._42 = 10.0f;
+#endif
 	m_pSprite.get()->SetMatrix(&matEffectWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Render(g_pImmediateContext);
 
@@ -838,6 +959,40 @@ bool GSeqSinglePlay::UpdateGunPosition() {
 
 #ifdef G_MACRO_CHAR_ADD
 
+void GSeqSinglePlay::AddZomb(int iNum) {
+	srand(time(NULL));
+
+	for (int i = 0; i < iNum; i++) {
+		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+
+		shared_ptr<GN2Zombie> pObjA = make_shared<GN2Zombie>();
+		pObjA.get()->setState(G_ZOMB_ST_WALK);
+
+		pObjA->Set(pChar0,
+			pChar0->m_pBoneObject,
+			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	
+		int iX = (rand() % 1000) - 100;
+		int iZ = (rand() % 1000) - 100;
+
+		if (iX >= 0)
+			iX += 300;
+		if (iX < 0)
+			iX -= 300;
+
+		if (iZ >= 0)
+			iZ += 300;
+		if (iZ < 0)
+			iZ -= 300;
+
+		D3DXMatrixTranslation(&pObjA->m_matWorld, float(iX), 0.0f, float(iZ));
+
+		pObjA->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+
+		m_CharZombie.push_back(pObjA);
+	}
+}
 bool GSeqSinglePlay::Load()
 {
 	//좀비 로드
@@ -846,15 +1001,8 @@ bool GSeqSinglePlay::Load()
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
 
-
-	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
-	pObjA->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	m_CharZombie.push_back(pObjA);
 
 	//주인공1 로드
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero1.gci") /*_T("CharTable.gci")*/))
@@ -888,6 +1036,12 @@ bool GSeqSinglePlay::Load()
 		pChar2->m_pBoneObject->m_Scene.iLastFrame);
 	m_CharHero.push_back(pObjC);
 
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		m_CharHero[i].get()->m_iBullet = 100;
+		m_CharHero[i].get()->m_iHP = 100;
+		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+	}
 	return true;
 }
 #endif 
@@ -983,8 +1137,12 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
+	memset(m_pTextOutBuffer, 0, sizeof(TCHAR) * 256);
+
+	m_iScore = 0;
+	m_fPlayTime = 0.0f;
 	m_CurrentHero = G_HERO_TOM;
-	m_bDebugCamera = false;
+	m_bDebugMode = false;
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD
 	m_pSprite = nullptr;

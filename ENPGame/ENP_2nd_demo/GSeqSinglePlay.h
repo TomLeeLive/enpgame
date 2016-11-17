@@ -1,18 +1,6 @@
 #pragma once
 
-enum G_OBJECT {
-	G_OBJ_LAB = 0,
-	G_OBJ_DROPSHIP,
-	G_OBJ_CAR1,
-	G_OBJ_CAR2,	
-	G_OBJ_CNT
-};
 
-enum G_HERO {
-	G_HERO_TOM =0,
-	G_HERO_JAKE,
-	G_HERO_CNT
-};
 
 class GSeqSinglePlay : public GSeq
 {
@@ -25,13 +13,20 @@ public:
 	}
 
 public:
+	void		AddZomb(int iNum);
+	void		ChangeZombState(int iNum, G_ZOMB_ST state);
+	void		ChangeZombState(int iNum, TCHAR* str);
+	TCHAR							m_pTextOutBuffer[256];
+	int								m_iScore;					//점수 계산용
+	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
-#ifdef G_MACRO_GAME_ADD
+	bool							FrameGun();
 	GSelect							m_Select;
 	G_RAY							m_Ray;
 	bool							ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
-	bool							m_bDebugCamera;
+#ifdef G_MACRO_GAME_ADD
+	bool							m_bDebugMode;		//디버그 모드 토글
 	GGbsObj							m_ObjGun;
 
 	G_HERO							m_CurrentHero;
@@ -84,7 +79,7 @@ public:
 	// 디버깅 용도
 	//--------------------------------------------------------------------------------------
 	GLineShape		m_DrawLine;
-	bool			m_bDebugRender;
+	bool			m_bMapDebugRender;
 	int				m_iDrawDepth;
 	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
 
@@ -94,7 +89,7 @@ public:
 #endif
 #ifdef G_MACRO_CHAR_ADD	
 public:
-	vector<shared_ptr<GZombie>>	m_CharZombie;
+	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 	vector<shared_ptr<GHero>>	m_CharHero;
 	bool		Load();
 #endif
