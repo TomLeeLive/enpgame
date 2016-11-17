@@ -11,6 +11,10 @@
 #include "GciCharToolDoc.h"
 #include "GciCharToolView.h"
 
+//파일 입출력 때문에 추가함
+#include <iostream>
+#include <fstream>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -249,6 +253,10 @@ int CGciCharToolApp::ExitInstance()
 	I_CharMgr.Release();
 	//return true;
 
+	for (int i = 0; i < m_vecStr.size(); i++) {
+	
+		m_vecStr[i].ReleaseBuffer();	
+	}
 
 	AfxOleTerm(FALSE);
 	GRelease();
@@ -476,6 +484,10 @@ bool CGciCharToolApp::Render() {
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
 		m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
+
+		
+		m_HeroObj[iChar].get()->m_OBB.Render(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	
 	}
 
 	if (GCoreLibV2::m_bDebugFpsPrint) {
@@ -666,16 +678,41 @@ bool CGciCharToolApp::Load()
 {
 	I_CharMgr.Init();
 
+
+
+
+
 	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
 	{
 		return false;
 	}
 
-	//int iLoad = m_LoadFiles.size() - 1;
-	//if (!m_tObject.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
-	//{
-	//	return false;
-	//}
+	
+
+	{
+		int iLoad = m_LoadFiles.size() - 1;
+
+		ifstream ifile;
+
+		char line[MAX_PATH]; // 한 줄씩 읽어서 임시로 저장할 공간
+
+		ifile.open(m_LoadFiles[iLoad].c_str());  // 파일 열기
+
+		if (ifile.is_open())
+		{
+			while (ifile.getline(line, sizeof(line))) // 한 줄씩 읽어 처리를 시작한다.
+			{
+				//cout << line << endl; // 내용 출력
+				CString str;
+				str = line;
+				m_vecStr.push_back(str);
+			}
+		}
+
+		ifile.close(); // 파일 닫기
+
+	}
+
 
 	int iLoad = m_LoadFiles.size() - 1;
 
@@ -684,54 +721,24 @@ bool CGciCharToolApp::Load()
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"TESTCHAR6");
-	//GCharacter* pChar1 = I_CharMgr.GetPtr(L"TEST_CHAR1");
-	//GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
-	//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
-	shared_ptr<GHeroObj> pObjA = make_shared<GHeroObj>();
+	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
 	pObjA->Set(pChar0,
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjA->m_OBB.Init(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
+	
 	m_HeroObj.push_back(pObjA);
-	/*
-	shared_ptr<GHeroObj> pObjB = make_shared<GHeroObj>();
-	pObjB->Set(pChar1,
-	pChar1->m_pBoneObject,
-	pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-	60);
-	m_HeroObj.push_back(pObjB);
+	
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	pFrame->m_wndModelCtrl.m_wndForm->UpdateTextOBBInfo(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
+	//CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	//CGciCharToolView *pView = (CGciCharToolView *)pFrame->GetActiveView();
 
-
-	shared_ptr<GHeroObj> pObjC = make_shared<GHeroObj>();
-	pObjC->Set(pChar1,
-	pChar1->m_pBoneObject,
-	61,
-	90);
-	m_HeroObj.push_back(pObjC);
-
-	shared_ptr<GHeroObj> pObjD = make_shared<GHeroObj>();
-	pObjD->Set(pChar1,
-	pChar1->m_pBoneObject,
-	62,
-	116);
-	m_HeroObj.push_back(pObjD);
-
-
-	shared_ptr<GHeroObj> pObjE = make_shared<GHeroObj>();
-	pObjE->Set(	pChar2,
-	pChar2->m_pBoneObject,
-	pChar2->m_pBoneObject->m_Scene.iFirstFrame,
-	pChar2->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjE);
-
-	shared_ptr<GHeroObj> pObjF = make_shared<GHeroObj>();
-	pObjF->Set( pChar3,
-	pChar3->m_pBoneObject,
-	pChar3->m_pBoneObject->m_Scene.iFirstFrame,
-	pChar3->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjF);*/
+	//pView->UpdateTextOBBInfo(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
 
 	return true;
 }
@@ -739,7 +746,7 @@ bool CGciCharToolApp::Load()
 void CGciCharToolApp::OnCharload()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	I_CharMgr.Release();
+	//I_CharMgr.Release();
 
 	Load();
 }
@@ -750,7 +757,100 @@ void CGciCharToolApp::OnCharload()
 void CGciCharToolApp::OnCharsave()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+
+
+	TCHAR current_path[MAX_PATH] = _T("");
+	GetCurrentDirectory(MAX_PATH, current_path); // 현재 경로 저장
+
+	CFileDialog dlg(false, _T("gci"), _T("*.gci"),
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		_T("GCI File(*.gci)|*.gci||"));
+
+	if (dlg.DoModal() == IDOK) { // OK 를 하는 순간 현재 경로가 변경된다.
+		// 여기서 파일 저장 작업.
+		// 여기서 얻는 dlg.GetFileName() 함수는 상대 경로로의 파일 이름을 반환해 준다.
+
+		// 선택한 파일의 이름..
+		// dlg.GetFileName();
+
+		// 선택한 파일의 이름을 포함한 경로..
+		CString str = dlg.GetPathName();
+
+		{
+
+			FILE* fp = fopen((CStringA)str, "wt+");
+
+			for (int i = 0; i< m_vecStr.size(); i++)
+			{
+				CString str;
+				CString strNum;
+				
+				
+
+				if (i == 7) {
+					str = "#OBB_MIN_X	";
+					strNum.Format(_T("%f\n"), pFrame->m_wndModelCtrl.m_wndForm->m_fMinX);
+					str.Append(strNum);
+					fprintf(fp, (CStringA)str);
+					continue;
+				}
+				if (i == 8) {
+					str = "#OBB_MIN_Y	";
+					strNum.Format(_T("%f\n"), pFrame->m_wndModelCtrl.m_wndForm->m_fMinY);
+					str.Append(strNum);
+					fprintf(fp, (CStringA)str);
+					continue;
+				}
+				if (i == 9) {
+					str = "#OBB_MIN_Z	";
+					strNum.Format(_T("%f\n"), pFrame->m_wndModelCtrl.m_wndForm->m_fMinZ);
+					str.Append(strNum);
+					fprintf(fp, (CStringA)str);
+					continue;
+				}
+				if (i == 10) {
+					str = "#OBB_MAX_X	";
+					strNum.Format(_T("%f\n"), pFrame->m_wndModelCtrl.m_wndForm->m_fMaxX);
+					str.Append(strNum);
+					fprintf(fp, (CStringA)str);
+					continue;
+				}
+				if (i == 11) {
+					str = "#OBB_MAX_Y	";
+					strNum.Format(_T("%f\n"), pFrame->m_wndModelCtrl.m_wndForm->m_fMaxY);
+					str.Append(strNum);
+					fprintf(fp, (CStringA)str);
+					continue;
+				}
+				if (i == 12) {
+					str = "#OBB_MAX_Z	";
+					strNum.Format(_T("%f\n"), pFrame->m_wndModelCtrl.m_wndForm->m_fMaxZ);
+					str.Append(strNum);
+					fprintf(fp, (CStringA)str);
+					continue;
+				}
+
+
+
+				
+				fprintf(fp, (CStringA)m_vecStr[i]);
+
+				//CString name = "wqwkejqpwe"; // 매번 다른 이름
+				//name.ReleaseBuffer();
+				fprintf(fp, "\n");
+			}
+
+			fclose(fp);
+		}
+
+	}
+	SetCurrentDirectory(current_path); // 원래 경로로 돌아 간다.
+
 }
+
 #ifdef G_MACRO_MODELVIEW
 bool CGciCharToolApp::DrawDebug()
 {

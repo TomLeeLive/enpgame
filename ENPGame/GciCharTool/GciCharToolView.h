@@ -27,6 +27,7 @@ protected:
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
 // 구현입니다.
+
 public:
 	virtual ~CGciCharToolView();
 #ifdef _DEBUG

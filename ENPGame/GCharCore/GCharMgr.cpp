@@ -96,6 +96,13 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 	int		iNumActions = 0;
 	int		iAniLoop = 1;
 
+	float	fMinX = 0.0f;
+	float	fMinY = 0.0f;
+	float	fMinZ = 0.0f;
+	float	fMaxX = 0.0f;
+	float	fMaxY = 0.0f;
+	float	fMaxZ = 0.0f;
+
 	if( m_Parser.GetDataFromFileLoop(_T("#NUM_OF_CHARACTER"), &iNumCharacter, INT_DATA ) )
 	{
 		float a,b,c;
@@ -106,7 +113,13 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 			m_Parser.GetDataFromFileLoop(_T("#MATRIX_FILE"), strMatrixName, STRING_DATA);
 			m_Parser.GetDataFromFileLoop(_T("#ACTION_LOOP"), &iAniLoop, INT_DATA);
 			m_Parser.GetDataFromFileLoop(_T("#ACTION_TABLE"), &iNumActions, INT_DATA);
-			
+			m_Parser.GetDataFromFileLoop(_T("#OBB_MIN_X"), &fMinX, FLOAT_DATA);
+			m_Parser.GetDataFromFileLoop(_T("#OBB_MIN_Y"), &fMinY, FLOAT_DATA);
+			m_Parser.GetDataFromFileLoop(_T("#OBB_MIN_Z"), &fMinZ, FLOAT_DATA);
+			m_Parser.GetDataFromFileLoop(_T("#OBB_MAX_X"), &fMaxX, FLOAT_DATA);
+			m_Parser.GetDataFromFileLoop(_T("#OBB_MAX_Y"), &fMaxY, FLOAT_DATA);
+			m_Parser.GetDataFromFileLoop(_T("#OBB_MAX_Z"), &fMaxZ, FLOAT_DATA);
+
 			//m_Parser.GetDataFromFileLoop(_T("*WORLDPOSITION"), 
 			//	&vPos, VERTEX_DATA);
 
@@ -143,7 +156,10 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 						pChar->Add(	pd3dDevice, pImmediateContext,
 									strMeshName, strShaderName, 
 									iMatrixIndex, 
-									iModelMatrixIndex, iAniLoop);
+									iModelMatrixIndex,
+									iAniLoop,
+									D3DXVECTOR3(fMinX, fMinY, fMinZ),
+									D3DXVECTOR3(fMaxX, fMaxY, fMaxZ));
 					}			
 				}
 			}			

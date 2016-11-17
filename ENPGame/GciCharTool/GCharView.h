@@ -7,7 +7,6 @@
 class GCharView : public CDialogEx
 {
 	DECLARE_DYNAMIC(GCharView)
-
 public:
 	GCharView(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~GCharView();

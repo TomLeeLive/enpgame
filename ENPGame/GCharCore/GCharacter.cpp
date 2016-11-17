@@ -34,7 +34,9 @@ bool GCharacter::Add(	ID3D11Device* pd3dDevice,
 						const TCHAR* strSkinShaderName, 		
 						int	iMatrixIndex,
 						int iModelMatrixIndex,
-						int iAniLoop)
+						int iAniLoop,
+						D3DXVECTOR3 vMin,
+						D3DXVECTOR3 vMax )
 {
 	if( !_tcsicmp(strSkinFileName, _T("null")) )
 	{
@@ -52,6 +54,8 @@ bool GCharacter::Add(	ID3D11Device* pd3dDevice,
 					m_pBoneObject->m_Scene.iLastFrame,
 					iMatrixIndex,iModelMatrixIndex);
 	m_iAniLoop = iAniLoop;
+	m_vMin = vMin;
+	m_vMax = vMax;
 	return true;		
 }
 bool GCharacter::Init()
@@ -104,6 +108,9 @@ bool GCharacter::Frame()
 
 GCharacter::GCharacter(void)
 {
+	m_vMin = D3DXVECTOR3(-1.5f, -1.5f, -1.5f);
+	m_vMax = D3DXVECTOR3(1.5f, 1.5f, 1.5f);
+
 	m_iAniLoop = 1;
 	m_iMatrixIndex = -1;
 }

@@ -91,6 +91,5 @@ void GCharView::OnTvnSelchangedTree1(NMHDR *pNMHDR, LRESULT *pResult)
 
 	//GetDlgItem(IDC_CHARNAME)->SetWindowText(item);
 
-
 	*pResult = 0;
 }

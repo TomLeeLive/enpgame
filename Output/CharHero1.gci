@@ -5,6 +5,12 @@
 #MATRIX_FILE		data/character/hero1/hero1_die_backward.gmt
 #ACTION_LOOP		0 
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/hero1/hero1.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -23,6 +29,12 @@
 #MATRIX_FILE		data/character/hero1/hero1_idle.gmt
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/hero1/hero1.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -41,6 +53,12 @@
 #MATRIX_FILE		data/character/hero1/hero1_walk.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/hero1/hero1.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -59,6 +77,12 @@
 #MATRIX_FILE		data/character/hero1/hero1_attack_shotgun.gmt 
 #ACTION_LOOP		0  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/hero1/hero1.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -77,6 +101,12 @@
 #MATRIX_FILE		data/character/hero1/hero1_run.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/hero1/hero1.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -95,6 +125,12 @@
 #MATRIX_FILE		data/character/hero1/hero1_jump.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/hero1/hero1.gsk null 
 #SKN_LOWER_BODY_COUNT	0

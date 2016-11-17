@@ -49,6 +49,12 @@
 #define IDC_RADIO2                      1013
 #define IDC_RADIO3                      1014
 #define IDC_RADIO4                      1015
+#define IDC_MIN_X                       1016
+#define IDC_MIN_Y                       1017
+#define IDC_MIN_Z                       1018
+#define IDC_MAX_X                       1019
+#define IDC_MAX_Y                       1020
+#define IDC_MAX_Z                       1021
 #define ID_32771                        32771
 #define ID_CREATEMAP                    32772
 #define ID_32773                        32773
@@ -64,7 +70,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        315
 #define _APS_NEXT_COMMAND_VALUE         32782
-#define _APS_NEXT_CONTROL_VALUE         1014
+#define _APS_NEXT_CONTROL_VALUE         1017
 #define _APS_NEXT_SYMED_VALUE           314
 #endif
 #endif
