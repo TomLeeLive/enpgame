@@ -4,7 +4,7 @@
 bool		GN2Zombie::Frame() {
 	GZombie::Frame();
 
-	
+
 	//m_CharZombie[0].get()->m_bDead = true;
 	if (m_State == G_ZOMB_ST_DEAD)
 		m_bDead = true;
@@ -41,13 +41,13 @@ bool		GN2Zombie::Frame() {
 	matRot._11 = vRight.x;		    matRot._12 = vRight.y;			matRot._13 = vRight.z;
 	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
 	matRot._31 = vLook_toPlayer.x;  matRot._32 = vLook_toPlayer.y;  matRot._33 = vLook_toPlayer.z;
-	
 
-	D3DXVECTOR3 vMove = D3DXVECTOR3(matZombie._41, matZombie._42, matZombie._43);
-	D3DXVECTOR3 vNewPos;
-	vNewPos = vMove - 100.0f*g_fSecPerFrame * vLook_toPlayer;
-	D3DXMatrixTranslation(&matTrans, vNewPos.x, vNewPos.y, vNewPos.z);
-	
+	//if (m_State == G_ZOMB_ST_WALK){
+		D3DXVECTOR3 vMove = D3DXVECTOR3(matZombie._41, matZombie._42, matZombie._43);
+		D3DXVECTOR3 vNewPos;
+		vNewPos = vMove - 100.0f*g_fSecPerFrame * vLook_toPlayer;
+		D3DXMatrixTranslation(&matTrans, vNewPos.x, vNewPos.y, vNewPos.z);
+	//}
 	matZombie = matScl * matRot * matTrans;
 
 	m_matWorld = matZombie;

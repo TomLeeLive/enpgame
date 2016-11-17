@@ -162,25 +162,25 @@ bool GSeqSinglePlay::Frame()
 
 
 
-
 	for (int i = 0; i < m_CharHero.size(); i++) {
 		for (int j = 0; j < m_CharZombie.size(); j++) {
 
-			//G_ZOMB_ST zombCurState = m_CharZombie[j].get()->getState();
+			//if (m_CharZombie[j].get()->getState() == G_ZOMB_ST_ATTACK) {
+			//	D3DXVECTOR3 vHeroPos, vZombPos;
+			//	vHeroPos= D3DXVECTOR3(m_CharHero[i].get()->m_matWorld._41, m_CharHero[i].get()->m_matWorld._42, m_CharHero[i].get()->m_matWorld._43);
+			//	vZombPos= D3DXVECTOR3(m_CharZombie[j].get()->m_matWorld._41, m_CharZombie[j].get()->m_matWorld._42, m_CharZombie[j].get()->m_matWorld._43);
+			//	if (GBBOXFUNC::CalcDistance(&vHeroPos, &vZombPos) > 100.0f) {
+			//		ChangeZombState(j, G_DEFINE_ANI_ZOMB_WLK);
+			//	}
+			//}
 			
 			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &m_CharZombie[j].get()->m_OBB)) {
 				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
+
 				m_CharHero[i].get()->m_iHP -= 1;
 			}
 			else {
-				//m_CharZombie[j].get()->setState(G_ZOMB_ST_WALK);
 			}
-			//G_ZOMB_ST zombAfterState = m_CharZombie[j].get()->getState();
-
-			//if (zombCurState != zombAfterState) {
-			//	ChangeZombState(j, zombAfterState);
-			//}
-
 		}
 
 	}
@@ -524,6 +524,8 @@ bool        GSeqSinglePlay::FrameMap() {
 	return true;
 };
 void		GSeqSinglePlay::ChangeZombState(int iNum, G_ZOMB_ST state) {
+
+	m_CharZombie[iNum]->setState(state);
 
 	int iState = state;
 	
