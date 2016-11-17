@@ -160,6 +160,34 @@ bool GSeqSinglePlay::Frame()
 	if(iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
 		AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
 
+
+
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		for (int j = 0; j < m_CharZombie.size(); j++) {
+
+			//G_ZOMB_ST zombCurState = m_CharZombie[j].get()->getState();
+			
+			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &m_CharZombie[j].get()->m_OBB)) {
+				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
+				m_CharHero[i].get()->m_iHP -= 1;
+			}
+			else {
+				//m_CharZombie[j].get()->setState(G_ZOMB_ST_WALK);
+			}
+			//G_ZOMB_ST zombAfterState = m_CharZombie[j].get()->getState();
+
+			//if (zombCurState != zombAfterState) {
+			//	ChangeZombState(j, zombAfterState);
+			//}
+
+		}
+
+	}
+
+
+
+
 	FrameGame();
 	FrameMap();
 	FrameObj();
@@ -495,7 +523,37 @@ bool        GSeqSinglePlay::FrameMap() {
 #endif
 	return true;
 };
+void		GSeqSinglePlay::ChangeZombState(int iNum, G_ZOMB_ST state) {
 
+	int iState = state;
+	
+	GCharacter* pChar0;
+
+	switch (iState) {
+	case 	G_ZOMB_ST_WALK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
+	}
+		break;
+	case 	G_ZOMB_ST_IDLE: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
+	}
+		break;
+	case 	G_ZOMB_ST_ATTACK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
+	}
+		break;
+	case 	G_ZOMB_ST_DEAD: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
+	}
+		break;
+	}
+
+	m_CharZombie[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+}
 void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
 
 	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
@@ -542,8 +600,11 @@ bool		GSeqSinglePlay::FrameChar() {
 		for (int i = 0; i < m_CharZombie.size(); i++){
 			iChange = m_CharZombie[i]->getState();
 
+			//if (m_CharZombie[i]->m_bDead == true)
+			//	m_CharZombie[i]->setState(G_ZOMB_ST_WALK);
+			
 			if (m_CharZombie[i]->m_bDead == true)
-				m_CharZombie[i]->setState(G_ZOMB_ST_WALK);
+				continue;
 
 			if (iChange != G_ZOMB_ST_DEAD) {
 				iChange++;

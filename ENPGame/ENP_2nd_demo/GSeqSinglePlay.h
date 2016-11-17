@@ -14,6 +14,7 @@ public:
 
 public:
 	void		AddZomb(int iNum);
+	void		ChangeZombState(int iNum, G_ZOMB_ST state);
 	void		ChangeZombState(int iNum, TCHAR* str);
 	TCHAR							m_pTextOutBuffer[256];
 	int								m_iScore;					//점수 계산용
