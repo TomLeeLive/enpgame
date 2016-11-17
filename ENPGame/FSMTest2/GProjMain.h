@@ -2,24 +2,28 @@
 
 enum G_AI {
 	G_AI_IDLE = 0,
-	G_AI_MOVE = 1,
-	G_AI_FOLLOW =2,
-	G_AI_ATTACK =3,
-	G_AI_DIE =4,
+	G_AI_MOVE,
+	G_AI_ATTACK,
+	G_AI_DIE,
+	G_AI_FOLLOW,
 	G_AI_CNT
 };
-enum G_ZOMBIE_STATE {
-	G_ZOMB_IDLE = 0,
-	G_ZOMB_ATTACK,
-	G_ZOMB_WALK,
-	G_ZOMB_DIE,
-	G_ZOMB_CNT
-};
+//enum G_ZOMBIE_STATE {
+//	G_ZOMB_IDLE = 0,
+//	G_ZOMB_WALK,
+//	G_ZOMB_ATTACK,
+//	G_ZOMB_DIE,
+//	G_ZOMB_FOLLOW,
+//	G_ZOMB_CNT
+//};
 
 
 class GProjMain : public GCoreLibV2
 {
 public:
+	void ChangeZombState(int iNum, G_ZOMB_ST state);
+	void ChangeZombState(int iNum, TCHAR* str);
+
 	int iChange;
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matBoxWorld;
@@ -31,7 +35,7 @@ public:
 	D3DXMATRIX  m_temp;
 
 
-	vector<shared_ptr<GNewZombie>>m_HeroObj;
+	vector<shared_ptr<GNewZombie>>m_CharNZomb;
 
 	GShape*		m_Box;
 	GShape*		m_Box1;

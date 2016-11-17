@@ -6,17 +6,17 @@ GAIMove * GAIMove::pInstance_ = 0;
 bool GAIMove::Init()
 {
 	m_Zombie = new GNewZombie;
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-	g_pMain->m_HeroObj[0]->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	//g_pMain->m_CharNZomb[0]->Set(pChar0,
+	//	pChar0->m_pBoneObject,
+	//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	return true;
 }
 void GAIMove::RendomMove() {
 
 
-	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//									랜덤 목적지 만들기
@@ -47,7 +47,7 @@ void GAIMove::RendomMove() {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// 랜덤 목적지 방향으로 회전 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_HeroObj[i]->m_worldMat._41, 0.0f, g_pMain->m_HeroObj[i]->m_worldMat._43);
+		vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_CharNZomb[i]->m_worldMat._41, 0.0f, g_pMain->m_CharNZomb[i]->m_worldMat._43);
 		vBoxPosition[i] = D3DXVECTOR3(g_pMain->m_matBoxWorld._41, 0.0f, g_pMain->m_matBoxWorld._43);
 		vRDestLook1[i] = m_RandomDestination[i] - vZombiePosition[i]; // 정규화 안한 랜덤 목적지 방향 벡터
 		vRDestLook[i] = m_RandomDestination[i] - vZombiePosition[i]; // 랜덤 목적지 방향 벡터
@@ -72,16 +72,25 @@ bool GAIMove::Frame()
 {
 	 RendomMove();
 
-	 for (int i = 0;i < 5;i++)
+	 for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
 	 {
 		 hp = 100;  m_Z_Look[i] = vRDestLook1[i];
 		 D3DXMatrixIdentity(&m_Z_Trans[i]);
 
+		 G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
+		 G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
+
 		 if (ZombieDistance[i] > 70.0f) {
 			 m_Zombie->ZombieMove(hp, m_Z_Look[i], m_Z_Trans[i], m_RandomRotation[i]);
 		 }
-		 else if (ZombieDistance[i] < 70.0f) {
+		 else if (ZombieDistance[i] < 70.0f && beforeState != G_ZOMB_ST_FOLLOW) {
+			 //g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
+			 afterState = G_ZOMB_ST_FOLLOW;
 			 g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
+
+			 if (beforeState != afterState) {
+				 g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
+			 }
 		 }
 	 }
 	return true;

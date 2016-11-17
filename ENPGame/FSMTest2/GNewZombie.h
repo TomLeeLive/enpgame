@@ -1,4 +1,5 @@
 #pragma once
+#include "_stdafx.h"
 #include "GCharMgr.h"
 
 #define MAX_BONE_MATRICES 255
@@ -11,7 +12,10 @@ struct CBConstBoneWorld
 class GNewZombie : public GModel
 {
 public:
-	G_ZOMBIE_AI_ST  m_State;
+	G_ZOMB_ST  m_State;
+	G_ZOMB_ST getState() { return m_State; }
+	void setState(G_ZOMB_ST state) { m_State = state; }
+
 	bool			m_bDead;
 	GSeq*           m_pState;
 	int				m_hp;

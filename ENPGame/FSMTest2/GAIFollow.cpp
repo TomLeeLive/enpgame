@@ -8,11 +8,11 @@ bool GAIFollow::Init()
 }
 void GAIFollow::FollowMove() {
 
-	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// 주인공 목적지 방향으로 회전 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	    vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_HeroObj[i]->m_worldMat._41, 0.0f, g_pMain->m_HeroObj[i]->m_worldMat._43);
+	    vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_CharNZomb[i]->m_worldMat._41, 0.0f, g_pMain->m_CharNZomb[i]->m_worldMat._43);
 		vBoxPosition[i] = D3DXVECTOR3(g_pMain->m_matBoxWorld._41, 0.0f, g_pMain->m_matBoxWorld._43);
 		vBDestLook1[i] = vBoxPosition[i] - vZombiePosition[i]; // 정규화 안한 박스로의 목적지 벡터
 		vBDestLook[i] = vZombiePosition[i] - vBoxPosition[i]; //- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
@@ -40,7 +40,7 @@ bool GAIFollow::Frame()
 {
 	FollowMove();
 
-	for (int i = 0;i < 5;i++)
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
 	{
 		hp = 100;  B_Look[i] = vBDestLook1[i]; 
 		D3DXMatrixIdentity(&B_Trans[i]);
@@ -53,11 +53,14 @@ bool GAIFollow::Frame()
 
 			if (ZombieDistance[i] < 30.0f)
 			{
-				GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
-				g_pMain->m_HeroObj[i]->Set(pChar0,
-					pChar0->m_pBoneObject,
-					pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-					pChar0->m_pBoneObject->m_Scene.iLastFrame);
+				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
+				//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
+				//g_pMain->m_CharNZomb[i]->Set(pChar0,
+				//	pChar0->m_pBoneObject,
+				//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+
 				g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
 			}
 		}

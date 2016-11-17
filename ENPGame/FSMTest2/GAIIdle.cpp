@@ -4,12 +4,12 @@ GAIIdle * GAIIdle::pInstance_ = 0;
 
 bool GAIIdle::Init()
 {
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 
-	g_pMain->m_HeroObj[0]->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	//g_pMain->m_CharNZomb[0]->Set(pChar0,
+	//	pChar0->m_pBoneObject,
+	//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	return true;
 }
 bool GAIIdle::Frame()

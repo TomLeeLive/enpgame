@@ -5,6 +5,10 @@ inline void DXUT_SetDebugName(ID3D11DeviceChild* pObj, const CHAR* pstrName)
 		pObj->SetPrivateData(WKPDID_D3DDebugObjectName, lstrlenA(pstrName), pstrName);
 }
 
+
+
+
+
 HRESULT GNewZombie::CreateConstantBuffer()
 {
 
@@ -189,11 +193,11 @@ bool GNewZombie::ZombieMove(int hp, D3DXVECTOR3 look,D3DXMATRIX Trans, D3DXMATRI
 	{
 		//Die
 	}
-	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
 		Trans._41 += look.x * g_fSecPerFrame;
-		g_pMain->m_HeroObj[i]->m_worldMat._41 += Trans._41;
+		g_pMain->m_CharNZomb[i]->m_worldMat._41 += Trans._41;
 		Trans._43 += look.z * g_fSecPerFrame;
-		g_pMain->m_HeroObj[i]->m_worldMat._43 += Trans._43;
+		g_pMain->m_CharNZomb[i]->m_worldMat._43 += Trans._43;
 		g_pMain->m_RandomRotation[i] = Rotation;
 	}
 	return true;
@@ -205,11 +209,11 @@ bool GNewZombie::Zombiefollow(int hp, D3DXVECTOR3 look, D3DXMATRIX Trans, D3DXMA
 	{
 		//Die
 	}
-	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
 		Trans._41 += look.x * g_fSecPerFrame;
-		g_pMain->m_HeroObj[i]->m_worldMat._41 += Trans._41;
+		g_pMain->m_CharNZomb[i]->m_worldMat._41 += Trans._41;
 		Trans._43 += look.z * g_fSecPerFrame;
-		g_pMain->m_HeroObj[i]->m_worldMat._43 += Trans._43;
+		g_pMain->m_CharNZomb[i]->m_worldMat._43 += Trans._43;
 		g_pMain->m_RandomRotation[i] = Rotation;
 	}
 
@@ -222,11 +226,11 @@ bool GNewZombie::ZombieAttack(int hp, D3DXVECTOR3 look, D3DXMATRIX Trans, D3DXMA
 	{
 		//Die
 	}
-	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
 		Trans._41 += look.x * g_fSecPerFrame;
-		g_pMain->m_HeroObj[i]->m_worldMat._41 += Trans._41;
+		g_pMain->m_CharNZomb[i]->m_worldMat._41 += Trans._41;
 		Trans._43 += look.z * g_fSecPerFrame;
-		g_pMain->m_HeroObj[i]->m_worldMat._43 += Trans._43;
+		g_pMain->m_CharNZomb[i]->m_worldMat._43 += Trans._43;
 		g_pMain->m_RandomRotation[i] = Rotation;
 	}
 
@@ -235,7 +239,7 @@ bool GNewZombie::ZombieAttack(int hp, D3DXVECTOR3 look, D3DXMATRIX Trans, D3DXMA
 
 GNewZombie::GNewZombie()
 {
-	m_State = G_ZOMBIE_AI_ST_WALK;
+	m_State = G_ZOMB_ST_WALK;
 
 	m_pChar = NULL;
 	m_bDead = false;

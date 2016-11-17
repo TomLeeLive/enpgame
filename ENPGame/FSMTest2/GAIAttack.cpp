@@ -4,18 +4,18 @@ GAIAttack * GAIAttack::pInstance_ = 0;
 
 bool GAIAttack::Init()
 {
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-	g_pMain->m_HeroObj[0]->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	//g_pMain->m_CharNZomb[0]->Set(pChar0,
+	//	pChar0->m_pBoneObject,
+	//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	//g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
 	return true;
 }
 void GAIAttack::AttackMove() {
 
-	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
-		vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_HeroObj[i]->m_worldMat._41, 0.0f, g_pMain->m_HeroObj[i]->m_worldMat._43);
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
+		vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_CharNZomb[i]->m_worldMat._41, 0.0f, g_pMain->m_CharNZomb[i]->m_worldMat._43);
 		vBoxPosition[i] = D3DXVECTOR3(g_pMain->m_matBoxWorld._41, 0.0f, g_pMain->m_matBoxWorld._43);
 		vADestLook1[i] = vBoxPosition[i] - vZombiePosition[i]; // 정규화 안한 박스로의 목적지 벡터
 		vADestLook[i] = vZombiePosition[i] - vBoxPosition[i]; // 정규화 할 박스로의 목적지 벡터
@@ -43,20 +43,38 @@ bool GAIAttack::Frame()
 	// 주인공 목적지 방향으로 회전 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	AttackMove();
-	for (int i = 0;i < 5;i++)
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
 	{
 		hp = 100;  A_Look = vADestLook1[i];
 		D3DXMatrixIdentity(&A_Trans[i]);
 
+		G_ZOMB_ST befState = g_pMain->m_CharNZomb[i].get()->m_State;
+		G_ZOMB_ST aftState = g_pMain->m_CharNZomb[i].get()->m_State;
 
-		if (ZombieDistance[i] > 70.0f) {
+		if (ZombieDistance[i] > 70.0f && befState != G_ZOMB_ST_WALK) {
+			//g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
+
+			//g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
+			aftState = G_ZOMB_ST_WALK;
 			g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
+
+			if (befState != aftState) {
+				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
+			}
+
 		}
 		else if (ZombieDistance[i] < 70.0f) {
 			Zombie->Zombiefollow(hp, A_Look, A_Trans[i], m_ABoxRotation);
-			if (ZombieDistance[i] < 30.0f)
+
+			G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
+			G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
+			if (ZombieDistance[i] < 30.0f && beforeState != G_ZOMB_ST_ATTACK)
 			{
+				afterState = G_ZOMB_ST_ATTACK;
 				g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
+			}
+			if (beforeState != afterState) {
+				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 #pragma once
 #include"GNewZombie.h"
 enum ZombieNum {
-	ZombieNum = 5
+	ZombieNum = G_DEFINE_MAX_AI_ZOMBIE
 };
 class GAIMove : public GSeq
 {
