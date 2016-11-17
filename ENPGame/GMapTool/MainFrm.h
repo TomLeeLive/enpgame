@@ -10,6 +10,7 @@
 
 //추가
 #include "GCreateMapDlg.h"
+#include "GSaveMapDlg.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -20,7 +21,8 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
-	GCreateMapDlg GMapDlg;
+	CString m_strSaveFileName;
+	//GCreateMapDlg GMapDlg;
 // 작업입니다.
 public:
 
@@ -61,6 +63,7 @@ protected:
 	void SetDockingWindowIcons(BOOL bHiColorIcons);
 public:
 	afx_msg void OnCreatemap();
+	afx_msg void OnSavemap();
 };
 
 

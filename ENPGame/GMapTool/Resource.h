@@ -85,7 +85,7 @@
 #define IDS_EXPLORER                    305
 #define IDS_EDIT_MENU                   306
 #define IDD_CREATEMAP                   316
-#define IDCANCEL                        1008
+#define IDD_SAVEMAP                     322
 #define IDC_EDIT1                       1009
 #define IDC_EDIT2                       1010
 #define IDC_COMBO1                      1011
@@ -97,6 +97,7 @@
 #define IDC_TILEHEIGHTSIZE2             1015
 #define IDC_COMBO2                      1015
 #define IDC_EDIT7                       1016
+#define IDCANCEL                        1016
 #define ID_CREATEMAP                    32771
 #define ID_32774                        32774
 #define ID_32775                        32775
@@ -117,9 +118,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_RESOURCE_VALUE        324
 #define _APS_NEXT_COMMAND_VALUE         32797
-#define _APS_NEXT_CONTROL_VALUE         1016
+#define _APS_NEXT_CONTROL_VALUE         1017
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

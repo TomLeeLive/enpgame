@@ -33,3 +33,4 @@ public:
 	afx_msg void OnBnClickedButton1();
 	CString m_strCharName;
 };
+//extern GCreateMapDlg GCreateDlg;

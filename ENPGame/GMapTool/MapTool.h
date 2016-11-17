@@ -24,6 +24,8 @@
 #include "map/GQuadTree.h"
 #include "GCamera.h"
 
+#include "GCreateMapDlg.h"
+#include "GSaveMapDlg.h"
 
 
 // CMapToolApp:
@@ -34,6 +36,11 @@ class CMapToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
 	shared_ptr<GCamera >	m_pMainCamera;
+	//--------------------------------------------------------------------------------------
+	// Åø
+	//--------------------------------------------------------------------------------------
+	//GCreateMapDlg GCreateDlg;
+	//GSaveMapDlg GSaveDlg;
 	//--------------------------------------------------------------------------------------
 	// ¸Ê
 	//--------------------------------------------------------------------------------------
