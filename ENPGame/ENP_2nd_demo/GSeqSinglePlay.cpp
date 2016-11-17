@@ -841,9 +841,24 @@ bool		GSeqSinglePlay::RenderEffect() {
 	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthEnable);
 
+
+#ifdef G_DEFINE_TOMLEE_TEST
+	D3DXMATRIX matEffectWld, matScl,matRot,matTrans,matViewInv;
+	D3DXMatrixIdentity(&matEffectWld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
+
+	D3DXMatrixScaling(&matScl, 10.0f, 10.0f, 10.0f);
+	D3DXMatrixTranslation(&matTrans, m_pCamera->m_vCameraPos.x, m_pCamera->m_vCameraPos.y+40.0f, m_pCamera->m_vCameraPos.z+50.0f);
+
+	D3DXMatrixInverse(&matViewInv, NULL, m_pCamera->GetViewMatrix());
+	matEffectWld = matScl * matRot * matTrans * matViewInv;
+#else
 	D3DXMATRIX matEffectWld;
 	matEffectWld = m_matWorld;
 	matEffectWld._42 = 10.0f;
+#endif
 	m_pSprite.get()->SetMatrix(&matEffectWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Render(g_pImmediateContext);
 
