@@ -77,7 +77,15 @@ bool GProjMain::Frame()
 	m_pSound.Frame();
 	return true;
 }
+G_SEQ GProjMain::GetCurSeq() {
+	return m_CurSeq;
+}
+bool GProjMain::ChangeSeq(G_SEQ seq) {
+	m_pCurrentSeq = m_pGameSeq[seq];
+	m_CurSeq = seq;
 
+	return true;
+}
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
@@ -110,7 +118,7 @@ GProjMain::GProjMain(void)
 	m_pGameSeq[G_SEQ_SINGLE] = GSeqSinglePlay::CreateInstance();
 	m_pGameSeq[G_SEQ_SURVIVAL] = GSeqSurvivalMode::CreateInstance();
 
-	m_pCurrentSeq = m_pGameSeq[G_SEQ_SINGLE];
+	ChangeSeq(G_SEQ_SINGLE);
 }
 
 GProjMain::~GProjMain(void)

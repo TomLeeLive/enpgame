@@ -98,7 +98,7 @@ public:
 #endif
 #ifdef G_MACRO_CHAR_ADD	
 public:
-	vector<shared_ptr<GZombie>>	m_CharZombie;
+	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 	vector<shared_ptr<GHero>>	m_CharHero;
 	bool		Load();
 #endif

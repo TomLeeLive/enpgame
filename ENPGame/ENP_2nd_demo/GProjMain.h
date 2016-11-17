@@ -16,9 +16,12 @@ enum G_SEQ {
 class GProjMain : public GCoreLibV2
 {
 public:
-
-	GSeq * m_pGameSeq[G_SEQ_CNT];
-	GSeq * m_pCurrentSeq;
+	bool		ChangeSeq(G_SEQ seq);
+	G_SEQ		GetCurSeq();
+	GSeq*		m_pCurrentSeq;
+private:
+	G_SEQ		m_CurSeq;				//현재 시퀀스 기록용
+	GSeq*		m_pGameSeq[G_SEQ_CNT];
 
 public:	
 	GSound		m_pSound;				// 사운드(fmod)

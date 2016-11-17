@@ -711,9 +711,9 @@ bool        GSeqSinglePlay::RenderMap() {
 
 bool		GSeqSinglePlay::RenderChar() {
 #ifdef G_MACRO_CHAR_ADD
-	D3DXMATRIX matCharWld;
-	matCharWld = m_matWorld;
-	matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
+	//D3DXMATRIX matCharWld;
+	//matCharWld = m_matWorld;
+	//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
 
 	D3DXMATRIX matHeroWld[G_HERO_CNT];
 	D3DXMATRIX matHeroScl[G_HERO_CNT];
@@ -742,13 +742,13 @@ bool		GSeqSinglePlay::RenderChar() {
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_CharZombie[iChar]->SetMatrix(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_CharZombie[iChar]->SetMatrix(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharZombie[iChar]->Render(g_pImmediateContext);
 	}
 
 	if(m_bDebugMode){
 		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++) {
-			m_CharZombie[iChar].get()->m_OBB.Render(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_CharZombie[iChar].get()->m_OBB.Render(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
 			m_CharHero[iChar].get()->m_OBB.Render(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
@@ -898,10 +898,10 @@ bool GSeqSinglePlay::Load()
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
 
-	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
+	shared_ptr<GN2Zombie> pObjA = make_shared<GN2Zombie>();
 	pObjA->Set(pChar0,
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
