@@ -273,6 +273,8 @@ void GFPSCamera::UpdateCameraDir() {
 
 void GFPSCamera::MoveLook( float fValue )
 {
+	//g_pMain->m_pSound.Play(SND_BOOTS1, true, true);
+
 	UpdateCameraDir();
 	m_vCameraPos += m_vCameraDir * fValue;
 }

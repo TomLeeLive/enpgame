@@ -1,5 +1,6 @@
 #pragma once
 #include "GCharMgr.h"
+#include "GBBox.h"
 
 #define MAX_BONE_MATRICES 255
 
@@ -12,6 +13,7 @@ class GZombie : public GModel
 	};
 
 public:
+	GBBox			m_OBB;
 	bool			m_bDead;
 	D3DXVECTOR3		m_vLook;
 public:

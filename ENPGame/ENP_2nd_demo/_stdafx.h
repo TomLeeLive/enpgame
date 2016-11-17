@@ -22,9 +22,11 @@
 #include "_resources.h"
 
 //공통 사용 헤더
+#include "GSound.h"
 #include "GCamera.h"
 #include "GFPSCamera.h"
 #include "GTimer.h"
+#include "GDirectWrite.h"
 
 //캐릭터
 #ifdef G_MACRO_CHAR_ADD

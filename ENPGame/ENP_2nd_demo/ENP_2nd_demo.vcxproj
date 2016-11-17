@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../include/dx;../../include/Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/FMOD;../../include/dx;../../include/Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX2016;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -66,7 +66,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../lib/FMOD;../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -122,6 +122,7 @@
     <ClCompile Include="GSeqSinglePlay.cpp" />
     <ClCompile Include="GSeqSurvivalMode.cpp" />
     <ClCompile Include="GN2Skybox.cpp" />
+    <ClCompile Include="GSound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GFPSCamera.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="GSeqSinglePlay.h" />
     <ClInclude Include="GSeqSurvivalMode.h" />
     <ClInclude Include="GN2Skybox.h" />
+    <ClInclude Include="GSound.h" />
     <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
     <ClInclude Include="_values.h" />

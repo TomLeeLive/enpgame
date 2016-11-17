@@ -3,8 +3,8 @@
 enum G_OBJECT {
 	G_OBJ_LAB = 0,
 	G_OBJ_DROPSHIP,
-	G_OBJ_CAR,
-	G_OBJ_CAR1,	
+	G_OBJ_CAR1,
+	G_OBJ_CAR2,	
 	G_OBJ_CNT
 };
 
@@ -25,8 +25,15 @@ public:
 	}
 
 public:
+	TCHAR							m_pTextOutBuffer[256];
+	int								m_iScore;					//점수 계산용
+	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
+	bool							FrameGun();
+	GSelect							m_Select;
+	G_RAY							m_Ray;
+	bool							ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
 #ifdef G_MACRO_GAME_ADD
 	bool							m_bDebugCamera;
 	GGbsObj							m_ObjGun;
@@ -64,8 +71,9 @@ public:
 	//GGbsObj		m_tbsobj;
 
 	GGbsObj		m_Obj[G_OBJ_CNT];
-	D3DXMATRIX	m_matObjWorld[G_OBJ_CNT];
-	D3DXMATRIX  matObjScale[G_OBJ_CNT], matObjRotation[G_OBJ_CNT], matObjTrans[G_OBJ_CNT];
+	D3DXMATRIX	m_matObjOBB[G_OBJ_CNT];
+	D3DXMATRIX	m_matObjWld[G_OBJ_CNT];
+	D3DXMATRIX  m_matObjScl[G_OBJ_CNT], m_matObjRot[G_OBJ_CNT], m_matObjTrans[G_OBJ_CNT];
 
 	//--------------------------------------------------------------------------------------
 	// 쿼드트리

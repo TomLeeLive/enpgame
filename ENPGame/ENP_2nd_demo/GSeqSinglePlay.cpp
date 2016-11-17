@@ -2,6 +2,72 @@
 
 GSeqSinglePlay * GSeqSinglePlay::pInstance_ = 0;
 
+
+bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
+{
+	if (pRay == NULL) pRay = &m_Ray;
+	float t_min = -999999.0f;
+	float t_max = 999999.0f;
+	float  f[3], fa[3], s[3], sa[3];
+
+	D3DXVECTOR3 vR = pRay->vOrigin - pBox->center;
+
+	for (int v = 0; v < 3; v++)
+	{
+		f[v] = D3DXVec3Dot(&pBox->axis[v], &pRay->vDirection);
+		s[v] = D3DXVec3Dot(&pBox->axis[v], &vR);
+		fa[v] = fabs(f[v]);
+		sa[v] = fabs(s[v]);
+
+		if (sa[v] > pBox->extent[v] && s[v] * f[v] >= 0.0f)
+			return false;
+
+		float t1 = (-s[v] - pBox->extent[v]) / f[v];
+		float t2 = (-s[v] + pBox->extent[v]) / f[v];
+		if (t1 > t2)
+		{
+			swap(t1, t2);
+		}
+		t_min = max(t_min, t1);
+		t_max = min(t_max, t2);
+		if (t_min > t_max)
+			return false;
+	}
+
+	float  fCross[3], fRhs;
+	D3DXVECTOR3 vDxR;
+	D3DXVec3Cross(&vDxR, &pRay->vDirection, &vR);
+	// D X pBox->vAxis[0]  분리축
+	fCross[0] = fabs(D3DXVec3Dot(&vDxR, &pBox->axis[0]));
+	float fAxis2 = pBox->extent[1] * fa[2];
+	float fAxis1 = pBox->extent[2] * fa[1];
+	fRhs = fAxis2 + fAxis1;
+	if (fCross[0] > fRhs)
+	{
+		m_Select.m_vDxR = vDxR;
+		return false;
+	}
+	// D x pBox->vAxis[1]  분리축
+	fCross[1] = fabs(D3DXVec3Dot(&vDxR, &pBox->axis[1]));
+	fRhs = pBox->extent[0] * fa[2] + pBox->extent[2] * fa[0];
+	if (fCross[1] > fRhs)
+	{
+		m_Select.m_vDxR = vDxR;
+		return false;
+	}
+	// D x pBox->vAxis[2]  분리축
+	fCross[2] = fabs(D3DXVec3Dot(&vDxR, &pBox->axis[2]));
+	fRhs = pBox->extent[0] * fa[1] + pBox->extent[1] * fa[0];
+	if (fCross[2] > fRhs)
+	{
+		m_Select.m_vDxR = vDxR;
+		return false;
+	}
+
+	m_Select.m_vIntersection = pRay->vOrigin + pRay->vDirection* t_min;
+	return true;
+}
+
 bool GSeqSinglePlay::Init()
 {
 	InitGame();
@@ -9,6 +75,84 @@ bool GSeqSinglePlay::Init()
 	InitEffect();
 	InitMap();
 	InitObj();
+
+	return true;
+}
+bool GSeqSinglePlay::FrameGun() {
+
+	//총 위치 업데이트
+	UpdateGunPosition();
+	m_ObjGun.Frame();
+
+	//총 발사 애니메이션 처리
+	if (g_InputData.bLeftClick) {
+
+		if (m_CharHero[m_CurrentHero].get()->m_iBullet <= 0)
+			return false;
+
+		m_ObjGun.ResetAni();
+
+		g_pMain->m_pSound.Play(SND_SHOT1, true, true);
+
+		m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
+
+		m_Ray.vOrigin = m_pCamera->m_vCameraPos;
+		m_Ray.vDirection = m_pCamera->m_vLookVector;
+		m_Ray.fExtent = 50.0f;
+
+		if (m_CharZombie[0].get()->m_bDead == false) {
+			if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
+			{
+
+				m_CharZombie[0].get()->m_bDead = true;
+
+				m_iScore += G_DEFINE_SCORE_BASIC;
+
+				GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
+
+				m_CharZombie[0]->Set(pChar0,
+					pChar0->m_pBoneObject,
+					pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+					pChar0->m_pBoneObject->m_Scene.iLastFrame);
+			}
+		}
+
+		for (int i = 0; i < G_HERO_CNT; i++) {
+
+			if (i == m_CurrentHero)
+				continue;
+
+			if (m_CharHero[i].get()->m_bDead == true)
+				continue;
+
+			if (ChkOBBToRay(&m_CharHero[i].get()->m_OBB, &m_Ray))
+			{
+				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
+
+				if (m_CharHero[i].get()->m_iHP <= 0)
+					m_CharHero[i].get()->m_bDead = true;
+
+				if (i == G_HERO_TOM && m_CharHero[i].get()->m_bDead == true)
+				{
+					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
+
+					m_CharHero[i]->Set(pChar1,
+						pChar1->m_pBoneObject,
+						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+						pChar1->m_pBoneObject->m_Scene.iLastFrame);
+				}
+				else if (i == G_HERO_JAKE && m_CharHero[i].get()->m_bDead == true)
+				{
+					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_DIE");
+
+					m_CharHero[i]->Set(pChar1,
+						pChar1->m_pBoneObject,
+						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+						pChar1->m_pBoneObject->m_Scene.iLastFrame);
+				}
+			}
+		}
+	}
 	return true;
 }
 bool GSeqSinglePlay::Frame()
@@ -19,6 +163,7 @@ bool GSeqSinglePlay::Frame()
 	FrameEffect();
 	FrameChar();
 
+	FrameGun();
 	return true;
 }
 
@@ -42,13 +187,11 @@ bool GSeqSinglePlay::Release()
 	ReleaseObj();
 	ReleaseChar();
 	ReleaseEffect();
-
 	return true;
 }
 
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
-
 
 	D3DXMatrixIdentity(&m_matWorld);
 
@@ -104,12 +247,7 @@ bool        GSeqSinglePlay::InitGame() {
 };
 bool        GSeqSinglePlay::InitMap() {
 #ifdef G_MACRO_MAP_ADD
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		D3DXMatrixIdentity(&m_matObjWorld[i]);
-		D3DXMatrixIdentity(&matObjScale[i]);
-		D3DXMatrixIdentity(&matObjRotation[i]);
-		D3DXMatrixIdentity(&matObjTrans[i]);
-	}
+
 
 	m_iDrawDepth = 0;
 	m_bDebugRender = false;
@@ -170,11 +308,29 @@ bool		GSeqSinglePlay::InitChar() {
 	I_CharMgr.Init();
 
 	Load();
+
+	for (int i = 0; i < m_CharZombie.size(); i++) {
+		m_CharZombie[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+	}
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		m_CharHero[i].get()->m_iBullet = 100;
+		m_CharHero[i].get()->m_iHP = 100;
+		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+	}
 #endif
 	return true;
 };
 bool		GSeqSinglePlay::InitObj() {
 #ifdef G_MACRO_MAP_ADD
+
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+		D3DXMatrixIdentity(&m_matObjWld[i]);
+		D3DXMatrixIdentity(&m_matObjScl[i]);
+		D3DXMatrixIdentity(&m_matObjRot[i]);
+		D3DXMatrixIdentity(&m_matObjTrans[i]);
+		D3DXMatrixIdentity(&m_matObjOBB[i]);
+	}
+
 	//--------------------------------------------------------------------------------------
 	// 오브젝트 생성
 	//--------------------------------------------------------------------------------------
@@ -182,31 +338,46 @@ bool		GSeqSinglePlay::InitObj() {
 		m_Obj[i].Init();
 	}
 
+
+	//연구소 로드
 	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_BOX);
-	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_LAB], 2, 2, 2);
-	m_matObjWorld[G_OBJ_LAB]._41 = 1000.0f;
-	m_matObjWorld[G_OBJ_LAB]._42 = 0.0f;
-	m_matObjWorld[G_OBJ_LAB]._43 = 1000.0f;
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB], 2, 2, 2);
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB], 1000.0f, 0.0f, 1000.0f);
+	m_matObjWld[G_OBJ_LAB] = m_matObjScl[G_OBJ_LAB] * m_matObjRot[G_OBJ_LAB] * m_matObjTrans[G_OBJ_LAB];
+	//연구소 OBB 사이즈
+	m_Obj[G_OBJ_LAB].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
 
+	//드롭십 로드
 	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
-	D3DXMatrixScaling(&matObjScale[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
-	D3DXMatrixRotationY(&matObjRotation[G_OBJ_DROPSHIP], D3DXToRadian(45.0f + 180.0f));
-	m_matObjWorld[G_OBJ_DROPSHIP] = matObjScale[G_OBJ_DROPSHIP] * matObjRotation[G_OBJ_DROPSHIP];
-	m_matObjWorld[G_OBJ_DROPSHIP]._41 = -1000.0f;
-	m_matObjWorld[G_OBJ_DROPSHIP]._42 = 0.0f;
-	m_matObjWorld[G_OBJ_DROPSHIP]._43 = -1000.0f;
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_DROPSHIP], D3DXToRadian(45.0f + 180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_DROPSHIP], -1000.0f, 0.0f, -1000.0f);
+	m_matObjWld[G_OBJ_DROPSHIP] = m_matObjScl[G_OBJ_DROPSHIP] * m_matObjRot[G_OBJ_DROPSHIP] * m_matObjTrans[G_OBJ_DROPSHIP];
+	//드롭십 OBB 사이즈
+	m_Obj[G_OBJ_DROPSHIP].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
 
-	m_Obj[G_OBJ_CAR].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
-	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR], 0.3, 0.3, 0.3);
-	m_matObjWorld[G_OBJ_CAR]._41 = 500.0f;
-	m_matObjWorld[G_OBJ_CAR]._42 = 0.0f;
-	m_matObjWorld[G_OBJ_CAR]._43 = -700.0f;
-
+	//차량1 로드
 	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
-	D3DXMatrixScaling(&m_matObjWorld[G_OBJ_CAR1], 0.3, 0.3, 0.3);
-	m_matObjWorld[G_OBJ_CAR1]._41 = -900.0f;
-	m_matObjWorld[G_OBJ_CAR1]._42 = 0.0f;
-	m_matObjWorld[G_OBJ_CAR1]._43 = 700.0f;
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR1], 0.3, 0.3, 0.3);
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR1], 500.0f, 0.0f, -700.0f);
+	m_matObjWld[G_OBJ_CAR1] = m_matObjScl[G_OBJ_CAR1] * m_matObjRot[G_OBJ_CAR1] * m_matObjTrans[G_OBJ_CAR1];
+	//드롭십 차량1 OBB 사이즈
+	m_Obj[G_OBJ_CAR1].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+
+	//차량2 로드
+	m_Obj[G_OBJ_CAR2].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR2], 0.3, 0.3, 0.3);
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR2], -900.0f, 0.0f, 700.0f);
+	m_matObjWld[G_OBJ_CAR2] = m_matObjScl[G_OBJ_CAR2] * m_matObjRot[G_OBJ_CAR2] * m_matObjTrans[G_OBJ_CAR2];
+	//드롭십 차량2 OBB 사이즈
+	m_Obj[G_OBJ_CAR2].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+
+
+	for (int i = 0; i < G_OBJ_CNT; i++) {
+
+		m_matObjOBB[i] = m_matObjRot[i] * m_matObjTrans[i];
+	}
+
 #endif
 	return true;
 };
@@ -245,6 +416,9 @@ bool		GSeqSinglePlay::InitEffect() {
 
 bool        GSeqSinglePlay::FrameGame() {
 #ifdef G_MACRO_GAME_ADD
+	
+	m_fPlayTime = (int)g_fDurationTime;
+
 	if (!m_bDebugCamera)
 		ShowCursor(false); // 커서를 화면에서 감추기
 	else {
@@ -292,13 +466,7 @@ bool        GSeqSinglePlay::FrameGame() {
 	//	m_pFPSCamera[i].get()->Frame();
 	//}
 
-	//총 발사 애니메이션 처리
-	if (g_InputData.bLeftClick) {
-		m_ObjGun.ResetAni();
-	}
-	//총 위치 업데이트
-	UpdateGunPosition();
-	m_ObjGun.Frame();
+
 #endif
 	return true;
 };
@@ -366,6 +534,9 @@ bool		GSeqSinglePlay::FrameChar() {
 
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
+		if(m_CharZombie[0]->m_bDead == true)
+			m_CharZombie[0]->m_bDead = false;
+
 		if (iChange != G_ZOMB_DIE) {
 			iChange++;
 		}
@@ -468,6 +639,38 @@ bool        GSeqSinglePlay::RenderGame() {
 
 	//if(!m_bDebugCamera)
 	m_ObjGun.Render(g_pImmediateContext);
+
+
+
+	RECT rc;
+	rc.top = g_pMain->m_DefaultRT.m_vp.Height/2;
+	rc.bottom = g_pMain->m_DefaultRT.m_vp.Height;
+	rc.left = 0;
+	rc.right = g_pMain->m_DefaultRT.m_vp.Width;
+
+	_stprintf_s(m_pTextOutBuffer, L"PlayTime : %d", m_fPlayTime);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Score : %d"), m_iScore);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Tom HP : %d"), m_CharHero[G_HERO_TOM].get()->m_iHP);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Tom Bullet : %d"), m_CharHero[G_HERO_TOM].get()->m_iBullet);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Jake HP : %d"), m_CharHero[G_HERO_JAKE].get()->m_iHP);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+
+	_stprintf_s(m_pTextOutBuffer, _T("Jake Bullet : %d"), m_CharHero[G_HERO_JAKE].get()->m_iBullet);
+	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
+
 #endif
 	return true;
 };
@@ -539,14 +742,27 @@ bool		GSeqSinglePlay::RenderChar() {
 		m_CharZombie[iChar]->SetMatrix(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharZombie[iChar]->Render(g_pImmediateContext);
 	}
+
+	if(m_bDebugCamera){
+		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++) {
+			m_CharZombie[iChar].get()->m_OBB.Render(&matCharWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		}
+		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
+			m_CharHero[iChar].get()->m_OBB.Render(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		}
+	}
+
 #endif
 	return true;
 };
 bool		GSeqSinglePlay::RenderObj() {
 #ifdef G_MACRO_MAP_ADD
 	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].SetMatrix(&m_matObjWorld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_Obj[i].SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i].Render(g_pImmediateContext);
+
+		if(m_bDebugCamera)
+			m_Obj[i].m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 #endif
 	return true;
@@ -816,6 +1032,10 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
+	memset(m_pTextOutBuffer, 0, sizeof(TCHAR) * 256);
+
+	m_iScore = 0;
+	m_fPlayTime = 0.0f;
 	m_CurrentHero = G_HERO_TOM;
 	m_bDebugCamera = false;
 	m_pCamera = nullptr;

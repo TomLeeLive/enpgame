@@ -25,6 +25,9 @@ bool GGbsObj::Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName, const TCHA
 		}
 		m_Parser.CloseStream();
 		stopwatch.Output(L"GGbsObj::Load After");
+
+		m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+
 		return true;
 	}	
 	return false;
@@ -504,6 +507,9 @@ bool GGbsObj::Frame()
 		GMesh* pMesh = m_pMesh[dwObject].get();
 		pMesh->m_matCalculation = pMesh->m_matCalculation * m_matWorld;
 	}*/
+
+	m_OBB.Frame(&m_matWorld);
+
 	return true;
 }
 
@@ -511,6 +517,7 @@ bool GGbsObj::Render(ID3D11DeviceContext*    pContext)
 {
 	PreRender(pContext);
 	Draw(pContext, this);
+
 	return true;
 }
 bool GGbsObj::Release()
