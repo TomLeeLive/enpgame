@@ -2,6 +2,66 @@
 GProjMain* g_pMain;
 
 
+void		GProjMain::ChangeZombState(int iNum, G_ZOMB_ST state) {
+
+	g_pMain->m_CharNZomb[iNum]->setState(state);
+
+	int iState = state;
+
+	GCharacter* pChar0 = NULL;
+
+	switch (iState) {
+	case 	G_ZOMB_ST_WALK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
+	}
+							break;
+	case 	G_ZOMB_ST_IDLE: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
+	}
+							break;
+	case 	G_ZOMB_ST_ATTACK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
+	}
+							  break;
+	case 	G_ZOMB_ST_DEAD: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
+	}
+							break;
+	}
+
+	g_pMain->m_CharNZomb[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+}
+void		GProjMain::ChangeZombState(int iNum, TCHAR* str) {
+
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
+	auto pChar0 = I_CharMgr.GetPtr(str);
+
+	 m_CharNZomb[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
+		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_DEAD);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
+		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_ATTACK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
+		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_WALK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
+		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_IDLE);
+	}
+	else {
+		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_IDLE);
+	}
+}
+
 bool GProjMain::Load()
 {
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
@@ -9,15 +69,33 @@ bool GProjMain::Load()
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	////GCharacter* pChar1 = I_CharMgr.GetPtr(L"TEST_CHAR1");
+	////GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
+	////GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
 
+	//shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
+	//pObjA->Set(pChar0,
+	//	pChar0->m_pBoneObject,
+	//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	//m_CharNZomb.push_back(pObjA);
 
-	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
-	pObjA->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	m_HeroObj.push_back(pObjA);
+	for (int i = 0;i < G_DEFINE_MAX_AI_ZOMBIE; i++) {
+		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+		//GCharacter* pChar1 = I_CharMgr.GetPtr(L"TEST_CHAR1");
+		//GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
+		//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
+
+		shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
+		pObjA->setState(G_ZOMB_ST_WALK);
+
+		pObjA->Set(pChar0,
+			pChar0->m_pBoneObject,
+			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		m_CharNZomb.push_back(pObjA);
+	}
 
 	return true;
 }
@@ -25,7 +103,7 @@ bool GProjMain::Load()
 bool GProjMain::Init()
 {
 	I_CharMgr.Init();
-	Load();
+	 Load();
 
 	m_fSecondPerFrmae = g_fSecPerFrame;
 	//--------------------------------------------------------------------------------------
@@ -40,19 +118,41 @@ bool GProjMain::Init()
 
 	SAFE_NEW(m_Box, GBoxShape);
 	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/flagstone.bmp");
-	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&m_matBoxWorld);
+	D3DXMatrixScaling(&m_matBoxWorld, 10.0f, 10.0f, 10.0f);
 
-	SAFE_NEW(m_Box1, GBoxShape);
-	m_Box1->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/cncr21S.bmp");
-	D3DXMatrixIdentity(&m_matWorld1);
-	D3DXMatrixScaling(&m_matWorld, 10.0f, 10.0f, 10.0f);
 	m_pCurrentSeq->Init();
 
-	
-	m_matZombieWorld = *m_pMainCamera->GetWorldMatrix();
-	m_matZombieWorld._41 = 50.0f;
-	m_matZombieWorld._42 = 0.0f;
-	m_matZombieWorld._43 = 50.0f;
+	srand(time(NULL));
+
+	//for (int i = 0;i < 4; i++) {
+	//	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	//	//GCharacter* pChar1 = I_CharMgr.GetPtr(L"TEST_CHAR1");
+	//	//GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
+	//	//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
+
+	//	shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
+	//	pObjA->Set(pChar0,
+	//		pChar0->m_pBoneObject,
+	//		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+	//		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	//	m_CharNZomb.push_back(pObjA);
+	//}
+
+	for (int i = 0;i < m_CharNZomb.size();i++){
+		D3DXMatrixIdentity(&m_CharNZomb[i]->m_worldMat);
+		m_CharNZomb[i]->m_worldMat._41 = (rand() * 3) % 203;
+		m_CharNZomb[i]->m_worldMat._43 = (rand() * 3) % 203;
+	}
+
+	/*D3DXMatrixIdentity(&m_HeroObj[0]->m_worldMat);
+	m_HeroObj[0]->m_worldMat._41 = (rand() * 3) % 83;
+	m_HeroObj[0]->m_worldMat._43 = (rand() * 3) % 83;
+
+	D3DXMatrixIdentity(&m_HeroObj[1]->m_worldMat);
+	m_HeroObj[1]->m_worldMat._41 = (rand() * 3) % 83;
+	m_HeroObj[1]->m_worldMat._43 = (rand() * 3) % 83;*/
+
 	return true;
 }
 bool GProjMain::Frame()
@@ -61,98 +161,51 @@ bool GProjMain::Frame()
 	D3DXMATRIX Logic;
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._43 += 20.0f * g_fSecPerFrame;
-		Logic._43 = g_pMain->m_matWorld._43;
+		g_pMain->m_matBoxWorld._43 += 30.0f * g_fSecPerFrame;
+		Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._43 -= 20.0f * g_fSecPerFrame;
-		Logic._43 = g_pMain->m_matWorld._43;
+		g_pMain->m_matBoxWorld._43 -= 30.0f * g_fSecPerFrame;
+		Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._41 -= 20.0f * g_fSecPerFrame;
-		Logic._41 = g_pMain->m_matWorld._41;
+		g_pMain->m_matBoxWorld._41 -= 30.0f * g_fSecPerFrame;
+		Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 
 	if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
 	{
-		g_pMain->m_matWorld._41 += 20.0f * g_fSecPerFrame;
-		Logic._41 = g_pMain->m_matWorld._41;
+		g_pMain->m_matBoxWorld._41 += 30.0f * g_fSecPerFrame;
+		Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	for (int iChar = 0; iChar < m_CharNZomb.size(); iChar++)
 	{
-		m_HeroObj[iChar]->Frame();
+		m_CharNZomb[iChar]->Frame();
 	}
-
-	//if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
-	//{
-	//	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	//	{
-	//		m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
-	//	}
-	//}
 	
-
-	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
-	{
-		if (iChange != G_ZOMB_DIE) {
-			iChange++;
-		}
-		else {
-			iChange = 0;
-		}
-
-		switch (iChange) {
-		case G_ZOMB_DIE:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
-
-			m_HeroObj[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_ATTACK:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
-
-			m_HeroObj[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		}
-
-
-	}
-
 	m_pMainCamera->Frame();
 	m_pCurrentSeq->Frame();
 
-	m_Result = m_Rotation * m_matWorld1;
-
-	
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
+		m_RandomRotResult[i] = m_RandomRotation[i] * m_CharNZomb[i]->m_worldMat;
+		m_BoxRotResult[i] = m_BoxRotation[i] * m_CharNZomb[i]->m_worldMat;
+	}
 	return true;
 }
 bool GProjMain::Render()
 {
-	m_Box->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-	//m_Box1->SetMatrix(&m_Result, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-
+	m_Box->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box->Render(m_pImmediateContext);
-	//m_Box1->Render(m_pImmediateContext);
 	
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	for (int iChar = 0; iChar < m_CharNZomb.size(); iChar++)
 	{
-		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&m_matZombieWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		m_HeroObj[iChar]->Render(m_pImmediateContext);
+		m_CharNZomb[iChar]->SetMatrix(&m_RandomRotResult[iChar], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+		m_CharNZomb[iChar]->Render(m_pImmediateContext);
 	}
 
 	m_pCurrentSeq->Render();
@@ -182,6 +235,7 @@ GProjMain::GProjMain(void)
 {
 	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
 	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
+	m_GameSeq[G_AI_FOLLOW] = GAIFollow::CreateInstance();
 	m_GameSeq[G_AI_ATTACK] = GAIAttack::CreateInstance();
 	m_GameSeq[G_AI_DIE] = GAIDie::CreateInstance();
 	m_pCurrentSeq = m_GameSeq[G_AI_MOVE];

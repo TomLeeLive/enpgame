@@ -50,7 +50,7 @@ bool GAIMove::Frame()
 	// 적 박스의 포지션을 벡터로 저장후 가려는방향(주인공) - vPos 하여 목적지 벡터 구함
 	D3DXVECTOR3 vPos = D3DXVECTOR3(g_pMain->m_matWorld1._41, 0.0f, g_pMain->m_matWorld1._43);
 	D3DXVECTOR3 vRandomDest = RandomDestination - vPos;
-	D3DXVECTOR3 vDestLook = RandomDestination - vPos; // 랜덤 목적지 벡터
+	D3DXVECTOR3 vDestLook = vPos-RandomDestination; // 랜덤 목적지 벡터
 	D3DXVec3Normalize(&vDestLook, &vDestLook);
 	D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	D3DXVec3Cross(&vRight, &vUp, &vDestLook);

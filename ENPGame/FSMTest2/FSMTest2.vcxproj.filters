@@ -33,6 +33,12 @@
     <ClCompile Include="GAIDie.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GNewZombie.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIFollow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h">
@@ -54,6 +60,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GAIDie.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GNewZombie.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIFollow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -94,6 +94,9 @@ bool GSeqSinglePlay::FrameGun() {
 
 		g_pMain->m_pSound.Play(SND_SHOT1, true, true);
 
+		//To-Do 총구 이펙트가 나와야함..아래 변수 이용하면 될듯?
+		//m_ObjGun.m_matWorld._41, m_ObjGun.m_matWorld._42, m_ObjGun.m_matWorld._43
+
 		if(m_bDebugMode == false)
 			m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
 
@@ -106,6 +109,9 @@ bool GSeqSinglePlay::FrameGun() {
 				if (ChkOBBToRay(&m_CharZombie[i].get()->m_OBB, &m_Ray))
 				{
 					m_iScore += G_DEFINE_SCORE_BASIC;
+
+					//To-Do 아래 변수를 이용해서 이펙트를 터뜨려야함.
+					//m_Select.m_vIntersection
 
 					ChangeZombState(i, G_DEFINE_ANI_ZOMB_DIE);
 				}
@@ -841,9 +847,24 @@ bool		GSeqSinglePlay::RenderEffect() {
 	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthEnable);
 
+
+#ifdef G_DEFINE_TOMLEE_TEST
+	D3DXMATRIX matEffectWld, matScl,matRot,matTrans,matViewInv;
+	D3DXMatrixIdentity(&matEffectWld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
+
+	D3DXMatrixScaling(&matScl, 10.0f, 10.0f, 10.0f);
+	D3DXMatrixTranslation(&matTrans, m_pCamera->m_vCameraPos.x, m_pCamera->m_vCameraPos.y+40.0f, m_pCamera->m_vCameraPos.z+50.0f);
+
+	D3DXMatrixInverse(&matViewInv, NULL, m_pCamera->GetViewMatrix());
+	matEffectWld = matScl * matRot * matTrans * matViewInv;
+#else
 	D3DXMATRIX matEffectWld;
 	matEffectWld = m_matWorld;
 	matEffectWld._42 = 10.0f;
+#endif
 	m_pSprite.get()->SetMatrix(&matEffectWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Render(g_pImmediateContext);
 
