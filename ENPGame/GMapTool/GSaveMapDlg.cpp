@@ -19,6 +19,7 @@ GSaveMapDlg::GSaveMapDlg(CWnd* pParent /*=NULL*/)
 
 GSaveMapDlg::~GSaveMapDlg()
 {
+
 }
 
 void GSaveMapDlg::DoDataExchange(CDataExchange* pDX)

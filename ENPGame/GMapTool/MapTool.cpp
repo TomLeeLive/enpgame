@@ -32,9 +32,26 @@ END_MESSAGE_MAP()
 bool CMapToolApp::CreateInit(int Width, int Height, float Distance, CString strTex)
 {
 	//--------------------------------------------------------------------------------------
+	// 카메라  행렬 
+	//--------------------------------------------------------------------------------------	
+	m_pMainCamera = make_shared<GCamera>();
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -50.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f,
+		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
+	//--------------------------------------------------------------------------------------
 	//  맵 생성
 	//--------------------------------------------------------------------------------------
-	m_MapDesc = { Width, Height, Distance,0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
+
+	wchar_t szCharPath[MAX_PATH] = L"data/";
+	wchar_t szChar[MAX_PATH];
+	//CString strString;
+	//strString = "test";
+	_tcscpy_s(szChar, 16, strTex.GetBuffer());
+	_tcscat_s(szCharPath, szChar);
+	//theApp.m_MapDesc.strTextureFile = m_strCharName;
+
+	//m_MapDesc = { Width, Height, Distance, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
+	m_MapDesc = { Width, Height, Distance, 0.1f,szCharPath, L"data/shader/CustomizeMap.hlsl" };
 	m_CustomMap.Init(GetDevice(), m_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(m_MapDesc))) { return false; }
 	//--------------------------------------------------------------------------------------
