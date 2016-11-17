@@ -37,10 +37,11 @@ bool CMapToolApp::CreateInit(int Width, int Height, float Distance, CString strT
 	m_MapDesc = { Width, Height, Distance,0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
 	m_CustomMap.Init(GetDevice(), m_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(m_MapDesc))) { return false; }
-
-
-
-
+	//--------------------------------------------------------------------------------------
+	//  Äõµå Æ®¸®
+	//--------------------------------------------------------------------------------------
+	m_QuadTree.Build(m_MapDesc.iNumCols, m_MapDesc.iNumRows);
+	m_QuadTree.Update(GetDevice(), m_pMainCamera.get());
 	return true;
 }
 
@@ -68,19 +69,7 @@ bool CMapToolApp::Init()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->CreateRenderBox(GetDevice(), m_pImmediateContext);
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/box.hlsl", "PS_Color"));
-
-	////--------------------------------------------------------------------------------------
-	////  ¸Ê »ý¼º
-	////--------------------------------------------------------------------------------------
-	//TMapDesc MapDesc = { 10, 10, 1.0f, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
-	//m_CustomMap.Init(GetDevice(), m_pImmediateContext);
-	//if (FAILED(m_CustomMap.Load(MapDesc))){		return false;	}
-	//
-	////--------------------------------------------------------------------------------------
-	////  Äõµå Æ®¸®
-	////--------------------------------------------------------------------------------------
-	//m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);	
-	//m_QuadTree.Update(GetDevice(), m_pMainCamera.get());		
+	
 	return true;
 }
 bool CMapToolApp::Frame()
@@ -129,12 +118,13 @@ bool CMapToolApp::Render()
 			m_pMainCamera->GetProjMatrix());
 		m_CustomMap.Render(m_pImmediateContext);
 
-		DrawQuadLine(m_QuadTree.m_pRootNode);
+		//DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
 	return true;
 }
 bool CMapToolApp::Release()
-{	
+{
+	m_CustomMap.Release();
 	m_QuadTree.Release();
 	return true;
 }

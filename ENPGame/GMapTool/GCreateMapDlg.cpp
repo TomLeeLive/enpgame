@@ -2,10 +2,8 @@
 //
 
 #include "stdafx.h"
-#include "MapTool.h"
 #include "GCreateMapDlg.h"
 #include "afxdialogex.h"
-
 
 // GCreateMapDlg 대화 상자입니다.
 
@@ -56,6 +54,7 @@ BOOL GCreateMapDlg::OnInitDialog()
 	m_cbCellCount.InsertString(3, L"8*8");
 	m_cbCellCount.InsertString(4, L"16*16");
 	m_cbCellCount.InsertString(5, L"32*32");
+
 
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
