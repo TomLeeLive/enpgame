@@ -45,6 +45,7 @@
 #include "GCharMgr.h"
 //#include "GHeroObj.h"
 #include "GZombie.h"
+#include "GN2Zombie.h"
 #include "GHero.h"
 
 #endif
