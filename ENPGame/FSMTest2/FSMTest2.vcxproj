@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="GAIAttack.cpp" />
     <ClCompile Include="GAIDie.cpp" />
+    <ClCompile Include="GAIFollow.cpp" />
     <ClCompile Include="GAIIdle.cpp" />
     <ClCompile Include="GAIMove.cpp" />
     <ClCompile Include="GNewZombie.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="GAIAttack.h" />
     <ClInclude Include="GAIDie.h" />
+    <ClInclude Include="GAIFollow.h" />
     <ClInclude Include="GAIIdle.h" />
     <ClInclude Include="GAIMove.h" />
     <ClInclude Include="GNewZombie.h" />

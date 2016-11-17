@@ -3,8 +3,9 @@
 enum G_AI {
 	G_AI_IDLE = 0,
 	G_AI_MOVE = 1,
-	G_AI_ATTACK =2,
-	G_AI_DIE =3,
+	G_AI_FOLLOW =2,
+	G_AI_ATTACK =3,
+	G_AI_DIE =4,
 	G_AI_CNT
 };
 enum G_ZOMBIE_STATE {
@@ -21,13 +22,12 @@ class GProjMain : public GCoreLibV2
 public:
 	int iChange;
 	shared_ptr<GCamera > m_pMainCamera;
-	D3DXMATRIX  m_matWorld;
+	D3DXMATRIX  m_matBoxWorld;
 	D3DXMATRIX  m_matWorld1;
-	D3DXMATRIX  m_RandomRotation;
-	D3DXMATRIX  m_BoxRotation;
-	D3DXMATRIX  m_matZombieWorld;
-	D3DXMATRIX  m_RandomRotResult;
-	D3DXMATRIX  m_BoxRotResult;
+	D3DXMATRIX  m_RandomRotation[5];
+	D3DXMATRIX  m_BoxRotation[5];
+	D3DXMATRIX  m_RandomRotResult[5];
+	D3DXMATRIX  m_BoxRotResult[5];
 	D3DXMATRIX  m_temp;
 
 

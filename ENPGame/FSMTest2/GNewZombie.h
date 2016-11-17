@@ -11,8 +11,14 @@ struct CBConstBoneWorld
 class GNewZombie : public GModel
 {
 public:
+	G_ZOMBIE_AI_ST  m_State;
 	bool			m_bDead;
+	GSeq*           m_pState;
+	int				m_hp;
 	D3DXVECTOR3		m_vLook;
+	D3DXMATRIX      m_worldMat;
+
+
 public:
 	int				m_iObjectIndex;
 	GCharacter*		m_pChar;
@@ -25,7 +31,14 @@ public:
 	float			m_fFrame;
 	float			m_fLerpTime;
 	float			m_fSpeed;
-	bool			ZombieMove(bool m_bDead, D3DXVECTOR3 m_vLook,GSeq * a);
+public:
+	D3DXVECTOR3 RandomPoint;
+	D3DXVECTOR3 RandomDestination;
+	D3DXVECTOR3 BoxDestination;
+public:
+	bool			ZombieMove(int m_hp, D3DXVECTOR3 vLook, D3DXMATRIX Trans, D3DXMATRIX Rotation);
+	bool			Zombiefollow(int m_hp, D3DXVECTOR3 vLook, D3DXMATRIX Trans, D3DXMATRIX Rotation);
+	bool			ZombieAttack(int m_hp, D3DXVECTOR3 vLook, D3DXMATRIX Trans, D3DXMATRIX Rotation);
 	D3DXMATRIX		m_pMatrix[255];
 	CBConstBoneWorld m_cbBoneData;
 	ComPtr<ID3D11Buffer>    m_pCBConstBoneWorld;

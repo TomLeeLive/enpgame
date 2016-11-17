@@ -158,7 +158,7 @@ bool GNewZombie::Frame()
 			pModel->GetMatrix());*/
 		}
 	}
-	return true;
+ return true;
 }
 bool GNewZombie::Render(ID3D11DeviceContext*    pContext)
 {
@@ -170,26 +170,7 @@ bool GNewZombie::Render(ID3D11DeviceContext*    pContext)
 		pModel->SetMatrix(&m_matWorld, &m_matView, &m_matProj);
 		ID3D11ShaderResourceView* aRViews[1] = { m_pBoneBufferRV.Get() };
 		g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
-
-		//if (m_bConstantBufferType)
-		//{
-		//	SetBoneMatrices(pModel->GetMatrix());
-		//	D3D11_MAPPED_SUBRESOURCE MappedResource;
-		//	pContext->Map(m_pCBConstBoneWorld.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
-		//	memcpy(MappedResource.pData, &m_cbBoneData, sizeof(CBConstBoneWorld));
-		//	pContext->Unmap(m_pCBConstBoneWorld.Get(), 0);
-		//	pContext->VSSetConstantBuffers(1, 1, m_pCBConstBoneWorld.GetAddressOf());
-		//}
-		//else
-		//{
-		//	//if (m_pChar->m_Scene.iBindPose > 0)
-		//		m_pBoneObject->SetBoneMatrices(pContext, m_pMatrix, pModel->GetMatrix());
-		//	//else
-		//	//	m_pBoneObject->SetBoneMatrices(pContext, m_pMatrix);
-		//	ID3D11ShaderResourceView* aRViews[1] = { m_pBoneObject->m_pBoneBufferRV };
-		//	pContext->VSSetShaderResources(1, 1, aRViews);
-		//}
-
+		
 		pModel->Render(pContext);
 	}
 	// 본 오브젝트 랜더링
@@ -201,13 +182,61 @@ bool GNewZombie::Render(ID3D11DeviceContext*    pContext)
 	}
 	return true;
 }
-bool GNewZombie::ZombieMove(bool Dead, D3DXVECTOR3 look,GSeq*State)
+bool GNewZombie::ZombieMove(int hp, D3DXVECTOR3 look,D3DXMATRIX Trans, D3DXMATRIX Rotation)
 {
+
+	if (hp = 0)
+	{
+		//Die
+	}
+	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+		Trans._41 += look.x * g_fSecPerFrame;
+		g_pMain->m_HeroObj[i]->m_worldMat._41 += Trans._41;
+		Trans._43 += look.z * g_fSecPerFrame;
+		g_pMain->m_HeroObj[i]->m_worldMat._43 += Trans._43;
+		g_pMain->m_RandomRotation[i] = Rotation;
+	}
+	return true;
+}
+bool GNewZombie::Zombiefollow(int hp, D3DXVECTOR3 look, D3DXMATRIX Trans, D3DXMATRIX Rotation)
+{
+
+	if (hp = 0)
+	{
+		//Die
+	}
+	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+		Trans._41 += look.x * g_fSecPerFrame;
+		g_pMain->m_HeroObj[i]->m_worldMat._41 += Trans._41;
+		Trans._43 += look.z * g_fSecPerFrame;
+		g_pMain->m_HeroObj[i]->m_worldMat._43 += Trans._43;
+		g_pMain->m_RandomRotation[i] = Rotation;
+	}
+
+	return true;
+}
+bool GNewZombie::ZombieAttack(int hp, D3DXVECTOR3 look, D3DXMATRIX Trans, D3DXMATRIX Rotation)
+{
+
+	if (hp = 0)
+	{
+		//Die
+	}
+	for (int i = 0;i < g_pMain->m_HeroObj.size();i++) {
+		Trans._41 += look.x * g_fSecPerFrame;
+		g_pMain->m_HeroObj[i]->m_worldMat._41 += Trans._41;
+		Trans._43 += look.z * g_fSecPerFrame;
+		g_pMain->m_HeroObj[i]->m_worldMat._43 += Trans._43;
+		g_pMain->m_RandomRotation[i] = Rotation;
+	}
+
 	return true;
 }
 
 GNewZombie::GNewZombie()
 {
+	m_State = G_ZOMBIE_AI_ST_WALK;
+
 	m_pChar = NULL;
 	m_bDead = false;
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
