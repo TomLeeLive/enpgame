@@ -2,6 +2,11 @@
 class GN2Zombie : public GZombie
 {
 public:
+	G_ZOMB_ST getState() { return m_State; }
+	void setState(G_ZOMB_ST state) {m_State = state;}
+private:
+	G_ZOMB_ST			m_State;
+public:
 	//D3DXMATRIX m_matZombie;
 
 	//virtual bool		Init();

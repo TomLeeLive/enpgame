@@ -1,18 +1,6 @@
 #pragma once
 
-enum G_OBJECT {
-	G_OBJ_LAB = 0,
-	G_OBJ_DROPSHIP,
-	G_OBJ_CAR1,
-	G_OBJ_CAR2,	
-	G_OBJ_CNT
-};
 
-enum G_HERO {
-	G_HERO_TOM =0,
-	G_HERO_JAKE,
-	G_HERO_CNT
-};
 
 class GSeqSinglePlay : public GSeq
 {
@@ -25,6 +13,8 @@ public:
 	}
 
 public:
+	void		AddZomb(int iNum);
+	void		ChangeZombState(int iNum, TCHAR* str);
 	TCHAR							m_pTextOutBuffer[256];
 	int								m_iScore;					//점수 계산용
 	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용

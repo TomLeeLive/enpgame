@@ -4,11 +4,21 @@
 bool		GN2Zombie::Frame() {
 	GZombie::Frame();
 
+	
+	//m_CharZombie[0].get()->m_bDead = true;
+	if (m_State == G_ZOMB_ST_DEAD)
+		m_bDead = true;
+	else
+		m_bDead = false;
+
 	if (g_pMain->GetCurSeq() != G_SEQ_SINGLE || m_bDead == true)
 		return false;
 	GSeqSinglePlay* seqSinglePlay = (GSeqSinglePlay*)g_pMain->m_pCurrentSeq;
 
-	D3DXVECTOR3 vPlayerPos = seqSinglePlay->m_pFPSCamera[G_HERO_TOM].get()->m_vCameraPos;
+	if (seqSinglePlay->m_pCamera == NULL)
+		return false;
+
+	D3DXVECTOR3 vPlayerPos = seqSinglePlay->m_pCamera->m_vCameraPos;
 
 	vPlayerPos.y = 0.0f;
 	D3DXVECTOR3 vLook_toPlayer;
@@ -49,6 +59,7 @@ bool		GN2Zombie::Frame() {
 
 GN2Zombie::GN2Zombie()
 {
+	m_State = G_ZOMB_ST_WALK;
 }
 
 

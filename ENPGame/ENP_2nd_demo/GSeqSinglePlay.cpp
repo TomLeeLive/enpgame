@@ -100,20 +100,14 @@ bool GSeqSinglePlay::FrameGun() {
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;
 
-		if (m_CharZombie[0].get()->m_bDead == false) {
-			if (ChkOBBToRay(&m_CharZombie[0].get()->m_OBB, &m_Ray))
-			{
+		for (int i = 0; i < m_CharZombie.size();i++){
+			if (m_CharZombie[i].get()->m_bDead == false) {
+				if (ChkOBBToRay(&m_CharZombie[i].get()->m_OBB, &m_Ray))
+				{
+					m_iScore += G_DEFINE_SCORE_BASIC;
 
-				m_CharZombie[0].get()->m_bDead = true;
-
-				m_iScore += G_DEFINE_SCORE_BASIC;
-
-				GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
-
-				m_CharZombie[0]->Set(pChar0,
-					pChar0->m_pBoneObject,
-					pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-					pChar0->m_pBoneObject->m_Scene.iLastFrame);
+					ChangeZombState(i, G_DEFINE_ANI_ZOMB_DIE);
+				}
 			}
 		}
 
@@ -157,6 +151,15 @@ bool GSeqSinglePlay::FrameGun() {
 }
 bool GSeqSinglePlay::Frame()
 {
+	int  iZombieAliveCnt = 0;
+	for (int i = 0; i < m_CharZombie.size(); i++) {
+		if (m_CharZombie[i].get()->m_bDead == false)
+			iZombieAliveCnt++;
+	}
+
+	if(iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
+		AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
+
 	FrameGame();
 	FrameMap();
 	FrameObj();
@@ -309,14 +312,7 @@ bool		GSeqSinglePlay::InitChar() {
 
 	Load();
 
-	for (int i = 0; i < m_CharZombie.size(); i++) {
-		m_CharZombie[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
-	}
-	for (int i = 0; i < m_CharHero.size(); i++) {
-		m_CharHero[i].get()->m_iBullet = 100;
-		m_CharHero[i].get()->m_iHP = 100;
-		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
-	}
+
 #endif
 	return true;
 };
@@ -499,6 +495,38 @@ bool        GSeqSinglePlay::FrameMap() {
 #endif
 	return true;
 };
+
+void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
+
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
+	auto pChar0 = I_CharMgr.GetPtr(str);
+
+	m_CharZombie[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_DEAD);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_ATTACK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_WALK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_IDLE);
+	}
+	else {
+		m_CharZombie[iNum]->setState(G_ZOMB_ST_IDLE);
+	}
+
+
+
+
+
+}
 bool		GSeqSinglePlay::FrameChar() {
 #ifdef G_MACRO_CHAR_ADD
 
@@ -507,90 +535,52 @@ bool		GSeqSinglePlay::FrameChar() {
 		m_CharHero[iChar]->Frame();
 	}
 
-	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
-	{
-		/*
-		if (I_Input.KeyCheck(DIK_ADD))
-		{
-		m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
-		}
-		if (I_Input.KeyCheck(DIK_SUBTRACT))
-		{
-		m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
-		if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
-		}
-		*/
-		m_CharZombie[iChar]->Frame();
-	}
-
-
-	enum G_ZOMBIE_STATE {
-		G_ZOMB_IDLE = 0,
-		G_ZOMB_ATTACK,
-		G_ZOMB_WALK,
-		G_ZOMB_DIE,
-		G_ZOMB_CNT
-	};
-	static int iChange = 0;
-
-
+	int iChange = 0;
 
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
-		if(m_CharZombie[0]->m_bDead == true)
-			m_CharZombie[0]->m_bDead = false;
+		for (int i = 0; i < m_CharZombie.size(); i++){
+			iChange = m_CharZombie[i]->getState();
 
-		if (iChange != G_ZOMB_DIE) {
-			iChange++;
+			if (m_CharZombie[i]->m_bDead == true)
+				m_CharZombie[i]->setState(G_ZOMB_ST_WALK);
+
+			if (iChange != G_ZOMB_ST_DEAD) {
+				iChange++;
+			}
+			else {
+				iChange = G_ZOMB_ST_WALK;
+			}
+
+			switch (iChange) {
+			case G_ZOMB_ST_DEAD:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_DIE);
+			}
+			break;
+			case G_ZOMB_ST_ATTACK:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
+			}
+			break;
+			case G_ZOMB_ST_WALK:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
+			}
+			break;
+			case G_ZOMB_ST_IDLE:
+			{
+				ChangeZombState(i, G_DEFINE_ANI_ZOMB_IDL);
+			}
+			break;
+			}
 		}
-		else {
-			iChange = 0;
-		}
-
-		switch (iChange) {
-		case G_ZOMB_DIE:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_ATTACK:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_WALK:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		case G_ZOMB_IDLE:
-		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
-
-			m_CharZombie[0]->Set(pChar0,
-				pChar0->m_pBoneObject,
-				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		}
-		break;
-		}
+	}
 
 
+	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
+	{
+		m_CharZombie[iChar]->Frame();
 	}
 
 	if (I_Input.KeyCheck(DIK_F12) == KEY_UP)
@@ -601,10 +591,10 @@ bool		GSeqSinglePlay::FrameChar() {
 		}
 	}
 
-	if (I_Input.KeyCheck(DIK_F9) == KEY_UP)
-	{
-		Load();
-	}
+	//if (I_Input.KeyCheck(DIK_F9) == KEY_UP)
+	//{
+	//	Load();
+	//}
 #endif
 	return true;
 };
@@ -890,6 +880,40 @@ bool GSeqSinglePlay::UpdateGunPosition() {
 
 #ifdef G_MACRO_CHAR_ADD
 
+void GSeqSinglePlay::AddZomb(int iNum) {
+	srand(time(NULL));
+
+	for (int i = 0; i < iNum; i++) {
+		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+
+		shared_ptr<GN2Zombie> pObjA = make_shared<GN2Zombie>();
+		pObjA.get()->setState(G_ZOMB_ST_WALK);
+
+		pObjA->Set(pChar0,
+			pChar0->m_pBoneObject,
+			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	
+		int iX = (rand() % 1000) - 100;
+		int iZ = (rand() % 1000) - 100;
+
+		if (iX >= 0)
+			iX += 300;
+		if (iX < 0)
+			iX -= 300;
+
+		if (iZ >= 0)
+			iZ += 300;
+		if (iZ < 0)
+			iZ -= 300;
+
+		D3DXMatrixTranslation(&pObjA->m_matWorld, float(iX), 0.0f, float(iZ));
+
+		pObjA->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+
+		m_CharZombie.push_back(pObjA);
+	}
+}
 bool GSeqSinglePlay::Load()
 {
 	//좀비 로드
@@ -898,15 +922,8 @@ bool GSeqSinglePlay::Load()
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
 
-
-	shared_ptr<GN2Zombie> pObjA = make_shared<GN2Zombie>();
-	pObjA->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	m_CharZombie.push_back(pObjA);
 
 	//주인공1 로드
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero1.gci") /*_T("CharTable.gci")*/))
@@ -940,6 +957,12 @@ bool GSeqSinglePlay::Load()
 		pChar2->m_pBoneObject->m_Scene.iLastFrame);
 	m_CharHero.push_back(pObjC);
 
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		m_CharHero[i].get()->m_iBullet = 100;
+		m_CharHero[i].get()->m_iHP = 100;
+		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+	}
 	return true;
 }
 #endif 
