@@ -445,7 +445,8 @@ void CMainFrame::OnSavemap()
 	memset(str, 0, sizeof(char) * 256);
 
 	//theApp.m_MapDesc.iNumCols;
-	_itoa(theApp.m_MapDesc.iNumCols, str, 10);		
+	int tempValue = theApp.m_MapDesc.iNumCols;
+	_itoa(tempValue, str, 10);
 	data_size = strlen(str);
 	file.Write(str, data_size);
 	memset(str, 0, sizeof(char) * 256);
@@ -457,7 +458,8 @@ void CMainFrame::OnSavemap()
 	memset(str, 0, sizeof(char) * 256);
 
 	// theApp.m_MapDesc.iNumRows;
-	_itoa(theApp.m_MapDesc.iNumRows, str, 10);	
+	tempValue = theApp.m_MapDesc.iNumRows;
+	_itoa(tempValue, str, 10);
 	data_size = strlen(str);
 	file.Write(str, data_size);
 	memset(str, 0, sizeof(char) * 256);
