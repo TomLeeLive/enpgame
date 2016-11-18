@@ -430,35 +430,53 @@ void CMainFrame::OnSavemap()
 
 	}
 
-	//CFile file;
-	//file.Open(m_strSaveFileName, CFile::modeCreate | CFile::modeWrite);
-	//int data1 = 10;
-	//file.Write(&data1, sizeof(int));
-	//file.Close();
+	CFile file;
+	file.Open(m_strSaveFileName, CFile::modeCreate | CFile::modeWrite);
 
-	char str[MAX_PATH] = { 0, };
-	//str = _T("Width1234679");
-	////int data_size = strlen(str);
-	//file.Write(str, 10);
-	
-	//int iWidth = theApp.m_MapDesc.iNumCols;
-	//file.Write(&iWidth, sizeof(int));
+	//TCHAR* str = new TCHAR[MAX_PATH];
 
-	//str = NULL;
-	//str = _T("Height");
-	//file.Write(str, sizeof(TCHAR));
-	//file.Write(&GMapDlg.m_iTileHeight, sizeof(int));
+	char str[MAX_PATH] = { 0 };
+	float fstr[MAX_PATH] = { 0 };
 
-	
-	FILE* fp;
+	//width °ª
+	strcat(str,"Width");	strcat(str, "\t");
+	int data_size = strlen(str);
+	file.Write(str, data_size);
+	memset(str, 0, sizeof(char) * 256);
 
-	fp = fopen("test.txt", "rt");
+	//theApp.m_MapDesc.iNumCols;
+	int tempValue = theApp.m_MapDesc.iNumCols;
+	_itoa(tempValue, str, 10);
+	data_size = strlen(str);
+	file.Write(str, data_size);
+	memset(str, 0, sizeof(char) * 256);
 
-	while (!feof(fp))
-	{
-		fgets(str, 256, fp);		
-	}
-	
+	//height °ª
+	strcat(str, "\r\n");	strcat(str, "Height");	strcat(str, "\t");
+	data_size = strlen(str);
+	file.Write(str, data_size);
+	memset(str, 0, sizeof(char) * 256);
+
+	// theApp.m_MapDesc.iNumRows;
+	tempValue = theApp.m_MapDesc.iNumRows;
+	_itoa(tempValue, str, 10);
+	data_size = strlen(str);
+	file.Write(str, data_size);
+	memset(str, 0, sizeof(char) * 256);
+
+	//fDistance °ª
+	strcat(str, "\r\n");	strcat(str, "fDistance");	strcat(str, "\t");
+	data_size = strlen(str);
+	file.Write(str, data_size);
+	memset(str, 0, sizeof(char) * 256);
+
+	// theApp.m_MapDesc.fSellDistance;
+	//_itoa(theApp.m_MapDesc.fSellDistance, fstr, 10);
+	//data_size = strlen(fstr);
+	//file.Write(fstr, data_size);
+	//memset(fstr, 0, sizeof(char) * 256);
+
+	file.Close();
 	
 
 }

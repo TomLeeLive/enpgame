@@ -5,6 +5,12 @@
 #MATRIX_FILE		data/character/zombie/zombie_die.gmt
 #ACTION_LOOP		0 
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/zombie/zombie.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -23,6 +29,12 @@
 #MATRIX_FILE		data/character/zombie/zombie_idle.gmt
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/zombie/zombie.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -41,6 +53,12 @@
 #MATRIX_FILE		data/character/zombie/zombie_walk.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/zombie/zombie.gsk null 
 #SKN_LOWER_BODY_COUNT	0
@@ -59,6 +77,12 @@
 #MATRIX_FILE		data/character/zombie/zombie_attack.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
+#OBB_MIN_X -30.0
+#OBB_MIN_Y -50.0
+#OBB_MIN_Z -30.0
+#OBB_MAX_X 30.0
+#OBB_MAX_Y 50.0
+#OBB_MAX_Z 30.0
 #SKN_UPPER_BODY_COUNT	1
 #SKN_UPPER_BODY	data/character/zombie/zombie.gsk null 
 #SKN_LOWER_BODY_COUNT	0

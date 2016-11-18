@@ -993,8 +993,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 			iZ -= 300;
 
 		D3DXMatrixTranslation(&pObjA->m_matWorld, float(iX), 0.0f, float(iZ));
-
-		pObjA->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+		pObjA->m_OBB.Init(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
 
 		m_CharZombie.push_back(pObjA);
 	}
@@ -1046,7 +1045,7 @@ bool GSeqSinglePlay::Load()
 	for (int i = 0; i < m_CharHero.size(); i++) {
 		m_CharHero[i].get()->m_iBullet = 100;
 		m_CharHero[i].get()->m_iHP = 100;
-		m_CharHero[i].get()->m_OBB.Init(D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f));
+		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
 	}
 	return true;
 }

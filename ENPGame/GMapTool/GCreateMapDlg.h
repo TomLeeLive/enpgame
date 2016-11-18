@@ -32,5 +32,6 @@ public:
 	float m_fCellDistance;
 	afx_msg void OnBnClickedButton1();
 	CString m_strCharName;
+	afx_msg void OnEnChangeEdit7();
 };
 //extern GCreateMapDlg GCreateDlg;

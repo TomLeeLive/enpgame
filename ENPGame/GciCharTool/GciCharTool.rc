@@ -73,7 +73,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GciCharTool.ico"
+
 IDR_AIToolTYPE          ICON                    "res\\GciCharToolDoc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +83,9 @@ IDR_AIToolTYPE          ICON                    "res\\GciCharToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -294,9 +298,20 @@ IDD_GMODELFORM DIALOGEX 0, 0, 166, 381
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 9, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    CONTROL         "",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,18,99,189
-    CONTROL         "",IDC_LIST1,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,233,144,121
-    LTEXT           "모델 구조",IDC_STATIC,7,7,42,8
+    CONTROL         "",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,14,18,132,42
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,14,77,132,47
+    LTEXT           "모델 구조",IDC_STATIC,14,7,42,8
+    LTEXT           "모델 목록",IDC_STATIC,15,65,31,8
+    GROUPBOX        "바운딩 박스 정보",IDC_STATIC,15,142,129,80
+    PUSHBUTTON      "셋팅",IDC_BUTTON1,92,205,50,14
+    EDITTEXT        IDC_MIN_X,17,162,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MIN_Y,59,162,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MIN_Z,100,162,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_X,17,187,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_Y,59,187,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_Z,100,187,40,14,ES_AUTOHSCROLL
+    LTEXT           "Min X, Y, Z",IDC_STATIC,19,153,35,8
+    LTEXT           "Max X, Y, Z",IDC_STATIC,19,177,37,8
 END
 
 IDD_GANICTRLFORM DIALOG 0, 0, 320, 200

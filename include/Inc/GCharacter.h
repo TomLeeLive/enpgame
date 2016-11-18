@@ -4,6 +4,8 @@
 class GCharacter : public GObject
 {
 public:
+	D3DXVECTOR3		m_vMin;
+	D3DXVECTOR3		m_vMax;
 	bool			m_iAniLoop;
 	T_STR			m_szName;
 	GBoneObj*		m_pBoneObject;
@@ -27,7 +29,9 @@ public:
 						const TCHAR* strSkinShaderName,	
 						int		iMatrixIndex	= -1,
 						int		iModelMatrixIndex = -1,
-						int		iAniLoop = 1);
+						int		iAniLoop = 1,
+						D3DXVECTOR3 vMin = D3DXVECTOR3(-1.5f, -1.5f, -1.5f),
+						D3DXVECTOR3 vMax = D3DXVECTOR3(1.5f, 1.5f, 1.5f));
 	// 모델 리스트들에 매트릭스 인덱스 세싱
 	void		SeGModelMaterixID(int iMatrixIndex);
 	void		SetMatrix( D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj );

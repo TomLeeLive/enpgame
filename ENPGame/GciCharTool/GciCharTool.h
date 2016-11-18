@@ -9,7 +9,8 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GCoreLibV2.h"
-#include "GHeroObj.h"
+//#include "GHeroObj.h"
+#include  "GZombie.h"
 
 #define G_MACRO_MODELVIEW 1
 
@@ -38,6 +39,7 @@
 class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	vector<CString> m_vecStr;
 	bool DrawDebug();
 #ifdef G_MACRO_MODELVIEW
 	BOOL				InitCamera();
@@ -94,7 +96,8 @@ public:
 	shared_ptr<GCamera > m_pMainCamera;
 #endif
 	D3DXMATRIX  m_matWorld;
-	vector<shared_ptr<GHeroObj>>	m_HeroObj;
+	//vector<shared_ptr<GHeroObj>>	m_HeroObj;
+	vector<shared_ptr<GZombie>>	m_HeroObj;
 
 	T_STR_VECTOR m_LoadFiles;
 	bool		Load();
