@@ -17,10 +17,9 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
-	void AttackMove();
+	bool ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
+	GNewZombieMgr * ZombieMgr;
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-	GNewZombie* Zombie;
 	int hp;
 	D3DXVECTOR3 A_Look;
 	D3DXMATRIX A_Trans[ZombieNum];

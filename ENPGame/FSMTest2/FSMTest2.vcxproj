@@ -160,6 +160,7 @@
     <ClCompile Include="GAIIdle.cpp" />
     <ClCompile Include="GAIMove.cpp" />
     <ClCompile Include="GNewZombie.cpp" />
+    <ClCompile Include="GNewZombieMgr.cpp" />
     <ClCompile Include="GProjMain.cpp" />
     <ClCompile Include="GSeq.cpp" />
   </ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="GAIIdle.h" />
     <ClInclude Include="GAIMove.h" />
     <ClInclude Include="GNewZombie.h" />
+    <ClInclude Include="GNewZombieMgr.h" />
     <ClInclude Include="GProjMain.h" />
     <ClInclude Include="GSeq.h" />
     <ClInclude Include="_stdafx.h" />

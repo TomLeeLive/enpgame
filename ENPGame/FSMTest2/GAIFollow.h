@@ -16,10 +16,10 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
-
-	void FollowMove();
-	GNewZombie* Zombie;
+	bool Zombiefollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
 	int hp;
+	GNewZombieMgr * ZombieMgr;
+
 	D3DXVECTOR3 B_Look[ZombieNum];
 	D3DXMATRIX B_Trans[ZombieNum];
 
