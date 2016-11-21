@@ -1,6 +1,7 @@
 
 // MainFrm.cpp : CMainFrame 클래스의 구현
 //
+#define Test_save
 
 #include "stdafx.h"
 #include "MapTool.h"
@@ -476,7 +477,30 @@ void CMainFrame::OnSavemap()
 	//file.Write(fstr, data_size);
 	//memset(fstr, 0, sizeof(char) * 256);
 
-	file.Close();
-	
+	file.Close();	
+#ifdef Test_save
+	//
+
+	char szChar[16];
+	CString strString;
+	strString = "test";
+	strcpy_s(szChar, 16, CW2A(strString));
+
+
+	FILE *f;	
+	char * str;
+	m_strSaveFileName;
+	f = fopen("StudentData.dat", "wt");
+
+
+	fprintf(f, buffer);
+
+
+	fclose(f);
+
+#endif
+
+
+
 
 }
