@@ -6,65 +6,57 @@ bool GAIFollow::Init()
 {
 	return true;
 }
-void GAIFollow::FollowMove() {
 
-	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// 주인공 목적지 방향으로 회전 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	    vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_CharNZomb[i]->m_worldMat._41, 0.0f, g_pMain->m_CharNZomb[i]->m_worldMat._43);
-		vBoxPosition[i] = D3DXVECTOR3(g_pMain->m_matBoxWorld._41, 0.0f, g_pMain->m_matBoxWorld._43);
-		vBDestLook1[i] = vBoxPosition[i] - vZombiePosition[i]; // 정규화 안한 박스로의 목적지 벡터
-		vBDestLook[i] = vZombiePosition[i] - vBoxPosition[i]; //- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
-		D3DXVec3Normalize(&vBDestLook[i], &vBDestLook[i]);
-		vBRight[i]= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		vBUp[i] = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&vBRight[i], &vBUp[i], &vBDestLook[i]);
-		D3DXVec3Cross(&vBUp[i], &vBDestLook[i], &vBRight[i]);
+bool GAIFollow::Zombiefollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up)
+{
+	D3DXMATRIX Rotation;
+	D3DXMatrixIdentity(&Rotation);
 
+	D3DXMATRIX Trans;
+	D3DXMatrixIdentity(&Trans);
 
-		D3DXMatrixIdentity(&m_BoxRotation[i]);
-		//D3DXMatrixIdentity(&g_pMain->m_RandomRotation);
-		m_BoxRotation[i]._11 = vBRight[i].x;			m_BoxRotation[i]._12 = vBRight[i].y;			m_BoxRotation[i]._13 = vBRight[i].z; // 임의 행렬에 x,y,z 기입
-		m_BoxRotation[i]._21 = vBUp[i].x;				m_BoxRotation[i]._22 = vBUp[i].y;				m_BoxRotation[i]._23 = vBUp[i].z;
-		m_BoxRotation[i]._31 = vBDestLook[i].x;		m_BoxRotation[i]._32 = vBDestLook[i].y;				m_BoxRotation[i]._33 = vBDestLook[i].z;
+	Rotation._11 = Right.x;			Rotation._12 = Right.y;			Rotation._13 = Right.z; // 임의 행렬에 x,y,z 기입
+	Rotation._21 = Up.x;			Rotation._22 = Up.y;			Rotation._23 = Up.z;
+	Rotation._31 = look.x;			Rotation._32 = look.y;			Rotation._33 = look.z;
 
+	Trans._41 += look.x * g_fSecPerFrame* SPEED;
+	Trans._43 += look.z * g_fSecPerFrame* SPEED;
+	
+	g_pMain->m_Zomb[i]->m_ZombieWorld[i] = Rotation*Trans;
 
-		vDistance[i] = vBoxPosition[i] - vZombiePosition[i];
-	    float a = D3DXVec3Length(&vDistance[i]);
-		ZombieDistance[i] = a;
-	}
-
+	return true;
 }
 bool GAIFollow::Frame()
 {
-	FollowMove();
-
 	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
 	{
-		hp = 100;  B_Look[i] = vBDestLook1[i]; 
-		D3DXMatrixIdentity(&B_Trans[i]);
-
-		if (ZombieDistance[i] > 70.0f) {
-			g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
-		}
-		else if (ZombieDistance[i] < 70.0f) {
-			Zombie->Zombiefollow(hp, B_Look[i], B_Trans[i], m_BoxRotation[i]);
-
-			if (ZombieDistance[i] < 30.0f)
+		if (g_pMain->m_Zomb[i]->vDistance[i] < 70.0f)
+		{
+			ZombieMgr->FollowMove(i, g_pMain->m_Zomb[i]->vBoxPosition[i], g_pMain->m_Zomb[i]->vZombiePosition[i]);
+			Zombiefollow(i, g_pMain->m_Zomb[i]->vLook[i], g_pMain->m_Zomb[i]->vZRight[i], g_pMain->m_Zomb[i]->vZUp[i]);
+			
+			G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
+			G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
+			
+			if (g_pMain->m_Zomb[i]->vDistance[i] < 30.0f)
 			{
-				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
-				//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
-				//g_pMain->m_CharNZomb[i]->Set(pChar0,
-				//	pChar0->m_pBoneObject,
-				//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-				//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
-
-
-				g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
+				if (beforeState != G_ZOMB_ST_ATTACK)
+				{
+					afterState = G_ZOMB_ST_ATTACK;
+					g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_ZOMB_ST_ATTACK];
+					if (beforeState != afterState)
+					{
+						g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
+					}
+				}
 			}
+			
 		}
+		
+
+
 	}
+
 	return true;
 }
 bool GAIFollow::Render()

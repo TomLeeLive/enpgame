@@ -5,94 +5,52 @@ GAIMove * GAIMove::pInstance_ = 0;
 
 bool GAIMove::Init()
 {
-	m_Zombie = new GNewZombie;
-	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-	//g_pMain->m_CharNZomb[0]->Set(pChar0,
-	//	pChar0->m_pBoneObject,
-	//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	return true;
 }
-void GAIMove::RendomMove() {
 
+bool GAIMove::ZombieMove(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up)
+{
+	D3DXMATRIX Rotation;
+	D3DXMatrixIdentity(&Rotation);
+	
+	
+	
+	Rotation._11 = Right.x;			Rotation._12 = Right.y;			Rotation._13 = Right.z; // 임의 행렬에 x,y,z 기입
+	Rotation._21 = Up.x;			Rotation._22 = Up.y;			Rotation._23 = Up.z;
+	Rotation._31 = look.x;			Rotation._32 = look.y;			Rotation._33 = look.z;
 
-	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
+	Trans[i]._41 += look.x * g_fSecPerFrame* SPEED;
+	Trans[i]._43 += look.z * g_fSecPerFrame* SPEED;
+	
+	g_pMain->m_Zomb[i]->m_ZombieWorld[i] = Rotation * Trans[i];
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//									랜덤 목적지 만들기
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		srand(time(NULL));
-		if ((rand() * 3) % 2 == 0)
-		{
-			m_RandomPoint[i].x = -((rand() * 3) % 50);
-		}
-		else
-		{
-			m_RandomPoint[i].x = (rand() * 3) % 50;
-		}
-		if ((rand() * 3) % 2 == 0)
-		{
-			m_RandomPoint[i].z = -((rand() * 3) % 50);
-		}
-		else
-		{
-			m_RandomPoint[i].z = (rand() * 3) % 50;
-		}
+	//회전행렬, 이동행렬 반환하기
 
-		// 랜덤 목적지
-		m_RandomDestination[i].x = m_RandomPoint[i].x;
-		m_RandomDestination[i].y = 0.0f;
-		m_RandomDestination[i].z = m_RandomPoint[i].z;
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// 랜덤 목적지 방향으로 회전 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_CharNZomb[i]->m_worldMat._41, 0.0f, g_pMain->m_CharNZomb[i]->m_worldMat._43);
-		vBoxPosition[i] = D3DXVECTOR3(g_pMain->m_matBoxWorld._41, 0.0f, g_pMain->m_matBoxWorld._43);
-		vRDestLook1[i] = m_RandomDestination[i] - vZombiePosition[i]; // 정규화 안한 랜덤 목적지 방향 벡터
-		vRDestLook[i] = m_RandomDestination[i] - vZombiePosition[i]; // 랜덤 목적지 방향 벡터
-		D3DXVec3Normalize(&vRDestLook[i], &vRDestLook[i]);
-		vZRight[i] = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		vZUp[i]= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&vZRight[i], &vZUp[i], &vRDestLook[i]);
-		D3DXVec3Cross(&vZUp[i], &vRDestLook[i], &vZRight[i]);
-
-
-
-		D3DXMatrixIdentity(&m_RandomRotation[i]);
-		m_RandomRotation[i]._11 = vZRight[i].x;			m_RandomRotation[i]._12 = vZRight[i].y;			m_RandomRotation[i]._13 = vZRight[i].z; // 임의 행렬에 x,y,z 기입
-		m_RandomRotation[i]._21 = vZUp[i].x;				m_RandomRotation[i]._22 = vZUp[i].y;		m_RandomRotation[i]._23 = vZUp[i].z;
-		m_RandomRotation[i]._31 = vRDestLook[i].x;		m_RandomRotation[i]._32 = vRDestLook[i].y;		m_RandomRotation[i]._33 = vRDestLook[i].z;
-
-		vDistance[i] = vBoxPosition[i] - vZombiePosition[i];
-		ZombieDistance[i] = D3DXVec3Length(&vDistance[i]);
-	}
+	return true;
 }
 bool GAIMove::Frame()
 {
-	 RendomMove();
+	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
+	{
+		if (g_pMain->m_Zomb[i]->vDistance[i] > 70.0f)
+		{
+			ZombieMgr->RandomMove(i, g_pMain->m_Zomb[i]->vZombiePosition[i]);
+			ZombieMove(i, g_pMain->m_Zomb[i]->vLook[i], g_pMain->m_Zomb[i]->vZRight[i], g_pMain->m_Zomb[i]->vZUp[i]);
+		}
 
-	 for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
-	 {
-		 hp = 100;  m_Z_Look[i] = vRDestLook1[i];
-		 D3DXMatrixIdentity(&m_Z_Trans[i]);
-
-		 G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
-		 G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
-
-		 if (ZombieDistance[i] > 70.0f) {
-			 m_Zombie->ZombieMove(hp, m_Z_Look[i], m_Z_Trans[i], m_RandomRotation[i]);
-		 }
-		 else if (ZombieDistance[i] < 70.0f && beforeState != G_ZOMB_ST_FOLLOW) {
-			 //g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
-			 afterState = G_ZOMB_ST_FOLLOW;
-			 g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
-
-			 if (beforeState != afterState) {
-				 g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
-			 }
-		 }
-	 }
+		G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
+		G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
+		
+		if (beforeState != G_ZOMB_ST_WALK)
+		{
+			afterState = G_ZOMB_ST_WALK;
+			g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
+			if (beforeState != afterState)
+			{
+				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
+			}
+		}
+	}
 	return true;
 }
 bool GAIMove::Render()
@@ -122,7 +80,10 @@ HRESULT GAIMove::DeleteResource()
 GAIMove::GAIMove()
 {
 	m_pMainCamera = nullptr;
+	ZombieMgr = new GNewZombieMgr;
 	pInstance_ = 0;
+	for (int i=0; i < ZombieNum; i++)
+	D3DXMatrixIdentity(&Trans[i]);
 
 }
 

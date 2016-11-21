@@ -9,10 +9,9 @@
 #define G_DEFINE_ANI_ZOMB_ATT L"ZOMBIE_ATTACK"
 #define G_DEFINE_ANI_ZOMB_WLK L"ZOMBIE_WALK"
 #define G_DEFINE_ANI_ZOMB_IDL L"ZOMBIE_IDLE"
-#define G_DEFINE_ANI_ZOMB_FLW L"ZOMBIE_FOLLOW"
 
-#define G_DEFINE_MAX_AI_ZOMBIE  3
-#define SPEED 10.0f
+#define G_DEFINE_MAX_AI_ZOMBIE  1
+
 enum G_ZOMB_ST {
 	G_ZOMB_ST_IDLE =0,
 	G_ZOMB_ST_WALK,
@@ -41,7 +40,6 @@ enum G_ZOMB_ST {
 
 #include "GModel.h"
 #include "GNewZombie.h"
-#include "GNewZombieMgr.h"
 #include "GObjMgr.h"
 
 //Main

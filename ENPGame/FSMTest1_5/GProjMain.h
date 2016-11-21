@@ -8,6 +8,14 @@ enum G_AI {
 	G_AI_FOLLOW,
 	G_AI_CNT
 };
+//enum G_ZOMBIE_STATE {
+//	G_ZOMB_IDLE = 0,
+//	G_ZOMB_WALK,
+//	G_ZOMB_ATTACK,
+//	G_ZOMB_DIE,
+//	G_ZOMB_FOLLOW,
+//	G_ZOMB_CNT
+//};
 
 
 class GProjMain : public GCoreLibV2
@@ -16,27 +24,22 @@ public:
 	void ChangeZombState(int iNum, G_ZOMB_ST state);
 	void ChangeZombState(int iNum, TCHAR* str);
 
-
 	int iChange;
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matBoxWorld;
 	D3DXMATRIX  m_matWorld1;
-	D3DXMATRIX  m_RandomRotation[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_BoxRotation[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_RandomRotResult[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_BoxRotResult[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_TransRotation[G_DEFINE_MAX_AI_ZOMBIE];
+	D3DXMATRIX  m_RandomRotation[5];
+	D3DXMATRIX  m_BoxRotation[5];
+	D3DXMATRIX  m_RandomRotResult[5];
+	D3DXMATRIX  m_BoxRotResult[5];
 	D3DXMATRIX  m_temp;
 
 
+	vector<shared_ptr<GNewZombie>>m_CharNZomb;
 
-
-
-	vector<shared_ptr<GNewZombieMgr>>m_CharNZomb;
-
-
-	GShape*	m_Box;
-	GNewZombie* m_Zomb[G_DEFINE_MAX_AI_ZOMBIE];
+	GShape*		m_Box;
+	GShape*		m_Box1;
+	bool m_bDead = true;
 	bool Load();
 
 public:
@@ -51,8 +54,6 @@ public:
  bool		Render();
  bool		Release();
  int		WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------

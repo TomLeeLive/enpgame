@@ -4,80 +4,38 @@ GAIAttack * GAIAttack::pInstance_ = 0;
 
 bool GAIAttack::Init()
 {
-	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-	//g_pMain->m_CharNZomb[0]->Set(pChar0,
-	//	pChar0->m_pBoneObject,
-	//	pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	//g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
 	return true;
 }
-void GAIAttack::AttackMove() {
+bool GAIAttack::ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up)
+{
+	D3DXMATRIX Rotation;
+	D3DXMatrixIdentity(&Rotation);
 
-	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
-		vZombiePosition[i] = D3DXVECTOR3(g_pMain->m_CharNZomb[i]->m_worldMat._41, 0.0f, g_pMain->m_CharNZomb[i]->m_worldMat._43);
-		vBoxPosition[i] = D3DXVECTOR3(g_pMain->m_matBoxWorld._41, 0.0f, g_pMain->m_matBoxWorld._43);
-		vADestLook1[i] = vBoxPosition[i] - vZombiePosition[i]; // 정규화 안한 박스로의 목적지 벡터
-		vADestLook[i] = vZombiePosition[i] - vBoxPosition[i]; // 정규화 할 박스로의 목적지 벡터
-		D3DXVec3Normalize(&vADestLook[i], &vADestLook[i]);
-		vARight[i] = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		vAUp[i] = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&vARight[i], &vAUp[i], &vADestLook[i]);
-		D3DXVec3Cross(&vAUp[i], &vADestLook[i], &vARight[i]);
+	D3DXMATRIX Trans;
+	D3DXMatrixIdentity(&Trans);
 
+	Rotation._11 = Right.x;			Rotation._12 = Right.y;			Rotation._13 = Right.z; // 임의 행렬에 x,y,z 기입
+	Rotation._21 = Up.x;			Rotation._22 = Up.y;			Rotation._23 = Up.z;
+	Rotation._31 = look.x;			Rotation._32 = look.y;			Rotation._33 = look.z;
 
-		D3DXMatrixIdentity(&m_ABoxRotation);
-		//D3DXMatrixIdentity(&g_pMain->m_RandomRotation);
-		m_ABoxRotation._11 = vARight[i].x;			m_ABoxRotation._12 = vARight[i].y;			m_ABoxRotation._13 = vARight[i].z; // 임의 행렬에 x,y,z 기입
-		m_ABoxRotation._21 = vAUp[i].x;				m_ABoxRotation._22 = vAUp[i].y;				m_ABoxRotation._23 = vAUp[i].z;
-		m_ABoxRotation._31 = vADestLook[i].x;		m_ABoxRotation._32 = vADestLook[i].y;		m_ABoxRotation._33 = vADestLook[i].z;
+	Trans._41 += look.x * g_fSecPerFrame* SPEED;
+	Trans._43 += look.z * g_fSecPerFrame* SPEED;
 
+	g_pMain->m_Zomb[i]->m_ZombieWorld[i] = Rotation*Trans;
 
-		vDistance[i]= vBoxPosition[i] - vZombiePosition[i];
-		ZombieDistance[i] = D3DXVec3Length(&vDistance[i]);
-	}
+	return true;
 }
 bool GAIAttack::Frame()
 {
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// 주인공 목적지 방향으로 회전 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	AttackMove();
 	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
 	{
-		hp = 100;  A_Look = vADestLook1[i];
-		D3DXMatrixIdentity(&A_Trans[i]);
-
-		G_ZOMB_ST befState = g_pMain->m_CharNZomb[i].get()->m_State;
-		G_ZOMB_ST aftState = g_pMain->m_CharNZomb[i].get()->m_State;
-
-		if (ZombieDistance[i] > 70.0f && befState != G_ZOMB_ST_WALK) {
-			//g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
-
-			//g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
-			aftState = G_ZOMB_ST_WALK;
-			g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
-
-			if (befState != aftState) {
-				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_WLK);
-			}
-
-		}
-		else if (ZombieDistance[i] < 70.0f) {
-			Zombie->Zombiefollow(hp, A_Look, A_Trans[i], m_ABoxRotation);
-
-			G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
-			G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
-			if (ZombieDistance[i] < 30.0f && beforeState != G_ZOMB_ST_ATTACK)
-			{
-				afterState = G_ZOMB_ST_ATTACK;
-				g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_ATTACK];
-			}
-			if (beforeState != afterState) {
-				g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
-			}
+		if (g_pMain->m_Zomb[i]->vDistance[i] < 30.0f)
+		{
+			ZombieMgr->FollowMove(i, g_pMain->m_Zomb[i]->vBoxPosition[i], g_pMain->m_Zomb[i]->vZombiePosition[i]);
+			ZombieAttack(i, g_pMain->m_Zomb[i]->vLook[i], g_pMain->m_Zomb[i]->vZRight[i], g_pMain->m_Zomb[i]->vZUp[i]);
 		}
 	}
+
 	return true;
 }
 bool GAIAttack::Render()
