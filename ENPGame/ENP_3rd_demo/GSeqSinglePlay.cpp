@@ -365,43 +365,47 @@ bool		GSeqSinglePlay::InitObj() {
 	//--------------------------------------------------------------------------------------
 	// 오브젝트 생성
 	//--------------------------------------------------------------------------------------
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].Init();
-	}
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
+	//	m_Obj[i].Init();
+	//}
 
+	int iIndex = -1;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_BOX);				if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);	if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);				if (iIndex < 0) return false;
 
 	//연구소 로드
-	m_Obj[G_OBJ_LAB].Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_BOX);
+	m_Obj[G_OBJ_LAB] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
 	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB], 2, 2, 2);
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB], 1000.0f, 0.0f, 1000.0f);
 	m_matObjWld[G_OBJ_LAB] = m_matObjScl[G_OBJ_LAB] * m_matObjRot[G_OBJ_LAB] * m_matObjTrans[G_OBJ_LAB];
 	//연구소 OBB 사이즈
-	m_Obj[G_OBJ_LAB].m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+	((GGbsObj*)m_Obj[G_OBJ_LAB])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
 
 	//드롭십 로드
-	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
+	m_Obj[G_OBJ_DROPSHIP] = I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
 	D3DXMatrixScaling(&m_matObjScl[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
 	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_DROPSHIP], D3DXToRadian(45.0f + 180.0f));
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_DROPSHIP], -1000.0f, 0.0f, -1000.0f);
 	m_matObjWld[G_OBJ_DROPSHIP] = m_matObjScl[G_OBJ_DROPSHIP] * m_matObjRot[G_OBJ_DROPSHIP] * m_matObjTrans[G_OBJ_DROPSHIP];
 	//드롭십 OBB 사이즈
-	m_Obj[G_OBJ_DROPSHIP].m_OBB.Init(D3DXVECTOR3(-42.0f, 0.0f, -75.0f), D3DXVECTOR3(42.0f, 60.0f, 115.0f));
+	((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(D3DXVECTOR3(-42.0f, 0.0f, -75.0f), D3DXVECTOR3(42.0f, 60.0f, 115.0f));
 
 	//차량1 로드
-	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
+	m_Obj[G_OBJ_CAR1] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
 	D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR1], 0.3, 0.3, 0.3);
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR1], 500.0f, 0.0f, -700.0f);
 	m_matObjWld[G_OBJ_CAR1] = m_matObjScl[G_OBJ_CAR1] * m_matObjRot[G_OBJ_CAR1] * m_matObjTrans[G_OBJ_CAR1];
 	//드롭십 차량1 OBB 사이즈
-	m_Obj[G_OBJ_CAR1].m_OBB.Init(D3DXVECTOR3(-160.0f, 0.0f, -440.0f), D3DXVECTOR3(160.0f, 300.0f, 440.0f));
+	((GGbsObj*)m_Obj[G_OBJ_CAR1])->m_OBB.Init(D3DXVECTOR3(-160.0f, 0.0f, -440.0f), D3DXVECTOR3(160.0f, 300.0f, 440.0f));
 
 	//차량2 로드
-	m_Obj[G_OBJ_CAR2].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
+	m_Obj[G_OBJ_CAR2] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
 	D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR2], 0.3, 0.3, 0.3);
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR2], -900.0f, 0.0f, 700.0f);
 	m_matObjWld[G_OBJ_CAR2] = m_matObjScl[G_OBJ_CAR2] * m_matObjRot[G_OBJ_CAR2] * m_matObjTrans[G_OBJ_CAR2];
 	//드롭십 차량2 OBB 사이즈
-	m_Obj[G_OBJ_CAR2].m_OBB.Init(D3DXVECTOR3(-160.0f, 0.0f, -440.0f), D3DXVECTOR3(160.0f, 300.0f, 440.0f));
+	((GGbsObj*)m_Obj[G_OBJ_CAR2])->m_OBB.Init(D3DXVECTOR3(-160.0f, 0.0f, -440.0f), D3DXVECTOR3(160.0f, 300.0f, 440.0f));
 
 
 	for (int i = 0; i < G_OBJ_CNT; i++) {
@@ -671,7 +675,7 @@ bool		GSeqSinglePlay::FrameChar() {
 bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].Frame();
+		m_Obj[i]->Frame();
 	}
 #endif
 	return true;
@@ -821,11 +825,11 @@ bool		GSeqSinglePlay::RenderChar() {
 bool		GSeqSinglePlay::RenderObj() {
 #ifdef G_MACRO_MAP_ADD
 	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-		m_Obj[i].Render(g_pImmediateContext);
+		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_Obj[i]->Render(g_pImmediateContext);
 
 		if(m_bDebugMode)
-			m_Obj[i].m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 #endif
 	return true;
@@ -918,9 +922,10 @@ bool		GSeqSinglePlay::ReleaseChar() {
 };
 bool		GSeqSinglePlay::ReleaseObj() {
 #ifdef G_MACRO_MAP_ADD
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i].Release();
-	}
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
+	//	m_Obj[i].Release();
+	//}
+	I_ObjMgr.Release();
 #endif
 	return true;
 };

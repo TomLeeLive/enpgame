@@ -59,9 +59,7 @@ public:
 	//--------------------------------------------------------------------------------------
 	// 오브젝트
 	//--------------------------------------------------------------------------------------
-	//GGbsObj		m_tbsobj;
-
-	GGbsObj		m_Obj[G_OBJ_CNT];
+	GModel*		m_Obj[G_OBJ_CNT];
 	D3DXMATRIX	m_matObjOBB[G_OBJ_CNT];
 	D3DXMATRIX	m_matObjWld[G_OBJ_CNT];
 	D3DXMATRIX  m_matObjScl[G_OBJ_CNT], m_matObjRot[G_OBJ_CNT], m_matObjTrans[G_OBJ_CNT];

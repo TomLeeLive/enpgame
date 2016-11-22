@@ -17,6 +17,11 @@ enum SNDRESOURCES {
 #define G_OBJ_LOC_DROPSHIP_LAND _T("data/object/dropship/dropship_land.GBS")
 #define G_OBJ_LOC_CAR _T("data/object/car/car.GBS")
 
+//오브젝트 매니저 등록 이름.
+#define G_OBJ_NAME_LAB L"lab.GBS"
+#define G_OBJ_NAME_DROPSHIP_LAND L"dropship_land.GBS"
+#define G_OBJ_NAME_CAR L"car.GBS"
+
 //셰이더 파일 위치
 #define G_SHA_PLANE L"data/shader/plane.hlsl"
 #define G_SHA_LINE L"data/shader/line.hlsl"
