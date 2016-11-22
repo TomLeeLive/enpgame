@@ -34,6 +34,40 @@ BEGIN_MESSAGE_MAP(CGciCharToolApp, CWinAppEx)
 END_MESSAGE_MAP()
 
 
+
+////////////////////////////////////////////////////////
+// 문자열 처리 관련 함수 추가함.
+
+//확장자를 얻기 위해.
+string getExt(string pathname) {
+	return pathname.substr(pathname.find_last_of(".") + 1);
+}
+typedef std::basic_string<TCHAR> tstring;
+
+// string to TChar
+TCHAR* StringToTCHAR(string& s)
+{
+	tstring tstr;
+	const char* all = s.c_str();
+	int len = 1 + strlen(all);
+	wchar_t* t = new wchar_t[len];
+	if (NULL == t) throw std::bad_alloc();
+	mbstowcs(t, all, len);
+	return (TCHAR*)t;
+}
+
+// TChar to string
+std::string TCHARToString(const TCHAR* ptsz)
+{
+	int len = wcslen((wchar_t*)ptsz);
+	char* psz = new char[2 * len + 1];
+	wcstombs(psz, (wchar_t*)ptsz, 2 * len + 1);
+	std::string s = psz;
+	delete[] psz;
+	return s;
+}
+////////////////////////////////////////////////////////
+
 // CAIToolApp 생성
 
 HRESULT CGciCharToolApp::CreateResource()
@@ -60,6 +94,8 @@ HRESULT CGciCharToolApp::DeleteResource()
 
 CGciCharToolApp::CGciCharToolApp()
 {
+	m_FileExt = G_TOOL_EXT_GCI;
+
 	m_bHiColorIcons = TRUE;
 
 	// 다시 시작 관리자 지원
@@ -251,12 +287,22 @@ int CGciCharToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	I_CharMgr.Release();
-	//return true;
 
-	for (int i = 0; i < m_vecStr.size(); i++) {
-	
-		m_vecStr[i].ReleaseBuffer();	
+	if (m_FileExt == G_TOOL_EXT_GCI) {
+
+		//return true;
+
+		for (int i = 0; i < m_vecStr.size(); i++) {
+
+			m_vecStr[i].ReleaseBuffer();
+		}
 	}
+	if (m_FileExt == G_TOOL_EXT_GBS) {
+		m_tbsobj.Release();
+	}
+
+
+	
 
 	AfxOleTerm(FALSE);
 	GRelease();
@@ -354,6 +400,7 @@ bool CGciCharToolApp::Frame() {
 	D3DXMatrixIdentity(&m_World[0]);
 #endif
 
+
 	//--------------------------------------------------------------------------------------
 	// 카메라 타입 선택
 	//--------------------------------------------------------------------------------------
@@ -410,7 +457,7 @@ bool CGciCharToolApp::Frame() {
 	// 카메라 행렬 계산
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Update(D3DXVECTOR4(m_fCameraPitch, m_fCameraYaw, m_fCameraRoll, m_fRadius /*6.0f*/));
-	
+
 #else
 	m_pMainCamera->Frame();
 
@@ -422,181 +469,200 @@ bool CGciCharToolApp::Frame() {
 
 
 
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	{
-		if (I_Input.KeyCheck(DIK_ADD))
-		{
-			m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
-		}
-		if (I_Input.KeyCheck(DIK_SUBTRACT))
-		{
-			m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
-			if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
-		}
-		m_HeroObj[iChar]->Frame();
+	if (m_FileExt == G_TOOL_EXT_GBS) {
+		m_tbsobj.Frame();
+		m_tbsobj.m_OBB.Frame(&m_tbsobj.m_matWorld);
 	}
-	if (I_Input.KeyCheck(DIK_F3) == KEY_UP && m_HeroObj.size() > 1)
-	{
-		m_HeroObj[1]->SetActionFrame(120, 205);//jump		
-	}
-	if (I_Input.KeyCheck(DIK_F4) == KEY_UP&& m_HeroObj.size() > 1)
-	{
-		m_HeroObj[1]->SetActionFrame(205, 289);//attack		
-	}
+	if (m_FileExt == G_TOOL_EXT_GCI) {
 
-	if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
-	{
+
+
+
 		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 		{
-			m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
+			if (I_Input.KeyCheck(DIK_ADD))
+			{
+				m_HeroObj[iChar]->m_fSpeed += g_fSecPerFrame;
+			}
+			if (I_Input.KeyCheck(DIK_SUBTRACT))
+			{
+				m_HeroObj[iChar]->m_fSpeed -= g_fSecPerFrame;
+				if (m_HeroObj[iChar]->m_fSpeed < 0.0f) m_HeroObj[iChar]->m_fSpeed = 0.01f;
+			}
+			m_HeroObj[iChar]->Frame();
 		}
-	}
+		if (I_Input.KeyCheck(DIK_F3) == KEY_UP && m_HeroObj.size() > 1)
+		{
+			m_HeroObj[1]->SetActionFrame(120, 205);//jump		
+		}
+		if (I_Input.KeyCheck(DIK_F4) == KEY_UP&& m_HeroObj.size() > 1)
+		{
+			m_HeroObj[1]->SetActionFrame(205, 289);//attack		
+		}
 
-	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
-	{
-		I_CharMgr.Release();
+		if (I_Input.KeyCheck(DIK_F5) == KEY_UP)
+		{
+			for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+			{
+				m_HeroObj[iChar]->m_bBoneRender = !m_HeroObj[iChar]->m_bBoneRender;
+			}
+		}
 
-		Load();
+		if (I_Input.KeyCheck(DIK_O) == KEY_UP)
+		{
+			I_CharMgr.Release();
 
+			Load();
+
+		}
 	}
 	return true;
 }
 bool CGciCharToolApp::Render() {
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
+	if (m_FileExt == G_TOOL_EXT_GBS) {
+		m_tbsobj.SetMatrix(NULL, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_tbsobj.Render(m_pImmediateContext);
+		m_tbsobj.m_OBB.Render(&m_tbsobj.m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	}
+	if (m_FileExt == G_TOOL_EXT_GCI)
+	{
 #ifdef G_MACRO_MODELVIEW
-	HRESULT hr;
+		HRESULT hr;
 
-	m_World[0]._41 = m_World[1]._41 = m_vObjectPosition.x;
-	m_World[0]._42 = m_World[1]._42 = m_vObjectPosition.y;
+		m_World[0]._41 = m_World[1]._41 = m_vObjectPosition.x;
+		m_World[0]._42 = m_World[1]._42 = m_vObjectPosition.y;
 
-	D3DXMATRIX matTrans;
-	D3DXMatrixIdentity(&matTrans);
-	matTrans._41 = m_vObjectPosition.x;
-	matTrans._42 = m_vObjectPosition.y;
+		D3DXMATRIX matTrans;
+		D3DXMatrixIdentity(&matTrans);
+		matTrans._41 = m_vObjectPosition.x;
+		matTrans._42 = m_vObjectPosition.y;
 
-	m_World[0] *= matTrans;
-	m_World[1] *= matTrans;
+		m_World[0] *= matTrans;
+		m_World[1] *= matTrans;
 
-	
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	{
-		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
-		m_HeroObj[iChar]->Render(m_pImmediateContext);
-
-		
-		m_HeroObj[iChar].get()->m_OBB.Render(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	
-	}
-
-	if (GCoreLibV2::m_bDebugFpsPrint) {
-		m_pDirectionLine.SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
-		m_pDirectionLine.Render(m_pImmediateContext);
-	}
-
-	//m_pBox.SetMatrix(&m_World[0], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-	//m_pBox.Render(m_pImmediateContext);
-
-	//m_pPlane.SetMatrix(&m_World[1], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-	//m_pPlane.Render(m_pImmediateContext);
-
-	//-----------------------------------------------------------------------
-	// 현재 세팅된 뷰포트 정보 저장
-	//-----------------------------------------------------------------------
-	D3D11_VIEWPORT vpOld[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
-	UINT nViewPorts = 1;
-	m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
-	//-----------------------------------------------------------------------
-	// 뷰포트
-	//-----------------------------------------------------------------------	
-	m_World[0]._41 = m_World[1]._41 = 0.0f;
-	for (int iVp = 0; iVp < 4; iVp++)
-	{
-		m_ViewPort[iVp].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
 
 		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 		{
 			//m_matWorld._41 = -50.0f + iChar * 25.0f;
-			m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pCamera[iVp].get()->m_matView, &m_pCamera[iVp].get()->m_matProj);
+			m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
 			m_HeroObj[iChar]->Render(m_pImmediateContext);
+
+
+			m_HeroObj[iChar].get()->m_OBB.Render(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+
 		}
-		//m_pBox.SetMatrix(&m_World[0], &m_pCamera[iVp]->m_matView, &m_pCamera[iVp]->m_matProj);
+
+		if (GCoreLibV2::m_bDebugFpsPrint) {
+			m_pDirectionLine.SetMatrix(&m_World[0], &m_pMainCamera.get()->m_matView, &m_pMainCamera.get()->m_matProj);
+			m_pDirectionLine.Render(m_pImmediateContext);
+		}
+
+		//m_pBox.SetMatrix(&m_World[0], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		//m_pBox.Render(m_pImmediateContext);
 
-		//m_pPlane.SetMatrix(&m_World[1], &m_pCamera[iVp]->m_matView, &m_pCamera[iVp]->m_matProj);
+		//m_pPlane.SetMatrix(&m_World[1], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 		//m_pPlane.Render(m_pImmediateContext);
-	}
 
-	//-----------------------------------------------------------------------
-	// 기본 뷰포트 정보로 복원
-	//-----------------------------------------------------------------------
-	m_pImmediateContext->RSSetViewports(nViewPorts, vpOld);
-	//-----------------------------------------------------------------------
-	// 뷰포트 번호 출력
-	//-----------------------------------------------------------------------
-	RECT rc;
-	for (int iVp = 0; iVp < 4; iVp++)
-	{
-		rc.left = m_ViewPort[iVp].m_vp.TopLeftX + m_ViewPort[iVp].m_vp.Width*0.5f;
-		rc.top = m_ViewPort[iVp].m_vp.TopLeftY;
-		rc.right = m_ViewPort[iVp].m_vp.Width + rc.left;
-		rc.bottom = m_ViewPort[iVp].m_vp.Height + rc.top;
-		T_STR str = ViewStyle[iVp];
+		//-----------------------------------------------------------------------
+		// 현재 세팅된 뷰포트 정보 저장
+		//-----------------------------------------------------------------------
+		D3D11_VIEWPORT vpOld[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
+		UINT nViewPorts = 1;
+		m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
+		//-----------------------------------------------------------------------
+		// 뷰포트
+		//-----------------------------------------------------------------------	
+		m_World[0]._41 = m_World[1]._41 = 0.0f;
+		for (int iVp = 0; iVp < 4; iVp++)
+		{
+			m_ViewPort[iVp].Apply(m_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+
+			for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+			{
+				//m_matWorld._41 = -50.0f + iChar * 25.0f;
+				m_HeroObj[iChar]->SetMatrix(&m_World[0], &m_pCamera[iVp].get()->m_matView, &m_pCamera[iVp].get()->m_matProj);
+				m_HeroObj[iChar]->Render(m_pImmediateContext);
+			}
+			//m_pBox.SetMatrix(&m_World[0], &m_pCamera[iVp]->m_matView, &m_pCamera[iVp]->m_matProj);
+			//m_pBox.Render(m_pImmediateContext);
+
+			//m_pPlane.SetMatrix(&m_World[1], &m_pCamera[iVp]->m_matView, &m_pCamera[iVp]->m_matProj);
+			//m_pPlane.Render(m_pImmediateContext);
+		}
+
+		//-----------------------------------------------------------------------
+		// 기본 뷰포트 정보로 복원
+		//-----------------------------------------------------------------------
+		m_pImmediateContext->RSSetViewports(nViewPorts, vpOld);
+		//-----------------------------------------------------------------------
+		// 뷰포트 번호 출력
+		//-----------------------------------------------------------------------
+		RECT rc;
+		for (int iVp = 0; iVp < 4; iVp++)
+		{
+			rc.left = m_ViewPort[iVp].m_vp.TopLeftX + m_ViewPort[iVp].m_vp.Width*0.5f;
+			rc.top = m_ViewPort[iVp].m_vp.TopLeftY;
+			rc.right = m_ViewPort[iVp].m_vp.Width + rc.left;
+			rc.bottom = m_ViewPort[iVp].m_vp.Height + rc.top;
+			T_STR str = ViewStyle[iVp];
+			TCHAR strNumber[32];
+			str += _itow(iVp, strNumber, 10);// _wtoi
+			DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
+		}
+		//-----------------------------------------------------------------------
+		// 적용되어 있는 카메라 타입 표시
+		//-----------------------------------------------------------------------	
+		rc.left = m_DefaultRT.m_vp.TopLeftX + m_DefaultRT.m_vp.Width*0.5f;
+		rc.top = m_DefaultRT.m_vp.TopLeftY;
+		rc.right = m_DefaultRT.m_vp.Width;
+		rc.bottom = m_DefaultRT.m_vp.Height;
+		T_STR str = ViewStyle[m_iCameraType];
 		TCHAR strNumber[32];
-		str += _itow(iVp, strNumber, 10);// _wtoi
+		str += _itow(m_iCameraType, strNumber, 10);// _wtoi
 		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
-	}
-	//-----------------------------------------------------------------------
-	// 적용되어 있는 카메라 타입 표시
-	//-----------------------------------------------------------------------	
-	rc.left = m_DefaultRT.m_vp.TopLeftX + m_DefaultRT.m_vp.Width*0.5f;
-	rc.top = m_DefaultRT.m_vp.TopLeftY;
-	rc.right = m_DefaultRT.m_vp.Width;
-	rc.bottom = m_DefaultRT.m_vp.Height;
-	T_STR str = ViewStyle[m_iCameraType];
-	TCHAR strNumber[32];
-	str += _itow(m_iCameraType, strNumber, 10);// _wtoi
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
-	//-----------------------------------------------------------------------
-	// 적용되어 있는 카메라의 방향벡터 표시
-	//-----------------------------------------------------------------------
-	str.clear();
-	TCHAR pBuffer[256];
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Look:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera.get()->m_vLookVector.x,
-		m_pMainCamera.get()->m_vLookVector.y,
-		m_pMainCamera.get()->m_vLookVector.z);
-	str += pBuffer;
+		//-----------------------------------------------------------------------
+		// 적용되어 있는 카메라의 방향벡터 표시
+		//-----------------------------------------------------------------------
+		str.clear();
+		TCHAR pBuffer[256];
+		memset(pBuffer, 0, sizeof(TCHAR) * 256);
+		_stprintf_s(pBuffer, _T("Look:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera.get()->m_vLookVector.x,
+			m_pMainCamera.get()->m_vLookVector.y,
+			m_pMainCamera.get()->m_vLookVector.z);
+		str += pBuffer;
 
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Up:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera.get()->m_vUpVector.x,
-		m_pMainCamera.get()->m_vUpVector.y,
-		m_pMainCamera.get()->m_vUpVector.z);
-	str += pBuffer;
+		memset(pBuffer, 0, sizeof(TCHAR) * 256);
+		_stprintf_s(pBuffer, _T("Up:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera.get()->m_vUpVector.x,
+			m_pMainCamera.get()->m_vUpVector.y,
+			m_pMainCamera.get()->m_vUpVector.z);
+		str += pBuffer;
 
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Right:%10.4f,%10.4f,%10.4f "), m_pMainCamera.get()->m_vRightVector.x,
-		m_pMainCamera.get()->m_vRightVector.y,
-		m_pMainCamera.get()->m_vRightVector.z);
-	str += pBuffer;
+		memset(pBuffer, 0, sizeof(TCHAR) * 256);
+		_stprintf_s(pBuffer, _T("Right:%10.4f,%10.4f,%10.4f "), m_pMainCamera.get()->m_vRightVector.x,
+			m_pMainCamera.get()->m_vRightVector.y,
+			m_pMainCamera.get()->m_vRightVector.z);
+		str += pBuffer;
 
-	rc.left = m_DefaultRT.m_vp.TopLeftX + m_DefaultRT.m_vp.Width*0.5f;
-	rc.top = m_DefaultRT.m_vp.Height - 75;
-	rc.right = m_DefaultRT.m_vp.Width;
-	rc.bottom = m_DefaultRT.m_vp.Height;
-	DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
-	
-	
+		rc.left = m_DefaultRT.m_vp.TopLeftX + m_DefaultRT.m_vp.Width*0.5f;
+		rc.top = m_DefaultRT.m_vp.Height - 75;
+		rc.right = m_DefaultRT.m_vp.Width;
+		rc.bottom = m_DefaultRT.m_vp.Height;
+		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
+
+
 
 #else
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	{
-		//m_matWorld._41 = -50.0f + iChar * 25.0f;
-		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-		m_HeroObj[iChar]->Render(m_pImmediateContext);
-	}
+		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+		{
+			//m_matWorld._41 = -50.0f + iChar * 25.0f;
+			m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+			m_HeroObj[iChar]->Render(m_pImmediateContext);
+		}
 #endif
+	}
+
 	return true;
 }
 
@@ -654,6 +720,20 @@ bool CGciCharToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 		load = &load[_tcslen(load) + 1];
 	}
 	SetCurrentDirectory(lpCurBuffer);
+
+
+	//확장자를 검출하기 위해 추가한 코드
+	string extension = getExt(TCHARToString(dir.c_str()));
+
+	if (0 == extension.compare("GCI") || extension.compare("gci") == 0)
+	{
+		m_FileExt = G_TOOL_EXT_GCI;
+		return true;
+	}
+	if (0 == extension.compare("GBS") || extension.compare("gbs") == 0) {
+		m_FileExt = G_TOOL_EXT_GBS;
+		return true;
+	}
 	return true;
 }
 #ifdef G_MACRO_MODELVIEW
@@ -676,69 +756,79 @@ HRESULT CGciCharToolApp::ScreenViewPort(UINT iWidth, UINT iHeight)
 
 bool CGciCharToolApp::Load()
 {
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+
 	I_CharMgr.Init();
-
-
-
-
 
 	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
 	{
 		return false;
 	}
 
-	
 
-	{
-		int iLoad = m_LoadFiles.size() - 1;
-
-		ifstream ifile;
-
-		char line[MAX_PATH]; // 한 줄씩 읽어서 임시로 저장할 공간
-
-		ifile.open(m_LoadFiles[iLoad].c_str());  // 파일 열기
-
-		if (ifile.is_open())
+	if (m_FileExt == G_TOOL_EXT_GCI) {
 		{
-			while (ifile.getline(line, sizeof(line))) // 한 줄씩 읽어 처리를 시작한다.
+			int iLoad = m_LoadFiles.size() - 1;
+
+			ifstream ifile;
+
+			char line[MAX_PATH]; // 한 줄씩 읽어서 임시로 저장할 공간
+
+			ifile.open(m_LoadFiles[iLoad].c_str());  // 파일 열기
+
+			if (ifile.is_open())
 			{
-				//cout << line << endl; // 내용 출력
-				CString str;
-				str = line;
-				m_vecStr.push_back(str);
+				while (ifile.getline(line, sizeof(line))) // 한 줄씩 읽어 처리를 시작한다.
+				{
+					//cout << line << endl; // 내용 출력
+					CString str;
+					str = line;
+					m_vecStr.push_back(str);
+				}
 			}
+
+			ifile.close(); // 파일 닫기
+
 		}
 
-		ifile.close(); // 파일 닫기
 
+		int iLoad = m_LoadFiles.size() - 1;
+
+		if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+		{
+			return false;
+		}
+
+		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+
+		shared_ptr<GZombie> pObjA = make_shared<GZombie>();
+		pObjA->Set(pChar0,
+			pChar0->m_pBoneObject,
+			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+		pObjA->m_OBB.Init(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
+
+		m_HeroObj.push_back(pObjA);
+
+		//CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+		pFrame->m_wndModelCtrl.m_wndForm->UpdateTextOBBInfo(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
+		//CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+		//CGciCharToolView *pView = (CGciCharToolView *)pFrame->GetActiveView();
+
+		//pView->UpdateTextOBBInfo(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
 	}
+	if (m_FileExt == G_TOOL_EXT_GBS) {
+		int iLoad = m_LoadFiles.size() - 1;
 
-
-	int iLoad = m_LoadFiles.size() - 1;
-
-	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
-	{
-		return false;
+		m_tbsobj.Init();
+		if (!m_tbsobj.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"data/shader/box.hlsl"))
+		{
+			return false;
+		}
+		m_tbsobj.m_OBB.Init(D3DXVECTOR3(-10.0f, -10.0f, -10.0f), D3DXVECTOR3(10.0f, 10.0f, 10.0f));
+		pFrame->m_wndModelCtrl.m_wndForm->UpdateTextOBBInfo(D3DXVECTOR3(-10.0f, -10.0f, -10.0f), D3DXVECTOR3(10.0f, 10.0f, 10.0f));
 	}
-
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-
-	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
-	pObjA->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-
-	pObjA->m_OBB.Init(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
-	
-	m_HeroObj.push_back(pObjA);
-	
-	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
-	pFrame->m_wndModelCtrl.m_wndForm->UpdateTextOBBInfo(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
-	//CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
-	//CGciCharToolView *pView = (CGciCharToolView *)pFrame->GetActiveView();
-
-	//pView->UpdateTextOBBInfo(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
 
 	return true;
 }

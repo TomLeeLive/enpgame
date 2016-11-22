@@ -376,7 +376,7 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB], 1000.0f, 0.0f, 1000.0f);
 	m_matObjWld[G_OBJ_LAB] = m_matObjScl[G_OBJ_LAB] * m_matObjRot[G_OBJ_LAB] * m_matObjTrans[G_OBJ_LAB];
 	//연구소 OBB 사이즈
-	m_Obj[G_OBJ_LAB].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+	m_Obj[G_OBJ_LAB].m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
 
 	//드롭십 로드
 	m_Obj[G_OBJ_DROPSHIP].Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);
@@ -385,7 +385,7 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_DROPSHIP], -1000.0f, 0.0f, -1000.0f);
 	m_matObjWld[G_OBJ_DROPSHIP] = m_matObjScl[G_OBJ_DROPSHIP] * m_matObjRot[G_OBJ_DROPSHIP] * m_matObjTrans[G_OBJ_DROPSHIP];
 	//드롭십 OBB 사이즈
-	m_Obj[G_OBJ_DROPSHIP].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+	m_Obj[G_OBJ_DROPSHIP].m_OBB.Init(D3DXVECTOR3(-42.0f, 0.0f, -75.0f), D3DXVECTOR3(42.0f, 60.0f, 115.0f));
 
 	//차량1 로드
 	m_Obj[G_OBJ_CAR1].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
@@ -393,7 +393,7 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR1], 500.0f, 0.0f, -700.0f);
 	m_matObjWld[G_OBJ_CAR1] = m_matObjScl[G_OBJ_CAR1] * m_matObjRot[G_OBJ_CAR1] * m_matObjTrans[G_OBJ_CAR1];
 	//드롭십 차량1 OBB 사이즈
-	m_Obj[G_OBJ_CAR1].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+	m_Obj[G_OBJ_CAR1].m_OBB.Init(D3DXVECTOR3(-160.0f, 0.0f, -440.0f), D3DXVECTOR3(160.0f, 300.0f, 440.0f));
 
 	//차량2 로드
 	m_Obj[G_OBJ_CAR2].Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);
@@ -401,12 +401,12 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR2], -900.0f, 0.0f, 700.0f);
 	m_matObjWld[G_OBJ_CAR2] = m_matObjScl[G_OBJ_CAR2] * m_matObjRot[G_OBJ_CAR2] * m_matObjTrans[G_OBJ_CAR2];
 	//드롭십 차량2 OBB 사이즈
-	m_Obj[G_OBJ_CAR2].m_OBB.Init(D3DXVECTOR3(-100.0f, -100.0f, -100.0f), D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+	m_Obj[G_OBJ_CAR2].m_OBB.Init(D3DXVECTOR3(-160.0f, 0.0f, -440.0f), D3DXVECTOR3(160.0f, 300.0f, 440.0f));
 
 
 	for (int i = 0; i < G_OBJ_CNT; i++) {
 
-		m_matObjOBB[i] = m_matObjRot[i] * m_matObjTrans[i];
+		m_matObjOBB[i] = m_matObjScl[i] * m_matObjRot[i] * m_matObjTrans[i];
 	}
 
 #endif

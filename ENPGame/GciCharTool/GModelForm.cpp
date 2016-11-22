@@ -145,5 +145,11 @@ void GModelForm::OnBnClickedButton1()
 	D3DXVECTOR3 vMin = D3DXVECTOR3(m_fMinX, m_fMinY, m_fMinZ);
 	D3DXVECTOR3 vMax = D3DXVECTOR3(m_fMaxX, m_fMaxY, m_fMaxZ);
 
-	GBBOXFUNC::initBox(&pApp->m_HeroObj[0].get()->m_OBB, vMin, vMax);
+	if (pApp->m_FileExt == G_TOOL_EXT_GCI) {
+		GBBOXFUNC::initBox(&pApp->m_HeroObj[0].get()->m_OBB, vMin, vMax);
+	}
+	if (pApp->m_FileExt == G_TOOL_EXT_GBS) {
+		GBBOXFUNC::initBox(&pApp->m_tbsobj.m_OBB, vMin, vMax);
+	}
+
 }
