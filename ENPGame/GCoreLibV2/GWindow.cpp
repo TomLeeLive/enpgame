@@ -61,6 +61,7 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 							{
 								ShowWindow(hWnd, SW_SHOW);
 							}
+							ClipMouse(true);
 						}
 						else {
 							SetFullScreenFlag(!IsScreenMode);
@@ -70,6 +71,7 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 							{
 								ShowWindow(hWnd, SW_SHOW);
 							}
+							ClipMouse(true);
 						}
 
 					}
@@ -278,6 +280,21 @@ bool GWindow::InitWindow(HINSTANCE hInstance, int nCmdShow, TCHAR* strWindowTitl
 	return true;
 }
 
+void GWindow::ClipMouse(bool bClip) {
+	if (bClip) {
+		//마우스커서 가두기
+		RECT Clip;
+		GetClientRect(g_hWnd, &Clip);
+		ClientToScreen(g_hWnd, (LPPOINT)&Clip);
+		ClientToScreen(g_hWnd, (LPPOINT)(&Clip.right));
+		ClipCursor(&Clip);
+	}
+	else {
+		//마우스 영역해제
+		ClipCursor(NULL);
+	}
+
+}
 GWindow::GWindow(void)
 {
 	m_bMaximized		= false;

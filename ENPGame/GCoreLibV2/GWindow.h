@@ -33,9 +33,8 @@ public:
 	//--------------------------------------------
 	void				CenterWindow(HWND hwnd);
 	bool				CheckWindowSize();
+	void				ClipMouse(bool bClip);
 
-public:
-	
 public:
 	virtual int			WndProc( HWND, UINT, WPARAM, LPARAM );
 			LRESULT		WindowMsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
