@@ -4,6 +4,9 @@
 class GWindow : public GDevice
 {
 public:
+	bool					m_bMaximized;				//처음 셋팅 최대화 여부
+	UINT					m_iInitialWidth;			//처음 셋팅한 가로크기
+	UINT					m_iInitialHeight;			//처음 셋팅한 세로크기
 	//--------------------------------------------
 	// Global Variables
 	//--------------------------------------------
@@ -23,6 +26,7 @@ public:
 										TCHAR* strWindowTitle = _T("GCore GProjMain"), 										
 										int iWidth = 800,
 										int iHeight=600,
+										bool bMaximized = false,
 										BOOL IsFullScreen = FALSE);	
 	//--------------------------------------------
 	// 윈도우 위치 화면 중앙으로 이동

@@ -37,7 +37,6 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
     switch( message )
     {
-
 		case WM_KEYDOWN:
         {
 			switch( wParam )
@@ -45,20 +44,67 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 				case '0':
 				{
 					if( GetSwapChain() )
-					{		
+					{	
 						BOOL IsScreenMode = FALSE;
 						GetSwapChain()->GetFullscreenState( &IsScreenMode, NULL );
-						GetSwapChain()->SetFullscreenState( !IsScreenMode, NULL );
-						SetFullScreenFlag( IsScreenMode );
-						assert( GetFullScreenFlag()  == IsScreenMode );
-						if( IsScreenMode )
-						{
-							ShowWindow( hWnd, SW_SHOW );
+
+						if(!IsScreenMode){
+							int iScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+							int iScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+							if (FAILED(ResizeDevice(iScreenWidth, iScreenHeight))) {}
+
+							SetFullScreenFlag(!IsScreenMode);
+							GetSwapChain()->SetFullscreenState(!IsScreenMode, NULL);
+							
+							assert(GetFullScreenFlag() == !IsScreenMode);
+							if (IsScreenMode)
+							{
+								ShowWindow(hWnd, SW_SHOW);
+							}
 						}
+						else {
+							SetFullScreenFlag(!IsScreenMode);
+							GetSwapChain()->SetFullscreenState(!IsScreenMode, NULL);
+							assert(GetFullScreenFlag() == !IsScreenMode);
+							if (!IsScreenMode)
+							{
+								ShowWindow(hWnd, SW_SHOW);
+							}
+						}
+
 					}
 				}break;
 			}
 		}break;
+		case WM_GETMINMAXINFO: {
+			int iScreenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+			int iScreenHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+
+			if(m_bMaximized){
+				RECT rc = { 0,0, iScreenWidth ,iScreenHeight };
+				AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+				((MINMAXINFO*)lParam)->ptMaxTrackSize.x = rc.right - rc.left; 
+				((MINMAXINFO*)lParam)->ptMaxTrackSize.y = rc.bottom - rc.top; 
+				((MINMAXINFO*)lParam)->ptMinTrackSize.x = rc.right - rc.left; 
+				((MINMAXINFO*)lParam)->ptMinTrackSize.y = rc.bottom - rc.top;
+			}
+			else {
+				RECT rc = { 0,0, m_iInitialWidth ,m_iInitialHeight };
+				AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+				((MINMAXINFO*)lParam)->ptMaxTrackSize.x = rc.right - rc.left;
+				((MINMAXINFO*)lParam)->ptMaxTrackSize.y = rc.bottom - rc.top;
+				((MINMAXINFO*)lParam)->ptMinTrackSize.x = rc.right - rc.left;
+				((MINMAXINFO*)lParam)->ptMinTrackSize.y = rc.bottom - rc.top;
+			}
+			return FALSE;
+		}
+		case WM_SYSCOMMAND:
+		{
+			if (SC_RESTORE == wParam || SC_MAXIMIZE == wParam) {
+				m_bMaximized = !m_bMaximized;
+			}
+		}
+		break;
 		case WM_SIZE:
 		{
 			if (SIZE_MINIMIZED != wParam) // √÷º“»≠
@@ -67,9 +113,9 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 				UINT height = HIWORD(lParam);
 				GetWindowRect(m_hWnd, &m_rcWindowBounds);
 				GetClientRect(m_hWnd, &m_rcWindowClient);
-				if (FAILED(ResizeDevice(width, height)))
-				{
-				}
+				
+				if (GetFullScreenFlag()== FALSE)
+					if (FAILED(ResizeDevice(width, height))){}
 			}
 		}break;
 		//case WM_EXITSIZEMOVE:		
@@ -180,8 +226,12 @@ void GWindow::CenterWindow(HWND hwnd)
 				m_rcWindowBounds.bottom-m_rcWindowBounds.top,
 				true);
 }
-bool GWindow::InitWindow(HINSTANCE hInstance, int nCmdShow, TCHAR* strWindowTitle,  int iWidth, int iHeight, BOOL IsFullScreen)
+bool GWindow::InitWindow(HINSTANCE hInstance, int nCmdShow, TCHAR* strWindowTitle,  int iWidth, int iHeight, bool bMaximized, BOOL IsFullScreen)
 {
+	m_bMaximized = bMaximized;
+	m_iInitialHeight = iHeight;
+	m_iInitialWidth = iWidth;
+
 	g_hInstance = hInstance;
 	  // Register class
     WNDCLASSEX wcex;
@@ -230,6 +280,9 @@ bool GWindow::InitWindow(HINSTANCE hInstance, int nCmdShow, TCHAR* strWindowTitl
 
 GWindow::GWindow(void)
 {
+	m_bMaximized		= false;
+	m_iInitialWidth		= 0;
+	m_iInitialHeight	= 0;
 	m_hInstance			= NULL;
 	m_hWnd				= NULL;
 	g_pWindow			= this;
