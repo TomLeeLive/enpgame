@@ -74,6 +74,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FSMTest2", "FSMTest2\FSMTes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpCharHero", "GSmpCharHero\GSmpCharHero.vcxproj", "{685B4A62-5017-4981-97A4-8E06760227FF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpFrustumCulling", "GSmpFrustumCulling\GSmpFrustumCulling.vcxproj", "{46530091-B901-420A-BB9D-A0186BA87633}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -384,6 +386,18 @@ Global
 		{685B4A62-5017-4981-97A4-8E06760227FF}.Release|x64.ActiveCfg = Release|Win32
 		{685B4A62-5017-4981-97A4-8E06760227FF}.Release|x86.ActiveCfg = Release|Win32
 		{685B4A62-5017-4981-97A4-8E06760227FF}.Release|x86.Build.0 = Release|Win32
+		{46530091-B901-420A-BB9D-A0186BA87633}.Debug|x64.ActiveCfg = Debug|x64
+		{46530091-B901-420A-BB9D-A0186BA87633}.Debug|x64.Build.0 = Debug|x64
+		{46530091-B901-420A-BB9D-A0186BA87633}.Debug|x86.ActiveCfg = Debug|Win32
+		{46530091-B901-420A-BB9D-A0186BA87633}.Debug|x86.Build.0 = Debug|Win32
+		{46530091-B901-420A-BB9D-A0186BA87633}.Hybrid|x64.ActiveCfg = Release|x64
+		{46530091-B901-420A-BB9D-A0186BA87633}.Hybrid|x64.Build.0 = Release|x64
+		{46530091-B901-420A-BB9D-A0186BA87633}.Hybrid|x86.ActiveCfg = Release|Win32
+		{46530091-B901-420A-BB9D-A0186BA87633}.Hybrid|x86.Build.0 = Release|Win32
+		{46530091-B901-420A-BB9D-A0186BA87633}.Release|x64.ActiveCfg = Release|x64
+		{46530091-B901-420A-BB9D-A0186BA87633}.Release|x64.Build.0 = Release|x64
+		{46530091-B901-420A-BB9D-A0186BA87633}.Release|x86.ActiveCfg = Release|Win32
+		{46530091-B901-420A-BB9D-A0186BA87633}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -416,6 +430,7 @@ Global
 		{F088269F-306D-4E9D-AD84-F0D0C6AE17C2} = {08C84B95-560B-4C1E-92DC-12F70876C10E}
 		{581884A0-BCE8-4A3E-BC42-BC2D3E9DE2CB} = {924C030D-11AD-4FAF-8C45-D7B4C3D5E666}
 		{685B4A62-5017-4981-97A4-8E06760227FF} = {08C84B95-560B-4C1E-92DC-12F70876C10E}
+		{46530091-B901-420A-BB9D-A0186BA87633} = {08C84B95-560B-4C1E-92DC-12F70876C10E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
