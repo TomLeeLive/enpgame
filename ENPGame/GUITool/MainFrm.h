@@ -22,8 +22,8 @@ public:
 
 	//추가함_S
 	CTabbedPane m_wndTabPane;
-	GButtonControl m_wndModelCtrl;
-	GUICtrlControl m_wndAniCtrlCtrl;
+	GButtonControl m_wndButtonCtrl;
+	GUICtrlControl m_wndImageCtrl;
 	//추가함_E
 
 // 재정의입니다.

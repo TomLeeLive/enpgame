@@ -109,24 +109,24 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndToolBar);
 
 	// 추가함_S
-	if (TRUE == m_wndModelCtrl.CreateEx(NULL, _T("Model"),
+	if (TRUE == m_wndButtonCtrl.CreateEx(NULL, _T("Button"),
 		this, CRect(0, 0, 300, 300),
 		TRUE, 1234,
 		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
 		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI)) {
-		m_wndModelCtrl.EnableDocking(CBRS_ALIGN_ANY);
-		DockPane(&m_wndModelCtrl);
+		m_wndButtonCtrl.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndButtonCtrl);
 	}
 	// 추가함_E
 
 	// 추가함_S
-	if (TRUE == m_wndAniCtrlCtrl.CreateEx(NULL, _T("AniCtrl"),
+	if (TRUE == m_wndImageCtrl.CreateEx(NULL, _T("UICtrl"),
 		this, CRect(0, 0, 300, 300),
 		TRUE, 5678,
 		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
 		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI)) {
-		m_wndAniCtrlCtrl.EnableDocking(CBRS_ALIGN_ANY);
-		DockPane(&m_wndAniCtrlCtrl);
+		m_wndImageCtrl.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndImageCtrl);
 	}
 	// 추가함_E
 
@@ -141,8 +141,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
 		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI))
 	{
-		m_wndTabPane.AddTab(&m_wndAniCtrlCtrl);
-		m_wndTabPane.AddTab(&m_wndModelCtrl);
+		m_wndTabPane.AddTab(&m_wndImageCtrl);
+		m_wndTabPane.AddTab(&m_wndButtonCtrl);
 		m_wndTabPane.EnableDocking(CBRS_ALIGN_ANY);
 		DockPane(&m_wndTabPane);
 	}

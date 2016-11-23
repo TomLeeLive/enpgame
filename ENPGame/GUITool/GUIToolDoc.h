@@ -6,11 +6,11 @@
 #pragma once
 
 
-class CGciCharToolDoc : public CDocument
+class CGUIToolDoc : public CDocument
 {
 protected: // serialization에서만 만들어집니다.
-	CGciCharToolDoc();
-	DECLARE_DYNCREATE(CGciCharToolDoc)
+	CGUIToolDoc();
+	DECLARE_DYNCREATE(CGUIToolDoc)
 
 // 특성입니다.
 public:
@@ -29,7 +29,7 @@ public:
 
 // 구현입니다.
 public:
-	virtual ~CGciCharToolDoc();
+	virtual ~CGUIToolDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

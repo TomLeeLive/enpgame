@@ -19,13 +19,13 @@
 
 // CAIToolView
 
-IMPLEMENT_DYNCREATE(CGciCharToolView, CView)
+IMPLEMENT_DYNCREATE(CGUIToolView, CView)
 
-BEGIN_MESSAGE_MAP(CGciCharToolView, CView)
+BEGIN_MESSAGE_MAP(CGUIToolView, CView)
 	// 표준 인쇄 명령입니다.
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CGciCharToolView::OnFilePrintPreview)
+	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CGUIToolView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_SIZE()
@@ -36,17 +36,17 @@ END_MESSAGE_MAP()
 
 // CAIToolView 생성/소멸
 
-CGciCharToolView::CGciCharToolView()
+CGUIToolView::CGUIToolView()
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
 }
 
-CGciCharToolView::~CGciCharToolView()
+CGUIToolView::~CGUIToolView()
 {
 }
 
-BOOL CGciCharToolView::PreCreateWindow(CREATESTRUCT& cs)
+BOOL CGUIToolView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
@@ -56,9 +56,9 @@ BOOL CGciCharToolView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CAIToolView 그리기
 
-void CGciCharToolView::OnDraw(CDC* /*pDC*/)
+void CGUIToolView::OnDraw(CDC* /*pDC*/)
 {
-	CGciCharToolDoc* pDoc = GetDocument();
+	CGUIToolDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
@@ -70,25 +70,25 @@ void CGciCharToolView::OnDraw(CDC* /*pDC*/)
 // CAIToolView 인쇄
 
 
-void CGciCharToolView::OnFilePrintPreview()
+void CGUIToolView::OnFilePrintPreview()
 {
 #ifndef SHARED_HANDLERS
 	AFXPrintPreview(this);
 #endif
 }
 
-BOOL CGciCharToolView::OnPreparePrinting(CPrintInfo* pInfo)
+BOOL CGUIToolView::OnPreparePrinting(CPrintInfo* pInfo)
 {
 	// 기본적인 준비
 	return DoPreparePrinting(pInfo);
 }
 
-void CGciCharToolView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CGUIToolView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
 	// TODO: 인쇄하기 전에 추가 초기화 작업을 추가합니다.
 }
 
-void CGciCharToolView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CGUIToolView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
 	// TODO: 인쇄 후 정리 작업을 추가합니다.
 }
@@ -99,20 +99,20 @@ void CGciCharToolView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 // CAIToolView 진단
 
 #ifdef _DEBUG
-void CGciCharToolView::AssertValid() const
+void CGUIToolView::AssertValid() const
 {
 	CView::AssertValid();
 }
 
-void CGciCharToolView::Dump(CDumpContext& dc) const
+void CGUIToolView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 }
 
-CGciCharToolDoc* CGciCharToolView::GetDocument() const // 디버그되지 않은 버전은 인라인으로 지정됩니다.
+CGUIToolDoc* CGUIToolView::GetDocument() const // 디버그되지 않은 버전은 인라인으로 지정됩니다.
 {
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CGciCharToolDoc)));
-	return (CGciCharToolDoc*)m_pDocument;
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CGUIToolDoc)));
+	return (CGUIToolDoc*)m_pDocument;
 }
 #endif //_DEBUG
 
@@ -120,12 +120,12 @@ CGciCharToolDoc* CGciCharToolView::GetDocument() const // 디버그되지 않은 버전은
 // CAIToolView 메시지 처리기
 
 
-void CGciCharToolView::OnSize(UINT nType, int cx, int cy)
+void CGUIToolView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
 
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-	CGciCharToolApp* pApp = (CGciCharToolApp*)AfxGetApp();
+	CGUIToolApp* pApp = (CGUIToolApp*)AfxGetApp();
 	if (cx != 0 && cy != 0)
 	{
 		pApp->ResizeDevice(cx, cy);
@@ -133,7 +133,7 @@ void CGciCharToolView::OnSize(UINT nType, int cx, int cy)
 }
 
 
-void CGciCharToolView::OnLButtonDown(UINT nFlags, CPoint point)
+void CGUIToolView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
@@ -141,27 +141,27 @@ void CGciCharToolView::OnLButtonDown(UINT nFlags, CPoint point)
 }
 
 
-void CGciCharToolView::OnLButtonUp(UINT nFlags, CPoint point)
+void CGUIToolView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	CView::OnLButtonUp(nFlags, point);
 }
 
-void CGciCharToolView::OnRButtonDown(UINT nFlags, CPoint point)
+void CGUIToolView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	CView::OnRButtonDown(nFlags, point);
 }
 
-void CGciCharToolView::OnRButtonUp(UINT /* nFlags */, CPoint point)
+void CGUIToolView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
 	ClientToScreen(&point);
 	//	OnContextMenu(this, point);
 }
 
-void CGciCharToolView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
+void CGUIToolView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
 #ifndef SHARED_HANDLERS
 	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);

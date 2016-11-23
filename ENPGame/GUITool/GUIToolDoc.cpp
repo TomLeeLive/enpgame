@@ -19,25 +19,25 @@
 
 // CAIToolDoc
 
-IMPLEMENT_DYNCREATE(CGciCharToolDoc, CDocument)
+IMPLEMENT_DYNCREATE(CGUIToolDoc, CDocument)
 
-BEGIN_MESSAGE_MAP(CGciCharToolDoc, CDocument)
+BEGIN_MESSAGE_MAP(CGUIToolDoc, CDocument)
 END_MESSAGE_MAP()
 
 
 // CAIToolDoc 생성/소멸
 
-CGciCharToolDoc::CGciCharToolDoc()
+CGUIToolDoc::CGUIToolDoc()
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 
 }
 
-CGciCharToolDoc::~CGciCharToolDoc()
+CGUIToolDoc::~CGUIToolDoc()
 {
 }
 
-BOOL CGciCharToolDoc::OnNewDocument()
+BOOL CGUIToolDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
@@ -53,7 +53,7 @@ BOOL CGciCharToolDoc::OnNewDocument()
 
 // CAIToolDoc serialization
 
-void CGciCharToolDoc::Serialize(CArchive& ar)
+void CGUIToolDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
@@ -122,12 +122,12 @@ void CAIToolDoc::SetSearchContent(const CString& value)
 // CAIToolDoc 진단
 
 #ifdef _DEBUG
-void CGciCharToolDoc::AssertValid() const
+void CGUIToolDoc::AssertValid() const
 {
 	CDocument::AssertValid();
 }
 
-void CGciCharToolDoc::Dump(CDumpContext& dc) const
+void CGUIToolDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }

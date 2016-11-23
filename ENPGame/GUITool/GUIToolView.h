@@ -4,15 +4,15 @@
 
 #pragma once
 
-class CGciCharToolView : public CView
+class CGUIToolView : public CView
 {
 protected: // serialization에서만 만들어집니다.
-	CGciCharToolView();
-	DECLARE_DYNCREATE(CGciCharToolView)
+	CGUIToolView();
+	DECLARE_DYNCREATE(CGUIToolView)
 
 // 특성입니다.
 public:
-	CGciCharToolDoc* GetDocument() const;
+	CGUIToolDoc* GetDocument() const;
 
 // 작업입니다.
 public:
@@ -29,7 +29,7 @@ protected:
 // 구현입니다.
 
 public:
-	virtual ~CGciCharToolView();
+	virtual ~CGUIToolView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
