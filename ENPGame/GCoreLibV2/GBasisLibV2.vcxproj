@@ -48,7 +48,7 @@
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../../output</OutDir>
+    <OutDir>../../output/</OutDir>
     <IntDir>../../output/GCoreLib_0</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -99,9 +99,13 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <PostBuildEvent />
     <PostBuildEvent>
       <Command>copy "./GCoreLib32.lib" "..\\..\\lib"
+md "..\\..\\include\\Inc"
 copy "*.h" "..\\..\\include\\Inc"
 md "..\\..\\Output\\data\\shader"
-copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
+copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"
+md "..\\..\\include\\Inc_map"
+copy "*.h" "..\\..\\include\\Inc_map"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
