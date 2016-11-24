@@ -84,7 +84,7 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
@@ -95,6 +95,7 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <Lib>
       <AdditionalLibraryDirectories>../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>GCoreLib32.lib</OutputFile>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent />
     <PostBuildEvent>
