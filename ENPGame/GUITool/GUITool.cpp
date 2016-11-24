@@ -72,7 +72,17 @@ std::string TCHARToString(const TCHAR* ptsz)
 
 HRESULT CGUIToolApp::CreateResource()
 {
-
+	//추가함 for UI [start]
+	HRESULT hr;
+	// 투영행렬도 윈도우 사이즈가 변경되면 반드시 업테이트 해야 한다.
+	int iRectWidth = m_SwapChainDesc.BufferDesc.Width;
+	int iRectHeight = m_SwapChainDesc.BufferDesc.Height;
+	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+	{
+		GControlUI* pRect = m_pUIList[iPlane];
+		if (pRect) pRect->CreateResource(iRectWidth, iRectHeight);
+	}
+	//추가함 for UI [end]
 	return S_OK;
 }
 
@@ -152,7 +162,7 @@ BOOL CGUIToolApp::InitInstance()
 	// 해당 설정이 저장된 레지스트리 키를 변경하십시오.
 	// TODO: 이 문자열을 회사 또는 조직의 이름과 같은
 	// 적절한 내용으로 수정해야 합니다.
-	SetRegistryKey(_T("GCICHARTOOL"));
+	SetRegistryKey(_T("GUITOOL"));
 	
 	CleanState();
 
@@ -222,6 +232,28 @@ BOOL CGUIToolApp::InitInstance()
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
+	I_Ime.ImeUi_Initialize(m_hWnd);
+
+	GImageCtl* pImageCtl = new GImageCtl();
+	pImageCtl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
+	pImageCtl->Create(GetDevice(), nullptr, L"data/ui/hud.dds");
+	pImageCtl->Scale(400 - 1.0f, 300 - 1.0f, 1.0f - 1.0f);
+	pImageCtl->Move(0, 0, 100);
+	m_pUIList.push_back(pImageCtl);
+
+	GButtonCtl* pBoxCtl = new GButtonCtl();
+	pBoxCtl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
+	pBoxCtl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
+	pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
+	pBoxCtl->Move(0, 0, 0);
+	m_pUIList.push_back(pBoxCtl);
+
+#pragma region g_pTextureSRV
+	m_pTextureSRV[0].Attach(CreateShaderResourceView(GetDevice(), L"data/ui/Background.bmp"));
+	m_pTextureSRV[1].Attach(CreateShaderResourceView(GetDevice(), L"data/ui/_connect.bmp"));
+	m_pTextureSRV[2].Attach(CreateShaderResourceView(GetDevice(), L"data/ui/_exit_lg.bmp"));
+#pragma endregion
+
 
 
 
@@ -238,7 +270,18 @@ BOOL CGUIToolApp::InitInstance()
 int CGUIToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
-	
+
+	//추가함 for UI [start]
+	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+	{
+		GControlUI* pRect = m_pUIList[iPlane];
+		pRect->Release();
+		delete pRect;
+	}
+	I_Ime.Uninitialize();
+	//추가함 for UI [end]
+
+
 
 	if (m_FileExt == G_TOOL_EXT_GUI) {
 
@@ -339,14 +382,91 @@ BOOL CGUIToolApp::OnIdle(LONG lCount)
 
 
 bool CGUIToolApp::Frame() {
+	//추가함 for UI [start]
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
+
+
+	if (I_Input.KeyCheck(DIK_P) == KEY_UP)
+	{
+		m_pSelectPlane = AddRect(G_BUTTON);
+	}
+	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
+	{
+		m_pSelectPlane = AddRect(G_EDIT);
+	}
+
+	GControlUI* pSelect = SelectRect();
+
+	if (pSelect != NULL && m_pSelectPlane != pSelect)
+	{
+		m_pSelectPlane = pSelect;
+	}
+
+	if (m_pSelectPlane)
+	{
+		D3DXVECTOR3 vPos(0, 0, 0);
+		D3DXVECTOR3 vScale(0, 0, 0);
+		if (g_InputData.bQKey)
+		{
+			vScale.x += 50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bEKey)
+		{
+			vScale.x += -50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bZKey)
+		{
+			vScale.y += 50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bCKey)
+		{
+			vScale.y += -50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bWKey)
+		{
+			vPos.y = 50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bSKey)
+		{
+			vPos.y = -50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bAKey)
+		{
+			vPos.x = -50 * g_fSecPerFrame;
+		}
+		if (g_InputData.bDKey)
+		{
+			vPos.x = 50 * g_fSecPerFrame;
+		}
+		m_pSelectPlane->Move(vPos.x, vPos.y, vPos.z);
+		m_pSelectPlane->Scale(vScale.x, vScale.y, vScale.z);
+	}
+
+	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+	{
+		GControlUI* pRect = m_pUIList[iPlane];
+		pRect->Update();
+	}
+	//추가함 for UI [end]
+
+
 
 	return true;
 }
 bool CGUIToolApp::Render() {
-	
+	//추가함 for UI [start]
+	D3DXMATRIX matTrans, matRotation, matZ;
+	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
+	float t = m_Timer.GetElapsedTime() * D3DX_PI;
 
+	//D3DXMatrixTranspose(&m_cbData.matProj, &m_Projection[1]);
+	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+	{
+		GControlUI* pRect = m_pUIList[iPlane];
+		pRect->Render(m_pImmediateContext);
+	}
+	//추가함 for UI [end]
 	return true;
 }
 
@@ -426,7 +546,6 @@ bool CGUIToolApp::Load()
 {
 	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
 
-	I_CharMgr.Init();
 
 	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
 	{
@@ -461,13 +580,13 @@ bool CGUIToolApp::Load()
 
 
 		int iLoad = m_LoadFiles.size() - 1;
-
-		if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+		/*
+		if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")))
 		{
 			return false;
 		}
 
-		/*
+		
 		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
 		shared_ptr<GZombie> pObjA = make_shared<GZombie>();
@@ -509,7 +628,7 @@ void CGUIToolApp::OnCharload()
 
 
 
-
+//추가함 for UI [start]
 void CGUIToolApp::OnCharsave()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -608,3 +727,57 @@ void CGUIToolApp::OnCharsave()
 }
 
 
+GControlUI* CGUIToolApp::AddRect(GUI_TYPE type)
+{
+	GControlUI* pUIControl = NULL;
+	switch (type)
+	{
+	case G_BUTTON: {
+		pUIControl = new GButtonCtl();
+		pUIControl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
+		pUIControl->Scale(50, 50, 0);
+	}
+	case G_EDIT: {
+		pUIControl = new GEditCtl();
+		pUIControl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
+		pUIControl->Scale(50, 50, 0);
+	}
+	}
+	pUIControl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
+	m_pUIList.push_back(pUIControl);
+	return pUIControl;
+}
+GControlUI* CGUIToolApp::SelectRect()
+{
+	POINT mouse;
+	GetCursorPos(&mouse);
+	ScreenToClient(m_hWnd, &mouse);
+	for (int iRect = 0; iRect < m_pUIList.size(); iRect++)
+	{
+		GControlUI* pRect = m_pUIList[iRect];
+		if (I_Input.m_MouseState[0] == KEY_HOLD)
+		{
+			RECT rt = pRect->m_rt;
+			// 뒤집어 진 경우
+			if (pRect->m_rt.left > pRect->m_rt.right)
+			{
+				rt.left = pRect->m_rt.right;
+				rt.right = pRect->m_rt.left;
+			}
+			if (pRect->m_rt.top > pRect->m_rt.bottom)
+			{
+				rt.top = pRect->m_rt.bottom;
+				rt.bottom = pRect->m_rt.top;
+			}
+			if (rt.left <= mouse.x && rt.right >= mouse.x)
+			{
+				if (rt.top <= mouse.y && rt.bottom >= mouse.y)
+				{
+					return pRect;
+				}
+			}
+		}
+	}
+	return NULL;
+}
+//추가함 for UI [end]

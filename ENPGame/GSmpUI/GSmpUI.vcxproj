@@ -96,13 +96,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GImeUI.cpp" />
-    <ClCompile Include="GPlaneRect.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GImeUI.h" />
-    <ClInclude Include="GPlaneRect.h" />
     <ClInclude Include="GProjMain.h" />
   </ItemGroup>
   <ItemGroup>

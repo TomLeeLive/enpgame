@@ -3,7 +3,7 @@
 #include "GDxHelperEx.h"
 #include "GPlaneRect.h"
 
-#pragma comment( lib, "IMM32.lib" )
+//#pragma comment( lib, "IMM32.lib" )
 using namespace DX;
 //--------------------------------------------------------------------------------------
 // Structures

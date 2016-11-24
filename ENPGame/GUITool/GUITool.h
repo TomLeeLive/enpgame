@@ -9,19 +9,14 @@
 
 #include "resource.h"       // 주 기호입니다.
 #include "GCoreLibV2.h"
-//#include "GHeroObj.h"
-#include  "GZombie.h"
 
-#define G_MACRO_MODELVIEW 1
+//추가함 for UI [start]
+#include "GDxHelperEx.h"
+#include "GPlaneRect.h"
+using namespace DX;
+//추가함 for UI [end]
 
-//#define G_MACRO_MODELROT 1
-
-#ifdef G_MACRO_MODELVIEW
-//#include "GModelViewCamera.h"
-#include "GModelCamera.h"
-#else
 #include "GCamera.h"
-#endif
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment( lib, "GCharCore32d.lib" )	
@@ -44,6 +39,16 @@ enum G_CHAR_TOOL_EXT {
 class CGUIToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	//추가함 for UI [start]
+	VS_CONSTANT_BUFFER			m_cbData;
+	std::vector<GControlUI*>	m_pUIList;
+	GControlUI*					m_pSelectPlane;
+	ComPtr<ID3D11ShaderResourceView> m_pTextureSRV[3];
+	GSceneUI						m_Scene;
+	GControlUI* AddRect(GUI_TYPE type);
+	GControlUI* SelectRect();
+	//추가함 for UI [end]
+
 	G_CHAR_TOOL_EXT m_FileExt;
 	vector<CString> m_vecStr;
 
