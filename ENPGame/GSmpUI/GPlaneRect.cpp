@@ -192,7 +192,7 @@ HRESULT		GImageCtl::Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile, 
 	HRESULT hr = S_OK;
 	if (pLoadShaderFile == nullptr)
 	{
-		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/plane.hlsl", pLoadTextureString)))
+		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/UI.hlsl", pLoadTextureString)))
 		{
 			return hr;
 		}
