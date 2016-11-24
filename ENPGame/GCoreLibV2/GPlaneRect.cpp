@@ -146,6 +146,30 @@ GControlUI::~GControlUI()
 	m_pShape->Release();
 }
 
+HRESULT		GButtonHalfCtl::Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile, const TCHAR* pLoadTextureString)
+{
+	HRESULT hr = S_OK;
+	if (pLoadShaderFile == nullptr)
+	{
+		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/box.hlsl", pLoadTextureString)))
+		{
+			return hr;
+		}
+	}
+	else
+	{
+		if (FAILED(hr = m_Box.Create(pDevice, pLoadShaderFile, pLoadTextureString)))
+		{
+			return hr;
+		}
+	}
+	m_pShape = &m_Box;
+
+	m_Vertices[0].p = D3DXVECTOR3(0.0f, 1.0f, -1.0f);
+	m_Vertices[3].p = D3DXVECTOR3(0.0f, -1.0f, -1.0f);
+	return hr;
+}
+
 HRESULT		GButtonCtl::Create(ID3D11Device* pDevice,const TCHAR* pLoadShaderFile,const TCHAR* pLoadTextureString)
 {
 	HRESULT hr = S_OK;

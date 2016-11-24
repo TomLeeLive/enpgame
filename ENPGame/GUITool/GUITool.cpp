@@ -237,13 +237,18 @@ BOOL CGUIToolApp::InitInstance()
 	GImageCtl* pImageCtl = new GImageCtl();
 	pImageCtl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
 	pImageCtl->Create(GetDevice(), nullptr, L"data/ui/hud.dds");
+	//pImageCtl->m_Vertices[0].p = D3DXVECTOR3(0.0f, 1.0f, -1.0f);
+	//pImageCtl->m_Vertices[3].p = D3DXVECTOR3(0.0f, -1.0f, -1.0f);
+
 	pImageCtl->Scale(400 - 1.0f, 300 - 1.0f, 1.0f - 1.0f);
 	pImageCtl->Move(0, 0, 100);
 	m_pUIList.push_back(pImageCtl);
 
-	GButtonCtl* pBoxCtl = new GButtonCtl();
+	GButtonHalfCtl* pBoxCtl = new GButtonHalfCtl();
 	pBoxCtl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
 	pBoxCtl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
+	//pBoxCtl->m_Vertices[0].p = D3DXVECTOR3(0.0f, 1.0f, -1.0f);
+	//pBoxCtl->m_Vertices[3].p = D3DXVECTOR3(0.0f, -1.0f, -1.0f);
 	pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
 	pBoxCtl->Move(0, 0, 0);
 	m_pUIList.push_back(pBoxCtl);

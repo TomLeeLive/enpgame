@@ -64,12 +64,6 @@
     <ClInclude Include="GModelCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GUICtrlControl.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GUICtrlForm.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GUIToolDoc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -91,6 +85,12 @@
     <ClInclude Include="GUITool.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GImageControl.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GImageForm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GButtonControl.cpp">
@@ -103,12 +103,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GModelCamera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GUICtrlControl.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GUICtrlForm.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GUIToolDoc.cpp">
@@ -127,6 +121,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GUITool.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GImageControl.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GImageForm.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

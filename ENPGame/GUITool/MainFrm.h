@@ -5,7 +5,7 @@
 #pragma once
 
 #include "GButtonControl.h"
-#include "GUICtrlControl.h"
+#include "GImageControl.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -23,7 +23,7 @@ public:
 	//추가함_S
 	CTabbedPane m_wndTabPane;
 	GButtonControl m_wndButtonCtrl;
-	GUICtrlControl m_wndImageCtrl;
+	GImageControl m_wndImageCtrl;
 	//추가함_E
 
 // 재정의입니다.

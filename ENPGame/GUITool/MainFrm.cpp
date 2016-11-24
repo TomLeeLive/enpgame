@@ -120,7 +120,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 추가함_E
 
 	// 추가함_S
-	if (TRUE == m_wndImageCtrl.CreateEx(NULL, _T("UICtrl"),
+	if (TRUE == m_wndImageCtrl.CreateEx(NULL, _T("Image"),
 		this, CRect(0, 0, 300, 300),
 		TRUE, 5678,
 		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
@@ -201,6 +201,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
+	// 이미 설정된 윈도우 속성 정보에서 FWS_ADDTOTITLE 속성의 제거.. 
+	cs.style = cs.style & (~FWS_ADDTOTITLE);
+
 	if( !CFrameWndEx::PreCreateWindow(cs) )
 		return FALSE;
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서

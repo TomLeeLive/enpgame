@@ -59,6 +59,18 @@ public:
 	virtual ~GButtonCtl() {};
 };
 
+class GButtonHalfCtl : public GControlUI
+{
+public:
+	GBoxHalfShape     m_Box;
+	HRESULT		Create(ID3D11Device* pDevice,
+		const TCHAR* pLoadShaderFile = nullptr,
+		const TCHAR* pLoadTextureString = nullptr);
+public:
+	GButtonHalfCtl() {};
+	virtual ~GButtonHalfCtl() {};
+};
+
 class GStaticTextCtl : public GButtonCtl
 {
 public:
