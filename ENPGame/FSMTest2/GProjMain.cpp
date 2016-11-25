@@ -2,9 +2,9 @@
 GProjMain* g_pMain;
 
 
-void		GProjMain::ChangeZombState(int iNum, G_ZOMB_ST state) {
+void		GProjMain::ChangeZombState(int iNum, G_AI state) {
 
-	g_pMain->m_CharNZomb[iNum]->setState(state);
+	g_pMain->m_Zomb[iNum]->setState(state);
 
 	int iState = state;
 
@@ -33,7 +33,7 @@ void		GProjMain::ChangeZombState(int iNum, G_ZOMB_ST state) {
 							break;
 	}
 
-	g_pMain->m_CharNZomb[iNum]->Set(pChar0,
+	g_pMain->m_Zomb[iNum]->Set(pChar0,
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
@@ -44,33 +44,37 @@ void		GProjMain::ChangeZombState(int iNum, TCHAR* str) {
 	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
 	auto pChar0 = I_CharMgr.GetPtr(str);
 
-	 m_CharNZomb[iNum]->Set(pChar0,
+	 m_Zomb[iNum]->Set(pChar0,
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 
 	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
-		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_DEAD);
+		 m_Zomb[iNum]->setState(G_AI_DIE);
 	}
 	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
-		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_ATTACK);
+		 m_Zomb[iNum]->setState(G_AI_ATTACK);
 	}
 	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
-		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_WALK);
+		 m_Zomb[iNum]->setState(G_AI_MOVE);
 	}
 	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
-		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_IDLE);
+		 m_Zomb[iNum]->setState(G_AI_IDLE);
 	}
 	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_FLW)) {
-		m_CharNZomb[iNum]->setState(G_ZOMB_ST_FOLLOW);
+		m_Zomb[iNum]->setState(G_AI_FOLLOW);
 	}
 	else {
-		 m_CharNZomb[iNum]->setState(G_ZOMB_ST_IDLE);
+		 m_Zomb[iNum]->setState(G_AI_IDLE);
 	}
 }
 
 bool GProjMain::Load()
 {
+
+	srand(time(NULL));
+
+
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
 	{
 		return false;
@@ -79,14 +83,21 @@ bool GProjMain::Load()
 	for (int i = 0;i < G_DEFINE_MAX_AI_ZOMBIE; i++) {
 		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
-		shared_ptr<GNewZombieMgr> pObjA = make_shared<GNewZombieMgr>();
-		pObjA->setState(G_ZOMB_ST_WALK);
+		shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
+		pObjA->setState(G_AI_MOVE);
+
+		pObjA->m_ZombieWorld._41 = (rand() * 3) % 303;
+		pObjA->m_ZombieWorld._43 = (rand() * 3) % 303;
+
+		pObjA->vZombiePosition.x = pObjA->m_ZombieWorld._41;
+		pObjA->vZombiePosition.y = 0.0f;
+		pObjA->vZombiePosition.z = pObjA->m_ZombieWorld._43;
 
 		pObjA->Set(pChar0,
 			pChar0->m_pBoneObject,
 			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 			pChar0->m_pBoneObject->m_Scene.iLastFrame);
-		m_CharNZomb.push_back(pObjA);
+		m_Zomb.push_back(pObjA);
 	}
 
 	return true;
@@ -113,22 +124,23 @@ bool GProjMain::Init()
 	D3DXMatrixIdentity(&m_matBoxWorld);
 	D3DXMatrixScaling(&m_matBoxWorld, 10.0f, 10.0f, 10.0f);
 
-	srand(time(NULL));
 
-	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	//for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	//{
+	//	SAFE_NEW(m_Zomb[i], GNewZombie);
+
+	//}
+
+	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		SAFE_NEW(m_Zomb[i], GNewZombie);
-		m_Zomb[i]->m_ZombieWorld._41 = (rand() * 3) % 303;
-		m_Zomb[i]->m_ZombieWorld._43 = (rand() * 3) % 303;
+		m_Zomb[i]->Init();
+		for (int j = 0; j < G_AI_CNT; j++)
+		{
+			m_Zomb[i]->m_GameSeq[j]->Init(i);
+		}
 
-		m_Zomb[i]->vZombiePosition.x = m_Zomb[i]->m_ZombieWorld._41;
-		m_Zomb[i]->vZombiePosition.y = 0.0f;
-		m_Zomb[i]->vZombiePosition.z = m_Zomb[i]->m_ZombieWorld._43;
 	}
-
 	
-
-	m_pCurrentSeq->Init();
 
 	return true;
 }
@@ -159,24 +171,15 @@ bool GProjMain::Frame()
 		g_pMain->m_matBoxWorld._41 += 30.0f * g_fSecPerFrame;
 		Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
-	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		m_Zomb[i]->vBoxPosition.x = g_pMain->m_matBoxWorld._41;
-		m_Zomb[i]->vBoxPosition.y = g_pMain->m_matBoxWorld._42;
-		m_Zomb[i]->vBoxPosition.z = g_pMain->m_matBoxWorld._43;
-	}
-	for (int iChar = 0; iChar < m_CharNZomb.size(); iChar++)
-	{
-		m_CharNZomb[iChar]->Frame();
+		m_Zomb[i]->Frame(i);
 	}
 	
-	m_pMainCamera->Frame();
-	m_pCurrentSeq->Frame();
 
-	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
-	{
-		m_Zomb[i]->m_ZombieWorld = m_Rotation[i] * m_Trans[i];
-	}
+	m_pMainCamera->Frame();
+
+
 	return true;
 }
 bool GProjMain::Render()
@@ -184,18 +187,25 @@ bool GProjMain::Render()
 	m_Box->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box->Render(m_pImmediateContext);
 	
-	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		m_CharNZomb[i]->SetMatrix(&m_Zomb[i]->m_ZombieWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		m_CharNZomb[i]->Render(m_pImmediateContext);
+		m_Zomb[i]->SetMatrix(&m_Zomb[i]->m_ZombieWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+		m_Zomb[i]->Render();
 	}
 
-	m_pCurrentSeq->Render();
+	for (int i = 0; i < m_Zomb.size(); i++)
+	{
+		m_Zomb[i]->Render();
+	}
+	
 	return true;
 }
 bool GProjMain::Release()
 {
-	m_pCurrentSeq->Release();
+	//for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	//{
+	//	m_Zomb[i].reset()
+	//}
 	return true;
 }
 HRESULT GProjMain::CreateResource()
@@ -204,6 +214,12 @@ HRESULT GProjMain::CreateResource()
 	if (m_pMainCamera != nullptr)
 		m_pMainCamera->SetProjMatrix((float)D3DX_PI * 0.25f,
 		m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 10000.0f);
+
+	for (int i = 0; i < m_Zomb.size(); i++)
+	{
+		m_Zomb[i]->CreateResource();
+	}
+
 	return S_OK;
 }
 HRESULT GProjMain::DeleteResource()
@@ -215,17 +231,8 @@ HRESULT GProjMain::DeleteResource()
 
 GProjMain::GProjMain(void)
 {
-	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
-	{
-		D3DXMatrixIdentity(&m_Rotation[i]);
-		D3DXMatrixIdentity(&m_Trans[i]);
-	}
-	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
-	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
-	m_GameSeq[G_AI_FOLLOW] = GAIFollow::CreateInstance();
-	m_GameSeq[G_AI_ATTACK] = GAIAttack::CreateInstance();
-	m_GameSeq[G_AI_DIE] = GAIDie::CreateInstance();
-	m_pCurrentSeq = m_GameSeq[G_AI_MOVE];
+
+
 }
 
 GProjMain::~GProjMain(void)

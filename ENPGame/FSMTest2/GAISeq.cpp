@@ -2,12 +2,12 @@
 
 
 
-GSeq::GSeq()
+GAISeq::GAISeq()
 {
 }
 
 
-GSeq::~GSeq()
+GAISeq::~GAISeq()
 {
 }
 

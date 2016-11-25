@@ -3,15 +3,15 @@
 enum ZombieNum {
 	ZombieNum = G_DEFINE_MAX_AI_ZOMBIE
 };
-class GAIMove : public GSeq
+class GAIMove : public GAISeq
 {
 public:
-	static GSeq* CreateInstance() {
+	static GAISeq* CreateInstance() {
 		if (pInstance_ == 0) pInstance_ = new GAIMove;
 		return pInstance_;
 	}
-	bool Init();
-	bool Frame();
+	bool Init(int iMyIndex);
+	bool Frame(int iMyIndex);
 	bool Render();
 	bool Release();
 
@@ -24,10 +24,10 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 
-	GNewZombieMgr * ZombieMgr;
+	//GNewZombieMgr * ZombieMgr;
 
-	D3DXMATRIX Trans[ZombieNum];
-	D3DXMATRIX Rotation[ZombieNum];
+	D3DXMATRIX Trans;
+	D3DXMATRIX Rotation;
 	int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return -1; };
 public:
 	virtual ~GAIMove();

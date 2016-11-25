@@ -1,11 +1,11 @@
 #pragma once
 
-class GAIIdle : public GSeq
+class GAIIdle : public GAISeq
 {
 private:
 	static GAIIdle *pInstance_;
 public:
-	static GSeq* CreateInstance()
+	static GAISeq* CreateInstance()
 	{
 		if (pInstance_ == 0) pInstance_ = new GAIIdle;
 		return pInstance_;
@@ -13,8 +13,8 @@ public:
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matWorld;
 
-	bool Init();
-	bool Frame();
+	bool Init(int iMyIndex);
+	bool Frame(int iMyIndex);
 	bool Render();
 	bool Release();
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
