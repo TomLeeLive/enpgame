@@ -1,47 +1,36 @@
 #pragma once
 
-enum G_AI {
-	G_AI_IDLE = 0,
-	G_AI_MOVE,
-	G_AI_ATTACK,
-	G_AI_DIE,
-	G_AI_FOLLOW,
-	G_AI_CNT
-};
+
 
 
 class GProjMain : public GCoreLibV2
 {
 public:
-	void ChangeZombState(int iNum, G_ZOMB_ST state);
+	void ChangeZombState(int iNum, G_AI state);
 	void ChangeZombState(int iNum, TCHAR* str);
 
 
 	int iChange;
 	shared_ptr<GCamera > m_pMainCamera;
 	D3DXMATRIX  m_matBoxWorld;
-	D3DXMATRIX  m_matWorld1;
-	D3DXMATRIX  m_RandomRotation[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_BoxRotation[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_RandomRotResult[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_BoxRotResult[G_DEFINE_MAX_AI_ZOMBIE];
-	D3DXMATRIX  m_TransRotation[G_DEFINE_MAX_AI_ZOMBIE];
+	//D3DXMATRIX  m_matWorld1;
+
 	D3DXMATRIX  m_temp;
 
 
 
 
 
-	vector<shared_ptr<GNewZombieMgr>>m_CharNZomb;
+	//vector<shared_ptr<GNewZombieMgr>>m_CharNZomb;
 
 
 	GShape*	m_Box;
-	GNewZombie* m_Zomb[G_DEFINE_MAX_AI_ZOMBIE];
+	//GNewZombie* m_Zomb[G_DEFINE_MAX_AI_ZOMBIE];
+	vector<shared_ptr<GNewZombie>> m_Zomb;
 	bool Load();
 
 public:
-	GSeq * m_GameSeq[G_AI_CNT];
-	GSeq * m_pCurrentSeq;
+
 	float m_fSecondPerFrmae;
 
 public:

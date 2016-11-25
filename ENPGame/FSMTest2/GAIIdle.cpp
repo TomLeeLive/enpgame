@@ -2,8 +2,11 @@
 
 GAIIdle * GAIIdle::pInstance_ = 0;
 
-bool GAIIdle::Init()
+bool GAIIdle::Init(int iMyIndex)
 {
+
+	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+
 	//GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 
 	//g_pMain->m_CharNZomb[0]->Set(pChar0,
@@ -12,11 +15,11 @@ bool GAIIdle::Init()
 	//	pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	return true;
 }
-bool GAIIdle::Frame()
+bool GAIIdle::Frame(int iMyIndex)
 {
 	TimeCount += g_fSecPerFrame;
 	if (TimeCount > 7.0f)
-		g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
+		g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
 	return true;
 }
 bool GAIIdle::Render()

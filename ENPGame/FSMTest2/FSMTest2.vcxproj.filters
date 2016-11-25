@@ -13,66 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="AISeq">
+      <UniqueIdentifier>{c6822669-14f0-4e3d-94b1-08c5a732bba5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GProjMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GAIIdle.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GSeq.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GAIMove.cpp">
+    <ClCompile Include="GNewZombie.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GAIAttack.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>AISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIDie.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>AISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIFollow.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>AISeq</Filter>
     </ClCompile>
-    <ClCompile Include="GNewZombieMgr.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GAIIdle.cpp">
+      <Filter>AISeq</Filter>
     </ClCompile>
-    <ClCompile Include="GNewZombie.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GAIMove.cpp">
+      <Filter>AISeq</Filter>
+    </ClCompile>
+    <ClCompile Include="GAISeq.cpp">
+      <Filter>AISeq</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GAIIdle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GSeq.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIMove.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="_stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIAttack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIDie.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIFollow.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GNewZombieMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GNewZombie.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIAttack.h">
+      <Filter>AISeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIDie.h">
+      <Filter>AISeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIFollow.h">
+      <Filter>AISeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIIdle.h">
+      <Filter>AISeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIMove.h">
+      <Filter>AISeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAISeq.h">
+      <Filter>AISeq</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

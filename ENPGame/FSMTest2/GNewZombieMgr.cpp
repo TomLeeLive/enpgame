@@ -184,16 +184,16 @@ void GNewZombieMgr::RandomMove(int i, D3DXVECTOR3 vZombiePosition)
 // 랜덤 목적지 방향으로 회전하기 위한 벡터 구현
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-		vRDestLook = m_RandomDestination - vZombiePosition; // 랜덤 목적지 방향 벡터
+		vRDestLook = vZombiePosition - m_RandomDestination;  // 랜덤 목적지 방향 벡터
 		D3DXVec3Normalize(&vRDestLook, &vRDestLook);
 		vZRight = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 		vZUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 		D3DXVec3Cross(&vZRight, &vZUp, &vRDestLook);
 		D3DXVec3Cross(&vZUp, &vRDestLook, &vZRight);
 
-		g_pMain->m_Zomb[i]->vLook[i] = vRDestLook;
-		g_pMain->m_Zomb[i]->vZRight[i] = vZRight;
-		g_pMain->m_Zomb[i]->vZUp[i] = vZUp;
+		g_pMain->m_Zomb[i]->vLook = vRDestLook;
+		g_pMain->m_Zomb[i]->vZRight = vZRight;
+		g_pMain->m_Zomb[i]->vZUp = vZUp;
 
 }
 void GNewZombieMgr::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition)
@@ -203,7 +203,7 @@ void GNewZombieMgr::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZom
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	vBDestLook = vZombiePosition - vBoxPosition; //- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
+	vBDestLook = vZombiePosition - vBoxPosition;//- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
 	D3DXVec3Normalize(&vBDestLook, &vBDestLook);
 	vBRight= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	vBUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
@@ -211,9 +211,9 @@ void GNewZombieMgr::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZom
 	D3DXVec3Cross(&vBUp, &vBDestLook, &vBRight);
 
 
-	g_pMain->m_Zomb[i]->vLook[i] = vBDestLook;
-	g_pMain->m_Zomb[i]->vZRight[i] = vBRight;
-	g_pMain->m_Zomb[i]->vZUp[i] = vBUp;
+	g_pMain->m_Zomb[i]->vLook = vBDestLook;
+	g_pMain->m_Zomb[i]->vZRight = vBRight;
+	g_pMain->m_Zomb[i]->vZUp = vBUp;
 
 }
 
@@ -230,9 +230,9 @@ void GNewZombieMgr::AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZom
 		D3DXVec3Cross(&vARight, &vAUp, &vADestLook);
 		D3DXVec3Cross(&vAUp, &vADestLook, &vARight);
 
-		g_pMain->m_Zomb[i]->vLook[i] = vADestLook;
-		g_pMain->m_Zomb[i]->vZRight[i] = vARight;
-		g_pMain->m_Zomb[i]->vZUp[i] = vAUp;
+		g_pMain->m_Zomb[i]->vLook = vADestLook;
+		g_pMain->m_Zomb[i]->vZRight = vARight;
+		g_pMain->m_Zomb[i]->vZUp = vAUp;
 
 }
 

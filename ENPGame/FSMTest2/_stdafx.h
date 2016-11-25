@@ -11,16 +11,9 @@
 #define G_DEFINE_ANI_ZOMB_IDL L"ZOMBIE_IDLE"
 #define G_DEFINE_ANI_ZOMB_FLW L"ZOMBIE_FOLLOW"
 
-#define G_DEFINE_MAX_AI_ZOMBIE  3
-#define SPEED 10.0f
-enum G_ZOMB_ST {
-	G_ZOMB_ST_IDLE =0,
-	G_ZOMB_ST_WALK,
-	G_ZOMB_ST_ATTACK,
-	G_ZOMB_ST_DEAD,
-	G_ZOMB_ST_FOLLOW,
-	G_ZOMB_ST_CNT
-};
+#define G_DEFINE_MAX_AI_ZOMBIE  5
+#define SPEED 30.0f
+
 
 
 
@@ -28,7 +21,8 @@ enum G_ZOMB_ST {
 #include "GCamera.h"
 #include "GTimer.h"
 
-#include "GSeq.h"
+#include "GCharacter.h"
+#include "GAISeq.h"
 #include "GAIIdle.h"
 #include "GAIMove.h"
 #include "GAIFollow.h"
@@ -40,8 +34,8 @@ enum G_ZOMB_ST {
 #include "GShape.h"
 
 #include "GModel.h"
+#include "GZombie.h"
 #include "GNewZombie.h"
-#include "GNewZombieMgr.h"
 #include "GObjMgr.h"
 
 //Main

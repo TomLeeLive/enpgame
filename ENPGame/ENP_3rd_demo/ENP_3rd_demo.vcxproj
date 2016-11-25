@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>ENP_3rd_demo</ProjectName>
-    <ProjectGuid>{0BB4D9A6-C683-446A-B4BA-912D07FE4DEA}</ProjectGuid>
+    <ProjectGuid>{6A89D4D6-5808-44DC-B297-82BAD7F2AD86}</ProjectGuid>
     <RootNamespace>SampleBindPoseAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>

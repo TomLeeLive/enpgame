@@ -2,12 +2,12 @@
 
 GAIDie * GAIDie::pInstance_ = 0;
 
-bool GAIDie::Init()
+bool GAIDie::Init(int iMyIndex)
 {
-
+	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
 	return true;
 }
-bool GAIDie::Frame()
+bool GAIDie::Frame(int iMyIndex)
 {
   // die 애니메이션 연출
 	
