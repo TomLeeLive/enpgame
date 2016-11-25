@@ -46,6 +46,9 @@
     <Filter Include="Common\BBox">
       <UniqueIdentifier>{ae81e570-be95-4832-81ad-9215b120ae3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\UI">
+      <UniqueIdentifier>{e6804c09-0fd0-4cb6-ab67-21ee22275348}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GArcBall.cpp">
@@ -143,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="GBBox.cpp">
       <Filter>Common\BBox</Filter>
+    </ClCompile>
+    <ClCompile Include="GImeUI.cpp">
+      <Filter>Common\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GPlaneRect.cpp">
+      <Filter>Common\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +262,12 @@
     </ClInclude>
     <ClInclude Include="GBBox.h">
       <Filter>Common\BBox</Filter>
+    </ClInclude>
+    <ClInclude Include="GImeUI.h">
+      <Filter>Common\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GPlaneRect.h">
+      <Filter>Common\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

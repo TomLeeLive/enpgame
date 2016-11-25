@@ -48,7 +48,7 @@
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../../output</OutDir>
+    <OutDir>../../output/</OutDir>
     <IntDir>../../output/GCoreLib_0</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -84,7 +84,7 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
@@ -95,13 +95,18 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <Lib>
       <AdditionalLibraryDirectories>../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>GCoreLib32.lib</OutputFile>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent />
     <PostBuildEvent>
       <Command>copy "./GCoreLib32.lib" "..\\..\\lib"
+md "..\\..\\include\\Inc"
 copy "*.h" "..\\..\\include\\Inc"
 md "..\\..\\Output\\data\\shader"
-copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
+copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"
+md "..\\..\\include\\Inc_map"
+copy "*.h" "..\\..\\include\\Inc_map"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -122,6 +127,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GDxState.cpp" />
     <ClCompile Include="GEnumeration.cpp" />
     <ClCompile Include="GFrustum.cpp" />
+    <ClCompile Include="GImeUI.cpp" />
     <ClCompile Include="GInput.cpp" />
     <ClCompile Include="GLightObj.cpp" />
     <ClCompile Include="GMatrix.cpp" />
@@ -130,6 +136,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClCompile Include="GModelViewCamera.cpp" />
     <ClCompile Include="GNormalMap.cpp" />
     <ClCompile Include="GParser.cpp" />
+    <ClCompile Include="GPlaneRect.cpp" />
     <ClCompile Include="GSelect.cpp" />
     <ClCompile Include="GShape.cpp" />
     <ClCompile Include="GSkyObj.cpp" />
@@ -157,6 +164,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GDxState.h" />
     <ClInclude Include="GEnumeration.h" />
     <ClInclude Include="GFrustum.h" />
+    <ClInclude Include="GImeUI.h" />
     <ClInclude Include="GInput.h" />
     <ClInclude Include="GLightObj.h" />
     <ClInclude Include="GMatrix.h" />
@@ -166,6 +174,7 @@ copy ".\\shader\\*.*" "..\\..\\Output\\data\\shader"</Command>
     <ClInclude Include="GNormalMap.h" />
     <ClInclude Include="GObjStd.h" />
     <ClInclude Include="GParser.h" />
+    <ClInclude Include="GPlaneRect.h" />
     <ClInclude Include="GSelect.h" />
     <ClInclude Include="GShape.h" />
     <ClInclude Include="GSkyObj.h" />

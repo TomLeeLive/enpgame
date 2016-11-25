@@ -55,12 +55,21 @@ public:
 class GBoxShape : public GShape
 {
 public:
-	bool			CreateVertexData();
-	bool			CreateIndexData();
-	HRESULT			CreateResource();
+	virtual bool			CreateVertexData();
+	virtual bool			CreateIndexData();
+	virtual HRESULT			CreateResource();
 public:
 	GBoxShape(void);
 	virtual ~GBoxShape(void);
+};
+
+class GBoxHalfShape : public GBoxShape
+{
+public:
+	virtual bool			CreateVertexData();
+public:
+	GBoxHalfShape(void) {};
+	virtual ~GBoxHalfShape(void) {};
 };
 
 class GPlaneShape : public GShape

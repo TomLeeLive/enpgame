@@ -2,6 +2,10 @@
 #define	 _STDAFX_H_
 
 
+#if defined(_G_RELEASE)
+#pragma comment( lib, "msvcrtd.lib")
+#endif
+
 #define GMAIN			g_pMain
 #define GHINST			g_pMain->m_hInstance
 #define GHWND			g_pMain->m_hWnd
@@ -31,7 +35,7 @@
 //ƒ≥∏Ø≈Õ
 #ifdef G_MACRO_CHAR_ADD
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG) || defined(DEBUG)
 #pragma comment( lib, "GCharCore32d.lib" )	
 #else
 #pragma comment( lib, "GCharCore32.lib" )
@@ -53,7 +57,7 @@
 //∏ 
 #ifdef G_MACRO_MAP_ADD
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG) || defined(DEBUG)
 #pragma comment( lib, "GMapCore32d.lib" )
 #else
 #pragma comment( lib, "GMapCore32.lib" )
@@ -71,7 +75,7 @@
 //¿Ã∆Â∆Æ
 #ifdef G_MACRO_EFFECT_ADD
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG) || defined(DEBUG)
 #pragma comment( lib, "GEffectCore32d.lib" )
 #else
 #pragma comment( lib, "GEffectCore32.lib" )

@@ -460,7 +460,7 @@ HRESULT GCoreLibV2::DeleteResource()
 	return S_OK;
 }
 GCoreLibV2::GCoreLibV2(void)
-{	
+{
 	m_fScreenColor[0] = 0.5f; // R
 	m_fScreenColor[1] = 1.0f; // G
 	m_fScreenColor[2] = 0.5f; // B

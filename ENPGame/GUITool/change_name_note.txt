@@ -1,0 +1,11 @@
+GModelForm -> GButtonForm
+GModelControl -> GButtonControl
+GAniCtrlControl -> GUICtrlControl
+GAniCtrlForm ->    GUICtrlForm
+GCharView -> GUIView
+
+
+GciCharTool -> GUITool
+GciCharToolDoc -> GUIToolDoc
+GciCharToolView -> GUIToolView
+

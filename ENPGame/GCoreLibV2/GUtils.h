@@ -187,7 +187,7 @@ namespace GCORESTD
 // Assert
 //--------------------------------------------
 #ifndef Assert
-#if defined( _DEBUG ) || defined( _DEBUG )
+#if defined( _DEBUG ) || defined( DEBUG )
 #define Assert(b) do {if (!(b)) {OutputDebugStringW(L"Assert: " #b L"\n");}} while(0)
 #else
 #define Assert(b)
