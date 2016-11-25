@@ -33,14 +33,23 @@
 // 이 클래스의 구현에 대해서는 GciCharTool.cpp을 참조하십시오.
 //
 
+enum G_CHAR_TOOL_EXT {
+	G_TOOL_EXT_GCI,
+	G_TOOL_EXT_GBS,
+	G_TOOL_EXT_CNT
+};
 
 
 
 class CGciCharToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	G_CHAR_TOOL_EXT m_FileExt;
 	vector<CString> m_vecStr;
 	bool DrawDebug();
+
+	GGbsObj		m_tbsobj;
+	//GObject     m_tObj;
 #ifdef G_MACRO_MODELVIEW
 	BOOL				InitCamera();
 
