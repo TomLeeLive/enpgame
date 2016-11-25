@@ -11,7 +11,7 @@ public:
 		return pInstance_;
 	}
 	shared_ptr<GCamera > m_pMainCamera;
-	D3DXMATRIX  m_matWorld;
+	//D3DXMATRIX  m_matWorld;
 
 	bool Init(int iMyIndex);
 	bool Frame(int iMyIndex);

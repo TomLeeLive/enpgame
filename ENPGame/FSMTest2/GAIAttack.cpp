@@ -82,12 +82,13 @@ HRESULT GAIAttack::DeleteResource()
 }
 GAIAttack::GAIAttack()
 {
-	m_pMainCamera = nullptr;
+	//m_pMainCamera = nullptr;
 	//ZombieMgr = new GNewZombieMgr;
 	pInstance_ = 0;
 
-		D3DXMatrixIdentity(&Trans);
-		D3DXMatrixIdentity(&Rotation);
+	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&Trans);
+	D3DXMatrixIdentity(&Rotation);
 
 }
 
@@ -97,10 +98,10 @@ GAIAttack::~GAIAttack()
 }
 int GAIAttack::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pMainCamera != nullptr)
-	{
-		m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
-	}
+	//if (m_pMainCamera != nullptr)
+	//{
+	//	m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
+	//}
 	return -1;
 }
 

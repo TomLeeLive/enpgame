@@ -202,6 +202,7 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
+	I_CharMgr.Release();
 	//for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
 	//{
 	//	m_Zomb[i].reset()

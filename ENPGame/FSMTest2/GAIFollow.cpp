@@ -82,6 +82,7 @@ GAIFollow::GAIFollow()
 	//ZombieMgr = new GNewZombieMgr;
 	pInstance_ = 0;
 
+	D3DXMatrixIdentity(&m_matWorld);
 	D3DXMatrixIdentity(&Trans);
 	D3DXMatrixIdentity(&Rotation);
 	

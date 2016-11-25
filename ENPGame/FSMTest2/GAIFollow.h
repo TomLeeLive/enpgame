@@ -10,7 +10,7 @@ public:
 		return pInstance_;
 	}
 	shared_ptr<GCamera > m_pMainCamera;
-	D3DXMATRIX  m_matWorld;
+	//D3DXMATRIX  m_matWorld;
 
 	bool Init(int iMyIndex);
 	bool Frame(int iMyIndex);
@@ -25,8 +25,8 @@ public:
 
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	
-	D3DXMATRIX Trans;
-	D3DXMATRIX Rotation;
+	//D3DXMATRIX Trans;
+	//D3DXMATRIX Rotation;
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------

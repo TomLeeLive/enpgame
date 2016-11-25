@@ -26,8 +26,8 @@ public:
 
 	//GNewZombieMgr * ZombieMgr;
 
-	D3DXMATRIX Trans;
-	D3DXMATRIX Rotation;
+	//D3DXMATRIX Trans;
+	//D3DXMATRIX Rotation;
 	int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return -1; };
 public:
 	virtual ~GAIMove();

@@ -90,11 +90,9 @@ GAIMove::GAIMove()
 //	m_pMainCamera = nullptr;
 	//ZombieMgr = new GNewZombieMgr;
 	pInstance_ = 0;
-	for (int i = 0; i < ZombieNum; i++)
-	{
+	D3DXMatrixIdentity(&m_matWorld);
 	D3DXMatrixIdentity(&Trans);
 	D3DXMatrixIdentity(&Rotation);
-	}
 }
 
 

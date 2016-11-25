@@ -46,6 +46,9 @@ HRESULT GAIIdle::DeleteResource()
 GAIIdle::GAIIdle()
 {
 	pInstance_ = 0;
+	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&Trans);
+	D3DXMatrixIdentity(&Rotation);
 }
 
 

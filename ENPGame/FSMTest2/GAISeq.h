@@ -21,7 +21,10 @@ enum G_AI {
 class GAISeq 
 {
 public:
-	GCharacter* pChar0;
+	GCharacter*	 pChar0;
+	D3DXMATRIX	 m_matWorld;
+	D3DXMATRIX	 Trans;
+	D3DXMATRIX	 Rotation;
 
 	static GAISeq* CreateInstance() { return 0; }
 	virtual bool Init(int iMyIndex) = 0;
