@@ -64,7 +64,7 @@
       <Filter>소스 파일\Dlg</Filter>
     </ClInclude>
     <ClInclude Include="GSaveMapDlg.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Dlg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +105,7 @@
       <Filter>소스 파일\Dlg</Filter>
     </ClCompile>
     <ClCompile Include="GSaveMapDlg.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Dlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

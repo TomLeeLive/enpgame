@@ -1,0 +1,3 @@
+Width	31
+Height	15
+fDistance	

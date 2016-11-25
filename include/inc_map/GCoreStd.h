@@ -5,7 +5,7 @@
 
 #pragma comment( lib, "winmm.lib" )
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG) || defined(DEBUG)
 #pragma comment( lib, "GCoreLib32d.lib" )
 #else
 #pragma comment( lib, "GCoreLib32.lib" )
