@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 
@@ -21,7 +22,7 @@ public:
 	//Ãß°¡ÇÔ_E
 public:
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_GMODELFORM };
+	enum { IDD = IDD_GBUTTONFORM };
 #endif
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -35,13 +36,21 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButton1();
 	float m_fMinX;
 	float m_fMinY;
 	float m_fMinZ;
 	float m_fMaxX;
 	float m_fMaxY;
 	float m_fMaxZ;
+	float m_fGuageValue;
+
+	CListBox m_List;
+
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
+	afx_msg void OnBnClickedButton4();
+	afx_msg void OnBnClickedButton5();
 };
 
 

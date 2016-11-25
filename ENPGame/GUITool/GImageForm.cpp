@@ -25,7 +25,7 @@ GImageForm* GImageForm::CreateOne(CWnd* pParent) {
 //Ãß°¡ÇÔ_E
 
 GImageForm::GImageForm()
-	: CFormView(IDD_GANICTRLFORM)
+	: CFormView(IDD_GIMAGEFORM)
 {
 
 }

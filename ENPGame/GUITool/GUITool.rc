@@ -73,9 +73,7 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GUITool.ico"
-
 IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -83,9 +81,7 @@ IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
-
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -175,14 +171,14 @@ BEGIN
             END
         END
     END
-    POPUP "케릭터(&C)"
+    POPUP "UI (&U)"
     BEGIN
         MENUITEM "GUI 로드(&L)\tF11",             ID_CHARLOAD
         MENUITEM "GUI 저장(&S)\tF12",             ID_CHARSAVE
     END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "GUITool 정보(&A)...",       ID_APP_ABOUT
+        MENUITEM "GUITool 정보(&A)...",           ID_APP_ABOUT
     END
 END
 
@@ -198,7 +194,7 @@ END
 
 IDR_HELP_MENU MENU
 BEGIN
-    MENUITEM "GUITool 정보(&A)...",       ID_APP_ABOUT
+    MENUITEM "GUITool 정보(&A)...",           ID_APP_ABOUT
 END
 
 IDR_THEME_MENU MENU
@@ -294,27 +290,36 @@ BEGIN
     CONTROL         "Radio2",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,215,147,38,10
 END
 
-IDD_GMODELFORM DIALOGEX 0, 0, 166, 381
+IDD_GBUTTONFORM DIALOGEX 0, 0, 166, 381
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 9, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    CONTROL         "",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,14,18,132,42
-    CONTROL         "",IDC_LIST1,"SysListView32",LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,14,77,132,47
-    LTEXT           "모델 구조",IDC_STATIC,14,7,42,8
-    LTEXT           "모델 목록",IDC_STATIC,15,65,31,8
-    GROUPBOX        "바운딩 박스 정보",IDC_STATIC,15,142,129,80
-    PUSHBUTTON      "셋팅",IDC_BUTTON1,92,205,50,14
-    EDITTEXT        IDC_MIN_X,17,162,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MIN_Y,59,162,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MIN_Z,100,162,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MAX_X,17,187,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MAX_Y,59,187,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MAX_Z,100,187,40,14,ES_AUTOHSCROLL
-    LTEXT           "Min X, Y, Z",IDC_STATIC,19,153,35,8
-    LTEXT           "Max X, Y, Z",IDC_STATIC,19,177,37,8
+    LTEXT           "UI 목록 ",IDC_STATIC,14,7,42,8
+    GROUPBOX        "바운딩 박스 정보",IDC_STATIC,15,267,129,80
+    PUSHBUTTON      "셋팅",IDC_BUTTON1,92,330,50,14
+    EDITTEXT        IDC_MIN_X,17,287,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MIN_Y,59,287,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MIN_Z,100,287,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_X,17,312,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_Y,59,312,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MAX_Z,100,312,40,14,ES_AUTOHSCROLL
+    LTEXT           "Min X, Y, Z",IDC_STATIC,19,278,35,8
+    LTEXT           "Max X, Y, Z",IDC_STATIC,19,302,37,8
+    LISTBOX         IDC_LIST2,14,21,132,78,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "이미지",IDC_BUTTON2,18,114,37,14
+    PUSHBUTTON      "버튼",IDC_BUTTON3,61,114,36,14
+    PUSHBUTTON      "Guage",IDC_BUTTON4,105,114,38,14
+    GROUPBOX        "UI 추가",IDC_STATIC,15,104,132,32
+    LTEXT           "이동: W,A,S,D",IDC_STATIC,55,200,46,8
+    LTEXT           "X스케일: Q, E",IDC_STATIC,56,214,44,8
+    LTEXT           "Y스케일: Z, C",IDC_STATIC,55,229,43,8
+    GROUPBOX        "조작키",IDC_STATIC,15,181,132,75
+    GROUPBOX        "Guage 테스트",IDC_STATIC,15,137,132,39
+    PUSHBUTTON      "셋팅",IDC_BUTTON5,89,150,50,14
+    EDITTEXT        IDC_EDIT1,25,151,52,14,ES_AUTOHSCROLL
 END
 
-IDD_GANICTRLFORM DIALOG 0, 0, 320, 200
+IDD_GIMAGEFORM DIALOG 0, 0, 320, 200
 STYLE DS_SETFONT | WS_CHILD
 FONT 9, "MS Shell Dlg"
 BEGIN
@@ -393,7 +398,7 @@ BEGIN
         BOTTOMMARGIN, 178
     END
 
-    IDD_GMODELFORM, DIALOG
+    IDD_GBUTTONFORM, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 159
@@ -401,7 +406,7 @@ BEGIN
         BOTTOMMARGIN, 374
     END
 
-    IDD_GANICTRLFORM, DIALOG
+    IDD_GIMAGEFORM, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 313
@@ -427,7 +432,7 @@ BEGIN
     0
 END
 
-IDD_GMODELFORM AFX_DIALOG_LAYOUT
+IDD_GBUTTONFORM AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

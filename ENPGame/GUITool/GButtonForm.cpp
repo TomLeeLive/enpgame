@@ -26,13 +26,14 @@ GButtonForm* GButtonForm::CreateOne(CWnd* pParent) {
 
 
 GButtonForm::GButtonForm()
-	: CFormView(IDD_GMODELFORM)
+	: CFormView(IDD_GBUTTONFORM)
 	, m_fMinX(0)
 	, m_fMinY(0)
 	, m_fMinZ(0)
 	, m_fMaxX(0)
 	, m_fMaxY(0)
 	, m_fMaxZ(0)
+	, m_fGuageValue(0)
 {
 
 }
@@ -91,10 +92,16 @@ void GButtonForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MAX_X, m_fMaxX);
 	DDX_Text(pDX, IDC_MAX_Y, m_fMaxY);
 	DDX_Text(pDX, IDC_MAX_Z, m_fMaxZ);
+	DDX_Control(pDX, IDC_LIST2, m_List);
+	DDX_Text(pDX, IDC_EDIT1, m_fGuageValue);
 }
 
 BEGIN_MESSAGE_MAP(GButtonForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON1, &GButtonForm::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &GButtonForm::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &GButtonForm::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &GButtonForm::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &GButtonForm::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -152,4 +159,33 @@ void GButtonForm::OnBnClickedButton1()
 //		GBBOXFUNC::initBox(&pApp->m_tbsobj.m_OBB, vMin, vMax);
 	}
 
+}
+
+
+void GButtonForm::OnBnClickedButton2()
+{
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (!pApp->LoadFileDlg(_T("bmp"), _T("image add")))
+	{
+		return;
+	}
+}
+
+
+void GButtonForm::OnBnClickedButton3()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void GButtonForm::OnBnClickedButton4()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void GButtonForm::OnBnClickedButton5()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

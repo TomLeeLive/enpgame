@@ -18,7 +18,7 @@ public:
 	//Ãß°¡ÇÔ_E
 public:
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_GANICTRLFORM };
+	enum { IDD = IDD_GIMAGEFORM };
 #endif
 #ifdef _DEBUG
 	virtual void AssertValid() const;

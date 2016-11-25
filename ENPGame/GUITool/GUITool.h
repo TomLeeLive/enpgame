@@ -8,12 +8,10 @@
 #endif
 
 #include "resource.h"       // 주 기호입니다.
-#include "GCoreLibV2.h"
+
 
 //추가함 for UI [start]
-#include "GDxHelperEx.h"
-#include "GPlaneRect.h"
-using namespace DX;
+#include "_stdafx.h"
 //추가함 for UI [end]
 
 #include "GCamera.h"
@@ -35,13 +33,7 @@ class CGUIToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
 	//추가함 for UI [start]
-	VS_CONSTANT_BUFFER			m_cbData;
-	std::vector<GControlUI*>	m_pUIList;
-	GControlUI*					m_pSelectPlane;
-	ComPtr<ID3D11ShaderResourceView> m_pTextureSRV[3];
-	GSceneUI						m_Scene;
-	GControlUI* AddRect(GUI_TYPE type);
-	GControlUI* SelectRect();
+	GUIManager     m_UIManager;
 	//추가함 for UI [end]
 
 	G_CHAR_TOOL_EXT m_FileExt;

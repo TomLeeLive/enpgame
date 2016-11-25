@@ -97,9 +97,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GProjMain.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h" />
+    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="UI.hlsl" />
