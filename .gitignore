@@ -2,6 +2,10 @@ ENPGame/GCharCore/GCharCore32d.lib
 ENPGame/GCoreLibV2/GCoreLib32d.lib
 ENPGame/GEffectCore/GEffectCore32d.lib
 ENPGame/GMapCore/GMapCore32d.lib
+ENPGame/GCharCore/GCharCore32.lib
+ENPGame/GCoreLibV2/GCoreLib32.lib
+ENPGame/GEffectCore/GEffectCore32.lib
+ENPGame/GMapCore/GMapCore32.lib
 *.obj.enc
 Output/HWInfo.txt
 *.VC.VC.opendb
