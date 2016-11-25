@@ -4,7 +4,6 @@
 
 #if defined(_DEBUG) && defined(_G_RELEASE)
 #pragma comment( lib, "msvcrtd.lib")
-#else
 #endif
 
 #define GMAIN			g_pMain
