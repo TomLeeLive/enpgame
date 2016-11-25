@@ -9,12 +9,12 @@
 #pragma comment( lib, "dxguid.lib" )
 #pragma comment( lib, "dxgi.lib" )
 #pragma comment( lib, "d3d11.lib" )
-#if defined(DEBUG) || defined(_DEBUG)
-#pragma comment( lib, "d3dx10d.lib" )	
-#pragma comment( lib, "d3dx11d.lib" )	
+#if defined(_DEBUG) && defined(_G_RELEASE)
+#pragma comment( lib, "d3dx10.lib" )	
+#pragma comment( lib, "d3dx11.lib" )	
 #else
-#pragma comment( lib, "d3dx10.lib" )
-#pragma comment( lib, "d3dx11.lib" )
+#pragma comment( lib, "d3dx10d.lib" )
+#pragma comment( lib, "d3dx11d.lib" )
 #endif
 #pragma comment( lib, "d3dcompiler.lib" )
 #pragma comment( lib, "d2d1.lib" )
