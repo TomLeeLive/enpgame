@@ -47,10 +47,7 @@
 #pragma comment( lib, "GMapCore32.lib" )
 #endif
 
-#include "GMiniMap.h"
-#include "map/GNoiseMap.h"
-#include "map/GQuadTreeIndex.h"
-#include "map/GMapObject.h"
+#include "map/GMap.h"
 #endif
 
 //¿Ã∆Â∆Æ
