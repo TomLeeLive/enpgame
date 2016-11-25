@@ -115,20 +115,15 @@ bool GProjMain::Init()
 
 	srand(time(NULL));
 
-	//for (int i = 0;i < m_CharNZomb.size();i++) {
-		//m_Zombie[i] = new GNewZombie[G_DEFINE_MAX_AI_ZOMBIE];
-	//}
-
-	
-
-	for (int i = 0;i < m_CharNZomb.size();i++){
-		D3DXMatrixIdentity(&m_CharNZomb[i]->m_worldMat);
-		m_CharNZomb[i]->m_worldMat._41 = (rand() * 3) % 303;
-		m_CharNZomb[i]->m_worldMat._43 = (rand() * 3) % 303;
-	}
 	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
 	{
 		SAFE_NEW(m_Zomb[i], GNewZombie);
+		m_Zomb[i]->m_ZombieWorld._41 = (rand() * 3) % 303;
+		m_Zomb[i]->m_ZombieWorld._43 = (rand() * 3) % 303;
+
+		m_Zomb[i]->vZombiePosition.x = m_Zomb[i]->m_ZombieWorld._41;
+		m_Zomb[i]->vZombiePosition.y = 0.0f;
+		m_Zomb[i]->vZombiePosition.z = m_Zomb[i]->m_ZombieWorld._43;
 	}
 
 	
@@ -164,7 +159,12 @@ bool GProjMain::Frame()
 		g_pMain->m_matBoxWorld._41 += 30.0f * g_fSecPerFrame;
 		Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
-
+	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	{
+		m_Zomb[i]->vBoxPosition.x = g_pMain->m_matBoxWorld._41;
+		m_Zomb[i]->vBoxPosition.y = g_pMain->m_matBoxWorld._42;
+		m_Zomb[i]->vBoxPosition.z = g_pMain->m_matBoxWorld._43;
+	}
 	for (int iChar = 0; iChar < m_CharNZomb.size(); iChar++)
 	{
 		m_CharNZomb[iChar]->Frame();
@@ -173,10 +173,10 @@ bool GProjMain::Frame()
 	m_pMainCamera->Frame();
 	m_pCurrentSeq->Frame();
 
-	//for (int i = 0;i < g_pMain->m_CharNZomb.size();i++) {
-	//	m_RandomRotResult[i] = m_RandomRotation[i] * m_TransRotation[i];
-	//	m_BoxRotResult[i] = m_BoxRotation[i] * m_TransRotation[i];
-	//}
+	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	{
+		m_Zomb[i]->m_ZombieWorld = m_Rotation[i] * m_Trans[i];
+	}
 	return true;
 }
 bool GProjMain::Render()
@@ -184,10 +184,10 @@ bool GProjMain::Render()
 	m_Box->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box->Render(m_pImmediateContext);
 	
-	for (int iChar = 0; iChar < m_CharNZomb.size(); iChar++)
+	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
 	{
-		m_CharNZomb[iChar]->SetMatrix(&m_Zomb[iChar]->m_ZombieWorld[iChar], &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-		m_CharNZomb[iChar]->Render(m_pImmediateContext);
+		m_CharNZomb[i]->SetMatrix(&m_Zomb[i]->m_ZombieWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+		m_CharNZomb[i]->Render(m_pImmediateContext);
 	}
 
 	m_pCurrentSeq->Render();
@@ -215,6 +215,11 @@ HRESULT GProjMain::DeleteResource()
 
 GProjMain::GProjMain(void)
 {
+	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
+	{
+		D3DXMatrixIdentity(&m_Rotation[i]);
+		D3DXMatrixIdentity(&m_Trans[i]);
+	}
 	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
 	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
 	m_GameSeq[G_AI_FOLLOW] = GAIFollow::CreateInstance();

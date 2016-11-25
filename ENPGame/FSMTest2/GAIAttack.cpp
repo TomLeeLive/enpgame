@@ -8,32 +8,52 @@ bool GAIAttack::Init()
 }
 bool GAIAttack::ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up)
 {
-	D3DXMATRIX Rotation;
-	D3DXMatrixIdentity(&Rotation);
+	Rotation[i]._11 = Right.x;			Rotation[i]._12 = Right.y;			Rotation[i]._13 = Right.z; // 임의 행렬에 x,y,z 기입
+	Rotation[i]._21 = Up.x;				Rotation[i]._22 = Up.y;				Rotation[i]._23 = Up.z;
+	Rotation[i]._31 = look.x;			Rotation[i]._32 = look.y;			Rotation[i]._33 = look.z;
 
-	D3DXMATRIX Trans;
-	D3DXMatrixIdentity(&Trans);
+	Trans[i]._41 -= look.x * g_fSecPerFrame * SPEED;
+	Trans[i]._43 -= look.z * g_fSecPerFrame * SPEED;
 
-	Rotation._11 = Right.x;			Rotation._12 = Right.y;			Rotation._13 = Right.z; // 임의 행렬에 x,y,z 기입
-	Rotation._21 = Up.x;			Rotation._22 = Up.y;			Rotation._23 = Up.z;
-	Rotation._31 = look.x;			Rotation._32 = look.y;			Rotation._33 = look.z;
+	g_pMain->m_Zomb[i]->vZombiePosition.x = g_pMain->m_Zomb[i]->m_ZombieWorld._41;
+	g_pMain->m_Zomb[i]->vZombiePosition.z = g_pMain->m_Zomb[i]->m_ZombieWorld._43;
 
-	Trans._41 += look.x * g_fSecPerFrame* SPEED;
-	Trans._43 += look.z * g_fSecPerFrame* SPEED;
-
-	g_pMain->m_Zomb[i]->m_ZombieWorld[i] = Rotation*Trans;
+	g_pMain->m_Rotation[i] = Rotation[i];
+	g_pMain->m_Trans[i] = Trans[i];
 
 	return true;
 }
 bool GAIAttack::Frame()
 {
-	for (int i = 0;i < g_pMain->m_CharNZomb.size();i++)
-	{
-		if (g_pMain->m_Zomb[i]->vDistance[i] < 30.0f)
+		for (int i = 0;i < G_DEFINE_MAX_AI_ZOMBIE;i++)
 		{
-			ZombieMgr->FollowMove(i, g_pMain->m_Zomb[i]->vBoxPosition[i], g_pMain->m_Zomb[i]->vZombiePosition[i]);
-			ZombieAttack(i, g_pMain->m_Zomb[i]->vLook[i], g_pMain->m_Zomb[i]->vZRight[i], g_pMain->m_Zomb[i]->vZUp[i]);
-		}
+			//G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
+			//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
+
+			D3DXVECTOR3 Temp = g_pMain->m_Zomb[i]->vBoxPosition - g_pMain->m_Zomb[i]->vZombiePosition;
+			float a = D3DXVec3Length(&Temp);
+			g_pMain->m_Zomb[i]->vDistance = a;
+
+			if (g_pMain->m_Zomb[i]->vDistance > 70.0f)
+			{
+				g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_MOVE];
+			}
+
+			else if (g_pMain->m_Zomb[i]->vDistance < 70.0f)
+			{
+				if (g_pMain->m_Zomb[i]->vDistance < 30.0f)
+				{
+					g_pMain->ChangeZombState(i, G_DEFINE_ANI_ZOMB_ATT);
+					ZombieMgr->AttackMove(i, g_pMain->m_Zomb[i]->vBoxPosition, g_pMain->m_Zomb[i]->vZombiePosition);
+					ZombieAttack(i, g_pMain->m_Zomb[i]->vLook, g_pMain->m_Zomb[i]->vZRight, g_pMain->m_Zomb[i]->vZUp);
+				
+				}
+				else
+				{
+					g_pMain->m_pCurrentSeq = g_pMain->m_GameSeq[G_AI_FOLLOW];
+				}
+
+			}
 	}
 
 	return true;
@@ -61,7 +81,14 @@ HRESULT GAIAttack::DeleteResource()
 }
 GAIAttack::GAIAttack()
 {
+	m_pMainCamera = nullptr;
+	ZombieMgr = new GNewZombieMgr;
 	pInstance_ = 0;
+	for (int i = 0; i < ZombieNum; i++)
+	{
+		D3DXMatrixIdentity(&Trans[i]);
+		D3DXMatrixIdentity(&Rotation[i]);
+	}
 }
 
 
