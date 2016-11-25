@@ -9,12 +9,12 @@
 #pragma comment( lib, "dxguid.lib" )
 #pragma comment( lib, "dxgi.lib" )
 #pragma comment( lib, "d3d11.lib" )
-#if defined(_DEBUG) && defined(_G_RELEASE)
-#pragma comment( lib, "d3dx10.lib" )	
-#pragma comment( lib, "d3dx11.lib" )	
+#if defined(_DEBUG) || defined(DEBUG)
+#pragma comment( lib, "d3dx10d.lib" )	
+#pragma comment( lib, "d3dx11d.lib" )	
 #else
-#pragma comment( lib, "d3dx10d.lib" )
-#pragma comment( lib, "d3dx11d.lib" )
+#pragma comment( lib, "d3dx10.lib" )
+#pragma comment( lib, "d3dx11.lib" )
 #endif
 #pragma comment( lib, "d3dcompiler.lib" )
 #pragma comment( lib, "d2d1.lib" )
@@ -26,7 +26,7 @@ namespace GCORESTD
 	extern ID3D11DeviceContext*		g_pImmediateContext;
 }
 
-#if defined(DEBUG) | defined(_DEBUG) 
+#if defined(DEBUG) || defined(_DEBUG) 
 #ifndef H_RETURN
 #define H_RETURN(x){ if (FAILED(x)){\
 		LPWSTR output;\

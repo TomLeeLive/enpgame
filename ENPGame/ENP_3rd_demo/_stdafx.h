@@ -2,7 +2,7 @@
 #define	 _STDAFX_H_
 
 
-#if defined(_DEBUG) && defined(_G_RELEASE)
+#if defined(_G_RELEASE)
 #pragma comment( lib, "msvcrtd.lib")
 #endif
 
@@ -35,10 +35,10 @@
 //ƒ≥∏Ø≈Õ
 #ifdef G_MACRO_CHAR_ADD
 
-#if defined(_DEBUG) && defined(_G_RELEASE)
-#pragma comment( lib, "GCharCore32.lib" )	
+#if defined(_DEBUG) || defined(DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )	
 #else
-#pragma comment( lib, "GCharCore32d.lib" )
+#pragma comment( lib, "GCharCore32.lib" )
 #endif
 
 #include "GTemplate.h"
@@ -57,10 +57,10 @@
 //∏ 
 #ifdef G_MACRO_MAP_ADD
 
-#if defined(_DEBUG) && defined(_G_RELEASE)
-#pragma comment( lib, "GMapCore32.lib" )
-#else
+#if defined(_DEBUG) || defined(DEBUG)
 #pragma comment( lib, "GMapCore32d.lib" )
+#else
+#pragma comment( lib, "GMapCore32.lib" )
 #endif
 
 //#include "GMiniMap.h"
@@ -75,10 +75,10 @@
 //¿Ã∆Â∆Æ
 #ifdef G_MACRO_EFFECT_ADD
 
-#if defined(_DEBUG) && defined(_G_RELEASE)
-#pragma comment( lib, "GEffectCore32.lib" )
-#else
+#if defined(_DEBUG) || defined(DEBUG)
 #pragma comment( lib, "GEffectCore32d.lib" )
+#else
+#pragma comment( lib, "GEffectCore32.lib" )
 #endif
 
 #include "GSprite.h"
