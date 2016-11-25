@@ -5,10 +5,10 @@
 
 #pragma comment( lib, "winmm.lib" )
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG) && defined(_G_RELEASE)
 #pragma comment( lib, "GCoreLib32.lib" )
 #else
-#pragma comment( lib, "GCoreLib32.lib" )
+#pragma comment( lib, "GCoreLib32d.lib" )
 #endif
 namespace GCORESTD
 {
