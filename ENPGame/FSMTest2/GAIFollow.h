@@ -16,7 +16,7 @@ public:
 	bool Frame();
 	bool Render();
 	bool Release();
-	bool Zombiefollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
+	bool ZombieFollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
 	int hp;
 	GNewZombieMgr * ZombieMgr;
 
@@ -24,19 +24,9 @@ public:
 	D3DXMATRIX B_Trans[ZombieNum];
 
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	D3DXVECTOR3 RandomPoint[ZombieNum];
-	D3DXMATRIX m_BoxRotation[ZombieNum];
-
-	D3DXVECTOR3 vBoxPosition[ZombieNum];
-	D3DXVECTOR3 vZombiePosition[ZombieNum];
-	D3DXVECTOR3 vBDestLook1[ZombieNum];
-	D3DXVECTOR3 vBDestLook[ZombieNum];
-	D3DXVECTOR3 vBRight[ZombieNum];
-	D3DXVECTOR3 vBUp[ZombieNum];
-
-	float	ZombieDistance[ZombieNum];
-	D3DXVECTOR3 vDistance[ZombieNum];
-
+	
+	D3DXMATRIX Trans[ZombieNum];
+	D3DXMATRIX Rotation[ZombieNum];
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------
