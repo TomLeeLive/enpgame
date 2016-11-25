@@ -21,6 +21,8 @@ enum G_AI {
 class GAISeq 
 {
 public:
+	shared_ptr<GZombie> m_pZombie;
+	//GZombie*	 m_pZombie;
 	GCharacter*	 pChar0;
 	D3DXMATRIX	 m_matWorld;
 	D3DXMATRIX	 Trans;

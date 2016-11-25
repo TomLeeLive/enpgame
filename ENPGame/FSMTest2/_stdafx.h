@@ -21,6 +21,8 @@
 #include "GCamera.h"
 #include "GTimer.h"
 
+#include "GModel.h"
+#include "GZombie.h"
 #include "GCharacter.h"
 #include "GAISeq.h"
 #include "GAIIdle.h"
@@ -33,8 +35,7 @@
 #include "GMatrix.h"
 #include "GShape.h"
 
-#include "GModel.h"
-#include "GZombie.h"
+
 #include "GNewZombie.h"
 #include "GObjMgr.h"
 

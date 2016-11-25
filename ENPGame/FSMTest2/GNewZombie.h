@@ -1,5 +1,5 @@
 #pragma once
-class GNewZombie : public GZombie
+class GNewZombie
 {
 public:
 	//D3DXMATRIX  m_RandomRotation ;
