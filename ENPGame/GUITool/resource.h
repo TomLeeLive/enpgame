@@ -60,7 +60,8 @@
 #define IDC_BUTTON3                     1024
 #define IDC_BUTTON4                     1025
 #define IDC_BUTTON5                     1026
-#define IDC_EDIT1                       1027
+#define IDC_GUAGE_VALUE                       1027
+#define IDC_GUAGE_VALUE                 1027
 #define ID_32771                        32771
 #define ID_CREATEMAP                    32772
 #define ID_32773                        32773

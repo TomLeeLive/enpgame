@@ -24,11 +24,11 @@ bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	
 	if (I_Input.KeyCheck(DIK_P) == KEY_UP)
 	{
-	m_pSelectPlane = AddRect(G_BUTTON, SwapChainDesc);
+	m_pSelectPlane = AddRect(GUI_TYPE_BUTTON, SwapChainDesc);
 	}
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
-	m_pSelectPlane = AddRect(G_EDIT, SwapChainDesc);
+	m_pSelectPlane = AddRect(GUI_TYPE_EDIT, SwapChainDesc);
 	}
 
 
@@ -131,12 +131,12 @@ GControlUI* GUIManager::AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDe
 	GControlUI* pUIControl = NULL;
 	switch (type)
 	{
-	case G_BUTTON: {
+	case GUI_TYPE_BUTTON: {
 		pUIControl = new GButtonCtl();
 		pUIControl->Create(g_pd3dDevice, nullptr, L"data/ui/exit_lg.bmp");
 		pUIControl->Scale(50, 50, 0);
 	}
-	case G_EDIT: {
+	case GUI_TYPE_EDIT: {
 		pUIControl = new GEditCtl();
 		pUIControl->Create(g_pd3dDevice, nullptr, L"data/ui/exit_lg.bmp");
 		pUIControl->Scale(50, 50, 0);

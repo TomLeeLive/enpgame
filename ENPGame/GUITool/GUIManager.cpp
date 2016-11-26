@@ -1,6 +1,76 @@
 #include "stdafx.h"
 #include "_stdafx.h"
 
+//파일 입출력 때문에 추가함
+#include <iostream>
+#include <fstream>
+
+void	GUIManager::UILoad(T_STR* strFile) {
+
+	vector<CString> vecStr;
+
+	ifstream ifile;
+
+	char line[MAX_PATH]; // 한 줄씩 읽어서 임시로 저장할 공간
+
+	ifile.open(strFile->c_str());  // 파일 열기
+
+	if (ifile.is_open())
+	{
+		while (ifile.getline(line, sizeof(line))) // 한 줄씩 읽어 처리를 시작한다.
+		{
+			//cout << line << endl; // 내용 출력
+			CString str;
+			str = line;
+			vecStr.push_back(str);
+		}
+	}
+	ifile.close(); // 파일 닫기
+
+
+}
+void	GUIManager::UICreate(GUI_TYPE type, T_STR_VECTOR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
+	int iType = type;
+
+	int iLoad = strFile->size() - 1;
+
+	switch (iType) {
+		case GUI_TYPE_BUTTON:
+		{
+			GButtonCtl* pBoxCtl = new GButtonCtl();
+			pBoxCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
+			pBoxCtl->Create(g_pd3dDevice, nullptr, (*strFile)[iLoad].c_str());
+			pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
+			pBoxCtl->Move(0, 0, 0);
+			m_pUIList.push_back(pBoxCtl);
+			m_ImageList.push_back((*strFile)[iLoad].c_str());
+		}
+		break;
+		case GUI_TYPE_IMAGE:
+		{
+			GImageCtl* pImageCtl = new GImageCtl();
+			pImageCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
+			pImageCtl->Create(g_pd3dDevice, nullptr, (*strFile)[iLoad].c_str());
+			pImageCtl->Scale(400 - 1.0f, 300 - 1.0f, 1.0f - 1.0f);
+			pImageCtl->Move(0, 0, 100);
+			m_pUIList.push_back(pImageCtl);
+			m_ImageList.push_back((*strFile)[iLoad].c_str());
+		}
+		break;
+		case GUI_TYPE_BUTTONHALF:
+		{
+			GButtonHalfCtl* pBoxCtl = new GButtonHalfCtl();
+			pBoxCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
+			pBoxCtl->Create(g_pd3dDevice,D3DXVECTOR3(100.0f, 50.0f, 1.0f), nullptr, (*strFile)[iLoad].c_str());
+			//pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
+			pBoxCtl->Move(0, 0, 0);
+			m_pUIList.push_back(pBoxCtl);
+			m_ImageList.push_back((*strFile)[iLoad].c_str());
+		}
+		break;
+	}
+
+}
 bool		GUIManager::Init() {
 
 	/*
@@ -25,11 +95,11 @@ bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 #if defined(_DEBUG)	|| defined(DEBUG)
 	if (I_Input.KeyCheck(DIK_P) == KEY_UP)
 	{
-	m_pSelectPlane = AddRect(G_UI_BUTTON, SwapChainDesc);
+	m_pSelectPlane = AddRect(GUI_TYPE_BUTTON, SwapChainDesc);
 	}
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
-	m_pSelectPlane = AddRect(G_UI_IMAGE, SwapChainDesc);
+	m_pSelectPlane = AddRect(GUI_TYPE_IMAGE, SwapChainDesc);
 	}
 #endif
 
@@ -127,17 +197,17 @@ HRESULT		GUIManager::DeleteResource() {
 	HRESULT hr;
 	return S_OK;
 };
-
-GControlUI* GUIManager::AddRect(G_UI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
+#if defined(_DEBUG) || defined(DEBUG)
+GControlUI* GUIManager::AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	GControlUI* pUIControl = NULL;
 	switch (type)
 	{
-	case G_UI_BUTTON: {
+	case GUI_TYPE_BUTTON: {
 		pUIControl = new GButtonCtl();
 		pUIControl->Create(g_pd3dDevice, nullptr, strImage);
 		pUIControl->Scale(50, 50, 0);
 	}
-	case G_UI_IMAGE: {
+	case GUI_TYPE_IMAGE: {
 		pUIControl = new GEditCtl();
 		pUIControl->Create(g_pd3dDevice, nullptr, strImage);
 		pUIControl->Scale(50, 50, 0);
@@ -148,16 +218,16 @@ GControlUI* GUIManager::AddRect(G_UI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN
 	return pUIControl;
 };
 
-GControlUI* GUIManager::AddRect(G_UI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
+GControlUI* GUIManager::AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	GControlUI* pUIControl = NULL;
 	switch (type)
 	{
-	case G_UI_BUTTON: {
+	case GUI_TYPE_BUTTON: {
 		pUIControl = new GButtonCtl();
 		pUIControl->Create(g_pd3dDevice, nullptr, L"data/ui/exit_lg.bmp");
 		pUIControl->Scale(50, 50, 0);
 	}
-	case G_UI_IMAGE: {
+	case GUI_TYPE_IMAGE: {
 		pUIControl = new GEditCtl();
 		pUIControl->Create(g_pd3dDevice, nullptr, L"data/ui/exit_lg.bmp");
 		pUIControl->Scale(50, 50, 0);
@@ -167,6 +237,7 @@ GControlUI* GUIManager::AddRect(G_UI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainD
 	m_pUIList.push_back(pUIControl);
 	return pUIControl;
 };
+
 GControlUI* GUIManager::SelectRect() {
 	POINT mouse;
 	GetCursorPos(&mouse);
@@ -199,7 +270,7 @@ GControlUI* GUIManager::SelectRect() {
 	}
 	return NULL;
 };
-
+#endif
 GUIManager::GUIManager()
 {
 	m_pSelectPlane = NULL;

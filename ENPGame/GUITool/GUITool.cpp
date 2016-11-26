@@ -29,8 +29,8 @@ BEGIN_MESSAGE_MAP(CGUIToolApp, CWinAppEx)
 	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 	// 표준 인쇄 설정 명령입니다.
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
-	ON_COMMAND(ID_CHARLOAD, &CGUIToolApp::OnCharload)
-	ON_COMMAND(ID_CHARSAVE, &CGUIToolApp::OnCharsave)
+	ON_COMMAND(ID_CHARLOAD, &CGUIToolApp::OnGuiLoad)
+	ON_COMMAND(ID_CHARSAVE, &CGUIToolApp::OnGuiSave)
 END_MESSAGE_MAP()
 
 
@@ -440,6 +440,7 @@ bool CGUIToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 		m_FileExt = G_TOOL_EXT_GBS;
 		return true;
 	}
+
 	return true;
 }
 
@@ -520,18 +521,28 @@ bool CGUIToolApp::Load()
 	return true;
 }
 
-void CGUIToolApp::OnCharload()
+void CGUIToolApp::OnGuiLoad()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	//I_CharMgr.Release();
 
-	Load();
+	if (!LoadFileDlg(_T("gui"), _T("GUI Load")))
+	{
+		return;
+	}
+	int iLoad = m_LoadFiles.size() - 1;
+
+	m_UIManager.UILoad(&m_LoadFiles[iLoad]);
+
 }
 
-
+void MatrixDecompose( D3DXVECTOR3* scl, D3DXVECTOR3* trans, D3DXMATRIX* mat) {
+	D3DXQUATERNION quat;
+	D3DXMatrixDecompose(scl, &quat, trans, mat);
+}
 
 //추가함 for UI [start]
-void CGUIToolApp::OnCharsave()
+void CGUIToolApp::OnGuiSave()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 
@@ -542,9 +553,9 @@ void CGUIToolApp::OnCharsave()
 	TCHAR current_path[MAX_PATH] = _T("");
 	GetCurrentDirectory(MAX_PATH, current_path); // 현재 경로 저장
 
-	CFileDialog dlg(false, _T("gci"), _T("*.gci"),
+	CFileDialog dlg(false, _T("gui"), _T("*.gui"),
 		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-		_T("GCI File(*.gci)|*.gci||"));
+		_T("GUI File(*.gui)|*.gui||"));
 
 	if (dlg.DoModal() == IDOK) { // OK 를 하는 순간 현재 경로가 변경된다.
 		// 여기서 파일 저장 작업.
@@ -554,73 +565,71 @@ void CGUIToolApp::OnCharsave()
 		// dlg.GetFileName();
 
 		// 선택한 파일의 이름을 포함한 경로..
-		CString str = dlg.GetPathName();
+		CString strFile = dlg.GetPathName();
 
 		{
 
-			FILE* fp = fopen((CStringA)str, "wt+");
+			FILE* fp = fopen((CStringA)strFile, "wt+");
 
-			for (int i = 0; i< m_vecStr.size(); i++)
+			for(int iUiItem = 0; iUiItem<m_UIManager.m_pUIList.size(); iUiItem++)
 			{
+				GUI_TYPE type =  m_UIManager.m_pUIList[iUiItem]->m_type;
+
 				CString str;
 				CString strNum;
-				
-				
+				D3DXVECTOR3 scl;
+				D3DXVECTOR3 trans;
 
-				if (i == 7) {
-					str = "#OBB_MIN_X	";
-					strNum.Format(_T("%f\n"), pFrame->m_wndButtonCtrl.m_wndForm->m_fMinX);
-					str.Append(strNum);
-					fprintf(fp, (CStringA)str);
-					continue;
-				}
-				if (i == 8) {
-					str = "#OBB_MIN_Y	";
-					strNum.Format(_T("%f\n"), pFrame->m_wndButtonCtrl.m_wndForm->m_fMinY);
-					str.Append(strNum);
-					fprintf(fp, (CStringA)str);
-					continue;
-				}
-				if (i == 9) {
-					str = "#OBB_MIN_Z	";
-					strNum.Format(_T("%f\n"), pFrame->m_wndButtonCtrl.m_wndForm->m_fMinZ);
-					str.Append(strNum);
-					fprintf(fp, (CStringA)str);
-					continue;
-				}
-				if (i == 10) {
-					str = "#OBB_MAX_X	";
-					strNum.Format(_T("%f\n"), pFrame->m_wndButtonCtrl.m_wndForm->m_fMaxX);
-					str.Append(strNum);
-					fprintf(fp, (CStringA)str);
-					continue;
-				}
-				if (i == 11) {
-					str = "#OBB_MAX_Y	";
-					strNum.Format(_T("%f\n"), pFrame->m_wndButtonCtrl.m_wndForm->m_fMaxY);
-					str.Append(strNum);
-					fprintf(fp, (CStringA)str);
-					continue;
-				}
-				if (i == 12) {
-					str = "#OBB_MAX_Z	";
-					strNum.Format(_T("%f\n"), pFrame->m_wndButtonCtrl.m_wndForm->m_fMaxZ);
-					str.Append(strNum);
-					fprintf(fp, (CStringA)str);
-					continue;
-				}
+				MatrixDecompose(&scl, &trans, &m_UIManager.m_pUIList[iUiItem]->m_matWorld);
 
+				switch (type)
+				{
+					case GUI_TYPE_BUTTON:
+					{
+						str = "#GUI_TYPE_BUTTON\n";
+						fprintf(fp, (CStringA)str);
+					}
+					break;
+					case GUI_TYPE_IMAGE:
+					{
+						str = "#GUI_TYPE_IMAGE\n";
+						fprintf(fp, (CStringA)str);
+					}
+					break;
+					case GUI_TYPE_BUTTONHALF:
+					{
+						str = "#GUI_TYPE_BUTTONHALF\n";
+						fprintf(fp, (CStringA)str);
+					}
+					break;
+				}
+				str = "#IMAGE ";
+				str.Append(m_UIManager.m_ImageList[iUiItem].c_str());
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
 
+				str = "#SCL";
+				strNum.Format(_T(" %f"), scl.x);
+				str.Append(strNum);
+				strNum.Format(_T(" %f"), scl.y);
+				str.Append(strNum);
+				strNum.Format(_T(" %f\n"), scl.z);
+				str.Append(strNum);
+				fprintf(fp, (CStringA)str);
 
-				
-				fprintf(fp, (CStringA)m_vecStr[i]);
-
-				//CString name = "wqwkejqpwe"; // 매번 다른 이름
-				//name.ReleaseBuffer();
-				fprintf(fp, "\n");
+				str = "#TRANS";
+				strNum.Format(_T(" %f"), trans.x);
+				str.Append(strNum);
+				strNum.Format(_T(" %f"), trans.y);
+				str.Append(strNum);
+				strNum.Format(_T(" %f\n"), trans.z);
+				str.Append(strNum);
+				fprintf(fp, (CStringA)str);
 			}
 
 			fclose(fp);
+			strFile.Append(_T(" 저장완료"));
+			MessageBox(g_hWnd, strFile, L"저장 완료", MB_OK);
 		}
 
 	}
