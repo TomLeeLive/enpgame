@@ -447,7 +447,7 @@ bool CGUIToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 
 bool CGUIToolApp::Load()
 {
-	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	//CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
 
 
 	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
@@ -482,7 +482,7 @@ bool CGUIToolApp::Load()
 		}
 
 
-		int iLoad = m_LoadFiles.size() - 1;
+		//int iLoad = m_LoadFiles.size() - 1;
 		/*
 		if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")))
 		{
@@ -504,8 +504,8 @@ bool CGUIToolApp::Load()
 		*/
 
 	}
-	if (m_FileExt == G_TOOL_EXT_GBS) {
-		int iLoad = m_LoadFiles.size() - 1;
+	//if (m_FileExt == G_TOOL_EXT_GBS) {
+	//	int iLoad = m_LoadFiles.size() - 1;
 
 		/*
 		m_tbsobj.Init();
@@ -516,15 +516,21 @@ bool CGUIToolApp::Load()
 		m_tbsobj.m_OBB.Init(D3DXVECTOR3(-10.0f, -10.0f, -10.0f), D3DXVECTOR3(10.0f, 10.0f, 10.0f));
 		pFrame->m_wndButtonCtrl.m_wndForm->UpdateTextOBBInfo(D3DXVECTOR3(-10.0f, -10.0f, -10.0f), D3DXVECTOR3(10.0f, 10.0f, 10.0f));
 		*/
-	}
+	//}
 
 	return true;
 }
 
 void CGUIToolApp::OnGuiLoad()
 {
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	//I_CharMgr.Release();
+	//CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	DXGI_SWAP_CHAIN_DESC	SwapChainDesc;
+	GetSwapChain()->GetDesc(&SwapChainDesc);
 
 	if (!LoadFileDlg(_T("gui"), _T("GUI Load")))
 	{
@@ -532,8 +538,24 @@ void CGUIToolApp::OnGuiLoad()
 	}
 	int iLoad = m_LoadFiles.size() - 1;
 
-	m_UIManager.UILoad(&m_LoadFiles[iLoad]);
+	m_UIManager.UILoad(&m_LoadFiles[iLoad], &SwapChainDesc);
 
+
+	for (int i = 0; i < m_UIManager.m_pUIList.size(); i++) {
+		TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+		
+		if (m_UIManager.m_pUIList[i]->m_type == GUI_TYPE_BUTTONHALF) {
+			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, L" Guage");
+		}
+		if (m_UIManager.m_pUIList[i]->m_type == GUI_TYPE_BUTTON) {
+			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, L" 버튼");
+		}
+		if (m_UIManager.m_pUIList[i]->m_type == GUI_TYPE_IMAGE) {
+			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, L" 이미지");
+		}
+
+		pFrame->m_wndButtonCtrl.m_wndForm->m_List.AddString(szRet);
+	}
 }
 
 void MatrixDecompose( D3DXVECTOR3* scl, D3DXVECTOR3* trans, D3DXMATRIX* mat) {
@@ -603,26 +625,31 @@ void CGUIToolApp::OnGuiSave()
 					}
 					break;
 				}
-				str = "#IMAGE ";
-				str.Append(m_UIManager.m_ImageList[iUiItem].c_str());
+				//str = "#IMAGE ";
+				//str.Append(m_UIManager.m_ImageList[iUiItem].c_str());
+				str = m_UIManager.m_ImageList[iUiItem].c_str();
 				str.Append(_T("\n"));
 				fprintf(fp, (CStringA)str);
 
-				str = "#SCL";
-				strNum.Format(_T(" %f"), scl.x);
+				//str = "#SCL";
+				strNum.Format(_T("%f"), scl.x);
+				str = strNum;
+				str.Append(_T("/"));
+				strNum.Format(_T("%f"), scl.y);
 				str.Append(strNum);
-				strNum.Format(_T(" %f"), scl.y);
-				str.Append(strNum);
-				strNum.Format(_T(" %f\n"), scl.z);
+				str.Append(_T("/"));
+				strNum.Format(_T("%f\n"), scl.z);
 				str.Append(strNum);
 				fprintf(fp, (CStringA)str);
 
-				str = "#TRANS";
-				strNum.Format(_T(" %f"), trans.x);
+				//str = "#TRANS";
+				strNum.Format(_T("%f"), trans.x);
+				str = strNum;
+				str.Append(_T("/"));
+				strNum.Format(_T("%f"), trans.y);
 				str.Append(strNum);
-				strNum.Format(_T(" %f"), trans.y);
-				str.Append(strNum);
-				strNum.Format(_T(" %f\n"), trans.z);
+				str.Append(_T("/"));
+				strNum.Format(_T("%f\n"), trans.z);
 				str.Append(strNum);
 				fprintf(fp, (CStringA)str);
 			}

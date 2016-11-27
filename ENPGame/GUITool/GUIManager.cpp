@@ -5,7 +5,28 @@
 #include <iostream>
 #include <fstream>
 
-void	GUIManager::UILoad(T_STR* strFile) {
+void GUIManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
+
+	vector<TCHAR*> vString;
+
+	TCHAR* token = NULL;
+	token = _tcstok((TCHAR*)pInStr, L"\\");
+	while (token != NULL)
+	{
+		token = _tcstok(NULL, L"\\");
+		vString.push_back(token);
+	}
+	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 2]);
+
+	TCHAR strDir[MAX_PATH] = L"data\\";
+	_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
+
+	_tcscpy((TCHAR*)pOutStr, strDir);
+}
+
+
+void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
+
 
 	vector<CString> vecStr;
 
@@ -27,45 +48,85 @@ void	GUIManager::UILoad(T_STR* strFile) {
 	}
 	ifile.close(); // 파일 닫기
 
+	for (int i = 0; i < vecStr.size()/GUI_ITEM_INFO_LINES; i++) {
+		int iItem = i * GUI_ITEM_INFO_LINES;
+		//vecStr[iItem + 0];//GUI_TYPE		#GUI_TYPE_IMAGE
+		//vecStr[iItem + 1];//IMAGE 경로		D:\_github\l4dlike\Output\data\baseColor.jpg
+		//vecStr[iItem + 2];//SCL				#SCL 400.000000 300.000000 1.000000
+		//vecStr[iItem + 3];//TRANS			#TRANS -21.257725 16.128735 100.000000
 
+		TCHAR pOutStr[MAX_PATH] = { 0, };
+		TCHAR* pInStr = (TCHAR*)(LPCTSTR)vecStr[iItem + 1];
+		GetStringWeNeed(pOutStr, pInStr);
+
+		CString strSclX, strSclY, strSclZ, strTransX, strTransY, strTransZ;
+		AfxExtractSubString(strSclX, vecStr[iItem + 2], 0, '/'); 
+		AfxExtractSubString(strSclY, vecStr[iItem + 2], 1, '/'); 
+		AfxExtractSubString(strSclZ, vecStr[iItem + 2], 2, '/'); 
+		AfxExtractSubString(strTransX, vecStr[iItem + 3], 0, '/');
+		AfxExtractSubString(strTransY, vecStr[iItem + 3], 1, '/');
+		AfxExtractSubString(strTransZ, vecStr[iItem + 3], 2, '/');
+
+		T_STR imgFile = pOutStr;
+
+		float fSclX, fSclY, fSclZ, fTransX, fTransY, fTransZ = 0.0f;
+
+		fSclX = _wtof(strSclX);
+		fSclY = _wtof(strSclY);
+		fSclZ = _wtof(strSclZ);
+
+		fTransX = _wtof(strTransX);
+		fTransY = _wtof(strTransY);
+		fTransZ = _wtof(strTransZ);
+
+		if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_IMAGE")) {
+			UICreate(GUI_TYPE_IMAGE, &imgFile, SwapChainDesc,D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ));
+		}
+		else if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_BUTTON")) {
+			UICreate(GUI_TYPE_BUTTON, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ));
+		}
+		else if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_BUTTONHALF")) {
+			UICreate(GUI_TYPE_BUTTONHALF, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ));
+		}
+	}
 }
-void	GUIManager::UICreate(GUI_TYPE type, T_STR_VECTOR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
+void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc,
+	D3DXVECTOR3 vScl, D3DXVECTOR3 vTrans
+	) {
 	int iType = type;
-
-	int iLoad = strFile->size() - 1;
 
 	switch (iType) {
 		case GUI_TYPE_BUTTON:
 		{
 			GButtonCtl* pBoxCtl = new GButtonCtl();
 			pBoxCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
-			pBoxCtl->Create(g_pd3dDevice, nullptr, (*strFile)[iLoad].c_str());
-			pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
-			pBoxCtl->Move(0, 0, 0);
+			pBoxCtl->Create(g_pd3dDevice, nullptr, (*strFile).c_str());
+			pBoxCtl->Scale(vScl.x, vScl.y, vScl.z);
+			pBoxCtl->Move(vTrans.x, vTrans.y, vTrans.z);
 			m_pUIList.push_back(pBoxCtl);
-			m_ImageList.push_back((*strFile)[iLoad].c_str());
+			m_ImageList.push_back((*strFile).c_str());
 		}
 		break;
 		case GUI_TYPE_IMAGE:
 		{
 			GImageCtl* pImageCtl = new GImageCtl();
 			pImageCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
-			pImageCtl->Create(g_pd3dDevice, nullptr, (*strFile)[iLoad].c_str());
-			pImageCtl->Scale(400 - 1.0f, 300 - 1.0f, 1.0f - 1.0f);
-			pImageCtl->Move(0, 0, 100);
+			pImageCtl->Create(g_pd3dDevice, nullptr, (*strFile).c_str());
+			pImageCtl->Scale(vScl.x, vScl.y, vScl.z);
+			pImageCtl->Move(vTrans.x, vTrans.y, vTrans.z);
 			m_pUIList.push_back(pImageCtl);
-			m_ImageList.push_back((*strFile)[iLoad].c_str());
+			m_ImageList.push_back((*strFile).c_str());
 		}
 		break;
 		case GUI_TYPE_BUTTONHALF:
 		{
 			GButtonHalfCtl* pBoxCtl = new GButtonHalfCtl();
 			pBoxCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
-			pBoxCtl->Create(g_pd3dDevice,D3DXVECTOR3(100.0f, 50.0f, 1.0f), nullptr, (*strFile)[iLoad].c_str());
+			pBoxCtl->Create(g_pd3dDevice,D3DXVECTOR3(vScl.x, vScl.y, vScl.z), nullptr, (*strFile).c_str());
 			//pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
-			pBoxCtl->Move(0, 0, 0);
+			pBoxCtl->Move(vTrans.x, vTrans.y, vTrans.z);
 			m_pUIList.push_back(pBoxCtl);
-			m_ImageList.push_back((*strFile)[iLoad].c_str());
+			m_ImageList.push_back((*strFile).c_str());
 		}
 		break;
 	}
@@ -101,7 +162,7 @@ bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	{
 	m_pSelectPlane = AddRect(GUI_TYPE_IMAGE, SwapChainDesc);
 	}
-#endif
+
 
 	GControlUI* pSelect = SelectRect();
 
@@ -117,18 +178,31 @@ bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 		if (g_InputData.bQKey)
 		{
 			vScale.x += 50 * g_fSecPerFrame;
+
+			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
+				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.x = m_pSelectPlane->m_vScale.x;
+
 		}
 		if (g_InputData.bEKey)
 		{
 			vScale.x += -50 * g_fSecPerFrame;
+
+			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
+				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.x = m_pSelectPlane->m_vScale.x;
 		}
 		if (g_InputData.bZKey)
 		{
 			vScale.y += 50 * g_fSecPerFrame;
+
+			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
+				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.y = m_pSelectPlane->m_vScale.y;
 		}
 		if (g_InputData.bCKey)
 		{
 			vScale.y += -50 * g_fSecPerFrame;
+
+			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
+				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.y = m_pSelectPlane->m_vScale.y;
 		}
 		if (g_InputData.bWKey)
 		{
@@ -149,7 +223,7 @@ bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 		m_pSelectPlane->Move(vPos.x, vPos.y, vPos.z);
 		m_pSelectPlane->Scale(vScale.x, vScale.y, vScale.z);
 	}
-
+#endif
 	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
 	{
 		GControlUI* pRect = m_pUIList[iPlane];

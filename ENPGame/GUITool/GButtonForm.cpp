@@ -176,7 +176,10 @@ void GButtonForm::OnBnClickedButton2()
 	{
 		return;
 	}
-	pApp->m_UIManager.UICreate(GUI_TYPE_IMAGE, &pApp->m_LoadFiles, &SwapChainDesc);
+
+	int iLoad = pApp->m_LoadFiles.size() - 1;
+
+	pApp->m_UIManager.UICreate(GUI_TYPE_IMAGE, &pApp->m_LoadFiles[iLoad], &SwapChainDesc);
 
 	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
 	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), pApp->m_UIManager.m_pUIList.size() - 1, L" 이미지");
@@ -196,7 +199,9 @@ void GButtonForm::OnBnClickedButton3()
 	{
 		return;
 	}
-	pApp->m_UIManager.UICreate(GUI_TYPE_BUTTON, &pApp->m_LoadFiles, &SwapChainDesc);
+	int iLoad = pApp->m_LoadFiles.size() - 1;
+
+	pApp->m_UIManager.UICreate(GUI_TYPE_BUTTON, &pApp->m_LoadFiles[iLoad], &SwapChainDesc);
 
 	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
 	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), pApp->m_UIManager.m_pUIList.size() - 1,L" 버튼");
@@ -216,7 +221,9 @@ void GButtonForm::OnBnClickedButton4()
 	{
 		return;
 	}
-	pApp->m_UIManager.UICreate(GUI_TYPE_BUTTONHALF, &pApp->m_LoadFiles, &SwapChainDesc);
+	int iLoad = pApp->m_LoadFiles.size() - 1;
+
+	pApp->m_UIManager.UICreate(GUI_TYPE_BUTTONHALF, &pApp->m_LoadFiles[iLoad], &SwapChainDesc);
 
 	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
 	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), pApp->m_UIManager.m_pUIList.size()-1, L" Guage");
