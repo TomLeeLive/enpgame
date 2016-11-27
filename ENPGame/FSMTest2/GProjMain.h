@@ -6,8 +6,8 @@
 class GProjMain : public GCoreLibV2
 {
 public:
-	//void ChangeZombState(int iNum, G_AI state);
-	//void ChangeZombState(int iNum, TCHAR* str);
+	void ChangeZombState(int iNum, G_AI state);
+	void ChangeZombState(int iNum, TCHAR* str);
 
 
 	int iChange;
