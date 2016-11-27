@@ -88,7 +88,7 @@ void GNewZombie::AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombie
 
 bool	GNewZombie::Init()
 {
-	//GZombie::Init();
+	GZombie::Init();
 	
 	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
 	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
@@ -104,8 +104,9 @@ bool	GNewZombie::Init()
 };
 bool	GNewZombie::Frame(int iMyIndex)
 {
-	//GZombie::Frame();
+	GZombie::Frame();
 	m_pCurrentSeq->Frame(iMyIndex);
+
 
 	vBoxPosition.x = g_pMain->m_matBoxWorld._41;
 	vBoxPosition.y = g_pMain->m_matBoxWorld._42;
@@ -122,15 +123,12 @@ bool	GNewZombie::Frame(int iMyIndex)
 };
 bool	GNewZombie::Render(){
 	m_pCurrentSeq->Render();
-	m_pCurrentSeq->m_pZombie->SetMatrix(&m_ZombieWorld, &g_pMain->m_pMainCamera->m_matView, &g_pMain->m_pMainCamera->m_matProj);
-	m_pCurrentSeq->m_pZombie->Render(g_pMain->m_pImmediateContext);
-
-	//GZombie::Render(g_pMain->GetContext());
+	GZombie::Render(g_pMain->GetContext());
 	return true;
 };
 bool	GNewZombie::Release()
 {
-
+	m_pCurrentSeq->Release();
 	return true;
 };
 

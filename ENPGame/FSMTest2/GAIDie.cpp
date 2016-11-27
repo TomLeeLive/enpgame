@@ -5,17 +5,10 @@ GAIDie * GAIDie::pInstance_ = 0;
 bool GAIDie::Init(int iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
-	m_pZombie = make_shared<GZombie>();
-	m_pZombie->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-
 	return true;
 }
 bool GAIDie::Frame(int iMyIndex)
 {
-	m_pZombie->Frame();
   // die 애니메이션 연출
 	
 	return true;

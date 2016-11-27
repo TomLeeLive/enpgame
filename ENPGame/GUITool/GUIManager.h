@@ -1,5 +1,7 @@
 #pragma once
 
+#define GUI_ITEM_INFO_LINES 4
+
 //enum G_TOOL_IMG_EXT {
 //	G_TOOL_IMG_EXT_BMP,
 //	G_TOOL_IMG_EXT_PNG,
@@ -20,6 +22,7 @@ public:
 	T_STR_VECTOR				m_ImageList;
 	GControlUI*					m_pSelectPlane;
 	//GSceneUI					m_Scene;
+	void GetStringWeNeed(VOID* pOutStr, VOID* pInStr);
 public:
 	bool		Init();
 	bool		Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
@@ -31,8 +34,12 @@ public:
 	HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	HRESULT		DeleteResource();
 public:
-	void	UILoad(T_STR* strFile);
-	void	UICreate(GUI_TYPE type, T_STR_VECTOR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
+	BOOL GUIManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
+		int iSubString, TCHAR chSep);
+	void	UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
+	void	UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc,
+		D3DXVECTOR3 vScl = D3DXVECTOR3(100 - 1.0f, 50 - 1.0f, 1 - 1.0f), D3DXVECTOR3 vTrans = D3DXVECTOR3(0, 0, 0)
+		);
 #if defined(_DEBUG) || defined(DEBUG)
 	GControlUI* AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	GControlUI* AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);

@@ -6,11 +6,6 @@ GAIMove * GAIMove::pInstance_ = 0;
 bool GAIMove::Init(int iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
-	m_pZombie = make_shared<GZombie>();
-	m_pZombie->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 
 
 	Trans = g_pMain->m_Zomb[iMyIndex]->m_ZombieWorld;
@@ -44,7 +39,6 @@ bool GAIMove::ZombieMove(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3
 }
 bool GAIMove::Frame(int iMyIndex)
 {
-	m_pZombie->Frame();
 
 		//G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
 		//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
