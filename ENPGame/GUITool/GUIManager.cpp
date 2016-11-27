@@ -5,6 +5,31 @@
 #include <iostream>
 #include <fstream>
 
+
+BOOL GUIManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
+	int iSubString, TCHAR chSep)
+{
+	if (lpszFullString == NULL)
+		return FALSE;
+
+	while (iSubString--)
+	{
+		lpszFullString = _tcschr(lpszFullString, chSep);
+		if (lpszFullString == NULL)
+		{
+			rString.Empty();        // return empty string as well
+			return FALSE;
+		}
+		lpszFullString++;       // point past the separator
+	}
+	LPCTSTR lpchEnd = _tcschr(lpszFullString, chSep);
+	int nLen = (lpchEnd == NULL) ?
+		lstrlen(lpszFullString) : (int)(lpchEnd - lpszFullString);
+	assert(nLen >= 0);
+	memcpy(rString.GetBufferSetLength(nLen), lpszFullString, nLen * sizeof(TCHAR));
+	return TRUE;
+}
+
 void GUIManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 
 	vector<TCHAR*> vString;
@@ -60,12 +85,12 @@ void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 		GetStringWeNeed(pOutStr, pInStr);
 
 		CString strSclX, strSclY, strSclZ, strTransX, strTransY, strTransZ;
-		AfxExtractSubString(strSclX, vecStr[iItem + 2], 0, '/'); 
-		AfxExtractSubString(strSclY, vecStr[iItem + 2], 1, '/'); 
-		AfxExtractSubString(strSclZ, vecStr[iItem + 2], 2, '/'); 
-		AfxExtractSubString(strTransX, vecStr[iItem + 3], 0, '/');
-		AfxExtractSubString(strTransY, vecStr[iItem + 3], 1, '/');
-		AfxExtractSubString(strTransZ, vecStr[iItem + 3], 2, '/');
+		ExtractSubString(strSclX, vecStr[iItem + 2], 0, '/');
+		ExtractSubString(strSclY, vecStr[iItem + 2], 1, '/');
+		ExtractSubString(strSclZ, vecStr[iItem + 2], 2, '/');
+		ExtractSubString(strTransX, vecStr[iItem + 3], 0, '/');
+		ExtractSubString(strTransY, vecStr[iItem + 3], 1, '/');
+		ExtractSubString(strTransZ, vecStr[iItem + 3], 2, '/');
 
 		T_STR imgFile = pOutStr;
 
