@@ -73,9 +73,7 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GUITool.ico"
-
 IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -83,9 +81,7 @@ IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
-
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -299,28 +295,22 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 9, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     LTEXT           "UI 목록 ",IDC_STATIC,14,7,42,8
-    GROUPBOX        "바운딩 박스 정보",IDC_STATIC,15,267,129,80
-    PUSHBUTTON      "셋팅",IDC_BUTTON1,92,330,50,14
-    EDITTEXT        IDC_MIN_X,17,287,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MIN_Y,59,287,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MIN_Z,100,287,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MAX_X,17,312,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MAX_Y,59,312,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_MAX_Z,100,312,40,14,ES_AUTOHSCROLL
-    LTEXT           "Min X, Y, Z",IDC_STATIC,19,278,35,8
-    LTEXT           "Max X, Y, Z",IDC_STATIC,19,302,37,8
     LISTBOX         IDC_LIST2,14,21,132,78,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "이미지",IDC_BUTTON2,18,114,37,14
     PUSHBUTTON      "버튼",IDC_BUTTON3,61,114,36,14
     PUSHBUTTON      "Guage",IDC_BUTTON4,105,114,38,14
     GROUPBOX        "UI 추가",IDC_STATIC,15,104,132,32
-    LTEXT           "이동: W,A,S,D",IDC_STATIC,55,200,46,8
-    LTEXT           "X스케일: Q, E",IDC_STATIC,56,214,44,8
-    LTEXT           "Y스케일: Z, C",IDC_STATIC,55,229,43,8
-    GROUPBOX        "조작키",IDC_STATIC,15,181,132,75
+    LTEXT           "이동: W,A,S,D",IDC_STATIC,57,309,46,8
+    LTEXT           "X스케일: Q, E",IDC_STATIC,58,323,44,8
+    LTEXT           "Y스케일: Z, C",IDC_STATIC,57,338,43,8
+    GROUPBOX        "조작키",IDC_STATIC,17,290,132,75
     GROUPBOX        "Guage 테스트",IDC_STATIC,15,137,132,39
     PUSHBUTTON      "셋팅",IDC_BUTTON5,89,150,50,14
     EDITTEXT        IDC_GUAGE_VALUE,25,151,52,14,ES_AUTOHSCROLL
+    CONTROL         "Rescale",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,35,227,39,10
+    CONTROL         "Retrans",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,85,227,39,10
+    GROUPBOX        "Rescale or Retrans",IDC_STATIC,15,187,130,67
+    LTEXT           "둘중에 하나만 선택 가능",IDC_STATIC,38,207,76,8
 END
 
 IDD_GIMAGEFORM DIALOG 0, 0, 320, 200

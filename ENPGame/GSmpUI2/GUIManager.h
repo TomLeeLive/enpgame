@@ -1,6 +1,6 @@
 #pragma once
 
-#define GUI_ITEM_INFO_LINES 4
+#define GUI_ITEM_INFO_LINES 5
 
 //enum G_TOOL_IMG_EXT {
 //	G_TOOL_IMG_EXT_BMP,
@@ -38,7 +38,8 @@ public:
 		int iSubString, TCHAR chSep);
 	void	UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	void	UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc,
-		D3DXVECTOR3 vScl = D3DXVECTOR3(100 - 1.0f, 50 - 1.0f, 1 - 1.0f), D3DXVECTOR3 vTrans = D3DXVECTOR3(0, 0, 0)
+		D3DXVECTOR3 vScl = D3DXVECTOR3(100 - 1.0f, 50 - 1.0f, 1 - 1.0f), D3DXVECTOR3 vTrans = D3DXVECTOR3(0, 0, 0),
+		int iAutoRescale = 1
 		);
 #if defined(_DEBUG) || defined(DEBUG)
 	GControlUI* AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);

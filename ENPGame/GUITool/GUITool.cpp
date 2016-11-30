@@ -226,16 +226,14 @@ BOOL CGUIToolApp::InitInstance()
 
 
 	//--------------------------------------------------------------------------------------
-	// 카메라  행렬 
+	// UIManaget Init
 	//--------------------------------------------------------------------------------------	
 	m_UIManager.Init();
 
 
-
-
-
-
-
+	//버튼 폼의 라디오 버튼 체크 안되게 한다.
+	pFrame->m_wndButtonCtrl.m_wndForm->m_iRadio = 2;
+	pFrame->m_wndButtonCtrl.m_wndForm->UpdateData(FALSE);
 
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
@@ -631,7 +629,18 @@ void CGUIToolApp::OnGuiSave()
 				str.Append(_T("\n"));
 				fprintf(fp, (CStringA)str);
 
-				//str = "#SCL";
+				if (m_UIManager.m_pUIList[iUiItem]->m_bAutoRescale)
+				{
+					strNum.Format(_T("%d"), 1);
+					str = strNum;
+				}
+				else {
+					strNum.Format(_T("%d"), 0);
+					str = strNum;
+				}
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
 				strNum.Format(_T("%f"), scl.x);
 				str = strNum;
 				str.Append(_T("/"));

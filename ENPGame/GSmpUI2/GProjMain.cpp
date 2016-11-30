@@ -6,7 +6,7 @@ bool GProjMain::Init()
 {
 	m_UIManager.Init();
 
-	T_STR strFile = L"UI_TEST.gui";
+	T_STR strFile = L"UI_TEST2.gui";
 	m_UIManager.UILoad(&strFile, &m_SwapChainDesc);
 	return true;
 }

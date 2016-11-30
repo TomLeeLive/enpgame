@@ -6,7 +6,6 @@
 #include <fstream>
 
 
-
 BOOL GUIManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
 	int iSubString, TCHAR chSep)
 {
@@ -78,20 +77,22 @@ void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 		int iItem = i * GUI_ITEM_INFO_LINES;
 		//vecStr[iItem + 0];//GUI_TYPE		#GUI_TYPE_IMAGE
 		//vecStr[iItem + 1];//IMAGE 경로		D:\_github\l4dlike\Output\data\baseColor.jpg
-		//vecStr[iItem + 2];//SCL				#SCL 400.000000 300.000000 1.000000
-		//vecStr[iItem + 3];//TRANS			#TRANS -21.257725 16.128735 100.000000
+		//vecStr[iItem + 2];//Auto Rescale 여부 1:true 0:false. 반전 값이 Autotrans에 들어감.
+		//vecStr[iItem + 3];//SCL				#SCL 400.000000 300.000000 1.000000
+		//vecStr[iItem + 4];//TRANS			#TRANS -21.257725 16.128735 100.000000
 
 		TCHAR pOutStr[MAX_PATH] = { 0, };
 		TCHAR* pInStr = (TCHAR*)(LPCTSTR)vecStr[iItem + 1];
 		GetStringWeNeed(pOutStr, pInStr);
 
+		int iAutoRescale = _ttoi(vecStr[iItem + 2]);
 		CString strSclX, strSclY, strSclZ, strTransX, strTransY, strTransZ;
-		ExtractSubString(strSclX, vecStr[iItem + 2], 0, '/');
-		ExtractSubString(strSclY, vecStr[iItem + 2], 1, '/');
-		ExtractSubString(strSclZ, vecStr[iItem + 2], 2, '/');
-		ExtractSubString(strTransX, vecStr[iItem + 3], 0, '/');
-		ExtractSubString(strTransY, vecStr[iItem + 3], 1, '/');
-		ExtractSubString(strTransZ, vecStr[iItem + 3], 2, '/');
+		ExtractSubString(strSclX, vecStr[iItem + 3], 0, '/');
+		ExtractSubString(strSclY, vecStr[iItem + 3], 1, '/');
+		ExtractSubString(strSclZ, vecStr[iItem + 3], 2, '/');
+		ExtractSubString(strTransX, vecStr[iItem + 4], 0, '/');
+		ExtractSubString(strTransY, vecStr[iItem + 4], 1, '/');
+		ExtractSubString(strTransZ, vecStr[iItem + 4], 2, '/');
 
 		T_STR imgFile = pOutStr;
 
@@ -106,18 +107,18 @@ void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 		fTransZ = _wtof(strTransZ);
 
 		if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_IMAGE")) {
-			UICreate(GUI_TYPE_IMAGE, &imgFile, SwapChainDesc,D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ));
+			UICreate(GUI_TYPE_IMAGE, &imgFile, SwapChainDesc,D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
 		}
 		else if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_BUTTON")) {
-			UICreate(GUI_TYPE_BUTTON, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ));
+			UICreate(GUI_TYPE_BUTTON, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
 		}
 		else if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_BUTTONHALF")) {
-			UICreate(GUI_TYPE_BUTTONHALF, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ));
+			UICreate(GUI_TYPE_BUTTONHALF, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
 		}
 	}
 }
 void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc,
-	D3DXVECTOR3 vScl, D3DXVECTOR3 vTrans
+	D3DXVECTOR3 vScl, D3DXVECTOR3 vTrans, int iAutoRescale
 	) {
 	int iType = type;
 
@@ -129,6 +130,16 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 			pBoxCtl->Create(g_pd3dDevice, nullptr, (*strFile).c_str());
 			pBoxCtl->Scale(vScl.x, vScl.y, vScl.z);
 			pBoxCtl->Move(vTrans.x, vTrans.y, vTrans.z);
+			if (iAutoRescale == 1)
+			{
+				pBoxCtl->m_bAutoRescale = true;
+				pBoxCtl->m_bAutoRetrans = false;
+			}
+			else {
+				pBoxCtl->m_bAutoRescale = false;
+				pBoxCtl->m_bAutoRetrans = true;
+			}
+
 			m_pUIList.push_back(pBoxCtl);
 			m_ImageList.push_back((*strFile).c_str());
 		}
@@ -140,6 +151,15 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 			pImageCtl->Create(g_pd3dDevice, nullptr, (*strFile).c_str());
 			pImageCtl->Scale(vScl.x, vScl.y, vScl.z);
 			pImageCtl->Move(vTrans.x, vTrans.y, vTrans.z);
+			if (iAutoRescale == 1)
+			{
+				pImageCtl->m_bAutoRescale = true;
+				pImageCtl->m_bAutoRetrans = false;
+			}
+			else {
+				pImageCtl->m_bAutoRescale = false;
+				pImageCtl->m_bAutoRetrans = true;
+			}
 			m_pUIList.push_back(pImageCtl);
 			m_ImageList.push_back((*strFile).c_str());
 		}
@@ -151,6 +171,15 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 			pBoxCtl->Create(g_pd3dDevice,D3DXVECTOR3(vScl.x, vScl.y, vScl.z), nullptr, (*strFile).c_str());
 			//pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
 			pBoxCtl->Move(vTrans.x, vTrans.y, vTrans.z);
+			if (iAutoRescale == 1)
+			{
+				pBoxCtl->m_bAutoRescale = true;
+				pBoxCtl->m_bAutoRetrans = false;
+			}
+			else {
+				pBoxCtl->m_bAutoRescale = false;
+				pBoxCtl->m_bAutoRetrans = true;
+			}
 			m_pUIList.push_back(pBoxCtl);
 			m_ImageList.push_back((*strFile).c_str());
 		}
