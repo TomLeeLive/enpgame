@@ -2,17 +2,15 @@
 
 GProjMain* g_pMain;
 
-
-
 bool GProjMain::Init()
 {
 	HRESULT hr;
 	//카메라 생성
 	SAFE_NEW(m_pMainCamera, GCamera);
 
-	D3DXVECTOR3 vTargetPosition = D3DXVECTOR3(0.0f, -0.1f, 0.0f);
+	D3DXVECTOR3 vTargetPosition = D3DXVECTOR3(0.0f, -0.1f, 100.0f);
 	D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
-	D3DXVECTOR3 vCameraPosition = D3DXVECTOR3(0.0f, 1.0f, -0.1f);
+	D3DXVECTOR3 vCameraPosition = D3DXVECTOR3(0.0f, 10.0f, -50.1f);
 	// 메인 카메라 뷰 행렬 세팅
 	m_pMainCamera->SetViewMatrix(vCameraPosition, vTargetPosition, vUpVector);
 
@@ -20,6 +18,11 @@ bool GProjMain::Init()
 		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height),
 		0.1f, 10000.0f);
 
+	//BB
+	// 기저 박스(크기가 1이 기본 박스) 구성
+	m_gBoxBase.vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_gBoxBase.vMax = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	m_gBoxBase.vMin = D3DXVECTOR3(-1.0f, -1.0f, -1.0f);
 
 	//CustomizeMap
 	TMapDesc MapDesc = { 50, 50, 1.0f, 0.1f,L"data/baseColor.jpg", L"data/shader/CustomizeMap.hlsl" };
@@ -33,6 +36,39 @@ bool GProjMain::Init()
 		return false;
 	}
 
+	D3DXVECTOR3 vPosition;
+	G_BOX GBox;
+	//Map Box
+	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)	
+	{
+		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
+		{
+			vPosition.x = MapDesc.fSellDistance*iRow + MapDesc.fSellDistance / 2.0f; //x
+			vPosition.y = MapDesc.fScaleHeight;										 //y
+			vPosition.z = MapDesc.fSellDistance*iCol + MapDesc.fSellDistance / 2.0f; //z
+			GBox.vCenter = vPosition;
+
+			//m_vCellPosition.push_back(vPosition);			
+			m_GMapBox.push_back(GBox);		
+
+			D3DXVECTOR3 vMax, vMin, vHalf;
+			D3DXVec3TransformCoord(&m_GMapBox[MapDesc.iNumRows*iRow+iCol].vAxis[0], &D3DXVECTOR3(1.0f, 0.0f, 0.0f), &m_CustomMap.m_matWorld);
+			D3DXVec3TransformCoord(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1], &D3DXVECTOR3(0.0f, 1.0f, 0.0f), &m_CustomMap.m_matWorld);
+			D3DXVec3TransformCoord(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2], &D3DXVECTOR3(0.0f, 0.0f, 1.0f), &m_CustomMap.m_matWorld);
+
+			// 박스의 각 축의 길이 구하기			
+			m_GMapBox[MapDesc.iNumRows*iRow + iCol].fExtent[0] = D3DXVec3Length(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[0]);	 //박스의 x축의 길이 구하기
+			m_GMapBox[MapDesc.iNumRows*iRow + iCol].fExtent[1] = D3DXVec3Length(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1]);	 //박스의 y축의 길이 구하기
+			m_GMapBox[MapDesc.iNumRows*iRow + iCol].fExtent[2] = D3DXVec3Length(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2]);	 //박스의 z축의 길이 구하기
+			
+			D3DXVec3Normalize(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[0], &m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[0]); //박스의 x축의 길이를 1로 정규화
+			D3DXVec3Normalize(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1], &m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1]); //박스의 y축의 길이를 1로 정규화
+			D3DXVec3Normalize(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2], &m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2]); //박스의 z축의 길이를 1로 정규화
+		
+		}
+	}
+	
+
 	//frustum
 	m_pMainCamera->CreateRenderBox(GetDevice(), m_pImmediateContext);
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/box.hlsl", "PS_COLOR"));
@@ -45,10 +81,6 @@ bool GProjMain::Init()
 		MessageBox(0, _T("m_LineShape 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
-	// 기저 박스(크기가 1이 기본 박스) 구성
-	m_gBoxBase.vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_gBoxBase.vMax = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	m_gBoxBase.vMin = D3DXVECTOR3(-1.0f, -1.0f, -1.0f);
 
 	//100개의 박스 위치 세팅
 	D3DXMATRIX matScale, matRotation, matWorld;
@@ -117,9 +149,9 @@ bool GProjMain::Render()
 	D3DXMATRIX matScale, matRotation;
 	for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
 	{
-		//m_pBoxShape->m_cbData.Color = m_vBoxColor[iBox];
+		m_pBoxShape->m_cbData.Color = m_vBoxColor[iBox];
 		m_pBoxShape->SetMatrix(&m_matBoxWorld[iBox], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-
+		
 		//obb와 프로스텀 박스의 제외처리 *******
 		if (m_pMainCamera->CheckOBBInPlane(&m_GBox[iBox]))
 		{
@@ -160,6 +192,7 @@ HRESULT GProjMain::DeleteResource()
 GProjMain::GProjMain(void)
 {
 	m_pMainCamera = NULL;
+	m_GMapBox 
 	SAFE_ZERO(m_pBoxShape);
 	//SAFE_ZERO(m_pLine);
 }

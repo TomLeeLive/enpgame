@@ -30,6 +30,10 @@ public:
 	G_BOX						m_GBox[NUM_OBJECTS];
 	GShape*						m_pBoxShape;
 
+	//MapBB
+	vector<D3DXMATRIX>			m_matCellWorld;
+	//vector<D3DXVECTOR3>			m_vCellPosition;
+	vector<G_BOX>				m_GMapBox;
 public:	
 	bool		Init();
 	bool		Frame();
