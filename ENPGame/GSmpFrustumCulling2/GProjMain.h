@@ -29,6 +29,7 @@ public:
 
 	G_BOX						m_GBox[NUM_OBJECTS];
 	GShape*						m_pBoxShape;
+
 public:	
 	bool		Init();
 	bool		Frame();

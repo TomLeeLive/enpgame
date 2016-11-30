@@ -36,7 +36,15 @@ bool GProjMain::Init()
 	//frustum
 	m_pMainCamera->CreateRenderBox(GetDevice(), m_pImmediateContext);
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader/box.hlsl", "PS_COLOR"));
-
+	//--------------------------------------------------------------------------------------
+	// 박스 오브젝트 생성( 100개 박스가 공유해서 사용함)
+	//--------------------------------------------------------------------------------------
+	SAFE_NEW(m_pBoxShape, GBoxShape);
+	if (FAILED(m_pBoxShape->Create(GetDevice(), L"data/shader/box.hlsl", L"data/checker_with_numbers.bmp")))
+	{
+		MessageBox(0, _T("m_LineShape 실패"), _T("Fatal error"), MB_OK);
+		return 0;
+	}
 	// 기저 박스(크기가 1이 기본 박스) 구성
 	m_gBoxBase.vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_gBoxBase.vMax = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -53,6 +61,8 @@ bool GProjMain::Init()
 		D3DXMatrixScaling(&matScale, (rand() % 256) / 255.0f*3.0f, (rand() % 256) / 255.0f*3.0f, (rand() % 256) / 255.0f*3.0f);
 		D3DXMatrixRotationYawPitchRoll(&matRotation, (rand() % 256) / 255.0f, (rand() % 256) / 255.0f, (rand() % 256) / 255.0f);
 		D3DXMatrixMultiply(&matWorld, &matScale, &matRotation);
+
+
 
 		//obb 기저벡터의 축방향(axis) 구하기
 		m_GBox[iBox].vCenter = m_vBoxPosition[iBox];
@@ -93,20 +103,8 @@ bool GProjMain::Frame()
 	g_pImmediateContext->UpdateSubresource(
 		m_CustomMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_CustomMap.m_VertexList.at(0), 0, 0);
 
-	//박스 랜더링
-	D3DXMATRIX matScale, matRotation;
-	for (int iBox = 0; NUM_OBJECTS; iBox++)
-	{
-		m_pBoxShape->m_cbData.Color = m_vBoxColor[iBox];
-		m_pBoxShape->SetMatrix(&m_matBoxWorld[iBox], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 
-		//obb와 프로스텀 박스의 제외처리 *******
-		if (m_pMainCamera->CheckOBBInPlane(&m_GBox[iBox]))
-		{
-			m_pBoxShape->Render(m_pImmediateContext);
-		}
 
-	}
 	return true;
 }
 bool GProjMain::Render()
@@ -115,7 +113,20 @@ bool GProjMain::Render()
 		m_pMainCamera->GetProjMatrix());
 	m_CustomMap.Render(m_pImmediateContext);
 
+	//박스 랜더링
+	D3DXMATRIX matScale, matRotation;
+	for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
+	{
+		m_pBoxShape->m_cbData.Color = m_vBoxColor[iBox];
+		m_pBoxShape->SetMatrix(&m_matBoxWorld[iBox], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		
+		//obb와 프로스텀 박스의 제외처리 *******
+		if (m_pMainCamera->CheckOBBInPlane(&m_GBox[iBox]))
+		{
+			m_pBoxShape->Render(m_pImmediateContext);
+		}
 
+	}
 	
 	return true;
 }
@@ -131,13 +142,11 @@ bool GProjMain::Release()
 HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
-	{
-		float fAspectRatio = m_SwapChainDesc.BufferDesc.Width /
-			(float)m_SwapChainDesc.BufferDesc.Height;
-		//m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
-
-
-	}
+	//{
+	//	float fAspectRatio = m_SwapChainDesc.BufferDesc.Width /
+	//		(float)m_SwapChainDesc.BufferDesc.Height;
+	//	//m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 500.0f);
+	//}
 
 	return S_OK;
 }
@@ -151,6 +160,8 @@ HRESULT GProjMain::DeleteResource()
 GProjMain::GProjMain(void)
 {
 	m_pMainCamera = NULL;
+	SAFE_ZERO(m_pBoxShape);
+	//SAFE_ZERO(m_pLine);
 }
 GProjMain::~GProjMain(void)
 {
