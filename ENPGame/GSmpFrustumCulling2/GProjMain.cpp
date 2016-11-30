@@ -117,9 +117,9 @@ bool GProjMain::Render()
 	D3DXMATRIX matScale, matRotation;
 	for (int iBox = 0; iBox < NUM_OBJECTS; iBox++)
 	{
-		m_pBoxShape->m_cbData.Color = m_vBoxColor[iBox];
+		//m_pBoxShape->m_cbData.Color = m_vBoxColor[iBox];
 		m_pBoxShape->SetMatrix(&m_matBoxWorld[iBox], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-		
+
 		//obb와 프로스텀 박스의 제외처리 *******
 		if (m_pMainCamera->CheckOBBInPlane(&m_GBox[iBox]))
 		{
