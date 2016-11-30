@@ -21,8 +21,8 @@ T_STR CameraViewStyle[] =
 class GProjMain : public GCoreLibV2
 {
 public:
-	GBBox						m_pBBox;
-	GBoxShape					m_pBox;
+	GBBox						m_pBBox[100];
+	GBoxShape					m_pBox[100];
 
 #ifdef G_MACRO_ENEMYBOX
 	D3DXMATRIX					m_matWorldEnemy;
