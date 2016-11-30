@@ -3,13 +3,13 @@
 class GAIDie : public GAISeq
 {
 private:
-	static GAIDie *pInstance_;
+	//static GAIDie *pInstance_;
 public:
-	static GAISeq* CreateInstance()
-	{
-		if (pInstance_ == 0) pInstance_ = new GAIDie;
-		return pInstance_;
-	}
+	//static GAISeq* CreateInstance()
+	//{
+	//	if (pInstance_ == 0) pInstance_ = new GAIDie;
+	//	return pInstance_;
+	//}
 	shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
@@ -27,8 +27,9 @@ public:
 	HRESULT		DeleteResource();
 public:
 	virtual ~GAIDie();
-protected:
 	GAIDie();
+protected:
+
 };
 
 

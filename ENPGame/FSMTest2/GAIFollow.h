@@ -2,13 +2,19 @@
 class GAIFollow : public GAISeq
 {
 private:
-	static GAIFollow *pInstance_;
+	//static GAIFollow *pInstance_;
 public:
-	static GAISeq* CreateInstance()
-	{
-		if (pInstance_ == 0) pInstance_ = new GAIFollow;
-		return pInstance_;
-	}
+	//follow
+	D3DXVECTOR3 m_vBDestLook;
+	D3DXVECTOR3 m_vBRight;
+	D3DXVECTOR3 m_vBUp;
+
+	void FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition);
+	//static GAISeq* CreateInstance()
+	//{
+	//	if (pInstance_ == 0) pInstance_ = new GAIFollow;
+	//	return pInstance_;
+	//}
 	shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
@@ -34,8 +40,9 @@ public:
 	HRESULT		DeleteResource();
 public:
 	virtual ~GAIFollow();
-protected:
 	GAIFollow();
+protected:
+
 };
 
 

@@ -3,13 +3,13 @@
 class GAIIdle : public GAISeq
 {
 private:
-	static GAIIdle *pInstance_;
+	//static GAIIdle *pInstance_;
 public:
-	static GAISeq* CreateInstance()
-	{
-		if (pInstance_ == 0) pInstance_ = new GAIIdle;
-		return pInstance_;
-	}
+	//static GAISeq* CreateInstance()
+	//{
+	//	if (pInstance_ == 0) pInstance_ = new GAIIdle;
+	//	return pInstance_;
+	//}
 	shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
@@ -18,6 +18,7 @@ public:
 	bool Render();
 	bool Release();
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	float m_SecondPerFrame;
 	D3DXVECTOR3 RandomPoint;
 	float TimeCount = 0.0f;
 	//----------------------------------------------------
@@ -27,8 +28,9 @@ public:
 	HRESULT		DeleteResource();
 public:
 	virtual ~GAIIdle();
-protected:
 	GAIIdle();
+protected:
+
 };
 
 

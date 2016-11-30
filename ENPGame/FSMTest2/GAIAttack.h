@@ -3,13 +3,18 @@
 class GAIAttack : public GAISeq
 {
 private:
-	static GAIAttack *pInstance_;
+	//static GAIAttack *pInstance_;
 public:
-	static GAISeq* CreateInstance()
-	{
-		if (pInstance_ == 0) pInstance_ = new GAIAttack;
-		return pInstance_;
-	}
+	//attack
+	D3DXVECTOR3 m_vADestLook;
+	D3DXVECTOR3 m_vARight;
+	D3DXVECTOR3 m_vAUp;
+	void AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition);
+	//static GAISeq* CreateInstance()
+	//{
+	//	if (pInstance_ == 0) pInstance_ = new GAIAttack;
+	//	return pInstance_;
+	//}
 	//shared_ptr<GCamera > m_pMainCamera;
 
 	bool Init(int iMyIndex);
@@ -31,8 +36,9 @@ public:
 	HRESULT		DeleteResource();
 public:
 	virtual ~GAIAttack();
-protected:
 	GAIAttack();
+protected:
+
 };
 
 

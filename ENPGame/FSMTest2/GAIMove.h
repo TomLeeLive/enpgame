@@ -6,10 +6,19 @@ enum ZombieNum {
 class GAIMove : public GAISeq
 {
 public:
-	static GAISeq* CreateInstance() {
-		if (pInstance_ == 0) pInstance_ = new GAIMove;
-		return pInstance_;
-	}
+
+	//move
+	D3DXVECTOR3 m_RandomPoint;
+	D3DXVECTOR3 m_RandomDestination;
+
+
+
+
+	void RandomMove(int i, D3DXVECTOR3 vZombiePosition);
+	//static GAISeq* CreateInstance() {
+	//	if (pInstance_ == 0) pInstance_ = new GAIMove;
+	//	return pInstance_;
+	//}
 	bool Init(int iMyIndex);
 	bool Frame(int iMyIndex);
 	bool Render();
@@ -31,9 +40,10 @@ public:
 	int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return -1; };
 public:
 	virtual ~GAIMove();
-protected:
 	GAIMove();
+protected:
+
 private:
-	static GAIMove *pInstance_;
+	//static GAIMove *pInstance_;
 };
 
