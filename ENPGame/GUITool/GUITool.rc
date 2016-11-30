@@ -73,7 +73,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GUITool.ico"
+
 IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +83,9 @@ IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -290,7 +294,7 @@ BEGIN
     CONTROL         "Radio2",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,215,147,38,10
 END
 
-IDD_GBUTTONFORM DIALOGEX 0, 0, 166, 381
+IDD_GBUTTONFORM DIALOGEX 0, 0, 160, 352
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 FONT 9, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
@@ -300,10 +304,10 @@ BEGIN
     PUSHBUTTON      "버튼",IDC_BUTTON3,61,114,36,14
     PUSHBUTTON      "Guage",IDC_BUTTON4,105,114,38,14
     GROUPBOX        "UI 추가",IDC_STATIC,15,104,132,32
-    LTEXT           "이동: W,A,S,D",IDC_STATIC,57,309,46,8
-    LTEXT           "X스케일: Q, E",IDC_STATIC,58,323,44,8
-    LTEXT           "Y스케일: Z, C",IDC_STATIC,57,338,43,8
-    GROUPBOX        "조작키",IDC_STATIC,17,290,132,75
+    LTEXT           "이동: W,A,S,D",IDC_STATIC,57,279,46,8
+    LTEXT           "X스케일: Q, E",IDC_STATIC,58,293,44,8
+    LTEXT           "Y스케일: Z, C",IDC_STATIC,57,308,43,8
+    GROUPBOX        "조작키",IDC_STATIC,17,260,128,75
     GROUPBOX        "Guage 테스트",IDC_STATIC,15,137,132,39
     PUSHBUTTON      "셋팅",IDC_BUTTON5,89,150,50,14
     EDITTEXT        IDC_GUAGE_VALUE,25,151,52,14,ES_AUTOHSCROLL
@@ -395,9 +399,9 @@ BEGIN
     IDD_GBUTTONFORM, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 159
+        RIGHTMARGIN, 153
         TOPMARGIN, 7
-        BOTTOMMARGIN, 374
+        BOTTOMMARGIN, 345
     END
 
     IDD_GIMAGEFORM, DIALOG

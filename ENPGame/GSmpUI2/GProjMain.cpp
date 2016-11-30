@@ -6,8 +6,8 @@ bool GProjMain::Init()
 {
 	m_UIManager.Init();
 
-	T_STR strFile = L"UI_TEST2.gui";
-	m_UIManager.UILoad(&strFile, &m_SwapChainDesc);
+	T_STR strFile = L"UI_TEST5.gui";
+	m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 	return true;
 }
 bool GProjMain::Frame()

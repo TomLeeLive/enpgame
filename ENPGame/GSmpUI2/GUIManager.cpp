@@ -50,7 +50,7 @@ void GUIManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 }
 
 
-void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
+void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc, float ScrWidth, float ScrHeight) {
 
 
 	vector<CString> vecStr;
@@ -105,6 +105,26 @@ void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 		fTransX = _wtof(strTransX);
 		fTransY = _wtof(strTransY);
 		fTransZ = _wtof(strTransZ);
+
+		//상대 좌표로 계산[Start]
+		float iWidth = ScrWidth / 2;	//클라이언트 창 width
+		float iHeight = ScrHeight / 2;	//height
+
+		fSclX = fSclX * iWidth / 100;
+		fSclY = fSclY * iHeight / 100;
+
+		if (fTransX < 0)
+			fTransX = -(abs(fTransX) * iWidth);
+		else
+			fTransX = fTransX * iWidth;
+
+		if (fTransY < 0)
+			fTransY = -(abs(fTransY) * iHeight);
+		else
+			fTransY = fTransY * iHeight;
+
+		//상대 좌표로 계산[End]
+
 
 		if (!_tcscmp(vecStr[iItem + 0], L"#GUI_TYPE_IMAGE")) {
 			UICreate(GUI_TYPE_IMAGE, &imgFile, SwapChainDesc,D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);

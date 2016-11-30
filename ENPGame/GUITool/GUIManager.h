@@ -36,7 +36,7 @@ public:
 public:
 	BOOL GUIManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
 		int iSubString, TCHAR chSep);
-	void	UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
+	void	UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc, float ScrWidth, float ScrHeight);
 	void	UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc,
 		D3DXVECTOR3 vScl = D3DXVECTOR3(100 - 1.0f, 50 - 1.0f, 1 - 1.0f), D3DXVECTOR3 vTrans = D3DXVECTOR3(0, 0, 0),
 		int iAutoRescale = 1
