@@ -73,7 +73,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\GUITool.ico"
+
 IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +83,9 @@ IDR_AIToolTYPE          ICON                    "res\\GUIToolDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -316,7 +320,7 @@ BEGIN
     GROUPBOX        "조작키",IDC_STATIC,15,181,132,75
     GROUPBOX        "Guage 테스트",IDC_STATIC,15,137,132,39
     PUSHBUTTON      "셋팅",IDC_BUTTON5,89,150,50,14
-    EDITTEXT        IDC_EDIT1,25,151,52,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_GUAGE_VALUE,25,151,52,14,ES_AUTOHSCROLL
 END
 
 IDD_GIMAGEFORM DIALOG 0, 0, 320, 200

@@ -35,7 +35,6 @@ GButtonForm::GButtonForm()
 	, m_fMaxZ(0)
 	, m_fGuageValue(0)
 {
-
 }
 
 GButtonForm::~GButtonForm()
@@ -93,7 +92,7 @@ void GButtonForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MAX_Y, m_fMaxY);
 	DDX_Text(pDX, IDC_MAX_Z, m_fMaxZ);
 	DDX_Control(pDX, IDC_LIST2, m_List);
-	DDX_Text(pDX, IDC_EDIT1, m_fGuageValue);
+	DDX_Text(pDX, IDC_GUAGE_VALUE, m_fGuageValue);
 }
 
 BEGIN_MESSAGE_MAP(GButtonForm, CFormView)
@@ -102,6 +101,8 @@ BEGIN_MESSAGE_MAP(GButtonForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON3, &GButtonForm::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &GButtonForm::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &GButtonForm::OnBnClickedButton5)
+	ON_LBN_DBLCLK(IDC_LIST2, &GButtonForm::OnLbnDblclkList2)
+	ON_EN_CHANGE(IDC_GUAGE_VALUE, &GButtonForm::OnEnChangeGuageValue)
 END_MESSAGE_MAP()
 
 
@@ -162,30 +163,119 @@ void GButtonForm::OnBnClickedButton1()
 }
 
 
+
 void GButtonForm::OnBnClickedButton2()
 {
-	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	if (!pApp->LoadFileDlg(_T("bmp"), _T("image add")))
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	DXGI_SWAP_CHAIN_DESC	SwapChainDesc;
+	pApp->GetSwapChain()->GetDesc(&SwapChainDesc);
+
+	if (!pApp->LoadFileDlg(_T("*"), _T("이미지 image add")))
 	{
 		return;
 	}
+
+	int iLoad = pApp->m_LoadFiles.size() - 1;
+
+	pApp->m_UIManager.UICreate(GUI_TYPE_IMAGE, &pApp->m_LoadFiles[iLoad], &SwapChainDesc);
+
+	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), pApp->m_UIManager.m_pUIList.size() - 1, L" 이미지");
+	m_List.AddString(szRet);
 }
 
 
 void GButtonForm::OnBnClickedButton3()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	DXGI_SWAP_CHAIN_DESC	SwapChainDesc;
+	pApp->GetSwapChain()->GetDesc(&SwapChainDesc);
+
+	if (!pApp->LoadFileDlg(_T("*"), _T("버튼 image add")))
+	{
+		return;
+	}
+	int iLoad = pApp->m_LoadFiles.size() - 1;
+
+	pApp->m_UIManager.UICreate(GUI_TYPE_BUTTON, &pApp->m_LoadFiles[iLoad], &SwapChainDesc);
+
+	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), pApp->m_UIManager.m_pUIList.size() - 1,L" 버튼");
+	m_List.AddString(szRet);
 }
 
 
 void GButtonForm::OnBnClickedButton4()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	DXGI_SWAP_CHAIN_DESC	SwapChainDesc;
+	pApp->GetSwapChain()->GetDesc(&SwapChainDesc);
+
+	if (!pApp->LoadFileDlg(_T("*"), _T("Guage image add")))
+	{
+		return;
+	}
+	int iLoad = pApp->m_LoadFiles.size() - 1;
+
+	pApp->m_UIManager.UICreate(GUI_TYPE_BUTTONHALF, &pApp->m_LoadFiles[iLoad], &SwapChainDesc);
+
+	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), pApp->m_UIManager.m_pUIList.size()-1, L" Guage");
+	m_List.AddString(szRet);
 }
 
 
 void GButtonForm::OnBnClickedButton5()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CString strValue;
+
+	GetDlgItem(IDC_GUAGE_VALUE)->GetWindowText(strValue);
+
+	m_fGuageValue = _ttof(strValue);
+
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	if (pApp->m_UIManager.m_pSelectPlane != NULL )
+	{
+		if (pApp->m_UIManager.m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF) {
+			((GButtonHalfCtl*)pApp->m_UIManager.m_pSelectPlane)->SetXSize(m_fGuageValue);
+			//pApp->m_UIManager.m_pSelectPlane->Update();
+		}
+		else {
+			//MessageBox(g_hWnd, "마우스 왼쪽 버튼을 눌렀습니다", "메시지 박스", MB_OK);
+		}
+	}
+}
+
+
+void GButtonForm::OnLbnDblclkList2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int iSelected = m_List.GetCurSel();
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+	
+	GControlUI* pSelect = pApp->m_UIManager.m_pUIList[iSelected];
+
+	if (pSelect != NULL && pApp->m_UIManager.m_pSelectPlane != pSelect)
+	{
+		pApp->m_UIManager.m_pSelectPlane = pSelect;
+	}
+}
+
+
+void GButtonForm::OnEnChangeGuageValue()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CFormView::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

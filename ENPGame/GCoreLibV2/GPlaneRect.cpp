@@ -151,7 +151,31 @@ HRESULT		GButtonHalfCtl::Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderF
 	HRESULT hr = S_OK;
 	if (pLoadShaderFile == nullptr)
 	{
-		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/box.hlsl", pLoadTextureString)))
+		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/UI.hlsl", pLoadTextureString)))
+		{
+			return hr;
+		}
+	}
+	else
+	{
+		if (FAILED(hr = m_Box.Create(pDevice, pLoadShaderFile, pLoadTextureString)))
+		{
+			return hr;
+		}
+	}
+	m_pShape = &m_Box;
+
+	m_Vertices[0].p = D3DXVECTOR3(0.0f, 1.0f, -1.0f);
+	m_Vertices[3].p = D3DXVECTOR3(0.0f, -1.0f, -1.0f);
+	return hr;
+}
+HRESULT		GButtonHalfCtl::Create(ID3D11Device* pDevice, D3DXVECTOR3 initScl, const TCHAR* pLoadShaderFile, const TCHAR* pLoadTextureString)
+{
+	m_vScale = m_initScl = initScl;
+	HRESULT hr = S_OK;
+	if (pLoadShaderFile == nullptr)
+	{
+		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/UI.hlsl", pLoadTextureString)))
 		{
 			return hr;
 		}
@@ -175,7 +199,7 @@ HRESULT		GButtonCtl::Create(ID3D11Device* pDevice,const TCHAR* pLoadShaderFile,c
 	HRESULT hr = S_OK;
 	if (pLoadShaderFile == nullptr)
 	{
-		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/box.hlsl", pLoadTextureString)))
+		if (FAILED(hr = m_Box.Create(pDevice, L"data/shader/UI.hlsl", pLoadTextureString)))
 		{
 			return hr;
 		}

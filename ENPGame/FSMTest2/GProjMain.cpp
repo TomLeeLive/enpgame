@@ -2,72 +2,72 @@
 GProjMain* g_pMain;
 
 
-//void		GProjMain::ChangeZombState(int iNum, G_AI state) {
-//
-//	g_pMain->m_Zomb[iNum]->setState(state);
-//
-//	int iState = state;
-//
-//	GCharacter* pChar0 = NULL;
-//
-//	switch (iState) {
-//	case 	G_ZOMB_ST_WALK: {
-//		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
-//	}
-//							break;
-//	case 	G_ZOMB_ST_IDLE: {
-//		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
-//	}
-//							break;
-//	case 	G_ZOMB_ST_ATTACK: {
-//		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
-//	}
-//							  break;
-//	case 	G_ZOMB_ST_DEAD: {
-//		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
-//	}
-//							break;
-//	case 	G_ZOMB_ST_FOLLOW: {
-//		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_FLW);
-//	}
-//							break;
-//	}
-//
-//	g_pMain->m_Zomb[iNum]->Set(pChar0,
-//		pChar0->m_pBoneObject,
-//		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-//		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-//
-//}
-//void		GProjMain::ChangeZombState(int iNum, TCHAR* str) {
-//
-//	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
-//	auto pChar0 = I_CharMgr.GetPtr(str);
-//
-//	 m_Zomb[iNum]->Set(pChar0,
-//		pChar0->m_pBoneObject,
-//		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-//		pChar0->m_pBoneObject->m_Scene.iLastFrame);
-//
-//	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
-//		 m_Zomb[iNum]->setState(G_AI_DIE);
-//	}
-//	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
-//		 m_Zomb[iNum]->setState(G_AI_ATTACK);
-//	}
-//	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
-//		 m_Zomb[iNum]->setState(G_AI_MOVE);
-//	}
-//	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
-//		 m_Zomb[iNum]->setState(G_AI_IDLE);
-//	}
-//	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_FLW)) {
-//		m_Zomb[iNum]->setState(G_AI_FOLLOW);
-//	}
-//	else {
-//		 m_Zomb[iNum]->setState(G_AI_IDLE);
-//	}
-//}
+void		GProjMain::ChangeZombState(int iNum, G_AI state) {
+
+	g_pMain->m_Zomb[iNum]->setState(state);
+
+	int iState = state;
+
+	GCharacter* pChar0 = NULL;
+
+	switch (iState) {
+	case 	G_ZOMB_ST_WALK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
+	}
+							break;
+	case 	G_ZOMB_ST_IDLE: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
+	}
+							break;
+	case 	G_ZOMB_ST_ATTACK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
+	}
+							  break;
+	case 	G_ZOMB_ST_DEAD: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
+	}
+							break;
+	case 	G_ZOMB_ST_FOLLOW: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_FLW);
+	}
+							break;
+	}
+
+	g_pMain->m_Zomb[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+}
+void		GProjMain::ChangeZombState(int iNum, TCHAR* str) {
+
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
+	auto pChar0 = I_CharMgr.GetPtr(str);
+
+	 m_Zomb[iNum]->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
+		 m_Zomb[iNum]->setState(G_AI_DIE);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
+		 m_Zomb[iNum]->setState(G_AI_ATTACK);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
+		 m_Zomb[iNum]->setState(G_AI_MOVE);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
+		 m_Zomb[iNum]->setState(G_AI_IDLE);
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_FLW)) {
+		m_Zomb[iNum]->setState(G_AI_FOLLOW);
+	}
+	else {
+		 m_Zomb[iNum]->setState(G_AI_IDLE);
+	}
+}
 
 bool GProjMain::Load()
 {
@@ -81,8 +81,10 @@ bool GProjMain::Load()
 	}
 
 	for (int i = 0;i < G_DEFINE_MAX_AI_ZOMBIE; i++) {
+		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
 		shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
+		pObjA->setState(G_AI_MOVE);
 
 		pObjA->m_ZombieWorld._41 = (rand() * 3) % 303;
 		pObjA->m_ZombieWorld._43 = (rand() * 3) % 303;
@@ -91,8 +93,10 @@ bool GProjMain::Load()
 		pObjA->vZombiePosition.y = 0.0f;
 		pObjA->vZombiePosition.z = pObjA->m_ZombieWorld._43;
 
-		pObjA->setState(G_AI_MOVE);
-		pObjA->m_pCurrentSeq = pObjA->m_GameSeq[G_AI_MOVE];
+		pObjA->Set(pChar0,
+			pChar0->m_pBoneObject,
+			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar0->m_pBoneObject->m_Scene.iLastFrame);
 		m_Zomb.push_back(pObjA);
 	}
 
@@ -185,6 +189,12 @@ bool GProjMain::Render()
 	
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
+		m_Zomb[i]->SetMatrix(&m_Zomb[i]->m_ZombieWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+		m_Zomb[i]->Render();
+	}
+
+	for (int i = 0; i < m_Zomb.size(); i++)
+	{
 		m_Zomb[i]->Render();
 	}
 	
@@ -192,28 +202,11 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
-	m_Box->Release();
-	delete m_Box;
+	I_CharMgr.Release();
 	//for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++)
 	//{
 	//	m_Zomb[i].reset()
 	//}
-
-	for (int i = 0; i < m_Zomb.size(); i++)
-	{
-		for (int j = 0; j < G_AI_CNT; j++) {
-			I_CharMgr.Delete(m_Zomb[i]->m_GameSeq[j]->pChar0);
-			
-		}
-		for (int j = 0; j < G_AI_CNT; j++) {
-			delete m_Zomb[i]->m_GameSeq[j];
-		}
-	}
-	I_CharMgr.Release();
-
-
-		
-
 	return true;
 }
 HRESULT GProjMain::CreateResource()
@@ -223,10 +216,10 @@ HRESULT GProjMain::CreateResource()
 		m_pMainCamera->SetProjMatrix((float)D3DX_PI * 0.25f,
 		m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 10000.0f);
 
-	//for (int i = 0; i < m_Zomb.size(); i++)
-	//{
-	//	m_Zomb[i]->CreateResource();
-	//}
+	for (int i = 0; i < m_Zomb.size(); i++)
+	{
+		m_Zomb[i]->CreateResource();
+	}
 
 	return S_OK;
 }

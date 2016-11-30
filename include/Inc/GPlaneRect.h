@@ -4,14 +4,19 @@
 using namespace DX;
 
 enum GUI_TYPE {
-	G_BUTTON = 0,
-	G_EDIT,
-	G_LISTBOX,
-	G_STATITEXT,
+	GUI_TYPE_BUTTON = 0,
+	GUI_TYPE_BUTTONHALF,
+	GUI_TYPE_EDIT,
+	GUI_TYPE_LISTBOX,
+	GUI_TYPE_STATICTEXT,
+	GUI_TYPE_IMAGE,
+	GUI_CNT
 };
 
 class GControlUI
 {
+public:
+	GUI_TYPE   m_type;
 public:	
 	GShape*     m_pShape;
 	T_STR		m_Text;
@@ -55,19 +60,30 @@ public:
 		const TCHAR* pLoadShaderFile=nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
 public:
-	GButtonCtl() {};
+	GButtonCtl() { m_type = GUI_TYPE_BUTTON; };
 	virtual ~GButtonCtl() {};
 };
 
 class GButtonHalfCtl : public GControlUI
 {
 public:
+	D3DXVECTOR3		  m_initScl;
 	GBoxHalfShape     m_Box;
 	HRESULT		Create(ID3D11Device* pDevice,
 		const TCHAR* pLoadShaderFile = nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
+
+	HRESULT		Create(ID3D11Device* pDevice,
+		D3DXVECTOR3 initScl,
+		const TCHAR* pLoadShaderFile = nullptr,
+		const TCHAR* pLoadTextureString = nullptr);
+
+	void	SetXSize(float fValue) {//0~100까지로 입력 받자.
+		m_vScale.x = m_initScl.x / 100.0f *fValue;
+	}
+
 public:
-	GButtonHalfCtl() {};
+	GButtonHalfCtl() { m_type = GUI_TYPE_BUTTONHALF; m_initScl = D3DXVECTOR3(0.0f, 0.0f, 0.0f); };
 	virtual ~GButtonHalfCtl() {};
 };
 
@@ -75,7 +91,7 @@ class GStaticTextCtl : public GButtonCtl
 {
 public:
 	GPlaneShape   m_Plane;
-	GStaticTextCtl() {};
+	GStaticTextCtl() { m_type = GUI_TYPE_STATICTEXT; };
 	virtual ~GStaticTextCtl() {};
 };
 
@@ -90,7 +106,7 @@ public:
 	HRESULT		Create(ID3D11Device* pDevice,
 		const TCHAR* pLoadShaderFile = nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
-	GEditCtl() {};
+	GEditCtl() { m_type = GUI_TYPE_EDIT; };
 	virtual ~GEditCtl() {};
 };
 
@@ -98,7 +114,7 @@ class GListBoxCtl : public GButtonCtl
 {
 public:
 	std::vector<GButtonCtl*>  m_ListBox;
-	GListBoxCtl() {};
+	GListBoxCtl() { m_type = GUI_TYPE_LISTBOX; };
 	virtual ~GListBoxCtl() {};
 };
 class GImageCtl : public GButtonCtl
@@ -108,7 +124,7 @@ public:
 	HRESULT		Create(ID3D11Device* pDevice,
 		const TCHAR* pLoadShaderFile = nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
-	GImageCtl() {};
+	GImageCtl() { m_type = GUI_TYPE_IMAGE; };
 	virtual ~GImageCtl() {};
 };
 class GPanel // 1개의 배경에서 뜨는 대화상자 개념.

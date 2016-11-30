@@ -5,11 +5,6 @@ GAIAttack * GAIAttack::pInstance_ = 0;
 bool GAIAttack::Init(int iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
-	m_pZombie = make_shared<GZombie>();
-	m_pZombie->Set(pChar0,
-		pChar0->m_pBoneObject,
-		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 
 	return true;
 }
@@ -32,34 +27,34 @@ bool GAIAttack::ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVEC
 }
 bool GAIAttack::Frame(int iMyIndex)
 {
-	m_pZombie->Frame();
-	//G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
-	//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
 
-	D3DXVECTOR3 Temp = g_pMain->m_Zomb[iMyIndex]->vBoxPosition - g_pMain->m_Zomb[iMyIndex]->vZombiePosition;
-	float a = D3DXVec3Length(&Temp);
-	g_pMain->m_Zomb[iMyIndex]->vDistance = a;
+			//G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
+			//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
 
-	if (g_pMain->m_Zomb[iMyIndex]->vDistance > 70.0f)
-	{
-		g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
-	}
+			D3DXVECTOR3 Temp = g_pMain->m_Zomb[iMyIndex]->vBoxPosition - g_pMain->m_Zomb[iMyIndex]->vZombiePosition;
+			float a = D3DXVec3Length(&Temp);
+			g_pMain->m_Zomb[iMyIndex]->vDistance = a;
 
-	else if (g_pMain->m_Zomb[iMyIndex]->vDistance < 70.0f)
-	{
-		if (g_pMain->m_Zomb[iMyIndex]->vDistance < 30.0f)
-		{
-			//g_pMain->ChangeZombState(iMyIndex, G_DEFINE_ANI_ZOMB_ATT);
-			g_pMain->m_Zomb[iMyIndex]->AttackMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->vBoxPosition, g_pMain->m_Zomb[iMyIndex]->vZombiePosition);
-			ZombieAttack(iMyIndex, g_pMain->m_Zomb[iMyIndex]->vLook, g_pMain->m_Zomb[iMyIndex]->m_vZRight, g_pMain->m_Zomb[iMyIndex]->m_vZUp);
-		
-		}
-		else
-		{
-			g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_FOLLOW];
-		}
+			if (g_pMain->m_Zomb[iMyIndex]->vDistance > 70.0f)
+			{
+				g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
+			}
 
-	}
+			else if (g_pMain->m_Zomb[iMyIndex]->vDistance < 70.0f)
+			{
+				if (g_pMain->m_Zomb[iMyIndex]->vDistance < 30.0f)
+				{
+					g_pMain->ChangeZombState(iMyIndex, G_DEFINE_ANI_ZOMB_ATT);
+					g_pMain->m_Zomb[iMyIndex]->AttackMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->vBoxPosition, g_pMain->m_Zomb[iMyIndex]->vZombiePosition);
+					ZombieAttack(iMyIndex, g_pMain->m_Zomb[iMyIndex]->vLook, g_pMain->m_Zomb[iMyIndex]->m_vZRight, g_pMain->m_Zomb[iMyIndex]->m_vZUp);
+				
+				}
+				else
+				{
+					g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_FOLLOW];
+				}
+
+			}
 	
 
 	return true;

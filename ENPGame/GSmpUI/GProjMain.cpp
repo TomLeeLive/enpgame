@@ -12,12 +12,12 @@ GControlUI* GProjMain::AddRect(GUI_TYPE type)
 	GControlUI* pUIControl = NULL;
 	switch (type)
 	{
-	case G_BUTTON: {
+	case GUI_TYPE_BUTTON: {
 		pUIControl = new GButtonCtl(); 
 		pUIControl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
 		pUIControl->Scale(50, 50, 0);
 	}
-	case G_EDIT: {
+	case GUI_TYPE_EDIT: {
 		pUIControl = new GEditCtl();
 		pUIControl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
 		pUIControl->Scale(50, 50, 0);
@@ -89,11 +89,11 @@ bool GProjMain::Frame()
 {
 	if (I_Input.KeyCheck(DIK_P) == KEY_UP)
 	{
-		m_pSelectPlane = AddRect(G_BUTTON);
+		m_pSelectPlane = AddRect(GUI_TYPE_BUTTON);
 	}
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
-		m_pSelectPlane = AddRect(G_EDIT);
+		m_pSelectPlane = AddRect(GUI_TYPE_EDIT);
 	}
 
 	GControlUI* pSelect = SelectRect();

@@ -36,6 +36,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+
+
 	float m_fMinX;
 	float m_fMinY;
 	float m_fMinZ;
@@ -51,6 +53,8 @@ public:
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
+	afx_msg void OnLbnDblclkList2();
+	afx_msg void OnEnChangeGuageValue();
 };
 
 
