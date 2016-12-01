@@ -18,6 +18,9 @@ enum GUI_TYPE {
 class GControlUI
 {
 public:
+	HRESULT						SetBlendState();
+	ID3D11BlendState*			m_pAlphaBlend;
+public:
 	int				m_iWidthBefore;
 	int				m_iWidthAfter;
 	int				m_iHeightBefore;

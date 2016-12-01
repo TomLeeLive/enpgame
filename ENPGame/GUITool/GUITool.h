@@ -33,7 +33,7 @@ class CGUIToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
 	//추가함 for UI [start]
-	GUIManager     m_UIManager;
+	GUIMaker    m_UIManager;
 	//추가함 for UI [end]
 
 	G_CHAR_TOOL_EXT m_FileExt;

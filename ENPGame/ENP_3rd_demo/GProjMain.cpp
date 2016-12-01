@@ -51,6 +51,16 @@ bool GProjMain::Init()
 
 	for (int i = 0; i < G_SEQ_CNT; i++)
 		m_pGameSeq[i]->Init();
+
+
+	//UI Init
+	for (int i = 0; i < G_SEQ_CNT; i++) {
+		m_UIManager[i].Init();
+
+		T_STR strFile = L"UI_TEST4.gui";
+		m_UIManager[i].UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
+	}
+
 	
 	return true;
 }
@@ -62,6 +72,9 @@ bool GProjMain::Render()
 }
 bool GProjMain::Release()
 {
+	for (int i = 0; i < G_SEQ_CNT; i++)
+		m_UIManager[i].Release();
+
 	m_pSound.Release();
 
 	for (int i = 0; i < G_SEQ_CNT; i++)
@@ -94,6 +107,8 @@ HRESULT GProjMain::CreateResource()
 	HRESULT hr;
 	m_pCurrentSeq->CreateResource();
 
+	for (int i = 0; i < G_SEQ_CNT; i++)
+		m_UIManager[i].CreateResource(&m_SwapChainDesc);
 	
 	ClipMouse(true);
 	

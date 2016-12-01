@@ -201,20 +201,32 @@ bool GSeqSinglePlay::Frame()
 	FrameEffect();
 	FrameChar();
 
+	g_pMain->m_UIManager[G_SEQ_SINGLE].Frame(&g_pMain->m_SwapChainDesc);
+
 	FrameGun();
 	return true;
 }
 
 bool GSeqSinglePlay::Render()
 {
+
+
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
+
+
 
 	RenderMap();
 	RenderObj();
 	RenderChar();
 	RenderGame();
+	
+	//render UI
+	g_pMain->m_UIManager[G_SEQ_SINGLE].Render();
+
 	RenderEffect();
+
+
 
 	return true;
 }

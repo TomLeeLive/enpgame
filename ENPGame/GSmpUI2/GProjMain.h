@@ -4,7 +4,7 @@
 class GProjMain : public GCoreLibV2
 {
 public:
-	GUIManager m_UIManager;
+	GUIMaker m_UIManager;
 public:	
 	bool		Init();
 	bool		Frame();

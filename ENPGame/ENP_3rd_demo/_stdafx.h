@@ -32,6 +32,8 @@
 #include "GTimer.h"
 #include "GDirectWrite.h"
 
+
+
 //캐릭터
 #ifdef G_MACRO_CHAR_ADD
 
@@ -83,6 +85,9 @@
 
 #include "GSprite.h"
 #endif
+
+//UI
+#include "GUIManager.h"
 
 //게임 플로우에 따른 각시퀀스를 GSeq 클래스를 상속하여 구현한다.(공통구조) FSM 쓰려고 함.
 #include "GSeq.h"

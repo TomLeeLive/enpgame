@@ -1,5 +1,8 @@
-#include "stdafx.h"
-#include "_stdafx.h"
+//#include "stdafx.h"
+//#include "_stdafx.h"
+
+#include "GUIManager.h"
+
 
 //파일 입출력 때문에 추가함
 #include <iostream>
@@ -43,7 +46,7 @@ void GUIManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 	}
 	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 2]);
 
-	TCHAR strDir[MAX_PATH] = L"data\\";
+	TCHAR strDir[MAX_PATH] = L"data\\ui\\";
 	_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
 
 	_tcscpy((TCHAR*)pOutStr, strDir);
@@ -209,96 +212,12 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 }
 bool		GUIManager::Init() {
 
-	/*
-	GImageCtl* pImageCtl = new GImageCtl();
-	pImageCtl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
-	pImageCtl->Create(GetDevice(), nullptr, L"data/ui/hud.dds");
-	pImageCtl->Scale(400 - 1.0f, 300 - 1.0f, 1.0f - 1.0f);
-	pImageCtl->Move(0, 0, 100);
-	m_pUIList.push_back(pImageCtl);
+	m_pSelectPlane = NULL;
 
-	GButtonCtl* pBoxCtl = new GButtonCtl();
-	pBoxCtl->Set(m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height);
-	pBoxCtl->Create(GetDevice(), nullptr, L"data/ui/exit_lg.bmp");
-	pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
-	pBoxCtl->Move(0, 0, 0);
-	m_pUIList.push_back(pBoxCtl);
-	*/
 	return true;
 };
 bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 
-#if defined(_DEBUG)	|| defined(DEBUG)
-	if (I_Input.KeyCheck(DIK_P) == KEY_UP)
-	{
-	m_pSelectPlane = AddRect(GUI_TYPE_BUTTON, SwapChainDesc);
-	}
-	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
-	{
-	m_pSelectPlane = AddRect(GUI_TYPE_IMAGE, SwapChainDesc);
-	}
-
-
-	GControlUI* pSelect = SelectRect();
-
-	if (pSelect != NULL && m_pSelectPlane != pSelect)
-	{
-		m_pSelectPlane = pSelect;
-	}
-
-	if (m_pSelectPlane)
-	{
-		D3DXVECTOR3 vPos(0, 0, 0);
-		D3DXVECTOR3 vScale(0, 0, 0);
-		if (g_InputData.bQKey)
-		{
-			vScale.x += 50 * g_fSecPerFrame;
-
-			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
-				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.x = m_pSelectPlane->m_vScale.x;
-
-		}
-		if (g_InputData.bEKey)
-		{
-			vScale.x += -50 * g_fSecPerFrame;
-
-			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
-				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.x = m_pSelectPlane->m_vScale.x;
-		}
-		if (g_InputData.bZKey)
-		{
-			vScale.y += 50 * g_fSecPerFrame;
-
-			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
-				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.y = m_pSelectPlane->m_vScale.y;
-		}
-		if (g_InputData.bCKey)
-		{
-			vScale.y += -50 * g_fSecPerFrame;
-
-			if (m_pSelectPlane->m_type == GUI_TYPE_BUTTONHALF)
-				((GButtonHalfCtl*)m_pSelectPlane)->m_initScl.y = m_pSelectPlane->m_vScale.y;
-		}
-		if (g_InputData.bWKey)
-		{
-			vPos.y = 50 * g_fSecPerFrame;
-		}
-		if (g_InputData.bSKey)
-		{
-			vPos.y = -50 * g_fSecPerFrame;
-		}
-		if (g_InputData.bAKey)
-		{
-			vPos.x = -50 * g_fSecPerFrame;
-		}
-		if (g_InputData.bDKey)
-		{
-			vPos.x = 50 * g_fSecPerFrame;
-		}
-		m_pSelectPlane->Move(vPos.x, vPos.y, vPos.z);
-		m_pSelectPlane->Scale(vScale.x, vScale.y, vScale.z);
-	}
-#endif
 	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
 	{
 		GControlUI* pRect = m_pUIList[iPlane];
@@ -322,9 +241,10 @@ bool		GUIManager::Release() {
 		pRect->Release();
 		delete pRect;
 	}
+	m_pUIList.clear();
 	return true;
 };
-//bool		PlaneRender(D3DXMATRIX 
+
 //---------------------------------
 // 변경된 클라이언트 영역를 재설정을
 //---------------------------------
