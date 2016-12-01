@@ -15,12 +15,41 @@ bool		GUIMaker::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	}
 
 
-	GControlUI* pSelect = SelectRect();
-
-	if (pSelect != NULL && m_pSelectPlane != pSelect)
+	//GControlUI* pSelect = SelectRect();
+	
+	
+	GControlUI* pSelect = NULL;
+	int iSelected = -1;
+	iSelected = SelectRect(&pSelect);
+	
+	//if (iSelected != -1) {
+	//	int a = 10;
+	//}
+	
+	if (pSelect != NULL && m_pSelectPlane != pSelect && iSelected != 0)
 	{
 		m_pSelectPlane = pSelect;
+
+		//선택된 버튼은 어둡게 처리.
+		if (m_pSelectPlane->m_type == GUI_TYPE_BUTTON)
+			((GButtonCtl*)m_pSelectPlane)->m_Box.m_bShaded = true;
+
+		//선택되지 않은 버튼은 밝게 처리.
+		for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+		{
+			if (iPlane == iSelected)
+				continue;
+
+			if (m_pUIList[iPlane]->m_type == GUI_TYPE_BUTTON) {
+				//((GButtonCtl*)m_pUIList[iPlane])->m_Box.m_bShaded = false;
+
+				GButtonCtl* pRect = (GButtonCtl*)m_pUIList[iPlane];
+				pRect->m_Box.m_bShaded = false;
+			}
+
+		}
 	}
+
 
 	if (m_pSelectPlane)
 	{

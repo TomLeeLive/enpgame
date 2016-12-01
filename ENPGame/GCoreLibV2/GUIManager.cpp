@@ -348,6 +348,7 @@ GControlUI* GUIManager::AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDe
 	m_pUIList.push_back(pUIControl);
 	return pUIControl;
 };
+#endif
 
 GControlUI* GUIManager::SelectRect() {
 	POINT mouse;
@@ -381,7 +382,41 @@ GControlUI* GUIManager::SelectRect() {
 	}
 	return NULL;
 };
-#endif
+
+int GUIManager::SelectRect(GControlUI** pSelectedRect) {
+	POINT mouse;
+	GetCursorPos(&mouse);
+	ScreenToClient(g_hWnd, &mouse);
+	for (int iRect = m_pUIList.size()-1; iRect > -1; iRect--)
+	{
+		GControlUI* pRect = m_pUIList[iRect];
+		if (I_Input.m_MouseState[0] == KEY_HOLD)
+		{
+			RECT rt = pRect->m_rt;
+			// 뒤집어 진 경우
+			if (pRect->m_rt.left > pRect->m_rt.right)
+			{
+				rt.left = pRect->m_rt.right;
+				rt.right = pRect->m_rt.left;
+			}
+			if (pRect->m_rt.top > pRect->m_rt.bottom)
+			{
+				rt.top = pRect->m_rt.bottom;
+				rt.bottom = pRect->m_rt.top;
+			}
+			if (rt.left <= mouse.x && rt.right >= mouse.x)
+			{
+				if (rt.top <= mouse.y && rt.bottom >= mouse.y)
+				{
+					*pSelectedRect = pRect;
+					return iRect;
+				}
+			}
+		}
+	}
+	return NULL;
+};
+
 GUIManager::GUIManager()
 {
 	m_pSelectPlane = NULL;

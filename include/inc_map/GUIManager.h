@@ -34,6 +34,7 @@ public:
 	virtual GControlUI* AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual GControlUI* AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual GControlUI* SelectRect();
+	virtual int			SelectRect(GControlUI** pSelectedRect);
 #endif
 public:
 	GUIManager();
