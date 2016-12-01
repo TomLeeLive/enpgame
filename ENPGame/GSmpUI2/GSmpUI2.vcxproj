@@ -97,11 +97,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GProjMain.cpp" />
-    <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="GUIMaker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h" />
-    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUIMaker.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <ItemGroup>

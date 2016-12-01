@@ -521,8 +521,15 @@ bool CGUIToolApp::Load()
 
 void CGUIToolApp::OnGuiLoad()
 {
+	m_UIManager.Release();
+	m_UIManager.Init();
+
 	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
 
+
+
+	pFrame->m_wndButtonCtrl.m_wndForm->m_List.ResetContent();
+	pFrame->m_wndButtonCtrl.m_wndForm->m_List.UpdateData(FALSE);
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	//I_CharMgr.Release();
 	//CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
