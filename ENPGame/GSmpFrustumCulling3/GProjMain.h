@@ -15,11 +15,6 @@ public:
 	GMap			m_CustomMap;
 	GLineShape				m_LineDraw;
 
-
-	//frustum
-	//D3DXVECTOR3	m_vFrustum[8];	/// 프러스텀을 구성할 정점 8개
-	//G_PLANE		m_Plane[6];
-
 	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
 	G_BOX m_gBoxBase;
 
@@ -31,9 +26,12 @@ public:
 	GShape*						m_pBoxShape;
 
 	//MapBB
-	vector<D3DXMATRIX>			m_matCellWorld;
-	//vector<D3DXVECTOR3>			m_vCellPosition;
-	vector<G_BOX>				m_GMapBox;
+	GBBox						m_pBBox;
+	GBoxShape					m_pBox;
+	D3DXMATRIX					m_matWorld;
+	vector<GBBox>						m_pBBox2;
+	vector<GBoxShape>					m_pBox2;
+	TMapDesc MapDesc;
 public:	
 	bool		Init();
 	bool		Frame();
