@@ -57,7 +57,7 @@ bool GProjMain::Init()
 	for (int i = 0; i < G_SEQ_CNT; i++) {
 		m_UIManager[i].Init();
 
-		T_STR strFile = L"UI_TEST4.gui";
+		T_STR strFile = L"UI_TEST6.gui";
 		m_UIManager[i].UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 	}
 

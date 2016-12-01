@@ -5,8 +5,8 @@
 
 
 //파일 입출력 때문에 추가함
-#include <iostream>
-#include <fstream>
+//#include <iostream>
+//#include <fstream>
 
 
 BOOL GUIManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
@@ -58,6 +58,47 @@ void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc, flo
 
 	vector<CString> vecStr;
 
+	FILE *pFile = NULL;
+
+	const wchar_t * pStrFile = strFile->c_str();
+
+	//int len = 256;
+	char ctemp[MAX_PATH];
+
+	//TCHAR -> char 변환
+	WideCharToMultiByte(CP_ACP, 0, pStrFile, MAX_PATH, ctemp, MAX_PATH, NULL, NULL);
+
+	pFile = fopen(ctemp, "r");
+	if (pFile != NULL)
+	{
+		char strTemp[MAX_PATH];
+		char *pStr;
+
+		while (!feof(pFile))
+		{
+			pStr = fgets(strTemp, sizeof(strTemp), pFile);
+			
+			if (pStr == NULL)
+				break;
+
+			// char -> TCHAR 변환
+			TCHAR szUniCode[MAX_PATH] = { 0, };
+			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pStr, strlen(pStr), szUniCode, MAX_PATH);
+			
+			// TCHAR -> CString 변환
+			CString str;
+			str.Format(L"%s", szUniCode);
+			str.TrimRight();//개행문자 삭제
+			vecStr.push_back(str);
+		}
+		fclose(pFile);
+	}
+	else
+	{
+		//에러 처리
+	}
+
+	/*
 	ifstream ifile;
 
 	char line[MAX_PATH]; // 한 줄씩 읽어서 임시로 저장할 공간
@@ -75,7 +116,7 @@ void	GUIManager::UILoad(T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc, flo
 		}
 	}
 	ifile.close(); // 파일 닫기
-
+	*/
 	for (int i = 0; i < vecStr.size()/GUI_ITEM_INFO_LINES; i++) {
 		int iItem = i * GUI_ITEM_INFO_LINES;
 		//vecStr[iItem + 0];//GUI_TYPE		#GUI_TYPE_IMAGE
@@ -235,6 +276,7 @@ bool		GUIManager::Render() {
 	return true;
 };
 bool		GUIManager::Release() {
+	m_ImageList.clear();
 	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
 	{
 		GControlUI* pRect = m_pUIList[iPlane];

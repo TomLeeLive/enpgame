@@ -122,6 +122,7 @@ bool GCoreLibV2::PreFrame()
 }
 bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 {
+#if defined(_DEBUG) || defined(DEBUG)
 	if (I_Input.KeyCheck(DIK_1) == KEY_UP)
 	{
 		m_bWireFrameRender = !m_bWireFrameRender;
@@ -154,7 +155,7 @@ bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 			m_iSamplerMode = 0;
 		}
 	}
-
+#endif
 	if (I_Input.KeyCheck(DIK_V) == KEY_PUSH)
 	{
 		m_bDebugFpsPrint = !m_bDebugFpsPrint;

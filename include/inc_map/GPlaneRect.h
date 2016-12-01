@@ -94,6 +94,12 @@ public:
 		const TCHAR* pLoadTextureString = nullptr);
 
 	void	SetXSize(float fValue) {//0~100까지로 입력 받자.
+		if (fValue <= 0.0f)
+			m_vScale.x = 0.0f;
+
+		if (fValue >= 100.0f)
+			m_vScale.x = 100.0f;
+
 		m_vScale.x = m_initScl.x / 100.0f *fValue;
 	}
 
