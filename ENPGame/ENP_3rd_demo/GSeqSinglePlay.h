@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 class GSeqSinglePlay : public GSeq
 {
 private:

@@ -1,11 +1,8 @@
 //#include "stdafx.h"
 //#include "_stdafx.h"
-#include <atlstr.h>
 
-#include "GDxHelperEx.h"
-#include "GPlaneRect.h"
 #include "GUIManager.h"
-#include "GInput.h"
+
 
 //파일 입출력 때문에 추가함
 #include <iostream>

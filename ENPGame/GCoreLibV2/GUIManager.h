@@ -1,5 +1,9 @@
 #pragma once
+#include <atlstr.h>
 
+#include "GDxHelperEx.h"
+#include "GPlaneRect.h"
+#include "GInput.h"
 #define GUI_ITEM_INFO_LINES 5
 
 class GUIManager

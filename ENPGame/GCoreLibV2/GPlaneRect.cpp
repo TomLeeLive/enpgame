@@ -145,13 +145,13 @@ bool		GControlUI::End(ID3D11DeviceContext* pContext) {
 	return m_pShape->PostRender(pContext);
 }
 bool		GControlUI::Render(ID3D11DeviceContext* pContext) {	
-	ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
+	//ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
 	g_pImmediateContext->OMSetBlendState(m_pAlphaBlend, 0, -1);
 
 	Begin(pContext);
 	End(pContext);
 
-	ApplyRS(g_pImmediateContext, GDxState::g_pRSNoneCullSolid);
+	//ApplyRS(g_pImmediateContext, GDxState::g_pRSNoneCullSolid);
 	return true;
 }
 bool		GControlUI::Release() {
