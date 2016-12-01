@@ -124,18 +124,101 @@ bool		GControlUI::Release() {
 	m_pShape->Release();
 	return true;
 }
+void GControlUI::Rescale() {
+	m_vScale.x = m_vScale.x * m_iWidthAfter / m_iWidthBefore;
+	m_vScale.y = m_vScale.y * m_iHeightAfter / m_iHeightBefore;
+
+	m_vTrans.x = m_vTrans.x * m_iWidthAfter / m_iWidthBefore;
+	m_vTrans.y = m_vTrans.y * m_iHeightAfter / m_iHeightBefore;
+}
+void GControlUI::Retrans() {
+	// 0  |  1
+	//---------
+	// 2  |  3
+
+	if (m_vTrans.x < 0 && m_vTrans.y > 0) //0
+	{
+
+		int iX = m_iWidthBefore - (-m_vTrans.x);
+		m_vTrans.x = -(m_iWidthAfter - iX);
+		int iY = m_iHeightBefore - m_vTrans.y;
+		m_vTrans.y = m_iHeightAfter - iY;
+
+	}
+	else if (m_vTrans.x > 0 && m_vTrans.y > 0) //1 
+	{
+		int iX = m_iWidthBefore - m_vTrans.x;
+		m_vTrans.x = m_iWidthAfter - iX;
+		int iY = m_iHeightBefore - m_vTrans.y;
+		m_vTrans.y = m_iHeightAfter - iY;
+	}
+	else if (m_vTrans.x < 0 && m_vTrans.y < 0) //2
+	{
+		int iX = m_iWidthBefore - (-m_vTrans.x);
+		m_vTrans.x = -(m_iWidthAfter - iX);
+
+		int iY = m_iHeightBefore - (-m_vTrans.y);
+		m_vTrans.y = -(m_iHeightAfter - iY);
+	}
+	else if (m_vTrans.x > 0 && m_vTrans.y < 0)//3
+	{
+		int iX = m_iWidthBefore - m_vTrans.x;
+		m_vTrans.x = m_iWidthAfter - iX;
+		int iY = m_iHeightBefore - (-m_vTrans.y);
+		m_vTrans.y = -(m_iHeightAfter - iY);
+	}
+	else {
+
+	}
+}
 HRESULT GControlUI::CreateResource(int iRectWidth, int iRectHeight)
 {
 	HRESULT hr = S_OK;
 	iRectWidth = iRectWidth / 2;
 	iRectHeight = iRectHeight / 2;
+
 	//D3DXMatrixOrthoLH(&m_Projection[1], iRectWidth * 2, iRectHeight * 2, 0.0f, 1000.0f);
 	// 화면 중앙이 원점으로 계산되기 때문에 넓이 및 높이가 -1 ~ 1 범위로 직교투영된다. 
 	D3DXMatrixOrthoOffCenterLH(&m_matProj, -iRectWidth, iRectWidth, -iRectHeight, iRectHeight, 0.0f, 1000.0f);
+
+	m_iWidthAfter = iRectWidth;
+	m_iHeightAfter = iRectHeight;
+
+	if (m_iWidthBefore == NULL
+		&& m_iHeightBefore == NULL) {
+		m_iWidthAfter = m_iWidthBefore = iRectWidth;
+		m_iHeightAfter = m_iHeightBefore = iRectHeight;
+
+		return hr;
+	}
+	else if(m_bAutoRescale){
+		Rescale();
+	}
+	else if (m_bAutoRetrans) {
+		Retrans();
+	}
+	else {
+	}
+
+
+	m_iWidthBefore = m_iWidthAfter;
+	m_iHeightBefore = m_iHeightAfter;
+
 	return hr;
 }
 GControlUI::GControlUI()
 {
+	m_iWidthBefore = NULL;
+	m_iWidthAfter = NULL;
+	m_iHeightBefore = NULL;
+	m_iHeightAfter = NULL;
+	m_bAutoRescale = true;
+	m_bAutoRetrans = false;
+	//m_bRelTrans = false;	// relativity(상대) 좌표 저장
+	//m_bRelScale = false;
+	//m_vRelTrans = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//m_vRelScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
 	m_pShape = nullptr;
 	Init();	
 }

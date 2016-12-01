@@ -3,6 +3,8 @@
 #include "GShape.h"
 using namespace DX;
 
+//#define G_MACRO_INVALID_INT_VALUE -1
+
 enum GUI_TYPE {
 	GUI_TYPE_BUTTON = 0,
 	GUI_TYPE_BUTTONHALF,
@@ -16,22 +18,32 @@ enum GUI_TYPE {
 class GControlUI
 {
 public:
-	GUI_TYPE   m_type;
+	int				m_iWidthBefore;
+	int				m_iWidthAfter;
+	int				m_iHeightBefore;
+	int				m_iHeightAfter;
+	bool			m_bAutoRescale;
+	bool			m_bAutoRetrans;
+	//bool			m_bRelTrans;	// relativity(상대) 좌표 저장
+	//bool			m_bRelScale;	// relativity(상대) 스케일 저장
+	GUI_TYPE		m_type;
+	void			Retrans();
+	void			Rescale();
 public:	
-	GShape*     m_pShape;
-	T_STR		m_Text;
-	PCT_VERTEX  m_Vertices[4];
-	RECT		m_rtSize[8];
-	RECT		m_rt;
-	D3DXMATRIX	m_matViewPort;
-	D3DXMATRIX  m_matWorld;
-	D3DXMATRIX  m_matView;
-	D3DXMATRIX  m_matProj;
-	D3DXVECTOR3  m_vScale;
-	D3DXVECTOR3  m_vRotate;
-	D3DXVECTOR3  m_vTrans;
-	UINT		 m_iWidthVP;
-	UINT		 m_iHeightVP;
+	GShape*			m_pShape;
+	T_STR			m_Text;
+	PCT_VERTEX		m_Vertices[4];
+	RECT			m_rtSize[8];
+	RECT			m_rt;
+	D3DXMATRIX		m_matViewPort;
+	D3DXMATRIX		m_matWorld;
+	D3DXMATRIX		m_matView;
+	D3DXMATRIX		m_matProj;
+	D3DXVECTOR3		m_vScale;
+	D3DXVECTOR3		m_vRotate;
+	D3DXVECTOR3		m_vTrans;
+	UINT			m_iWidthVP;
+	UINT			m_iHeightVP;
 public: //event
 	virtual void		SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
 	virtual void		SetAmbientColor(float fR, float fG, float fB, float fA);

@@ -226,16 +226,14 @@ BOOL CGUIToolApp::InitInstance()
 
 
 	//--------------------------------------------------------------------------------------
-	// 카메라  행렬 
+	// UIManaget Init
 	//--------------------------------------------------------------------------------------	
 	m_UIManager.Init();
 
 
-
-
-
-
-
+	//버튼 폼의 라디오 버튼 체크 안되게 한다.
+	pFrame->m_wndButtonCtrl.m_wndForm->m_iRadio = 2;
+	pFrame->m_wndButtonCtrl.m_wndForm->UpdateData(FALSE);
 
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
@@ -538,7 +536,7 @@ void CGUIToolApp::OnGuiLoad()
 	}
 	int iLoad = m_LoadFiles.size() - 1;
 
-	m_UIManager.UILoad(&m_LoadFiles[iLoad], &SwapChainDesc);
+	m_UIManager.UILoad(&m_LoadFiles[iLoad], &SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 
 
 	for (int i = 0; i < m_UIManager.m_pUIList.size(); i++) {
@@ -604,6 +602,25 @@ void CGUIToolApp::OnGuiSave()
 
 				MatrixDecompose(&scl, &trans, &m_UIManager.m_pUIList[iUiItem]->m_matWorld);
 
+
+				//상대 좌표로 계산[Start]
+				float iWidth = m_DefaultRT.m_vp.Width / 2;	//클라이언트 창 width
+				float iHeight = m_DefaultRT.m_vp.Height / 2;	//height
+
+				scl.x = scl.x / iWidth * 100;
+				scl.y = scl.y / iHeight * 100;
+
+				if (trans.x < 0)
+					trans.x = -(abs(trans.x) / iWidth);
+				else
+					trans.x = trans.x / iWidth;
+
+				if (trans.y < 0)
+					trans.y = -(abs(trans.y) / iHeight);
+				else
+					trans.y = trans.y / iHeight;
+
+				//상대 좌표로 계산[End]
 				switch (type)
 				{
 					case GUI_TYPE_BUTTON:
@@ -631,7 +648,18 @@ void CGUIToolApp::OnGuiSave()
 				str.Append(_T("\n"));
 				fprintf(fp, (CStringA)str);
 
-				//str = "#SCL";
+				if (m_UIManager.m_pUIList[iUiItem]->m_bAutoRescale)
+				{
+					strNum.Format(_T("%d"), 1);
+					str = strNum;
+				}
+				else {
+					strNum.Format(_T("%d"), 0);
+					str = strNum;
+				}
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
 				strNum.Format(_T("%f"), scl.x);
 				str = strNum;
 				str.Append(_T("/"));
