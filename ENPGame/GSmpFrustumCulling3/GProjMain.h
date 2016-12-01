@@ -26,11 +26,13 @@ public:
 	GShape*						m_pBoxShape;
 
 	//MapBB
-	GBBox						m_pBBox;
-	GBoxShape					m_pBox;
+	//GBBox						m_pBBox;
+	//GBoxShape					m_pBox;
+
 	D3DXMATRIX					m_matWorld;
-	vector<GBBox>						m_pBBox2;
-	vector<GBoxShape>					m_pBox2;
+	vector<shared_ptr<GBBox>>						m_pBBox2;
+	//vector<GBBox*>						m_pBBox2;
+	vector<shared_ptr<GBoxShape>>					m_pBox2;
 	TMapDesc MapDesc;
 public:	
 	bool		Init();
