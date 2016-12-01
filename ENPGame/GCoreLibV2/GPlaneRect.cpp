@@ -145,13 +145,28 @@ bool		GControlUI::End(ID3D11DeviceContext* pContext) {
 	return m_pShape->PostRender(pContext);
 }
 bool		GControlUI::Render(ID3D11DeviceContext* pContext) {	
-	//ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
+	// Store the old render targets
+	ID3D11RenderTargetView* pOldRTV;
+	ID3D11DepthStencilView* pOldDSV;
+	g_pImmediateContext->OMGetRenderTargets(1, &pOldRTV, &pOldDSV);
+
+	ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
 	g_pImmediateContext->OMSetBlendState(m_pAlphaBlend, 0, -1);
+
+
 
 	Begin(pContext);
 	End(pContext);
 
-	//ApplyRS(g_pImmediateContext, GDxState::g_pRSNoneCullSolid);
+
+	//-----------------------------------------------------------------------
+	// 기본 render targets 정보로 복원
+	//-----------------------------------------------------------------------
+	g_pImmediateContext->OMSetRenderTargets(1, &pOldRTV, pOldDSV);
+	// OMGetRenderTargets함수를 사용하였다면 반드시 아래와 같이 소멸시켜야 한다.
+	SAFE_RELEASE(pOldRTV);
+	SAFE_RELEASE(pOldDSV);
+
 	return true;
 }
 bool		GControlUI::Release() {
