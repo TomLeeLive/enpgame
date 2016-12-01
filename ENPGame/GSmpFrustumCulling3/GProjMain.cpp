@@ -18,14 +18,10 @@ bool GProjMain::Init()
 		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height),
 		0.1f, 10000.0f);
 
-	//BB
-	// 기저 박스(크기가 1이 기본 박스) 구성
-	m_gBoxBase.vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_gBoxBase.vMax = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	m_gBoxBase.vMin = D3DXVECTOR3(-1.0f, -1.0f, -1.0f);
 
+	
 	//CustomizeMap
-	TMapDesc MapDesc = { 50, 50, 1.0f, 0.1f,L"data/baseColor.jpg", L"data/shader/CustomizeMap.hlsl" };
+	MapDesc = { 5, 5, 1.0f, 0.1f,L"data/baseColor.jpg", L"data/shader/CustomizeMap.hlsl" };
 	m_CustomMap.Init(GetDevice(), m_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
@@ -36,38 +32,40 @@ bool GProjMain::Init()
 		return false;
 	}
 
-	D3DXVECTOR3 vPosition;
-	G_BOX GBox;
-	//Map Box
-	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)	
+	//m_pBBox2.resize(MapDesc.iNumCols*MapDesc.iNumRows);
+	for (int i = 0; i < MapDesc.iNumCols*MapDesc.iNumRows; i++) {
+		auto box = make_shared<GBBox>();
+		m_pBBox2.push_back(box);
+
+		auto box2 = make_shared<GBoxShape>();
+		m_pBox2.push_back(box2);
+		//GBBox* box = new GBBox;
+		//m_pBBox2.push_back(box);
+	}
+
+	//BB
+	D3DXVECTOR3 vMin, vMax, vHalf;
+	GBBox bbox;
+	int iHalfCols, iHalfRows;
+	iHalfCols = MapDesc.iNumCols / 2;
+	iHalfRows = MapDesc.iNumRows / 2;
+	D3DXMatrixIdentity(&m_matWorld);
+
+	vMin = D3DXVECTOR3(-(MapDesc.iNumCols*MapDesc.fSellDistance / 2.0f), 0.0f, -(MapDesc.iNumRows*MapDesc.fSellDistance / 2.0f));
+	vMax = D3DXVECTOR3((MapDesc.iNumCols*MapDesc.fSellDistance / 2.0f), 0.0f, (MapDesc.iNumRows*MapDesc.fSellDistance / 2.0f));
+	//m_pBBox.Init(vMin,vMax);
+	
+	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)
 	{
 		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
 		{
-			vPosition.x = MapDesc.fSellDistance*iRow + MapDesc.fSellDistance / 2.0f; //x
-			vPosition.y = MapDesc.fScaleHeight;										 //y
-			vPosition.z = MapDesc.fSellDistance*iCol + MapDesc.fSellDistance / 2.0f; //z
-			GBox.vCenter = vPosition;
+			//
+			vMin = D3DXVECTOR3((iRow - iHalfRows)* MapDesc.fSellDistance, 0.0f, -(iCol - iHalfCols + 1)* MapDesc.fSellDistance);
+			vMax = D3DXVECTOR3((iRow - iHalfRows + 1)* MapDesc.fSellDistance, 0.0f, -(iCol - iHalfCols)* MapDesc.fSellDistance);
 
-			//m_vCellPosition.push_back(vPosition);			
-			m_GMapBox.push_back(GBox);		
-
-			D3DXVECTOR3 vMax, vMin, vHalf;
-			D3DXVec3TransformCoord(&m_GMapBox[MapDesc.iNumRows*iRow+iCol].vAxis[0], &D3DXVECTOR3(1.0f, 0.0f, 0.0f), &m_CustomMap.m_matWorld);
-			D3DXVec3TransformCoord(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1], &D3DXVECTOR3(0.0f, 1.0f, 0.0f), &m_CustomMap.m_matWorld);
-			D3DXVec3TransformCoord(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2], &D3DXVECTOR3(0.0f, 0.0f, 1.0f), &m_CustomMap.m_matWorld);
-
-			// 박스의 각 축의 길이 구하기			
-			m_GMapBox[MapDesc.iNumRows*iRow + iCol].fExtent[0] = D3DXVec3Length(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[0]);	 //박스의 x축의 길이 구하기
-			m_GMapBox[MapDesc.iNumRows*iRow + iCol].fExtent[1] = D3DXVec3Length(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1]);	 //박스의 y축의 길이 구하기
-			m_GMapBox[MapDesc.iNumRows*iRow + iCol].fExtent[2] = D3DXVec3Length(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2]);	 //박스의 z축의 길이 구하기
-			
-			D3DXVec3Normalize(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[0], &m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[0]); //박스의 x축의 길이를 1로 정규화
-			D3DXVec3Normalize(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1], &m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[1]); //박스의 y축의 길이를 1로 정규화
-			D3DXVec3Normalize(&m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2], &m_GMapBox[MapDesc.iNumRows*iRow + iCol].vAxis[2]); //박스의 z축의 길이를 1로 정규화
-		
+			m_pBBox2[iCol*(MapDesc.iNumCols-1) + iRow]->Init(vMin, vMax);
 		}
 	}
-	
 
 	//frustum
 	m_pMainCamera->CreateRenderBox(GetDevice(), m_pImmediateContext);
@@ -98,7 +96,7 @@ bool GProjMain::Init()
 
 		//obb 기저벡터의 축방향(axis) 구하기
 		m_GBox[iBox].vCenter = m_vBoxPosition[iBox];
-		D3DXVECTOR3 vMax, vMin, vHalf;
+		//D3DXVECTOR3 vMax, vMin, vHalf;
 		D3DXVec3TransformCoord(&m_GBox[iBox].vAxis[0], &D3DXVECTOR3(1.0f, 0.0f, 0.0f), &matWorld);
 		D3DXVec3TransformCoord(&m_GBox[iBox].vAxis[1], &D3DXVECTOR3(0.0f, 1.0f, 0.0f), &matWorld);
 		D3DXVec3TransformCoord(&m_GBox[iBox].vAxis[2], &D3DXVECTOR3(0.0f, 0.0f, 1.0f), &matWorld);
@@ -135,7 +133,14 @@ bool GProjMain::Frame()
 	g_pImmediateContext->UpdateSubresource(
 		m_CustomMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_CustomMap.m_VertexList.at(0), 0, 0);
 
-
+	//m_pBBox.Frame(&m_matWorld);
+	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)
+	{
+		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
+		{
+			m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Frame(&m_matWorld);
+		}
+	}
 
 	return true;
 }
@@ -144,6 +149,18 @@ bool GProjMain::Render()
 	m_CustomMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(),
 		m_pMainCamera->GetProjMatrix());
 	m_CustomMap.Render(m_pImmediateContext);
+
+	//m_pBox.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	//m_pBBox.Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+
+	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)
+	{
+		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
+		{
+			m_pBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+			m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+		}
+	}
 
 	//박스 랜더링
 	D3DXMATRIX matScale, matRotation;
@@ -155,7 +172,7 @@ bool GProjMain::Render()
 		//obb와 프로스텀 박스의 제외처리 *******
 		if (m_pMainCamera->CheckOBBInPlane(&m_GBox[iBox]))
 		{
-			m_pBoxShape->Render(m_pImmediateContext);
+			//m_pBoxShape->Render(m_pImmediateContext);
 		}
 
 	}
@@ -192,7 +209,7 @@ HRESULT GProjMain::DeleteResource()
 GProjMain::GProjMain(void)
 {
 	m_pMainCamera = NULL;
-	m_GMapBox 
+	//SAFE_ZERO(m_GMapBox);	
 	SAFE_ZERO(m_pBoxShape);
 	//SAFE_ZERO(m_pLine);
 }
