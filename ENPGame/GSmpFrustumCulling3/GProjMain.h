@@ -33,6 +33,8 @@ public:
 	vector<shared_ptr<GBBox>>						m_pBBox2;
 	//vector<GBBox*>						m_pBBox2;
 	vector<shared_ptr<GBoxShape>>					m_pBox2;
+
+	
 	TMapDesc MapDesc;
 public:	
 	bool		Init();
