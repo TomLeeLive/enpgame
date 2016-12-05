@@ -267,11 +267,48 @@ bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	return true;
 
 };
+bool		GUIManager::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc,GTimer* timer) {
+
+	//버튼 선택 처리 [START]
+	GControlUI* pSelect = NULL;
+	int iSelected = -1;
+	iSelected = SelectRect(&pSelect);
+
+	if (pSelect != NULL && m_pSelectPlane != pSelect && iSelected != 0)
+	{
+		m_pSelectPlane = pSelect;
+
+		//선택된 버튼은 어둡게 처리.
+		if (m_pSelectPlane->m_type == GUI_TYPE_BUTTON)
+			((GButtonCtl*)m_pSelectPlane)->Clicked(timer);
+	}
+	//버튼 선택 처리 [END]
+
+	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+	{
+		GControlUI* pRect = m_pUIList[iPlane];
+		pRect->Update();
+	}
+	return true;
+
+};
 bool		GUIManager::Render() {
 	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
 	{
 		GControlUI* pRect = m_pUIList[iPlane];
 		pRect->Render(g_pImmediateContext);
+	}
+	return true;
+};
+bool		GUIManager::Render(int* iClickedEndNum) {
+	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
+	{
+		GControlUI* pRect = m_pUIList[iPlane];
+
+		if (false == pRect->Render(g_pImmediateContext)) {
+			*iClickedEndNum = iPlane;
+			m_pSelectPlane = NULL;
+		}
 	}
 	return true;
 };

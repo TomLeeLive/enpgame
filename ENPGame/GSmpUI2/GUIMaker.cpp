@@ -32,8 +32,9 @@ bool		GUIMaker::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 
 		//선택된 버튼은 어둡게 처리.
 		if (m_pSelectPlane->m_type == GUI_TYPE_BUTTON)
-			((GButtonCtl*)m_pSelectPlane)->m_Box.m_bShaded = true;
+			((GButtonCtl*)m_pSelectPlane)->Clicked(&g_pMain->m_Timer);//((GButtonCtl*)m_pSelectPlane)->m_Box.SetShaded();
 
+		/*
 		//선택되지 않은 버튼은 밝게 처리.
 		for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
 		{
@@ -44,10 +45,11 @@ bool		GUIMaker::Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 				//((GButtonCtl*)m_pUIList[iPlane])->m_Box.m_bShaded = false;
 
 				GButtonCtl* pRect = (GButtonCtl*)m_pUIList[iPlane];
-				pRect->m_Box.m_bShaded = false;
+				pRect->m_Box.SetShaded(false);
 			}
 
 		}
+		*/
 	}
 
 

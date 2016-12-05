@@ -10,6 +10,18 @@ public:
 	G_SPHERE                    m_Sphere;
 	G_PLANE                     m_Plane;
 public:
+	virtual void	SetShaded(bool bShaded = true) {
+		if (bShaded) {
+			SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
+		}
+		else {
+			SetColor();
+		}
+	}
+	virtual void	SetColor(D3DXVECTOR4 vColor = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f)) {
+		m_cbData.Color = vColor;
+		m_dxobj.g_pConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbData, 1, sizeof(VS_CONSTANT_BUFFER)));
+	}
 	void	CreateOBBBox(	float fExtX = 1.0f, float fExtY = 1.0f, float fExtZ = 1.0f,
 							D3DXVECTOR3 vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 							D3DXVECTOR3 vDirX = D3DXVECTOR3(1.0f, 0.0f, 0.0f),
@@ -63,16 +75,14 @@ public:
 	virtual ~GBoxShape(void);
 };
 
-class GButtonShape : public GBoxShape
-{
-public:
-	bool				m_bShaded;
-	HRESULT				CreateConstantBuffer();
-	void				UpdateConstantBuffer(ID3D11DeviceContext* pContext, GModel* pParent = NULL);
-public:
-	GButtonShape(void);
-	virtual ~GButtonShape(void);
-};
+//class GButtonShape : public GBoxShape
+//{
+//public:
+//	bool				m_bShaded;
+//public:
+//	GButtonShape(void);
+//	virtual ~GButtonShape(void);
+//};
 
 class GBoxHalfShape : public GBoxShape
 {
