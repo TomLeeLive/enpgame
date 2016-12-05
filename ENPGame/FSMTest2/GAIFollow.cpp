@@ -9,7 +9,7 @@ void GAIFollow::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombieP
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	m_vBDestLook = vZombiePosition - vBoxPosition;//- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
+	m_vBDestLook = vBoxPosition - vZombiePosition;//- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
 	D3DXVec3Normalize(&m_vBDestLook, &m_vBDestLook);
 	m_vBRight = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_vBUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
@@ -17,7 +17,7 @@ void GAIFollow::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombieP
 	D3DXVec3Cross(&m_vBUp, &m_vBDestLook, &m_vBRight);
 
 
-	g_pMain->m_Zomb[i]->m_vLook = m_vBDestLook;
+	m_vLook = m_vBDestLook;
 	m_vZRight = m_vBRight;
 	m_vZUp = m_vBUp;
 
@@ -41,15 +41,14 @@ bool GAIFollow::ZombieFollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVEC
 	D3DXMatrixIdentity(&Trans);
 
 	Rotation = g_pMain->m_Zomb[i]->m_matRot;
-	Trans = g_pMain->m_Zomb[i]->m_matTrans;
+	Trans = g_pMain->m_Zomb[i]->m_matZombWld;
 
 	Rotation._11 = Right.x;			Rotation._12 = Right.y;			Rotation._13 = Right.z; 
 	Rotation._21 = Up.x;			Rotation._22 = Up.y;			Rotation._23 = Up.z;
 	Rotation._31 = look.x;			Rotation._32 = look.y;			Rotation._33 = look.z;
 
-	Trans._41 -= look.x * g_fSecPerFrame * SPEED;
-	Trans._43 -= look.z * g_fSecPerFrame * SPEED;
-
+	Trans._41 += look.x * g_fSecPerFrame * SPEED;
+	Trans._43 += look.z * g_fSecPerFrame * SPEED;
 
 	g_pMain->m_Zomb[i]->m_vZombPos.x = g_pMain->m_Zomb[i]->m_matZombWld._41;
 	g_pMain->m_Zomb[i]->m_vZombPos.z = g_pMain->m_Zomb[i]->m_matZombWld._43;
@@ -67,12 +66,12 @@ bool GAIFollow::Frame(int iMyIndex)
 	m_fDistance = a;
 
 
-	if (m_fDistance > 50.0f)
+	if (m_fDistance > 70.0f)
 	{
 		g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
 	}
 
-	else if (m_fDistance < 50.0f)
+	else if (m_fDistance < 70.0f)
 	{
 		if (m_fDistance < 30.0f)
 		{
@@ -80,10 +79,8 @@ bool GAIFollow::Frame(int iMyIndex)
 		}
 		else
 		{
-			FollowMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vBoxPos,
-				g_pMain->m_Zomb[iMyIndex]->m_vZombPos);
-
-			ZombieFollow(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vLook, m_vZRight, m_vZUp);
+			FollowMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vBoxPos,g_pMain->m_Zomb[iMyIndex]->m_vZombPos);
+			ZombieFollow(iMyIndex,m_vLook, m_vZRight, m_vZUp);
 		}
 			
 	}

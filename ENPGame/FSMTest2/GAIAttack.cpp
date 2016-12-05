@@ -15,7 +15,7 @@ void GAIAttack::AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombieP
 	D3DXVec3Cross(&m_vARight, &m_vAUp, &m_vADestLook);
 	D3DXVec3Cross(&m_vAUp, &m_vADestLook, &m_vARight);
 
-	g_pMain->m_Zomb[i]->m_vLook = m_vADestLook;
+	m_vLook = m_vADestLook;
 	m_vZRight = m_vARight;
 	m_vZUp = m_vAUp;
 
@@ -73,7 +73,7 @@ bool GAIAttack::Frame(int iMyIndex)
 				{
 					g_pMain->ChangeZombState(iMyIndex, G_DEFINE_ANI_ZOMB_ATT);
 					AttackMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vBoxPos, g_pMain->m_Zomb[iMyIndex]->m_vZombPos);
-					ZombieAttack(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vLook,m_vZRight, m_vZUp);
+					ZombieAttack(iMyIndex,m_vLook,m_vZRight, m_vZUp);
 				
 				}
 				else

@@ -38,8 +38,10 @@ bool GAIIdle::Frame(int iMyIndex)
 
 	//현재시간에서 - 처음셋팅된 시간 > 쿨타임보다 크면...
 	if (g_fDurationTime - fTime > fCoolTime && !m_bDebug) {
-		g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
+		//if(g_pMain->m_Zomb[iMyIndex]->
 		g_pMain->ChangeZombState(iMyIndex, G_AI_MOVE);
+		g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
+
 
 		m_bDebug = true;
 	}

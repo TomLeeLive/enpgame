@@ -32,9 +32,12 @@ bool	GNewZombie::Frame(int iMyIndex)
 	m_vBoxPos.y = g_pMain->m_matBoxWorld._42;
 	m_vBoxPos.z = g_pMain->m_matBoxWorld._43;
 
-	if (g_pMain->m_Zomb[iMyIndex]->m_State != G_AI_IDLE)
-	{
+
+	if (g_pMain->m_Zomb[iMyIndex]->m_State != G_AI_IDLE && m_matTrans._41 != 0.0f)
+{
 		m_matZombWld = m_matRot * m_matTrans;
+		//m_vZombPos.x = m_matWorld._41;
+		//m_vZombPos.z = m_matWorld._43;
 	}
 	return true;
 };

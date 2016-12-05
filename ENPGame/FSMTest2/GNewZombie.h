@@ -18,7 +18,7 @@ public:
 	//D3DXMATRIX  m_RandomRotation;
 
 
-private:
+public:
 	G_AI m_State;
 public:
 	G_AI getState() { return m_State; }

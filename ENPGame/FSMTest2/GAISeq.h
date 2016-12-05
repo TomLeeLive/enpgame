@@ -22,12 +22,19 @@ class GAISeq
 {
 public:
 	float m_fDistance;
+	float m_fRandTime;
 	D3DXVECTOR3 m_vRDestLook;
 	D3DXVECTOR3 m_vZRight;
 	D3DXVECTOR3 m_vZUp;
+	D3DXVECTOR3 m_vLook;
 
 	bool		m_bDebug;
 	bool		m_bTime;
+
+	bool		m_bRTime;
+	bool		m_bRDebug;
+
+	float fTime;
 	GCharacter*	 pChar0;
 
 
@@ -43,15 +50,9 @@ public:
 		m_vRDestLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 		m_vZRight = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 		m_vZUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		//D3DXMatrixIdentity(&m_matWorld);
-		//D3DXMatrixIdentity(&Trans);
-		//D3DXMatrixIdentity(&Rotation);
+
 	};
-	//shared_ptr<GCamera > m_pMainCamera;
-	//D3DXMATRIX  m_matWorld;
-	//GShape*		m_Box1;
-	//GShape*		m_Box2;
-	//GShape*		m_Box3;
+
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------

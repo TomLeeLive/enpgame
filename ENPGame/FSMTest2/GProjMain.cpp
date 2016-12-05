@@ -178,7 +178,10 @@ bool GProjMain::Render()
 {
 	m_Box->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box->Render(m_pImmediateContext);
-	
+	if (m_Zomb[0]->m_State == G_AI_MOVE)
+	{
+		int i;
+	}
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
 		m_Zomb[i]->SetMatrix(&m_Zomb[i]->m_matZombWld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
