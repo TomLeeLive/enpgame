@@ -70,8 +70,8 @@ void		GProjMain::ChangeZombState(int iNum, TCHAR* str) {
 
 bool GProjMain::Load()
 {
-
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
+	//srand(time(NULL));
 
 
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
@@ -88,9 +88,9 @@ bool GProjMain::Load()
 		pObjA->m_matZombWld._41 = (rand() * 3) % 303;
 		pObjA->m_matZombWld._43 = (rand() * 3) % 303;
 
-		pObjA->m_vZombPos.x = pObjA->m_matZombWld._41;
-		pObjA->m_vZombPos.y = 0.0f;
-		pObjA->m_vZombPos.z = pObjA->m_matZombWld._43;
+		//pObjA->m_vZombPos.x = pObjA->m_matZombWld._41;
+		//pObjA->m_vZombPos.y = 0.0f;
+		//pObjA->m_vZombPos.z = pObjA->m_matZombWld._43;
 
 		pObjA->Set(pChar0,
 			pChar0->m_pBoneObject,
@@ -104,6 +104,8 @@ bool GProjMain::Load()
 
 bool GProjMain::Init()
 {
+	//srand(time(NULL));
+
 	I_CharMgr.Init();
 	 Load();
 

@@ -15,38 +15,45 @@ bool GAIMove::Init(int iMyIndex)
 
 void GAIMove::RandomMove(int i, D3DXVECTOR3 vZombiePosition)
 {
+	srand(time(NULL));
+
+	D3DXVECTOR3 RandomPoint;
+	D3DXVECTOR3 RandomDestination;
+
+	RandomPoint.x = 0.0f;
+	RandomDestination.x = 0.0f;
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//									랜덤 목적지 만들기
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	srand(time(NULL));
+
 		if ((rand() * 3) % 2 == 0)
 		{
-			m_RandomPoint.x = -((rand() * 3) % 50);
+			RandomPoint.x = -((rand() * 3) % 50);
 		}
 		else
 		{
-			m_RandomPoint.x = (rand() * 3) % 50;
+			RandomPoint.x = (rand() * 3) % 50;
 
 		}
 		if ((rand() * 3) % 2 == 0)
 		{
-			m_RandomPoint.z = -((rand() * 3) % 50);
+			RandomPoint.z = -((rand() * 3) % 50);
 		}
 		else
 		{
-			m_RandomPoint.z = (rand() * 3) % 50;
+			RandomPoint.z = (rand() * 3) % 50;
 		}
 		// 랜덤 목적지
-		m_RandomDestination.x = m_RandomPoint.x;
-		m_RandomDestination.y = 0.0f;
-		m_RandomDestination.z = m_RandomPoint.z;
+		RandomDestination.x = RandomPoint.x;
+		RandomDestination.y = 0.0f;
+		RandomDestination.z = RandomPoint.z;
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// 랜덤 목적지 방향으로 회전하기 위한 벡터 구현
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		m_vRDestLook = m_RandomDestination - vZombiePosition;  // 랜덤 목적지 방향 벡터
+		/*
+		m_vRDestLook = RandomDestination - vZombiePosition;  // 랜덤 목적지 방향 벡터
 		D3DXVec3Normalize(&m_vRDestLook, &m_vRDestLook);
 		m_vZRight = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 		m_vZUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
@@ -56,11 +63,36 @@ void GAIMove::RandomMove(int i, D3DXVECTOR3 vZombiePosition)
 		m_vLook = m_vRDestLook;
 		m_vZRight = m_vZRight;
 		m_vZUp = m_vZUp;
-
+		*/
 		
 }
 
+D3DXVECTOR3 GAIMove::RandomMove( )
+{
 
+
+	D3DXVECTOR3 RandomPoint;
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//									랜덤 목적지 만들기
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	RandomPoint.x = rand() % 200 - 100;
+	RandomPoint.y = 0.0f;
+	RandomPoint.z = rand() % 200 - 100;
+
+
+	//CStopwatch stopwatch;//시작
+
+	TCHAR buf[256];
+	_stprintf_s(buf, _countof(buf), _T("Rand X:%5f, Rand Z:%5f\n"), RandomPoint.x, RandomPoint.z);
+	OutputDebugString(buf);
+
+	//stopwatch.Output(L"Rand End \n");
+
+	return RandomPoint;
+}
+
+/*
 bool GAIMove::ZombieMove(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up)
 {
 	D3DXMATRIX Rotation;
@@ -93,37 +125,75 @@ bool GAIMove::ZombieMove(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3
 
 	return true;
 }
+*/
 bool GAIMove::Frame(int iMyIndex)
 {
-
-		//G_ZOMB_ST beforeState = g_pMain->m_Zomb[iMyIndex].get()->m_State;
-		//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
-
-	
-		D3DXVECTOR3 Temp = g_pMain->m_Zomb[iMyIndex]->m_vBoxPos - g_pMain->m_Zomb[iMyIndex]->m_vZombPos;
-		float Range = D3DXVec3Length(&Temp);
-		m_fDistance = Range;
-		
-		fTime += g_fSecPerFrame;
-		//bool bTime = false;
+	//처음 셋팅된 시간을 저장
+	//float fTime = 0.0f;
+	//3초 후를 체크하기 위한 변수
+	float fCoolTime = 3.0f;
 
 
-		
-		if (m_fDistance > 70.0f)
-		{
-			if (fTime> 5.0f)
-			{
-				RandomMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vZombPos);
-				fTime = 0.0f;
-			}
-			ZombieMove(iMyIndex, m_vLook, m_vZRight, m_vZUp);
+	//G_ZOMB_ST beforeState = g_pMain->m_Zomb[iMyIndex].get()->m_State;
+	//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
 
-		}
-		else if(m_fDistance < 70.0f)
-		{
-			g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_FOLLOW];
-		}
-	
+
+
+	/*
+	D3DXVECTOR3 Temp = g_pMain->m_Zomb[iMyIndex]->m_vBoxPos - g_pMain->m_Zomb[iMyIndex]->m_vZombPos;
+	float Range = D3DXVec3Length(&Temp);
+	m_fDistance = Range;
+	*/
+
+
+
+
+#pragma region test
+	//fTime += g_fSecPerFrame;
+	//bool bTime = false;
+
+	//g_pMain->m_Timer.m_fDurationTime;
+
+	//g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(g_pMain->m_Zomb[iMyIndex]->m_vBoxPos);
+
+	//if (m_fDistance > 70.0f)
+	//{
+	//	if (fTime> 5.0f)
+	//	{
+	//		RandomMove(iMyIndex, g_pMain->m_Zomb[iMyIndex]->m_vZombPos);
+	//		fTime = 0.0f;
+	//	}
+	//	ZombieMove(iMyIndex, m_vLook, m_vZRight, m_vZUp);
+
+	//}
+	//else if(m_fDistance < 70.0f)
+	//{
+	//	g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_FOLLOW];
+	//}
+#pragma endregion
+
+
+	//bool bTime = false;
+
+
+	if (!m_bTime) {
+		fTime = g_fDurationTime;
+		m_vPos = RandomMove();
+		m_bTime = true;
+
+	}
+
+	float t = g_fDurationTime;
+	//현재시간에서 - 처음셋팅된 시간 > 쿨타임보다 크면...
+	if (g_fDurationTime - fTime > fCoolTime) {  
+		m_bTime = false;
+
+	}
+	else {
+		g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(m_vPos);
+	}
+
+
 	return true;
 }
 bool GAIMove::Render()
@@ -154,9 +224,8 @@ HRESULT GAIMove::DeleteResource()
 GAIMove::GAIMove()
 {
 	GAISeq::InitGSeq();
-	m_RandomPoint.x = 0.0f;
-	m_RandomDestination.x= 0.0f;
-	fTime = 10.0f;
+
+	m_fTime = 0.0f;
 
 }
 

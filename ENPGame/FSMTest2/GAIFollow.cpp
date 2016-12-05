@@ -17,9 +17,9 @@ void GAIFollow::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombieP
 	D3DXVec3Cross(&m_vBUp, &m_vBDestLook, &m_vBRight);
 
 
-	m_vLook = m_vBDestLook;
-	m_vZRight = m_vBRight;
-	m_vZUp = m_vBUp;
+	//m_vLook = m_vBDestLook;
+	//m_vZRight = m_vBRight;
+	//m_vZUp = m_vBUp;
 
 }
 
@@ -40,6 +40,7 @@ bool GAIFollow::ZombieFollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVEC
 	D3DXMatrixIdentity(&Rotation);
 	D3DXMatrixIdentity(&Trans);
 
+	/*
 	Rotation = g_pMain->m_Zomb[i]->m_matRot;
 	Trans = g_pMain->m_Zomb[i]->m_matZombWld;
 
@@ -55,12 +56,12 @@ bool GAIFollow::ZombieFollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVEC
 
 	g_pMain->m_Zomb[i]->m_matRot = Rotation;
 	g_pMain->m_Zomb[i]->m_matTrans = Trans;
-
+	*/
 	return true;
 }
 bool GAIFollow::Frame(int iMyIndex)
 {
-
+	/*
 	D3DXVECTOR3 Temp = g_pMain->m_Zomb[iMyIndex]->m_vBoxPos - g_pMain->m_Zomb[iMyIndex]->m_vZombPos;
 	float a = D3DXVec3Length(&Temp);
 	m_fDistance = a;
@@ -84,7 +85,7 @@ bool GAIFollow::Frame(int iMyIndex)
 		}
 			
 	}
-	
+	*/
 	return true;
 }
 bool GAIFollow::Render()

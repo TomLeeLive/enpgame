@@ -11,7 +11,7 @@
 #define G_DEFINE_ANI_ZOMB_IDL L"ZOMBIE_IDLE"
 #define G_DEFINE_ANI_ZOMB_FLW L"ZOMBIE_FOLLOW"
 
-#define G_DEFINE_MAX_AI_ZOMBIE  1
+#define G_DEFINE_MAX_AI_ZOMBIE  4
 #define SPEED 10.0f
 
 
@@ -38,8 +38,9 @@
 #include "GNewZombie.h"
 #include "GObjMgr.h"
 
+#include <time.h>
 //Main
 #include "GCoreLibV2.h"
 #include "GProjMain.h"
-#include <time.h>
+
 

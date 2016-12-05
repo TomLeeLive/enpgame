@@ -15,9 +15,9 @@ void GAIAttack::AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombieP
 	D3DXVec3Cross(&m_vARight, &m_vAUp, &m_vADestLook);
 	D3DXVec3Cross(&m_vAUp, &m_vADestLook, &m_vARight);
 
-	m_vLook = m_vADestLook;
-	m_vZRight = m_vARight;
-	m_vZUp = m_vAUp;
+	//m_vLook = m_vADestLook;
+	//m_vZRight = m_vARight;
+	//m_vZUp = m_vAUp;
 
 }
 
@@ -34,6 +34,7 @@ bool GAIAttack::ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVEC
 	D3DXMatrixIdentity(&Rotation);
 	D3DXMatrixIdentity(&Trans);
 
+	/*
 	Rotation = g_pMain->m_Zomb[i]->m_matRot;
 	Trans = g_pMain->m_Zomb[i]->m_matTrans;
 
@@ -49,12 +50,12 @@ bool GAIAttack::ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVEC
 
 	g_pMain->m_Zomb[i]->m_matRot = Rotation;
 	g_pMain->m_Zomb[i]->m_matTrans = Trans;
-
+	*/
 	return true;
 }
 bool GAIAttack::Frame(int iMyIndex)
 {
-
+	/*
 			//G_ZOMB_ST beforeState = g_pMain->m_CharNZomb[i].get()->m_State;
 			//G_ZOMB_ST afterState = g_pMain->m_CharNZomb[i].get()->m_State;
 
@@ -83,7 +84,7 @@ bool GAIAttack::Frame(int iMyIndex)
 
 			}
 	
-
+	*/
 	return true;
 }
 bool GAIAttack::Render()

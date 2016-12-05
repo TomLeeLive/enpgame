@@ -24,21 +24,22 @@ bool	GNewZombie::Frame(int iMyIndex)
 {
 	GZombie::Frame();
 
-
+	//if (g_pMain->m_Zomb[iMyIndex]->m_State != G_AI_IDLE && m_matTrans._41 != 0.0f)
+	//{
+	//	m_matZombWld = m_matRot * m_matTrans;
+	//	//m_vZombPos.x = m_matWorld._41;
+	//	//m_vZombPos.z = m_matWorld._43;
+	//}
 	
 	m_pCurrentSeq->Frame(iMyIndex);
 
+	/*
 	m_vBoxPos.x = g_pMain->m_matBoxWorld._41;
 	m_vBoxPos.y = g_pMain->m_matBoxWorld._42;
 	m_vBoxPos.z = g_pMain->m_matBoxWorld._43;
 
+	*/
 
-	if (g_pMain->m_Zomb[iMyIndex]->m_State != G_AI_IDLE && m_matTrans._41 != 0.0f)
-{
-		m_matZombWld = m_matRot * m_matTrans;
-		//m_vZombPos.x = m_matWorld._41;
-		//m_vZombPos.z = m_matWorld._43;
-	}
 	return true;
 };
 bool	GNewZombie::Render(){
@@ -57,19 +58,24 @@ bool	GNewZombie::Release()
 	
 GNewZombie::GNewZombie()
 {
+	/*
 	D3DXMatrixIdentity(&m_matRot);
 	D3DXMatrixIdentity(&m_matTrans);
-
+	*/
 	D3DXMatrixIdentity(&m_matZombWld);
+	/*
 	m_vZombPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vBoxPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	*/
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 
 	m_State = G_AI_MOVE;
 	D3DXMatrixIdentity(&m_matZombWld);
+	/*
 	m_vBoxPos.x = g_pMain->m_matBoxWorld._41;
 	m_vBoxPos.y = g_pMain->m_matBoxWorld._42;
 	m_vBoxPos.z = g_pMain->m_matBoxWorld._43;
+	*/
 	
 }
 
