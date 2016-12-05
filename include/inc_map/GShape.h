@@ -63,6 +63,17 @@ public:
 	virtual ~GBoxShape(void);
 };
 
+class GButtonShape : public GBoxShape
+{
+public:
+	bool				m_bShaded;
+	HRESULT				CreateConstantBuffer();
+	void				UpdateConstantBuffer(ID3D11DeviceContext* pContext, GModel* pParent = NULL);
+public:
+	GButtonShape(void);
+	virtual ~GButtonShape(void);
+};
+
 class GBoxHalfShape : public GBoxShape
 {
 public:

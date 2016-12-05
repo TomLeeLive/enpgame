@@ -362,6 +362,41 @@ GBoxShape::GBoxShape(void)
 GBoxShape::~GBoxShape(void)
 {
 }
+
+HRESULT	GButtonShape::CreateConstantBuffer() {
+	m_cbData.Color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+	m_dxobj.g_pConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbData, 1, sizeof(VS_CONSTANT_BUFFER)));
+	return S_OK;
+
+}
+void	GButtonShape::UpdateConstantBuffer(ID3D11DeviceContext* pContext, GModel* pParent) {
+
+	if (m_bShaded == true) {
+		m_cbData.Color = D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f);
+		m_dxobj.g_pConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbData, 1, sizeof(VS_CONSTANT_BUFFER)));
+	}
+	else {
+		m_cbData.Color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+		m_dxobj.g_pConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbData, 1, sizeof(VS_CONSTANT_BUFFER)));
+	}
+	if (pParent != NULL)
+	{
+		pContext->UpdateSubresource(pParent->m_dxobj.g_pConstantBuffer.Get(), 0, NULL, &pParent->m_cbData, 0, 0);
+	}
+	else
+	{
+		pContext->UpdateSubresource(m_dxobj.g_pConstantBuffer.Get(), 0, NULL, &m_cbData, 0, 0);
+	}
+}
+GButtonShape::GButtonShape(void)
+{
+	m_bShaded = false;
+}
+
+GButtonShape::~GButtonShape(void)
+{
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            GPlaneShape
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

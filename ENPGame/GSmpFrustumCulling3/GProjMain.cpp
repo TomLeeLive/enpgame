@@ -33,7 +33,7 @@ bool GProjMain::Init()
 	}
 
 	//m_pBBox2.resize(MapDesc.iNumCols*MapDesc.iNumRows);
-	for (int i = 0; i < MapDesc.iNumCols*MapDesc.iNumRows; i++) {
+	for (int i = 0; i < (MapDesc.iNumCols-1)*(MapDesc.iNumRows-1); i++) {
 		auto box = make_shared<GBBox>();
 		m_pBBox2.push_back(box);
 
@@ -50,14 +50,10 @@ bool GProjMain::Init()
 	iHalfCols = MapDesc.iNumCols / 2;
 	iHalfRows = MapDesc.iNumRows / 2;
 	D3DXMatrixIdentity(&m_matWorld);
-
-	vMin = D3DXVECTOR3(-(MapDesc.iNumCols*MapDesc.fSellDistance / 2.0f), 0.0f, -(MapDesc.iNumRows*MapDesc.fSellDistance / 2.0f));
-	vMax = D3DXVECTOR3((MapDesc.iNumCols*MapDesc.fSellDistance / 2.0f), 0.0f, (MapDesc.iNumRows*MapDesc.fSellDistance / 2.0f));
-	//m_pBBox.Init(vMin,vMax);
 	
-	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)
+	for (int iCol = 0; iCol < MapDesc.iNumCols-1; iCol++)
 	{
-		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
+		for (int iRow = 0; iRow < MapDesc.iNumRows-1; iRow++)
 		{
 			//
 			vMin = D3DXVECTOR3((iRow - iHalfRows)* MapDesc.fSellDistance, 0.0f, -(iCol - iHalfCols + 1)* MapDesc.fSellDistance);
@@ -134,9 +130,9 @@ bool GProjMain::Frame()
 		m_CustomMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_CustomMap.m_VertexList.at(0), 0, 0);
 
 	//m_pBBox.Frame(&m_matWorld);
-	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)
+	for (int iCol = 0; iCol < MapDesc.iNumCols-1; iCol++)
 	{
-		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
+		for (int iRow = 0; iRow < MapDesc.iNumRows-1; iRow++)
 		{
 			m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Frame(&m_matWorld);
 		}
@@ -152,13 +148,28 @@ bool GProjMain::Render()
 
 	//m_pBox.SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	//m_pBBox.Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	G_BOX pBox2 ;
 
-	for (int iCol = 0; iCol < MapDesc.iNumCols; iCol++)
+	for (int iCol = 0; iCol < MapDesc.iNumCols-1; iCol++)
 	{
-		for (int iRow = 0; iRow < MapDesc.iNumRows; iRow++)
+		for (int iRow = 0; iRow < MapDesc.iNumRows-1; iRow++)
 		{
-			m_pBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-			m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+			pBox2.vCenter = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->center;
+
+			pBox2.fExtent[0] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[0];
+			pBox2.fExtent[1] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[1];
+			pBox2.fExtent[2] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[2];
+			
+			pBox2.vAxis[0] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[0];
+			pBox2.vAxis[1] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[1];
+			pBox2.vAxis[2] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[2];
+
+
+			if (m_pMainCamera->CheckOBBInPlane(&pBox2))
+			{
+				m_pBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+				m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+			}
 		}
 	}
 
@@ -211,11 +222,11 @@ GProjMain::GProjMain(void)
 	m_pMainCamera = NULL;
 	//SAFE_ZERO(m_GMapBox);	
 	SAFE_ZERO(m_pBoxShape);
+	
 	//SAFE_ZERO(m_pLine);
 }
-GProjMain::~GProjMain(void)
-{
-
+GProjMain::~GProjMain(void){
+	
 }
 
 

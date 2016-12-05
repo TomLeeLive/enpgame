@@ -70,7 +70,7 @@ public:
 class GButtonCtl : public GControlUI
 {
 public:
-	GBoxShape     m_Box;
+	GButtonShape     m_Box;
 	HRESULT		Create(ID3D11Device* pDevice,
 		const TCHAR* pLoadShaderFile=nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
