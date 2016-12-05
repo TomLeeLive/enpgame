@@ -8,12 +8,13 @@
 #endif
 
 #include "resource.h"       // 주 기호입니다.
+#include "_stdafx.h"
+
 #include "GCoreLibV2.h"
 #include "GModelViewCamera.h"
 #include "GUtils.h"
 
-#include <memory>
-#include "GSprite.h"
+
 
 #if defined(DEBUG) || defined(_DEBUG)
 #pragma comment( lib, "GEffectCore32d.lib" )
@@ -28,41 +29,26 @@
 class CKEffectToolApp : public CWinApp,public GCoreLibV2
 {
 public:
-	bool m_bCheck; // play button check
-public:
+	EffManager m_EffMgr;
+
 	CKEffectToolApp();
 	shared_ptr<GCamera > m_pMainCamera;
-public:
-	GPlaneShape				m_BigPlane;
-	GSprite*				m_pSprite;
-	ComPtr<ID3D11PixelShader>	m_pPS;
-	D3DXVECTOR4				m_vMaterial;
-	D3DXMATRIX				m_matPlaneWorld;
-	D3DXMATRIX				m_mPlanWorld;
-	D3DXMATRIX				m_matWorld;
-	shared_ptr<GPlaneShape> m_pPlane;
-	shared_ptr<GPlaneShape> m_pScreen;
-public:
-	bool check; // play button check
-	ID3D11BlendState*           m_pAlphaBlendFactor;
-	ID3D11BlendState*			m_pAlphaBlend;
-public:
-	virtual BOOL InitInstance();
-	virtual int ExitInstance();
 
-	void ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext);
+	G_EFF_TOOL_EXT m_FileExt;
+	T_STR_VECTOR m_LoadFiles;
+	bool LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
+public:
 	virtual bool Init();
 	virtual bool Frame();
 	virtual bool Render();
 	virtual bool Release();
-	bool RenderPlane();
-	bool ChagePositionData(float x, float y, float z);
-
-
-	HRESULT	SetBlendState();
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 
+
+
+	virtual BOOL InitInstance();
+	virtual int ExitInstance();
 // 구현입니다.
 	afx_msg void OnAppAbout();
 	virtual BOOL OnIdle(LONG iCount);
