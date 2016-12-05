@@ -1,4 +1,27 @@
 #include "GPlaneRect.h"
+
+HRESULT GControlUI::SetBlendState() {
+	HRESULT hr = S_OK;
+	D3D11_BLEND_DESC BlendState;
+	ZeroMemory(&BlendState, sizeof(D3D11_BLEND_DESC));
+	BlendState.AlphaToCoverageEnable = TRUE;
+	BlendState.RenderTarget[0].BlendEnable = TRUE;
+	BlendState.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+	BlendState.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	BlendState.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+	BlendState.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	BlendState.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	BlendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+
+	BlendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	if (FAILED(hr = g_pd3dDevice->CreateBlendState(&BlendState, &m_pAlphaBlend)))
+	{
+		return hr;
+	}
+	return hr;
+}
 void GControlUI::SetAmbientColor(float fR, float fG, float fB, float fA)
 {
 	m_pShape->m_cbData.Color = D3DXVECTOR4(fR, fG, fB, fA);
@@ -26,6 +49,13 @@ void GControlUI::SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pP
 }
 bool		GControlUI::Init()
 {
+	HRESULT hr;
+
+	if (FAILED(hr = SetBlendState()))
+	{
+		return hr;
+	}
+
 	m_vScale.x = 1; m_vScale.y = 1; m_vScale.z = 1;
 	m_vRotate.x = 0; m_vRotate.y = 0; m_vRotate.z = 0;
 	m_vTrans.x = 0; m_vTrans.y = 0; m_vTrans.z = 0;
@@ -115,27 +145,133 @@ bool		GControlUI::End(ID3D11DeviceContext* pContext) {
 	return m_pShape->PostRender(pContext);
 }
 bool		GControlUI::Render(ID3D11DeviceContext* pContext) {	
+	// Store the old render targets
+	ID3D11RenderTargetView* pOldRTV;
+	ID3D11DepthStencilView* pOldDSV;
+	g_pImmediateContext->OMGetRenderTargets(1, &pOldRTV, &pOldDSV);
+
+	ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
+	g_pImmediateContext->OMSetBlendState(m_pAlphaBlend, 0, -1);
+
+
+
 	Begin(pContext);
 	End(pContext);
+
+
+	//-----------------------------------------------------------------------
+	// 기본 render targets 정보로 복원
+	//-----------------------------------------------------------------------
+	g_pImmediateContext->OMSetRenderTargets(1, &pOldRTV, pOldDSV);
+	// OMGetRenderTargets함수를 사용하였다면 반드시 아래와 같이 소멸시켜야 한다.
+	SAFE_RELEASE(pOldRTV);
+	SAFE_RELEASE(pOldDSV);
+
 	return true;
 }
 bool		GControlUI::Release() {
+	SAFE_RELEASE(m_pAlphaBlend);
 	assert(m_pShape);
 	m_pShape->Release();
 	return true;
+}
+void GControlUI::Rescale() {
+	m_vScale.x = m_vScale.x * m_iWidthAfter / m_iWidthBefore;
+	m_vScale.y = m_vScale.y * m_iHeightAfter / m_iHeightBefore;
+
+	m_vTrans.x = m_vTrans.x * m_iWidthAfter / m_iWidthBefore;
+	m_vTrans.y = m_vTrans.y * m_iHeightAfter / m_iHeightBefore;
+}
+void GControlUI::Retrans() {
+	// 0  |  1
+	//---------
+	// 2  |  3
+
+	if (m_vTrans.x < 0 && m_vTrans.y > 0) //0
+	{
+
+		int iX = m_iWidthBefore - (-m_vTrans.x);
+		m_vTrans.x = -(m_iWidthAfter - iX);
+		int iY = m_iHeightBefore - m_vTrans.y;
+		m_vTrans.y = m_iHeightAfter - iY;
+
+	}
+	else if (m_vTrans.x > 0 && m_vTrans.y > 0) //1 
+	{
+		int iX = m_iWidthBefore - m_vTrans.x;
+		m_vTrans.x = m_iWidthAfter - iX;
+		int iY = m_iHeightBefore - m_vTrans.y;
+		m_vTrans.y = m_iHeightAfter - iY;
+	}
+	else if (m_vTrans.x < 0 && m_vTrans.y < 0) //2
+	{
+		int iX = m_iWidthBefore - (-m_vTrans.x);
+		m_vTrans.x = -(m_iWidthAfter - iX);
+
+		int iY = m_iHeightBefore - (-m_vTrans.y);
+		m_vTrans.y = -(m_iHeightAfter - iY);
+	}
+	else if (m_vTrans.x > 0 && m_vTrans.y < 0)//3
+	{
+		int iX = m_iWidthBefore - m_vTrans.x;
+		m_vTrans.x = m_iWidthAfter - iX;
+		int iY = m_iHeightBefore - (-m_vTrans.y);
+		m_vTrans.y = -(m_iHeightAfter - iY);
+	}
+	else {
+
+	}
 }
 HRESULT GControlUI::CreateResource(int iRectWidth, int iRectHeight)
 {
 	HRESULT hr = S_OK;
 	iRectWidth = iRectWidth / 2;
 	iRectHeight = iRectHeight / 2;
+
 	//D3DXMatrixOrthoLH(&m_Projection[1], iRectWidth * 2, iRectHeight * 2, 0.0f, 1000.0f);
 	// 화면 중앙이 원점으로 계산되기 때문에 넓이 및 높이가 -1 ~ 1 범위로 직교투영된다. 
 	D3DXMatrixOrthoOffCenterLH(&m_matProj, -iRectWidth, iRectWidth, -iRectHeight, iRectHeight, 0.0f, 1000.0f);
+
+	m_iWidthAfter = iRectWidth;
+	m_iHeightAfter = iRectHeight;
+
+	if (m_iWidthBefore == NULL
+		&& m_iHeightBefore == NULL) {
+		m_iWidthAfter = m_iWidthBefore = iRectWidth;
+		m_iHeightAfter = m_iHeightBefore = iRectHeight;
+
+		return hr;
+	}
+	else if(m_bAutoRescale){
+		Rescale();
+	}
+	else if (m_bAutoRetrans) {
+		Retrans();
+	}
+	else {
+	}
+
+
+	m_iWidthBefore = m_iWidthAfter;
+	m_iHeightBefore = m_iHeightAfter;
+
 	return hr;
 }
 GControlUI::GControlUI()
 {
+	m_pAlphaBlend = NULL;
+
+	m_iWidthBefore = NULL;
+	m_iWidthAfter = NULL;
+	m_iHeightBefore = NULL;
+	m_iHeightAfter = NULL;
+	m_bAutoRescale = true;
+	m_bAutoRetrans = false;
+	//m_bRelTrans = false;	// relativity(상대) 좌표 저장
+	//m_bRelScale = false;
+	//m_vRelTrans = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//m_vRelScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
 	m_pShape = nullptr;
 	Init();	
 }
@@ -220,7 +356,7 @@ HRESULT		GEditCtl::Create(ID3D11Device* pDevice,const TCHAR* pLoadShaderFile,con
 	HRESULT hr = S_OK;
 	if (pLoadShaderFile == nullptr)
 	{
-		if (FAILED(hr = m_Plane.Create(pDevice, L"data/shader/plane.hlsl",pLoadTextureString)))
+		if (FAILED(hr = m_Plane.Create(pDevice, L"data/shader/UI.hlsl",pLoadTextureString)))
 		{
 			return hr;
 		}

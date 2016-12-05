@@ -6,23 +6,30 @@ bool GProjMain::Init()
 {
 	m_UIManager.Init();
 
-	T_STR strFile = L"UI_TEST.gui";
-	m_UIManager.UILoad(&strFile, &m_SwapChainDesc);
+	//T_STR strFile = L"UI_TEST4.gui";
+	T_STR strFile = L"ui_menu.gui";
+	m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 	return true;
 }
 bool GProjMain::Frame()
 {
-	m_UIManager.Frame(&m_SwapChainDesc);
+	m_UIManager.Frame(&m_SwapChainDesc,&m_Timer);
 	return true;
 }
 bool GProjMain::Render()
 {
-	D3DXMATRIX matTrans, matRotation, matZ;
+	//D3DXMATRIX matTrans, matRotation, matZ;
+
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
-	float t = m_Timer.GetElapsedTime() * D3DX_PI;
+	//float t = m_Timer.GetElapsedTime() * D3DX_PI;
 
-	m_UIManager.Render();
+	int clicked = -1;
 
+	m_UIManager.Render(&clicked);
+
+	if (clicked != -1) {
+		int a = 10;
+	}
 	return true;
 }
 bool GProjMain::Release()

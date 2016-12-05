@@ -2,6 +2,8 @@
 class GSeq
 {
 public:
+	GUIManager	m_UIManager;
+
 	static GSeq* CreateInstance() { return 0;  }
 	virtual bool Init() = 0;
 	virtual bool Frame() = 0;

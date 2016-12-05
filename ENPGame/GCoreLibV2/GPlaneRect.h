@@ -1,7 +1,10 @@
 #pragma once
 #include "GImeUI.h"
 #include "GShape.h"
+#include "GTimer.h"
 using namespace DX;
+
+//#define G_MACRO_INVALID_INT_VALUE -1
 
 enum GUI_TYPE {
 	GUI_TYPE_BUTTON = 0,
@@ -16,22 +19,35 @@ enum GUI_TYPE {
 class GControlUI
 {
 public:
-	GUI_TYPE   m_type;
+	HRESULT						SetBlendState();
+	ID3D11BlendState*			m_pAlphaBlend;
+public:
+	int				m_iWidthBefore;
+	int				m_iWidthAfter;
+	int				m_iHeightBefore;
+	int				m_iHeightAfter;
+	bool			m_bAutoRescale;
+	bool			m_bAutoRetrans;
+	//bool			m_bRelTrans;	// relativity(상대) 좌표 저장
+	//bool			m_bRelScale;	// relativity(상대) 스케일 저장
+	GUI_TYPE		m_type;
+	void			Retrans();
+	void			Rescale();
 public:	
-	GShape*     m_pShape;
-	T_STR		m_Text;
-	PCT_VERTEX  m_Vertices[4];
-	RECT		m_rtSize[8];
-	RECT		m_rt;
-	D3DXMATRIX	m_matViewPort;
-	D3DXMATRIX  m_matWorld;
-	D3DXMATRIX  m_matView;
-	D3DXMATRIX  m_matProj;
-	D3DXVECTOR3  m_vScale;
-	D3DXVECTOR3  m_vRotate;
-	D3DXVECTOR3  m_vTrans;
-	UINT		 m_iWidthVP;
-	UINT		 m_iHeightVP;
+	GShape*			m_pShape;
+	T_STR			m_Text;
+	PCT_VERTEX		m_Vertices[4];
+	RECT			m_rtSize[8];
+	RECT			m_rt;
+	D3DXMATRIX		m_matViewPort;
+	D3DXMATRIX		m_matWorld;
+	D3DXMATRIX		m_matView;
+	D3DXMATRIX		m_matProj;
+	D3DXVECTOR3		m_vScale;
+	D3DXVECTOR3		m_vRotate;
+	D3DXVECTOR3		m_vTrans;
+	UINT			m_iWidthVP;
+	UINT			m_iHeightVP;
 public: //event
 	virtual void		SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
 	virtual void		SetAmbientColor(float fR, float fG, float fB, float fA);
@@ -55,12 +71,42 @@ public:
 class GButtonCtl : public GControlUI
 {
 public:
-	GBoxShape     m_Box;
+	GTimer*		m_Timer;
+	bool		m_bClicked;
+	float		m_fClickStTime;
+	float		m_fCoolTime;
+	void		Clicked(GTimer*	timer) {
+		m_Timer = timer;
+		m_fClickStTime = m_Timer->m_fDurationTime;
+		m_bClicked = true;
+	}
+public:
+	GBoxShape   m_Box;
 	HRESULT		Create(ID3D11Device* pDevice,
 		const TCHAR* pLoadShaderFile=nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
+	bool		Render(ID3D11DeviceContext* pContext) {
+
+		if (m_bClicked) {
+			
+			if (m_Timer->m_fDurationTime - m_fClickStTime > m_fCoolTime) {
+				m_Box.SetShaded(false);
+				m_bClicked = false;
+				return false;
+			}
+			else
+			{m_Box.SetShaded();}
+		}
+
+		GControlUI::Render(pContext);
+	}
 public:
-	GButtonCtl() { m_type = GUI_TYPE_BUTTON; };
+	GButtonCtl() {
+		m_fCoolTime = 0.5f;
+		m_Timer = NULL;
+		m_bClicked = false;
+		m_fClickStTime = 0.0f;
+		m_type = GUI_TYPE_BUTTON; };
 	virtual ~GButtonCtl() {};
 };
 
@@ -79,6 +125,12 @@ public:
 		const TCHAR* pLoadTextureString = nullptr);
 
 	void	SetXSize(float fValue) {//0~100까지로 입력 받자.
+		if (fValue <= 0.0f)
+			m_vScale.x = 0.0f;
+
+		if (fValue >= 100.0f)
+			m_vScale.x = 100.0f;
+
 		m_vScale.x = m_initScl.x / 100.0f *fValue;
 	}
 

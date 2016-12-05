@@ -27,13 +27,14 @@ GButtonForm* GButtonForm::CreateOne(CWnd* pParent) {
 
 GButtonForm::GButtonForm()
 	: CFormView(IDD_GBUTTONFORM)
-	, m_fMinX(0)
-	, m_fMinY(0)
-	, m_fMinZ(0)
-	, m_fMaxX(0)
-	, m_fMaxY(0)
-	, m_fMaxZ(0)
+	//, m_fMinX(0)
+	//, m_fMinY(0)
+	//, m_fMinZ(0)
+	//, m_fMaxX(0)
+	//, m_fMaxY(0)
+	//, m_fMaxZ(0)
 	, m_fGuageValue(0)
+	, m_iRadio(0)
 {
 }
 
@@ -41,68 +42,73 @@ GButtonForm::~GButtonForm()
 {
 }
 
-void GButtonForm::UpdateTextOBBInfo(D3DXVECTOR3 vMin, D3DXVECTOR3 vMax) {
-	/*
-	// CString -> int convert
-	CString strNum = _T("5");
-	int nNum = _ttoi(strNum);
 
-	// int -> CString convert
-	int nNum = 5;
-	CString strNum;
-	strNum.Format(_T("%d"), nNum);
-	*/
-	CString strMinX;
-	strMinX.Format(_T("%f"), vMin.x);
-	CString strMinY;
-	strMinY.Format(_T("%f"), vMin.y);
-	CString strMinZ;
-	strMinZ.Format(_T("%f"), vMin.z);
-	CString strMaxX;
-	strMaxX.Format(_T("%f"), vMax.x);
-	CString strMaxY;
-	strMaxY.Format(_T("%f"), vMax.y);
-	CString strMaxZ;
-	strMaxZ.Format(_T("%f"), vMax.z);
-
-
-	//SetDlgItemText(g_hWnd,IDC_MIN_X, strMinX);
-	//SetDlgItemText(g_hWnd, IDC_MIN_Y, strMinY);
-	//SetDlgItemText(g_hWnd, IDC_MIN_Z, strMinZ);
-	//SetDlgItemText(g_hWnd, IDC_MAX_X, strMaxX);
-	//SetDlgItemText(g_hWnd, IDC_MAX_Y, strMaxY);
-	//SetDlgItemText(g_hWnd, IDC_MAX_Z, strMaxZ);
-
-	GetDlgItem(IDC_MIN_X)->SetWindowText(strMinX);
-	GetDlgItem(IDC_MIN_Y)->SetWindowText(strMinY);
-	GetDlgItem(IDC_MIN_Z)->SetWindowText(strMinZ);
-	GetDlgItem(IDC_MAX_X)->SetWindowText(strMaxX);
-	GetDlgItem(IDC_MAX_Y)->SetWindowText(strMaxY);
-	GetDlgItem(IDC_MAX_Z)->SetWindowText(strMaxZ);
-
-}
+//void GButtonForm::UpdateTextOBBInfo(D3DXVECTOR3 vMin, D3DXVECTOR3 vMax) {
+//	/*
+//	// CString -> int convert
+//	CString strNum = _T("5");
+//	int nNum = _ttoi(strNum);
+//
+//	// int -> CString convert
+//	int nNum = 5;
+//	CString strNum;
+//	strNum.Format(_T("%d"), nNum);
+//	*/
+//	CString strMinX;
+//	strMinX.Format(_T("%f"), vMin.x);
+//	CString strMinY;
+//	strMinY.Format(_T("%f"), vMin.y);
+//	CString strMinZ;
+//	strMinZ.Format(_T("%f"), vMin.z);
+//	CString strMaxX;
+//	strMaxX.Format(_T("%f"), vMax.x);
+//	CString strMaxY;
+//	strMaxY.Format(_T("%f"), vMax.y);
+//	CString strMaxZ;
+//	strMaxZ.Format(_T("%f"), vMax.z);
+//
+//
+//	//SetDlgItemText(g_hWnd,IDC_MIN_X, strMinX);
+//	//SetDlgItemText(g_hWnd, IDC_MIN_Y, strMinY);
+//	//SetDlgItemText(g_hWnd, IDC_MIN_Z, strMinZ);
+//	//SetDlgItemText(g_hWnd, IDC_MAX_X, strMaxX);
+//	//SetDlgItemText(g_hWnd, IDC_MAX_Y, strMaxY);
+//	//SetDlgItemText(g_hWnd, IDC_MAX_Z, strMaxZ);
+//
+//	GetDlgItem(IDC_MIN_X)->SetWindowText(strMinX);
+//	GetDlgItem(IDC_MIN_Y)->SetWindowText(strMinY);
+//	GetDlgItem(IDC_MIN_Z)->SetWindowText(strMinZ);
+//	GetDlgItem(IDC_MAX_X)->SetWindowText(strMaxX);
+//	GetDlgItem(IDC_MAX_Y)->SetWindowText(strMaxY);
+//	GetDlgItem(IDC_MAX_Z)->SetWindowText(strMaxZ);
+//
+//}
 
 void GButtonForm::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_MIN_X, m_fMinX);
-	DDX_Text(pDX, IDC_MIN_Y, m_fMinY);
-	DDX_Text(pDX, IDC_MIN_Z, m_fMinZ);
-	DDX_Text(pDX, IDC_MAX_X, m_fMaxX);
-	DDX_Text(pDX, IDC_MAX_Y, m_fMaxY);
-	DDX_Text(pDX, IDC_MAX_Z, m_fMaxZ);
+	//DDX_Text(pDX, IDC_MIN_X, m_fMinX);
+	//DDX_Text(pDX, IDC_MIN_Y, m_fMinY);
+	//DDX_Text(pDX, IDC_MIN_Z, m_fMinZ);
+	//DDX_Text(pDX, IDC_MAX_X, m_fMaxX);
+	//DDX_Text(pDX, IDC_MAX_Y, m_fMaxY);
+	//DDX_Text(pDX, IDC_MAX_Z, m_fMaxZ);
 	DDX_Control(pDX, IDC_LIST2, m_List);
 	DDX_Text(pDX, IDC_GUAGE_VALUE, m_fGuageValue);
+	DDX_Radio(pDX, IDC_RADIO1, m_iRadio);
 }
 
 BEGIN_MESSAGE_MAP(GButtonForm, CFormView)
-	ON_BN_CLICKED(IDC_BUTTON1, &GButtonForm::OnBnClickedButton1)
+	//ON_BN_CLICKED(IDC_BUTTON1, &GButtonForm::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &GButtonForm::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &GButtonForm::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &GButtonForm::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &GButtonForm::OnBnClickedButton5)
 	ON_LBN_DBLCLK(IDC_LIST2, &GButtonForm::OnLbnDblclkList2)
 	ON_EN_CHANGE(IDC_GUAGE_VALUE, &GButtonForm::OnEnChangeGuageValue)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_RADIO1, IDC_RADIO2, OnBnClickedRadio)
+	ON_LBN_SETFOCUS(IDC_LIST2, &GButtonForm::OnLbnSetfocusList2)
+	ON_LBN_SELCHANGE(IDC_LIST2, &GButtonForm::OnLbnSelchangeList2)
 END_MESSAGE_MAP()
 
 
@@ -125,7 +131,7 @@ void GButtonForm::Dump(CDumpContext& dc) const
 
 // GButtonForm 메시지 처리기입니다.
 
-
+/*
 void GButtonForm::OnBnClickedButton1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -161,7 +167,7 @@ void GButtonForm::OnBnClickedButton1()
 	}
 
 }
-
+*/
 
 
 void GButtonForm::OnBnClickedButton2()
@@ -258,15 +264,7 @@ void GButtonForm::OnBnClickedButton5()
 void GButtonForm::OnLbnDblclkList2()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	int iSelected = m_List.GetCurSel();
-	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
-	
-	GControlUI* pSelect = pApp->m_UIManager.m_pUIList[iSelected];
 
-	if (pSelect != NULL && pApp->m_UIManager.m_pSelectPlane != pSelect)
-	{
-		pApp->m_UIManager.m_pSelectPlane = pSelect;
-	}
 }
 
 
@@ -278,4 +276,65 @@ void GButtonForm::OnEnChangeGuageValue()
 	// 이 알림 메시지를 보내지 않습니다.
 
 	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+afx_msg void GButtonForm::OnBnClickedRadio(UINT msg) {
+	int iSelected = m_List.GetCurSel();
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	UpdateData(TRUE);//컨트롤로 부터 값 가져오기
+
+	if (pApp->m_UIManager.m_pSelectPlane != NULL)
+	{
+		switch (m_iRadio)
+		{
+			case 0://Rescale
+			{
+				pApp->m_UIManager.m_pSelectPlane->m_bAutoRescale = true;
+				pApp->m_UIManager.m_pSelectPlane->m_bAutoRetrans = false;
+			}
+			break;//Retrans
+			case 1:
+			{
+				pApp->m_UIManager.m_pSelectPlane->m_bAutoRescale = false;
+				pApp->m_UIManager.m_pSelectPlane->m_bAutoRetrans = true;
+			}
+			break;
+		}
+	}
+	else {
+		m_iRadio = 2;
+	}
+
+	UpdateData(FALSE);//컨트롤에 업데이트
+
+}
+
+void GButtonForm::OnLbnSetfocusList2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+}
+
+
+void GButtonForm::OnLbnSelchangeList2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int iSelected = m_List.GetCurSel();
+	if (iSelected == -1)
+		return;
+
+	CGUIToolApp *pApp = (CGUIToolApp *)AfxGetApp();
+
+	GControlUI* pSelect = pApp->m_UIManager.m_pUIList[iSelected];
+
+	if (pSelect != NULL && pApp->m_UIManager.m_pSelectPlane != pSelect)
+	{
+		pApp->m_UIManager.m_pSelectPlane = pSelect;
+
+		if (pApp->m_UIManager.m_pSelectPlane->m_bAutoRescale)
+			m_iRadio = 0;
+		else
+			m_iRadio = 1;
+		UpdateData(FALSE);
+	}
 }

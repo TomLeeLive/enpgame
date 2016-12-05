@@ -142,6 +142,7 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <ClCompile Include="GSkyObj.cpp" />
     <ClCompile Include="GTextureMgr.cpp" />
     <ClCompile Include="GTimer.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="GVector.cpp" />
     <ClCompile Include="GWindow.cpp" />
   </ItemGroup>
@@ -181,6 +182,7 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <ClInclude Include="GTemplate.h" />
     <ClInclude Include="GTextureMgr.h" />
     <ClInclude Include="GTimer.h" />
+    <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUtils.h" />
     <ClInclude Include="GVector.h" />
     <ClInclude Include="GWindow.h" />

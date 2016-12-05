@@ -212,7 +212,7 @@
     <ClInclude Include="GImageControl.h" />
     <ClInclude Include="GImageForm.h" />
     <ClInclude Include="GModelCamera.h" />
-    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUIMaker.h" />
     <ClInclude Include="GUITool.h" />
     <ClInclude Include="GUIToolDoc.h" />
     <ClInclude Include="GUIToolView.h" />
@@ -230,7 +230,7 @@
     <ClCompile Include="GImageControl.cpp" />
     <ClCompile Include="GImageForm.cpp" />
     <ClCompile Include="GModelCamera.cpp" />
-    <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="GUIMaker.cpp" />
     <ClCompile Include="GUITool.cpp" />
     <ClCompile Include="GUIToolDoc.cpp" />
     <ClCompile Include="GUIToolView.cpp" />

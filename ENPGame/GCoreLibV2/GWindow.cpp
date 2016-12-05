@@ -61,7 +61,9 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 							{
 								ShowWindow(hWnd, SW_SHOW);
 							}
+#if !defined (DEBUG) && !defined (_DEBUG)
 							ClipMouse(true);
+#endif
 						}
 						else {
 							SetFullScreenFlag(!IsScreenMode);
@@ -71,7 +73,9 @@ LRESULT GWindow::WindowMsgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 							{
 								ShowWindow(hWnd, SW_SHOW);
 							}
+#if !defined (DEBUG) && !defined (_DEBUG)
 							ClipMouse(true);
+#endif
 						}
 
 					}

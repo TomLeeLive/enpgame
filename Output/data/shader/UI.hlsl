@@ -34,7 +34,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	output.p = mul(output.p, g_matView);
 	output.p = mul(output.p, g_matProj);
 	output.t = vIn.t;
-	output.c = vIn.c;// *g_MeshColor;
+	output.c = g_MeshColor;//vIn.c;// *
 	return output;
 }
 
@@ -43,7 +43,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 //--------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
-	return g_txDiffuse.Sample(samLinear, vIn.t); //*vIn.c;
+	return g_txDiffuse.Sample(samLinear, vIn.t)*vIn.c;
 }
 //--------------------------------------------------------------------------------------
 // Pixel Shader

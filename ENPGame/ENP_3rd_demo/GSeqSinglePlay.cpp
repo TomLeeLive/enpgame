@@ -201,20 +201,32 @@ bool GSeqSinglePlay::Frame()
 	FrameEffect();
 	FrameChar();
 
+	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
+
 	FrameGun();
 	return true;
 }
 
 bool GSeqSinglePlay::Render()
 {
+
+
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
+
+
 
 	RenderMap();
 	RenderObj();
 	RenderChar();
 	RenderGame();
+	
+	//render UI
+	m_UIManager.Render();
+
 	RenderEffect();
+
+
 
 	return true;
 }
@@ -708,36 +720,36 @@ bool        GSeqSinglePlay::RenderGame() {
 	m_ObjGun.Render(g_pImmediateContext);
 
 
+	if(g_pMain->m_bDebugInfoPrint){
+		RECT rc;
+		rc.top = g_pMain->m_DefaultRT.m_vp.Height/2;
+		rc.bottom = g_pMain->m_DefaultRT.m_vp.Height;
+		rc.left = 0;
+		rc.right = g_pMain->m_DefaultRT.m_vp.Width;
 
-	RECT rc;
-	rc.top = g_pMain->m_DefaultRT.m_vp.Height/2;
-	rc.bottom = g_pMain->m_DefaultRT.m_vp.Height;
-	rc.left = 0;
-	rc.right = g_pMain->m_DefaultRT.m_vp.Width;
+		_stprintf_s(m_pTextOutBuffer, L"PlayTime : %d", m_fPlayTime);
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-	_stprintf_s(m_pTextOutBuffer, L"PlayTime : %d", m_fPlayTime);
-	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+		_stprintf_s(m_pTextOutBuffer, _T("Score : %d"), m_iScore);
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-	_stprintf_s(m_pTextOutBuffer, _T("Score : %d"), m_iScore);
-	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
-	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+		_stprintf_s(m_pTextOutBuffer, _T("Tom HP : %d"), m_CharHero[G_HERO_TOM].get()->m_iHP);
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-	_stprintf_s(m_pTextOutBuffer, _T("Tom HP : %d"), m_CharHero[G_HERO_TOM].get()->m_iHP);
-	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
-	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+		_stprintf_s(m_pTextOutBuffer, _T("Tom Bullet : %d"), m_CharHero[G_HERO_TOM].get()->m_iBullet);
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f));
+		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-	_stprintf_s(m_pTextOutBuffer, _T("Tom Bullet : %d"), m_CharHero[G_HERO_TOM].get()->m_iBullet);
-	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f));
-	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
+		_stprintf_s(m_pTextOutBuffer, _T("Jake HP : %d"), m_CharHero[G_HERO_JAKE].get()->m_iHP);
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-	_stprintf_s(m_pTextOutBuffer, _T("Jake HP : %d"), m_CharHero[G_HERO_JAKE].get()->m_iHP);
-	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-	rc.top += G_MACRO_DEBUG_STR_INTERVAL;
-
-	_stprintf_s(m_pTextOutBuffer, _T("Jake Bullet : %d"), m_CharHero[G_HERO_JAKE].get()->m_iBullet);
-	g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
-
+		_stprintf_s(m_pTextOutBuffer, _T("Jake Bullet : %d"), m_CharHero[G_HERO_JAKE].get()->m_iBullet);
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
+	}
 #endif
 	return true;
 };
