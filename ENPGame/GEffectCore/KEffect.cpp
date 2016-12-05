@@ -1,6 +1,6 @@
-#include "stdafx.h"
-#include "_stdafx.h"
-
+//#include "stdafx.h"
+//#include "_stdafx.h"
+#include "KEffect.h"
 bool		KEffect::Init() { 
 	m_pPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/Blend.hlsl", "PS_MATERIAL"));
 	//--------------------------------------------------------------------------------------

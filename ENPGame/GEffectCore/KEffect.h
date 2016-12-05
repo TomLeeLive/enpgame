@@ -1,4 +1,11 @@
 #pragma once
+#include "GDxState.h"
+#include "GCamera.h"
+
+#include "GSprite.h"
+#include "GTimer.h"
+#include "GCamera.h"
+
 using namespace DX;
 
 enum G_EFFECT_TYPE {

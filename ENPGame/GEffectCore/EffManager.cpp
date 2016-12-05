@@ -1,5 +1,6 @@
-#include "stdafx.h"
-#include "_stdafx.h"
+//#include "stdafx.h"
+//#include "_stdafx.h"
+#include "EffManager.h"
 
 void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 	D3DXVECTOR3 vScl, float fTime ) {
@@ -24,7 +25,7 @@ void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 		//이미지 이름을 저장해 놓는다. 나중에 save 할때 쓴다.
 		//TCHAR  *tchr = (TCHAR*)(LPCTSTR)strFile;
 		//p_CParctice->m_EffMgr.GetStringWeNeed(tchr, tchr);
-		m_ImageList.push_back(strFile->c_str());
+		//m_ImageList.push_back(strFile->c_str());
 
 		// 애니메이션 관련, 가로4x4
 		Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);

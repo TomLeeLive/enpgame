@@ -10,12 +10,9 @@
 #include "KEffect.h"
 #include "EffManager.h"
 
-enum G_EFF_TOOL_EXT {
-	G_EFF_TOOL_EXT1,//.eff
-	G_EFF_TOOL_EXT2,//.bff
-};
 
 
 
-#define G_EFF_ITEM_INFO_LINES 4
+
+
 

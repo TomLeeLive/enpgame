@@ -1,4 +1,19 @@
 #pragma once
+
+#include <atlstr.h>
+
+#include "GSprite.h"
+#include "GTimer.h"
+#include "GCamera.h"
+#include "KEffect.h"
+
+#define G_EFF_ITEM_INFO_LINES 4
+
+enum G_EFF_TOOL_EXT {
+	G_EFF_TOOL_EXT1,//.eff
+	G_EFF_TOOL_EXT2,//.bff
+};
+
 using namespace std;
 
 class EffManager
