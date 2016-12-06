@@ -34,7 +34,7 @@ unsigned int __stdcall LoadingThread(void* arg) {
 	((GSeqLoading*)g_pMain->m_pGameSeq[G_SEQ_LOADING])->m_fLoading += 40.0f;
 	LeaveCriticalSection(&CSfLoading);
 
-	g_pMain->m_pSound.Play(SND_BGM_1, true, true);
+	g_pMain->m_pSound.Play(SND_BGM_1, true, false);
 
 
 	for (int i = 0; i < G_SEQ_CNT; i++) {

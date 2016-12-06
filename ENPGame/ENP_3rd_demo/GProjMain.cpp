@@ -22,8 +22,8 @@ bool GProjMain::SoundLoad() {
 
 	int iIndex = 0;
 
-	iIndex = m_pSound.Load("data/sound/bgm/bgm1.mp3");				
-	iIndex = m_pSound.Load("data/sound/bgm/theme.mp3");				
+	iIndex = m_pSound.Load("data/sound/bgm/bgm1.mp3",true);				
+	iIndex = m_pSound.Load("data/sound/bgm/theme.mp3", true);
 	iIndex = m_pSound.Load("data/sound/intro/intro_the_hell.wav");	
 	iIndex = m_pSound.Load("data/sound/player/boots1.wav");			
 	iIndex = m_pSound.Load("data/sound/player/boots2.wav");			
