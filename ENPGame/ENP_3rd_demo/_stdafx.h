@@ -31,7 +31,7 @@
 #include "GFPSCamera.h"
 #include "GTimer.h"
 #include "GDirectWrite.h"
-
+//#include <process.h> //beginthreadex() 함수 사용시 필요 헤더파일
 
 
 //캐릭터
@@ -99,6 +99,7 @@
 #include "GSeqMenu.h"
 #include "GSeqSinglePlay.h"
 #include "GSeqSurvivalMode.h"
+#include "GSeqLoading.h"
 
 //Main
 #include "GCoreLibV2.h"

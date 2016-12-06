@@ -30,10 +30,12 @@ HRESULT GSprite::SetInputLayout()
 
 		};
 		UINT numElements = sizeof(layout) / sizeof(layout[0]);
+		//EnterCriticalSection(&g_CSd3dDevice);
 		m_dxobj.g_pInputlayout.Attach(DX::CreateInputlayout(g_pd3dDevice,
 			m_dxobj.g_pVSBlob.Get()->GetBufferSize(),
 			m_dxobj.g_pVSBlob.Get()->GetBufferPointer(),
 			layout, numElements));
+		//LeaveCriticalSection(&g_CSd3dDevice);
 	}
 	return hr;
 }
@@ -56,8 +58,9 @@ HRESULT GSprite::CreateInstance(UINT iNumInstance)
 				(rand() & RAND_MAX) / (float)RAND_MAX,	1);
 		D3DXMatrixTranspose(&m_pInstance[iSt].matWorld,	&m_pInstance[iSt].matWorld);
 	}
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_pVBInstance.Attach(DX::CreateVertexBuffer(m_pd3dDevice, &m_pInstance.at(0), m_pInstance.size(), sizeof(GInstatnce)));
-	
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	
 	return hr;
 }
@@ -106,7 +109,9 @@ bool GSprite::PostDraw(ID3D11DeviceContext* pContext)
 }
 bool	GSprite::RenderInstancing(ID3D11DeviceContext* pContext)
 {
+	//EnterCriticalSection(&g_CSImmediateContext);
 	PreDraw(g_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	{
 		ID3D11Buffer* vb[2] = {	m_dxobj.g_pVertexBuffer.Get(),	m_pVBInstance.Get() };
 		UINT stride[2] = { sizeof(PNCT_VERTEX), sizeof(GInstatnce) };
@@ -214,12 +219,15 @@ void GSprite::SetTextureArray(T_STR_VECTOR FileList)
 	HRESULT hr = S_OK;
 	for (int iList = 0; iList < FileList.size(); iList++)
 	{
+		//EnterCriticalSection(&g_CSd3dDevice);
 		INT iIndex = I_Texture.Add(m_pd3dDevice, FileList[iList].c_str());
 		if (iIndex <= 0)
 		{
+			//LeaveCriticalSection(&g_CSd3dDevice);
 			MessageBox(0, _T("m_Texture.Load ½ÇÆÐ"), _T("Fatal error"), MB_OK);
 			return;
 		}
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		m_TextureIndex.push_back(iIndex);
 	}
 	m_iNumTexture = m_TextureIndex.size();

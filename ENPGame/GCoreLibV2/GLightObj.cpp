@@ -161,10 +161,14 @@ INT TLightMgr::Add(D3DXVECTOR3 vPosition, D3DXVECTOR3 vDir, const TCHAR *pFileNa
 	_stprintf_s(szPath, _T("%s%s"), Drive, Dir);
 	pPoint->SetPath(szPath);
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(pPoint->Load(m_pd3dDevice, szFileName)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return 0;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	TMap.insert(make_pair(++m_iCurIndex, pPoint));
 	return m_iCurIndex;
 }
