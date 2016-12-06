@@ -32,7 +32,7 @@ bool GSeqMenu::Render() {
 	switch (iClickedButton) {
 		case 1: 
 		{
-			g_pMain->m_pGameSeq[G_SEQ_SINGLE]->Init();
+			//g_pMain->m_pGameSeq[G_SEQ_SINGLE]->Init();
 			g_pMain->ChangeSeq(G_SEQ_SINGLE);
 		}
 		break;

@@ -2,15 +2,13 @@
 class GSeqLoading : public GSeq
 {
 public:
-	
-	float m_fLoading;
-public:
 	static GSeq* CreateInstance() { 
 		if (pInstance_ == 0) pInstance_ = new GSeqLoading;
 		return pInstance_;
 	}
 	bool Init();
 	 bool Frame() ;
+	 bool RenderManually(float fValue);
 	 bool Render();
 	 bool Release() { return true; };
 
@@ -24,7 +22,7 @@ public:
 public:
 	virtual ~GSeqLoading() {};
 protected:
-	GSeqLoading() { m_fLoading= 0.0f; pInstance_ = 0; };
+	GSeqLoading() { pInstance_ = 0; };
 private:
 	static GSeqLoading *pInstance_;
 };

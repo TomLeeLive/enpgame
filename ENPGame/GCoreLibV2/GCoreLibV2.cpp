@@ -204,22 +204,26 @@ bool GCoreLibV2::GRelease()
 }
 bool GCoreLibV2::GFrame()
 {
-	PreFrame();
-	Frame();
-	PostFrame();
+	if(!m_bRenderManually){
+		PreFrame();
+		Frame();
+		PostFrame();
+	}
 	return true;
 }
 bool GCoreLibV2::GRender()
 {
-	I_Input.Render();
-	m_Timer.Render();
+	if (!m_bRenderManually) {
+		I_Input.Render();
+		m_Timer.Render();
 
-	PreRender();
-	Render();
+		PreRender();
+		Render();
 
-	if( m_bDebugFpsPrint )	DrawDebug();
-	if (m_bDebugInfoPrint)	DrawInfo();
-	PostRender();	
+		if (m_bDebugFpsPrint)	DrawDebug();
+		if (m_bDebugInfoPrint)	DrawInfo();
+		PostRender();
+	}
 	return true;
 }
 
@@ -470,6 +474,7 @@ HRESULT GCoreLibV2::DeleteResource()
 }
 GCoreLibV2::GCoreLibV2(void)
 {
+	m_bRenderManually = false;
 	m_fScreenColor[0] = 0.5f; // R
 	m_fScreenColor[1] = 1.0f; // G
 	m_fScreenColor[2] = 0.5f; // B
