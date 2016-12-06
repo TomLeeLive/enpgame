@@ -228,7 +228,7 @@ void C2dDlgTap::OnBnClickedButton1()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CKEffectToolApp* pApp = (CKEffectToolApp*)AfxGetApp();
 
-	if (!pApp->LoadFileDlg(_T("gui"), _T("GUI Load")))
+	if (!pApp->LoadFileDlg(_T("eff"), _T("EFF Load")))
 	{
 		return;
 	}
