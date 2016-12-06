@@ -21,22 +21,37 @@ enum G_AI {
 class GAISeq 
 {
 public:
-	GCharacter*	 pChar0;
-	D3DXMATRIX	 m_matWorld;
-	D3DXMATRIX	 Trans;
-	D3DXMATRIX	 Rotation;
+	//float m_fDistance;
+	//float m_fRandTime;
+	//D3DXVECTOR3 m_vRDestLook;
+	//D3DXVECTOR3 m_vZRight;
+	//D3DXVECTOR3 m_vZUp;
+	//D3DXVECTOR3 m_vLook;
 
-	static GAISeq* CreateInstance() { return 0; }
+	bool		m_bDebug;
+	bool		m_bTime;
+
+	//bool		m_bRTime;
+	//bool		m_bRDebug;
+
+	float fTime;
+	GCharacter*	 pChar0;
+
+	//static GAISeq* CreateInstance() { return 0; }
 	virtual bool Init(int iMyIndex) = 0;
 	virtual bool Frame(int iMyIndex) = 0;
 	virtual bool Render() = 0;
 	virtual bool Release() = 0;
+	void		InitGSeq() {
+		//m_fDistance = 0.0f;
+		m_bDebug = false;
+		m_bTime = false;
+		//m_vRDestLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+		//m_vZRight = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+		//m_vZUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
-	//shared_ptr<GCamera > m_pMainCamera;
-	//D3DXMATRIX  m_matWorld;
-	//GShape*		m_Box1;
-	//GShape*		m_Box2;
-	//GShape*		m_Box3;
+	};
+
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------
@@ -46,7 +61,8 @@ public:
 	virtual int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 
 	virtual ~GAISeq();
-protected:
 	GAISeq();
+protected:
+
 };
 

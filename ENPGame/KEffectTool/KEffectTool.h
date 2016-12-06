@@ -28,6 +28,8 @@
 class CKEffectToolApp : public CWinApp,public GCoreLibV2
 {
 public:
+	bool m_bCheck; // play button check
+public:
 	CKEffectToolApp();
 	shared_ptr<GCamera > m_pMainCamera;
 public:
