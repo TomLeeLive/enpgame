@@ -51,7 +51,7 @@ bool GHeightMap::CreateHeightMap(TCHAR* strHeightMapTex)
 				{
 					UINT colStart = col * 4;
 					UINT uRed = pTexels[rowStart + colStart + 0];
-					m_fHeightList[row * desc.Width + col] = uRed;	/// DWORD이므로 pitch/4	
+					m_fHeightList[row * desc.Width + col] = uRed/10.f;	/// DWORD이므로 pitch/4	
 				}
 			}
 			m_pContext->Unmap(pTexture2D, D3D11CalcSubresource(0, 0, 1));
