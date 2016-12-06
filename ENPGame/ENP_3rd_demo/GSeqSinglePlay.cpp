@@ -333,9 +333,22 @@ bool        GSeqSinglePlay::InitMap() {
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ¸Ê »ý¼º
 	//--------------------------------------------------------------------------------------
-	TMapDesc MapDesc = { 50, 50, 500.0f, 0.0f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
-	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
-	if (FAILED(m_CustomMap.Load(MapDesc)))
+	//HeightMap
+	m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
+	if (FAILED(m_HeightMap.CreateHeightMap(L"data/HeightTest.bmp")))
+	{
+		return false;
+	}
+
+	m_HeightMap.m_bStaticLight = true;
+	TMapDesc MapDesc = {
+		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
+		//5,5,
+		30.0f, 1.0f,
+		L"data/Sand.jpg",
+		L"data/shader/CustomizeMap.hlsl" };
+
+	if (!m_HeightMap.Load(MapDesc))
 	{
 		return false;
 	}
@@ -345,10 +358,8 @@ bool        GSeqSinglePlay::InitMap() {
 	//  Äõµå Æ®¸®
 	//--------------------------------------------------------------------------------------
 	m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
-
 	m_QuadTree.Update(g_pd3dDevice, m_pCamera);
 
-	//m_QuadTree.AddObject(&m_tbsobj[iBox]);
 #endif
 
 	return true;
@@ -540,9 +551,12 @@ bool        GSeqSinglePlay::FrameMap() {
 	{
 		m_QuadTree.SetThresHold(!m_QuadTree.m_bThresHoldValue);
 	}
+	
+	m_QuadTree.Frame();	
 
-	m_QuadTree.Frame();
-
+	m_HeightMap.Frame();
+	g_pImmediateContext->UpdateSubresource(
+		m_HeightMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_HeightMap.m_VertexList.at(0), 0, 0);
 #endif
 	return true;
 };
@@ -769,9 +783,9 @@ bool        GSeqSinglePlay::RenderMap() {
 	//--------------------------------------------------------------------------------------
 	// Ä¿½ºÅÒ ¸Ê
 	//--------------------------------------------------------------------------------------
-	m_CustomMap.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(),
-		m_pCamera->GetProjMatrix());
-	m_CustomMap.Render(g_pImmediateContext);
+
+	m_HeightMap.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	m_HeightMap.Render(g_pImmediateContext);
 
 	DrawSelectTreeLevel(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	if (m_bMapDebugRender)
@@ -919,7 +933,8 @@ bool        GSeqSinglePlay::ReleaseGame() {
 
 bool        GSeqSinglePlay::ReleaseMap() {
 #ifdef G_MACRO_MAP_ADD
-	m_CustomMap.Release();
+	
+	m_HeightMap.Release();
 	m_QuadTree.Release();
 #endif
 	return true;

@@ -18,7 +18,7 @@ bool GProjMain::Init()
 		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height),
 		0.1f, 10000.0f);
 
-
+	//G_MACRO_MAP_ADD
 	//HeightMap
 	m_HeightMap.Init(m_pd3dDevice, m_pImmediateContext);
 	if (FAILED(m_HeightMap.CreateHeightMap(L"data/HeightTest.bmp")))
