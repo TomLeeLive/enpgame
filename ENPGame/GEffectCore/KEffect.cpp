@@ -2,16 +2,23 @@
 //#include "_stdafx.h"
 #include "KEffect.h"
 bool		KEffect::Init() { 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_pPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/Blend.hlsl", "PS_MATERIAL"));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	//--------------------------------------------------------------------------------------
 	// 배경 부분
 	//--------------------------------------------------------------------------------------
 	m_pScreen = make_shared<GPlaneShape>();
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (m_pScreen->Create(g_pd3dDevice, L"data/shader/plane.hlsl") == false)
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		MessageBox(0, _T("m_pPlane 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	m_pSprite = make_shared<GSprite>();
 	//SAFE_NEW(m_pSprite, GSprite);
@@ -45,8 +52,10 @@ bool		KEffect::Frame(GCamera* camera, GTimer* timer) {
 	D3DXMATRIX matView = *(camera->GetViewMatrix());
 	D3DXMATRIX matProj = *(camera->GetProjMatrix());
 	m_pSprite->SetMatrix(&m_matBillboard, &matView, &matProj);
+
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pSprite->Frame(g_pImmediateContext, timer->GetElapsedTime(), g_fSecPerFrame);
-	
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 
 
@@ -60,8 +69,9 @@ bool		KEffect::Frame(GCamera* camera, GTimer* timer) {
 	m_vMaterial.w = fValue;
 	m_pSprite->m_cbData.Color = m_vMaterial;
 
+	//EnterCriticalSection(&g_CSImmediateContext);
 	ApplyBS(g_pImmediateContext, GDxState::g_pBSAlphaOne, fFactor, 0xffffffff);
-
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 	return true; };
 bool		KEffect::Render() {
@@ -71,8 +81,10 @@ bool		KEffect::Render() {
 
 	//if (m_RT.Begin(m_pImmediateContext, vColor))
 	//	{
+	//EnterCriticalSection(&g_CSImmediateContext);
 	ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
 	ApplyDSS(g_pImmediateContext, GDxState::g_pDSSDepthEnable);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 	if (m_bCheck == true)
 	{
@@ -83,6 +95,7 @@ bool		KEffect::Render() {
 	//	m_RT.End(m_pImmediateContext);
 	//	}
 
+	//EnterCriticalSection(&g_CSImmediateContext);
 	ApplyDSS(g_pImmediateContext, GDxState::g_pDSSDepthDisable);
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity(&matIdentity);
@@ -93,6 +106,7 @@ bool		KEffect::Render() {
 	g_pImmediateContext->PSSetShader(m_pPS.Get(), NULL, 0);
 	g_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite->m_dxobj.g_pConstantBuffer.GetAddressOf());
 	m_pScreen->PostRender(g_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 	return true; };
 bool		KEffect::Release() { 
@@ -110,7 +124,10 @@ bool KEffect::RenderPlane()
 	if (m_pSprite == NULL)
 		return false;
 
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pSprite->Render(g_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
+
 	return true;
 }
 

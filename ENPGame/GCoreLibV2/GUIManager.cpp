@@ -191,7 +191,9 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 		{
 			GButtonCtl* pBoxCtl = new GButtonCtl();
 			pBoxCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
+			//EnterCriticalSection(&g_CSd3dDevice);
 			pBoxCtl->Create(g_pd3dDevice, nullptr, (*strFile).c_str());
+			//LeaveCriticalSection(&g_CSd3dDevice);
 			pBoxCtl->Scale(vScl.x, vScl.y, vScl.z);
 			pBoxCtl->Move(vTrans.x, vTrans.y, vTrans.z);
 			if (iAutoRescale == 1)
@@ -212,7 +214,9 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 		{
 			GImageCtl* pImageCtl = new GImageCtl();
 			pImageCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
+			//EnterCriticalSection(&g_CSd3dDevice);
 			pImageCtl->Create(g_pd3dDevice, nullptr, (*strFile).c_str());
+			//LeaveCriticalSection(&g_CSd3dDevice);
 			pImageCtl->Scale(vScl.x, vScl.y, vScl.z);
 			pImageCtl->Move(vTrans.x, vTrans.y, vTrans.z);
 			if (iAutoRescale == 1)
@@ -232,7 +236,9 @@ void	GUIManager::UICreate(GUI_TYPE type, T_STR* strFile, DXGI_SWAP_CHAIN_DESC*	S
 		{
 			GButtonHalfCtl* pBoxCtl = new GButtonHalfCtl();
 			pBoxCtl->Set(SwapChainDesc->BufferDesc.Width, SwapChainDesc->BufferDesc.Height);
+			//EnterCriticalSection(&g_CSd3dDevice);
 			pBoxCtl->Create(g_pd3dDevice,D3DXVECTOR3(vScl.x, vScl.y, vScl.z), nullptr, (*strFile).c_str());
+			//LeaveCriticalSection(&g_CSd3dDevice);
 			//pBoxCtl->Scale(100 - 1.0f, 50 - 1.0f, 1 - 1.0f);
 			pBoxCtl->Move(vTrans.x, vTrans.y, vTrans.z);
 			if (iAutoRescale == 1)
@@ -296,7 +302,9 @@ bool		GUIManager::Render() {
 	for (int iPlane = 0; iPlane < m_pUIList.size(); iPlane++)
 	{
 		GControlUI* pRect = m_pUIList[iPlane];
+		//EnterCriticalSection(&g_CSImmediateContext);
 		pRect->Render(g_pImmediateContext);
+		//LeaveCriticalSection(&g_CSImmediateContext);
 	}
 	return true;
 };
@@ -305,10 +313,12 @@ bool		GUIManager::Render(int* iClickedEndNum) {
 	{
 		GControlUI* pRect = m_pUIList[iPlane];
 
+		//EnterCriticalSection(&g_CSImmediateContext);
 		if (false == pRect->Render(g_pImmediateContext)) {
 			*iClickedEndNum = iPlane;
 			m_pSelectPlane = NULL;
 		}
+		//LeaveCriticalSection(&g_CSImmediateContext);
 	}
 	return true;
 };
@@ -352,12 +362,16 @@ GControlUI* GUIManager::AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_
 	{
 	case GUI_TYPE_BUTTON: {
 		pUIControl = new GButtonCtl();
+		//EnterCriticalSection(&g_CSd3dDevice);
 		pUIControl->Create(g_pd3dDevice, nullptr, strImage);
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		pUIControl->Scale(50, 50, 0);
 	}
 	case GUI_TYPE_IMAGE: {
 		pUIControl = new GEditCtl();
+		//EnterCriticalSection(&g_CSd3dDevice);
 		pUIControl->Create(g_pd3dDevice, nullptr, strImage);
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		pUIControl->Scale(50, 50, 0);
 	}
 	}
@@ -372,12 +386,16 @@ GControlUI* GUIManager::AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDe
 	{
 	case GUI_TYPE_BUTTON: {
 		pUIControl = new GButtonCtl();
+		//EnterCriticalSection(&g_CSd3dDevice);
 		pUIControl->Create(g_pd3dDevice, nullptr, L"data/ui/exit_lg.bmp");
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		pUIControl->Scale(50, 50, 0);
 	}
 	case GUI_TYPE_IMAGE: {
 		pUIControl = new GEditCtl();
+		//EnterCriticalSection(&g_CSd3dDevice);
 		pUIControl->Create(g_pd3dDevice, nullptr, L"data/ui/exit_lg.bmp");
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		pUIControl->Scale(50, 50, 0);
 	}
 	}

@@ -12,12 +12,15 @@ bool GBBox::Init(D3DXVECTOR3 &min, D3DXVECTOR3 &max)
 
 	m_pLine = make_shared<GLineShape>();
 
+	//EnterCriticalSection(&g_CSd3dDevice);
+
 	if (FAILED(m_pLine->Create(g_pd3dDevice, L"data/shader/line.hlsl")))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		MessageBox(0, _T("m_pLIne ½ÇÆÐ"), _T("Fatal error"), MB_OK);
 		return false;
 	}
-
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	
 	GBBOXFUNC::initBox(this, min, max);
@@ -53,7 +56,7 @@ bool GBBox::Render(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
 
 	//D3DXVECTOR3 m_vPoint[8];
 
-
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pLine->Draw(g_pImmediateContext, m_vPoint[0], m_vPoint[1], m_vColor);
 	m_pLine->Draw(g_pImmediateContext, m_vPoint[1], m_vPoint[3], m_vColor);
 	m_pLine->Draw(g_pImmediateContext, m_vPoint[2], m_vPoint[3], m_vColor);
@@ -68,6 +71,7 @@ bool GBBox::Render(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
 	m_pLine->Draw(g_pImmediateContext, m_vPoint[1], m_vPoint[5], m_vColor);
 	m_pLine->Draw(g_pImmediateContext, m_vPoint[2], m_vPoint[6], m_vColor);
 	m_pLine->Draw(g_pImmediateContext, m_vPoint[3], m_vPoint[7], m_vColor);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 	return true;
 }

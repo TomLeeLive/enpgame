@@ -36,39 +36,10 @@ bool GProjMain::SoundLoad() {
 }
 
 bool GProjMain::Init()
-{
-
-	m_pSound.Init();
-
-	SoundLoad();
-
-	m_pSound.Play(SND_BGM_1, true, true);
-
-	
+{	
 	ClipMouse(true);
-	
 
-
-	for (int i = 0; i < G_SEQ_CNT; i++)
-		m_pGameSeq[i]->Init();
-
-	/*
-	//UI Init
-	for (int i = 0; i < G_SEQ_CNT; i++) {
-		m_pGameSeq[i]->m_UIManager.Init();
-
-		T_STR strFile = L"UI_TEST6.gui";
-		m_pGameSeq[i]->m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
-	}
-	*/
-	m_pGameSeq[G_SEQ_MENU]->m_UIManager.Init();
-	T_STR strFile = L"ui_menu.gui";
-	m_pGameSeq[G_SEQ_MENU]->m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
-	
-	m_pGameSeq[G_SEQ_SINGLE]->m_UIManager.Init();
-	strFile = L"UI_TEST6.gui";
-	m_pGameSeq[G_SEQ_SINGLE]->m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
-	
+	m_pGameSeq[G_SEQ_LOADING]->Init();
 	return true;
 }
 
@@ -132,15 +103,10 @@ HRESULT GProjMain::DeleteResource()
 }
 GProjMain::GProjMain(void)
 {
-	m_pGameSeq[G_SEQ_END] = GSeqGameEnd::CreateInstance();
-	m_pGameSeq[G_SEQ_OVER] = GSeqGameOver::CreateInstance();
-	m_pGameSeq[G_SEQ_HOWTO] = GSeqHowTo::CreateInstance();
-	m_pGameSeq[G_SEQ_INTRO] = GSeqIntro::CreateInstance();
-	m_pGameSeq[G_SEQ_MENU] = GSeqMenu::CreateInstance();
-	m_pGameSeq[G_SEQ_SINGLE] = GSeqSinglePlay::CreateInstance();
-	m_pGameSeq[G_SEQ_SURVIVAL] = GSeqSurvivalMode::CreateInstance();
 
-	ChangeSeq(G_SEQ_MENU);
+	m_pGameSeq[G_SEQ_LOADING] = GSeqLoading::CreateInstance();
+
+	ChangeSeq(G_SEQ_LOADING);
 }
 
 GProjMain::~GProjMain(void)

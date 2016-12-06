@@ -664,10 +664,12 @@ HRESULT GQuadTreeIndex::CreateIndexBuffer( GStaticData*  pData )
 	{
 		if( pData->IndexList[iData].size() <= 0 ) break;
 		// 정점 인덱스 버퍼 생성
+		//EnterCriticalSection(&g_CSd3dDevice);
 		pData->IndexBufferList[iData].Attach(DX::CreateIndexBuffer(m_pd3dDevice,
 			&pData->IndexList[iData].at(0),
 			pData->IndexList[iData].size(),
 			sizeof(DWORD)));
+		//LeaveCriticalSection(&g_CSd3dDevice);
 	}
 	return hr;
 }
@@ -678,10 +680,12 @@ HRESULT GQuadTreeIndex::CreateVertexBuffer(GNode* pNode, DWORD dwCount, PNCT_VER
 	void** pData = nullptr;
 	if (dwCount > 0) pData = (void**)pvHeightMap;
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	pNode->m_pVertexBuffer.Attach(DX::CreateVertexBuffer(m_pd3dDevice,
 		pData,
 		dwCount,
 		sizeof(PNCT_VERTEX)));
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	return hr;
 }
@@ -721,7 +725,10 @@ bool GQuadTreeIndex::CreateVertexData(GNode* pNode)
 
 bool GQuadTreeIndex::Render(ID3D11DeviceContext*    pContext)
 {
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pMap->PreRender(g_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
+
 	UINT stride = sizeof(PNCT_VERTEX);
 	UINT offset = 0;
 

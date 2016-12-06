@@ -70,6 +70,11 @@ bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
 
 bool GSeqSinglePlay::Init()
 {
+	T_STR strFile;
+	m_UIManager.Init();
+	strFile = L"ui_singleplay.gui";
+	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
+
 	InitGame();
 	InitChar();
 	InitEffect();
@@ -242,6 +247,7 @@ bool GSeqSinglePlay::Release()
 
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
+	//EnterCriticalSection(&g_CSd3dDevice);
 
 	D3DXMatrixIdentity(&m_matWorld);
 
@@ -249,12 +255,12 @@ bool        GSeqSinglePlay::InitGame() {
 
 	m_ObjGun.m_bAniLoop = false;
 
+	
 	if (!m_ObjGun.Load(g_pd3dDevice, _T("data/object/fps_shotgun/shotgun3.GBS"), L"data/shader/box.hlsl"))
 	{
 		return false;
 	}
-
-
+	
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -292,6 +298,7 @@ bool        GSeqSinglePlay::InitGame() {
 		g_pMain->m_bDebugFpsPrint = true;
 	}
 
+	//LeaveCriticalSection(&g_CSd3dDevice);
 #endif
 	return true;
 };

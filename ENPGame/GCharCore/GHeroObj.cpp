@@ -15,7 +15,11 @@ HRESULT GHeroObj::CreateConstantBuffer()
 	Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	Desc.MiscFlags = 0;
 	Desc.ByteWidth = sizeof(CBConstBoneWorld);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	V_RETURN(g_pd3dDevice->CreateBuffer(&Desc, NULL, m_pCBConstBoneWorld.GetAddressOf()));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	DXUT_SetDebugName(m_pCBConstBoneWorld.Get(), "CBConstBoneWorld");
 
 	//////////////////////////   //////////////////
@@ -28,7 +32,9 @@ HRESULT GHeroObj::CreateConstantBuffer()
 		D3D11_CPU_ACCESS_WRITE,
 		0
 	};
+	//EnterCriticalSection(&g_CSd3dDevice);
 	g_pd3dDevice->CreateBuffer(&vbdesc, NULL, &m_pBoneBuffer);
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
@@ -38,8 +44,10 @@ HRESULT GHeroObj::CreateConstantBuffer()
 	SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	SRVDesc.Buffer.ElementOffset = 0;
 	SRVDesc.Buffer.ElementWidth = MAX_BONE_MATRICES * 4;
+	//EnterCriticalSection(&g_CSd3dDevice);
 	g_pd3dDevice->CreateShaderResourceView(
 		m_pBoneBuffer.Get(), &SRVDesc, m_pBoneBufferRV.GetAddressOf());
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	return hr;
 }
@@ -135,18 +143,22 @@ bool		GHeroObj::Frame()
 		{
 			SetBoneMatrices(pModel->GetMatrix());
 			D3D11_MAPPED_SUBRESOURCE MappedResource;
+			//EnterCriticalSection(&g_CSImmediateContext);
 			g_pImmediateContext->Map(m_pCBConstBoneWorld.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
 			memcpy(MappedResource.pData, &m_cbBoneData, sizeof(CBConstBoneWorld));
 			g_pImmediateContext->Unmap(m_pCBConstBoneWorld.Get(), 0);
 			g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pCBConstBoneWorld.GetAddressOf());
+			//LeaveCriticalSection(&g_CSImmediateContext);
 		}
 		else
 		{
+			//EnterCriticalSection(&g_CSImmediateContext);
 			m_pBoneObject->SetBoneMatrices(
 				g_pImmediateContext,
 				m_pBoneBuffer.Get(), 
 				m_pMatrix,
 				pModel->GetMatrix());
+			//LeaveCriticalSection(&g_CSImmediateContext);
 			/*SetBoneMatrices(
 				g_pImmediateContext,
 				m_pMatrix,
@@ -164,8 +176,10 @@ bool		GHeroObj::Render(ID3D11DeviceContext*    pContext)
 		_ASSERT(pModel);
 		pModel->SetMatrix(&m_matWorld, &m_matView, &m_matProj);
 		ID3D11ShaderResourceView* aRViews[1] = { m_pBoneBufferRV.Get() };
-		g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
 
+		//EnterCriticalSection(&g_CSImmediateContext);
+		g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
+		//LeaveCriticalSection(&g_CSImmediateContext);
 		//if (m_bConstantBufferType)
 		//{
 		//	SetBoneMatrices(pModel->GetMatrix());

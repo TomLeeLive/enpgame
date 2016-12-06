@@ -138,6 +138,7 @@
     <ClCompile Include="GSeqGameOver.cpp" />
     <ClCompile Include="GSeqHowTo.cpp" />
     <ClCompile Include="GSeqIntro.cpp" />
+    <ClCompile Include="GSeqLoading.cpp" />
     <ClCompile Include="GSeqMenu.cpp" />
     <ClCompile Include="GSeqSinglePlay.cpp" />
     <ClCompile Include="GSeqSurvivalMode.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="GSeqGameOver.h" />
     <ClInclude Include="GSeqHowTo.h" />
     <ClInclude Include="GSeqIntro.h" />
+    <ClInclude Include="GSeqLoading.h" />
     <ClInclude Include="GSeqMenu.h" />
     <ClInclude Include="GSeqSinglePlay.h" />
     <ClInclude Include="GSeqSurvivalMode.h" />

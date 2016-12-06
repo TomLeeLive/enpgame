@@ -559,9 +559,13 @@ HRESULT GAseObj::SetInputLayout()
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pInputlayout.Attach(DX::CreateInputlayout(m_pd3dDevice,
 			m_dxobj.g_pVSBlob.Get()->GetBufferSize(),
 			m_dxobj.g_pVSBlob.Get()->GetBufferPointer(), layout, numElements));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return hr;
 }
 bool GAseObj::ResetResource()
@@ -649,12 +653,13 @@ bool GAseObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 					pSubMesh->m_dxobj.m_BoxVB.top = 0; pSubMesh->m_dxobj.m_BoxVB.bottom = 1;
 					pSubMesh->m_dxobj.m_BoxVB.front = 0; pSubMesh->m_dxobj.m_BoxVB.back = 1;
 
+					//EnterCriticalSection(&g_CSImmediateContext);
 					g_pImmediateContext->UpdateSubresource(
 						pVB, 0,
 						&pSubMesh->m_dxobj.m_BoxVB,
 						(uint8_t*)&pSubData->m_VertexArray.at(0),
 						0, 0);
-
+					//LeaveCriticalSection(&g_CSImmediateContext);
 
 					/*g_pImmediateContext->CopySubresourceRegion(
 					m_dxobj.g_pVertexBuffer.Get(), 0, iBeginPos, 0, 0,
@@ -672,8 +677,10 @@ bool GAseObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 					pSubMesh->m_dxobj.m_BoxIB.top = 0;		pSubMesh->m_dxobj.m_BoxIB.bottom = 1;
 					pSubMesh->m_dxobj.m_BoxIB.front = 0;	pSubMesh->m_dxobj.m_BoxIB.back = 1;
 
+					//EnterCriticalSection(&g_CSImmediateContext);
 					g_pImmediateContext->UpdateSubresource(pIB, 0,
 						&pSubMesh->m_dxobj.m_BoxIB, (void*)&pSubData->m_IndexArray.at(0), 0, 0);
+					//LeaveCriticalSection(&g_CSImmediateContext);
 
 					pSubMesh->m_dxobj.m_iBeginIB = ibOffset;
 					ibOffset += pSubMesh->m_dxobj.m_iNumIndex;
@@ -696,8 +703,10 @@ bool GAseObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 				pMesh->m_dxobj.m_BoxVB.top = 0; pMesh->m_dxobj.m_BoxVB.bottom = 1;
 				pMesh->m_dxobj.m_BoxVB.front = 0; pMesh->m_dxobj.m_BoxVB.back = 1;
 
+				//EnterCriticalSection(&g_CSImmediateContext);
 				g_pImmediateContext->UpdateSubresource(pVB, 0,
 					&pMesh->m_dxobj.m_BoxVB, (void*)&pData->m_VertexArray.at(0), 0, 0);
+				//LeaveCriticalSection(&g_CSImmediateContext);
 
 				pMesh->m_dxobj.m_iBeginVB = vbOffset;
 				vbOffset += pMesh->m_dxobj.m_iNumVertex;
@@ -710,8 +719,10 @@ bool GAseObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 				pMesh->m_dxobj.m_BoxIB.top = 0; pMesh->m_dxobj.m_BoxIB.bottom = 1;
 				pMesh->m_dxobj.m_BoxIB.front = 0; pMesh->m_dxobj.m_BoxIB.back = 1;
 
+				//EnterCriticalSection(&g_CSImmediateContext);
 				g_pImmediateContext->UpdateSubresource(pIB, 0,
 					&pMesh->m_dxobj.m_BoxIB, (void*)&pData->m_IndexArray.at(0), 0, 0);
+				//LeaveCriticalSection(&g_CSImmediateContext);
 
 				pMesh->m_dxobj.m_iBeginIB = ibOffset;
 				ibOffset += pMesh->m_dxobj.m_iNumIndex;

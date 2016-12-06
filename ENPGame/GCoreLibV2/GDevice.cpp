@@ -1,6 +1,8 @@
 #include "GDevice.h"
 namespace GCORESTD
 {
+	//CRITICAL_SECTION		g_CSImmediateContext;
+	//CRITICAL_SECTION		g_CSd3dDevice;
 	ID3D11Device*			g_pd3dDevice = NULL;
 	ID3D11DeviceContext*    g_pImmediateContext = NULL;
 	UINT					g_iClientWidth;
@@ -103,7 +105,9 @@ HRESULT GDevice::ResizeDevice( UINT iWidth, UINT iHeight)
 	//--------------------------------------------------------------------------------------
 	// 랜더타켓과 깊이스텐실 버퍼를 해제한다.
 	//--------------------------------------------------------------------------------------
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pImmediateContext->OMSetRenderTargets( 0, NULL, NULL );
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	m_DefaultRT.m_pRenderTargetView.ReleaseAndGetAddressOf();	
 
 	//--------------------------------------------------------------------------------------
@@ -221,7 +225,10 @@ HRESULT GDevice::CreateSwapChain( HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsF
 	//적절한 화면 모드를 검색한다.
 	//DXGI_MODE_DESC FindBufferDesc;
 	ZeroMemory(&m_FindBufferDesc, sizeof(m_FindBufferDesc));
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_FindBufferDesc = FindClosestMatchingMode(BufferDesc, m_pd3dDevice);
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	if( m_pGIFactory == NULL ) return S_FALSE;
 	DXGI_SWAP_CHAIN_DESC sd;
@@ -241,10 +248,14 @@ HRESULT GDevice::CreateSwapChain( HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsF
 	// 추가
 	sd.Flags	= DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if( FAILED( hr = m_pGIFactory->CreateSwapChain( m_pd3dDevice, &sd, &m_pSwapChain ) ))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return hr;
 	}	
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	if (FAILED(hr = m_pSwapChain->GetDesc(&m_SwapChainDesc)))
 	{
 		return hr;
@@ -300,14 +311,25 @@ HRESULT GDevice::CreateDeviceAndSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, 
     for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
         m_driverType = driverTypes[driverTypeIndex];
+
+		//EnterCriticalSection(&g_CSd3dDevice);
+		//EnterCriticalSection(&g_CSImmediateContext);
         hr = D3D11CreateDeviceAndSwapChain( NULL, m_driverType, NULL, createDeviceFlags,featureLevels, numFeatureLevels,
                                             D3D11_SDK_VERSION, &sd, &m_pSwapChain, &m_pd3dDevice, &m_FeatureLevel, &m_pImmediateContext );
+		//LeaveCriticalSection(&g_CSImmediateContext);
+		//LeaveCriticalSection(&g_CSd3dDevice);
+
         if( SUCCEEDED( hr ) )
 		{
             if( FAILED( hr ) || m_FeatureLevel < D3D_FEATURE_LEVEL_11_0)
 			{
+				//EnterCriticalSection(&g_CSImmediateContext);
 				if( m_pImmediateContext ) m_pImmediateContext->Release();
+				//LeaveCriticalSection(&g_CSImmediateContext);
+
+				//EnterCriticalSection(&g_CSd3dDevice);
 				if( m_pd3dDevice ) m_pd3dDevice->Release();
+				//LeaveCriticalSection(&g_CSd3dDevice);
 				continue;
 			}
 			break;
@@ -321,6 +343,8 @@ HRESULT GDevice::CreateDeviceAndSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, 
 	{
 		return hr;
 	}
+	
+
 	GCORESTD::g_pd3dDevice = m_pd3dDevice;
 	GCORESTD::g_pImmediateContext = m_pImmediateContext;
 	GCORESTD::g_iClientWidth = m_SwapChainDesc.BufferDesc.Width;
@@ -359,25 +383,42 @@ HRESULT GDevice::CreateDevice()
 	for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
     {
         m_driverType = driverTypes[driverTypeIndex];
+
+		//InitializeCriticalSection(&(GCORESTD::g_CSImmediateContext));
+		//InitializeCriticalSection(&(GCORESTD::g_CSd3dDevice));
+
+		//EnterCriticalSection(&g_CSd3dDevice);
+		//EnterCriticalSection(&g_CSImmediateContext);
         if( SUCCEEDED( hr = D3D11CreateDevice(	NULL, m_driverType, NULL, createDeviceFlags,
 												featureLevels, numFeatureLevels,
 												D3D11_SDK_VERSION, &m_pd3dDevice, &m_FeatureLevel, &m_pImmediateContext ) ))
-		{			
+		{	
+			//LeaveCriticalSection(&g_CSImmediateContext);
+			//LeaveCriticalSection(&g_CSd3dDevice);
 			if( FAILED( hr ) || m_FeatureLevel < D3D_FEATURE_LEVEL_11_0)
 			{
 				if( m_pImmediateContext ) m_pImmediateContext->Release();
+				//EnterCriticalSection(&g_CSd3dDevice);
 				if( m_pd3dDevice ) m_pd3dDevice->Release();
+				//LeaveCriticalSection(&g_CSd3dDevice);
 				continue;
 			}
 			break;
 		}
+		//LeaveCriticalSection(&g_CSImmediateContext);
+		//LeaveCriticalSection(&g_CSd3dDevice);
     }
     if( FAILED( hr ) )       return hr;
 
 	GCORESTD::g_pd3dDevice = m_pd3dDevice;
 	GCORESTD::g_pImmediateContext = m_pImmediateContext;
 
-	if (FAILED( hr=GDxState::SetState(m_pd3dDevice))) return hr;
+	//EnterCriticalSection(&g_CSd3dDevice);
+	if (FAILED(hr = GDxState::SetState(m_pd3dDevice))) { 
+		//LeaveCriticalSection(&g_CSd3dDevice);
+		return hr; 
+	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	return CreateGIFactory();
 }
@@ -389,8 +430,11 @@ HRESULT GDevice::CreateGIFactory()
 	if(m_pd3dDevice==NULL) return E_FAIL;
 	HRESULT hr;// = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)(&m_pGIFactory) );
 	IDXGIDevice * pDXGIDevice;
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	hr = m_pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
-      
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	IDXGIAdapter * pDXGIAdapter;
 	hr = pDXGIDevice->GetParent(__uuidof(IDXGIAdapter), (void **)&pDXGIAdapter);
 
@@ -422,7 +466,10 @@ HRESULT GDevice::SetRenderTargetView()
     if( FAILED( hr ) )
         return hr;
 
+	//EnterCriticalSection(&g_CSd3dDevice);
     hr = m_pd3dDevice->CreateRenderTargetView( pBackBuffer, NULL, m_DefaultRT.m_pRenderTargetView.GetAddressOf() );
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
     pBackBuffer->Release();
     if( FAILED( hr ) )
         return hr;    
@@ -446,7 +493,10 @@ bool GDevice::CleanupDevice()
 	// 추가함 m_Enumeration은 HW info 출력을 위해 추가하였음.
 	m_Enumeration.ClearAdapterInfoList();
 
+	//EnterCriticalSection(&g_CSImmediateContext);
 	ClearD3D11DeviceContext(m_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
+
 	// 바인딩되어 있는 각종 뷰리소스를 해제한다.
 	if( FAILED( DeleteDxResource()))
 	{
@@ -454,11 +504,17 @@ bool GDevice::CleanupDevice()
 	}
        // Clear state and flush
 	// ComPtr에 Attach 이후에는 Release하면 안된다.
+	//EnterCriticalSection(&g_CSImmediateContext);
     if( m_pImmediateContext )    m_pImmediateContext->ClearState();
     if( m_pImmediateContext )    m_pImmediateContext->Flush();  
     if( m_pSwapChain ) m_pSwapChain->Release();
 	if( m_pImmediateContext ) m_pImmediateContext->Release();
+	//LeaveCriticalSection(&g_CSImmediateContext);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
     if( m_pd3dDevice ) m_pd3dDevice->Release();
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	if( m_pGIFactory ) m_pGIFactory->Release();
 	m_pd3dDevice		= NULL;
 	m_pSwapChain		= NULL;

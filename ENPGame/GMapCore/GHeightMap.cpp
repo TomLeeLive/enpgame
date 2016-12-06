@@ -21,10 +21,13 @@ bool GHeightMap::CreateHeightMap(TCHAR* strHeightMapTex)
 	loadInfo.pSrcInfo = &ImageInfo;
 
 	ID3D11Resource *pTexture = NULL;
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(hr = D3DX11CreateTextureFromFile(m_pd3dDevice, strHeightMapTex, &loadInfo, NULL, &pTexture, NULL)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return false;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	ID3D11Texture2D *pTexture2D = NULL;
 	if (FAILED(pTexture->QueryInterface(__uuidof(ID3D11Texture2D), (LPVOID*)&pTexture2D)))
 	{

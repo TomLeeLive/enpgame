@@ -22,6 +22,8 @@
 
 namespace GCORESTD
 {
+	//extern CRITICAL_SECTION			g_CSImmediateContext;
+	//extern CRITICAL_SECTION			g_CSd3dDevice;
 	extern ID3D11Device*			g_pd3dDevice;
 	extern ID3D11DeviceContext*		g_pImmediateContext;
 }

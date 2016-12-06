@@ -2,12 +2,13 @@
 
 enum G_SEQ {
 	G_SEQ_END = 0,
-	G_SEQ_OVER = 1,
-	G_SEQ_HOWTO =2,
-	G_SEQ_INTRO =3,
-	G_SEQ_MENU = 4,
-	G_SEQ_SINGLE = 5,
-	G_SEQ_SURVIVAL = 6,
+	G_SEQ_OVER,// = 1,
+	G_SEQ_HOWTO,// =2,
+	G_SEQ_INTRO,// =3,
+	G_SEQ_MENU,// = 4,
+	G_SEQ_SINGLE,// = 5,
+	G_SEQ_SURVIVAL,// = 6,
+	G_SEQ_LOADING,// =7,
 	G_SEQ_CNT
 };
 
@@ -16,12 +17,12 @@ enum G_SEQ {
 class GProjMain : public GCoreLibV2
 {
 public:
-	//GUIManager	m_UIManager[G_SEQ_CNT];
+	//GUIManager	m_UILoadingScreen;
 
 	bool		ChangeSeq(G_SEQ seq);
 	G_SEQ		GetCurSeq();
 	GSeq*		m_pCurrentSeq;
-private:
+//private:
 	G_SEQ		m_CurSeq;				//현재 시퀀스 기록용
 	GSeq*		m_pGameSeq[G_SEQ_CNT];
 

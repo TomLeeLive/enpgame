@@ -117,7 +117,9 @@ bool GCoreLibV2::PreFrame()
 {
 	if( !m_Timer.Frame() ) return false;
 	if( !I_Input.Frame() ) return false;	
+	//EnterCriticalSection(&g_CSImmediateContext);
 	if (!Update(m_pImmediateContext)) return false;
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	return true;
 }
 bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
@@ -229,11 +231,13 @@ bool GCoreLibV2::PreRender()
 {
 	// Just clear the backbuffer
     float ClearColor[4] = { m_fScreenColor[0], m_fScreenColor[1], m_fScreenColor[2], m_fScreenColor[3] }; //red,green,blue,alpha
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pImmediateContext->ClearRenderTargetView( GetRenderTargetView(), ClearColor );	
 	m_pImmediateContext->ClearDepthStencilView(m_DefaultRT.m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_pImmediateContext->OMSetRenderTargets(1, GetRenderTargetViewAddress(), m_DefaultRT.m_pDepthStencilView.Get() );
 	m_pImmediateContext->RSSetViewports(1, &m_DefaultRT.m_vp);
 	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthEnable);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	return true;
 }
 bool GCoreLibV2::DrawInfo() {
@@ -441,10 +445,14 @@ HRESULT GCoreLibV2::CreateDxResource()
 		return hr;
 	}	
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(hr = m_DefaultRT.UpdateDepthStencilView(m_pd3dDevice, m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return hr;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return CreateResource();
 }
 HRESULT GCoreLibV2::DeleteDxResource()

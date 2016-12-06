@@ -136,8 +136,12 @@ HRESULT GMap::SetInputLayout()
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pInputlayout.Attach(DX::CreateInputlayout(m_pd3dDevice, m_dxobj.g_pVSBlob.Get()->GetBufferSize(),
 		m_dxobj.g_pVSBlob.Get()->GetBufferPointer(), layout, numElements));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return hr;
 }
 HRESULT GMap::CreateVertexBuffer()
@@ -145,14 +149,18 @@ HRESULT GMap::CreateVertexBuffer()
 	HRESULT hr = S_OK;
 	m_dxobj.m_iVertexSize = sizeof(PNCT_VERTEX);
 	m_dxobj.m_iNumVertex = m_iNumVertices;
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pVertexBuffer.Attach(DX::CreateVertexBuffer(m_pd3dDevice, &m_VertexList.at(0), m_dxobj.m_iNumVertex, m_dxobj.m_iVertexSize));
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	return hr;
 }
 HRESULT GMap::CreateIndexBuffer()
 {
 	HRESULT hr = S_OK;
 	m_dxobj.m_iNumIndex = m_iNumFace * 3;//(m_iNumRows - 1)*(m_iNumCols - 1) * 2 * 3
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pIndexBuffer.Attach(DX::CreateIndexBuffer(m_pd3dDevice, &m_IndexList.at(0), m_dxobj.m_iNumIndex, sizeof(DWORD)));
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	return hr;
 }
 bool GMap::CreateVertexData()
@@ -307,10 +315,13 @@ bool GMap::Load(TMapDesc& MapDesc)
 		return false;
 	}
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (!GModel::Create(m_pd3dDevice, MapDesc.strShaderFile.c_str(), MapDesc.strTextureFile.c_str()))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return false;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	return true;
 }

@@ -70,7 +70,9 @@ bool	GPolygonGen::LoadTexture()
 	{
 		PolyTexture PolyTex;
 		PolyTex.szName = strTextureName[iTex];
+		//EnterCriticalSection(&g_CSd3dDevice);
 		PolyTex.iTexIndex = I_Texture.Add(g_pd3dDevice, PolyTex.szName.c_str());
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		m_TextureArray.push_back(PolyTex);
 	}
 	return true;

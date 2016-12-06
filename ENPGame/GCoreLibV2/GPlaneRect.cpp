@@ -16,10 +16,14 @@ HRESULT GControlUI::SetBlendState() {
 	BlendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 
 	BlendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(hr = g_pd3dDevice->CreateBlendState(&BlendState, &m_pAlphaBlend)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return hr;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	return hr;
 }
 void GControlUI::SetAmbientColor(float fR, float fG, float fB, float fA)
@@ -148,11 +152,13 @@ bool		GControlUI::Render(ID3D11DeviceContext* pContext) {
 	// Store the old render targets
 	ID3D11RenderTargetView* pOldRTV;
 	ID3D11DepthStencilView* pOldDSV;
+
+	//EnterCriticalSection(&g_CSImmediateContext);
 	g_pImmediateContext->OMGetRenderTargets(1, &pOldRTV, &pOldDSV);
 
 	ApplyRS(g_pImmediateContext, GDxState::g_pRSBackCullSolid);
 	g_pImmediateContext->OMSetBlendState(m_pAlphaBlend, 0, -1);
-
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 
 	Begin(pContext);
@@ -162,7 +168,9 @@ bool		GControlUI::Render(ID3D11DeviceContext* pContext) {
 	//-----------------------------------------------------------------------
 	// 기본 render targets 정보로 복원
 	//-----------------------------------------------------------------------
+	//EnterCriticalSection(&g_CSImmediateContext);
 	g_pImmediateContext->OMSetRenderTargets(1, &pOldRTV, pOldDSV);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	// OMGetRenderTargets함수를 사용하였다면 반드시 아래와 같이 소멸시켜야 한다.
 	SAFE_RELEASE(pOldRTV);
 	SAFE_RELEASE(pOldDSV);

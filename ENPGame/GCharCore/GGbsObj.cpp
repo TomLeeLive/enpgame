@@ -137,9 +137,11 @@ void GGbsObj::LoadTexMap(GMtrl* pMtrl, T_STR szDirName )
 
 		TexMap.m_strTextureName = strName;
 		// 텍스쳐 매니져 등록 및 배열 저장.
+		//EnterCriticalSection(&g_CSd3dDevice);
 		TexMap.m_dwIndex = I_Texture.Add(
 			g_pd3dDevice, TexMap.m_strTextureName.c_str(), szDirName.c_str());
-		
+		//LeaveCriticalSection(&g_CSd3dDevice);
+
 		pMtrl->m_TexMaps.push_back(TexMap);
 	}
 }
@@ -680,12 +682,13 @@ bool GGbsObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 					ptSubMesh->m_dxobj.m_BoxVB.top = 0; ptSubMesh->m_dxobj.m_BoxVB.bottom = 1;
 					ptSubMesh->m_dxobj.m_BoxVB.front = 0; ptSubMesh->m_dxobj.m_BoxVB.back = 1;
 
+					//EnterCriticalSection(&g_CSImmediateContext);
 					g_pImmediateContext->UpdateSubresource(
 						pVB, 0,
 						&ptSubMesh->m_dxobj.m_BoxVB,
 						(uint8_t*)&pSubData->m_VertexArray.at(0),
 						0, 0);
-
+					//LeaveCriticalSection(&g_CSImmediateContext);
 
 					/*g_pImmediateContext->CopySubresourceRegion(
 					m_dxobj.g_pVertexBuffer.Get(), 0, iBeginPos, 0, 0,
@@ -702,8 +705,10 @@ bool GGbsObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 					ptSubMesh->m_dxobj.m_BoxIB.top = 0;	ptSubMesh->m_dxobj.m_BoxIB.bottom = 1;
 					ptSubMesh->m_dxobj.m_BoxIB.front = 0;	ptSubMesh->m_dxobj.m_BoxIB.back = 1;
 
+					//EnterCriticalSection(&g_CSImmediateContext);
 					g_pImmediateContext->UpdateSubresource(pIB, 0,
 						&ptSubMesh->m_dxobj.m_BoxIB, (void*)&pSubData->m_IndexArray.at(0), 0, 0);
+					//LeaveCriticalSection(&g_CSImmediateContext);
 
 					ptSubMesh->m_dxobj.m_iBeginIB = ibOffset;
 					ibOffset += ptSubMesh->m_dxobj.m_iNumIndex;
@@ -725,7 +730,9 @@ bool GGbsObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 				ptMesh->m_dxobj.m_BoxVB.top = 0; ptMesh->m_dxobj.m_BoxVB.bottom = 1;
 				ptMesh->m_dxobj.m_BoxVB.front = 0; ptMesh->m_dxobj.m_BoxVB.back = 1;
 
+				//EnterCriticalSection(&g_CSImmediateContext);
 				g_pImmediateContext->UpdateSubresource(pVB, 0, &ptMesh->m_dxobj.m_BoxVB, (void*)&pData->m_VertexArray.at(0), 0, 0);
+				//LeaveCriticalSection(&g_CSImmediateContext);
 
 				ptMesh->m_dxobj.m_iBeginVB = vbOffset;
 				vbOffset += ptMesh->m_dxobj.m_iNumVertex;
@@ -737,7 +744,10 @@ bool GGbsObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 				ptMesh->m_dxobj.m_BoxIB.top = 0; ptMesh->m_dxobj.m_BoxIB.bottom = 1;
 				ptMesh->m_dxobj.m_BoxIB.front = 0; ptMesh->m_dxobj.m_BoxIB.back = 1;
 
+				//EnterCriticalSection(&g_CSImmediateContext);
 				g_pImmediateContext->UpdateSubresource(pIB, 0, &ptMesh->m_dxobj.m_BoxIB, (void*)&pData->m_IndexArray.at(0), 0, 0);
+				//LeaveCriticalSection(&g_CSImmediateContext);
+
 				ptMesh->m_dxobj.m_iBeginIB = ibOffset;
 				ibOffset += ptMesh->m_dxobj.m_iNumIndex;
 				dstibOffset = ptMesh->m_dxobj.m_BoxIB.right;
