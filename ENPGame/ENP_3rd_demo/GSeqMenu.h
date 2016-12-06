@@ -7,8 +7,8 @@ public:
 		return pInstance_;
 	}
 	bool Init() { return true; };
-	bool Frame() { return true; };
-	bool Render() { return true; };
+	bool Frame();
+	bool Render();
 	bool Release() { return true; };
 
 	//----------------------------------------------------

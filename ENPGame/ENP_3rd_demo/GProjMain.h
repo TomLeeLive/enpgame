@@ -16,7 +16,7 @@ enum G_SEQ {
 class GProjMain : public GCoreLibV2
 {
 public:
-	GUIManager	m_UIManager[G_SEQ_CNT];
+	//GUIManager	m_UIManager[G_SEQ_CNT];
 
 	bool		ChangeSeq(G_SEQ seq);
 	G_SEQ		GetCurSeq();

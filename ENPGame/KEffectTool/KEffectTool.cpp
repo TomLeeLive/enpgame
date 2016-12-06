@@ -439,5 +439,5 @@ void CKEffectToolApp::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceCon
 }
 bool CKEffectToolApp::ChagePositionData(float x,float y, float z)
 {
-
+	return true;
 }

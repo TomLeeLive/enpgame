@@ -1,6 +1,7 @@
 #pragma once
 #include "GImeUI.h"
 #include "GShape.h"
+#include "GTimer.h"
 using namespace DX;
 
 //#define G_MACRO_INVALID_INT_VALUE -1
@@ -70,12 +71,42 @@ public:
 class GButtonCtl : public GControlUI
 {
 public:
-	GButtonShape     m_Box;
+	GTimer*		m_Timer;
+	bool		m_bClicked;
+	float		m_fClickStTime;
+	float		m_fCoolTime;
+	void		Clicked(GTimer*	timer) {
+		m_Timer = timer;
+		m_fClickStTime = m_Timer->m_fDurationTime;
+		m_bClicked = true;
+	}
+public:
+	GBoxShape   m_Box;
 	HRESULT		Create(ID3D11Device* pDevice,
 		const TCHAR* pLoadShaderFile=nullptr,
 		const TCHAR* pLoadTextureString = nullptr);
+	bool		Render(ID3D11DeviceContext* pContext) {
+
+		if (m_bClicked) {
+			
+			if (m_Timer->m_fDurationTime - m_fClickStTime > m_fCoolTime) {
+				m_Box.SetShaded(false);
+				m_bClicked = false;
+				return false;
+			}
+			else
+			{m_Box.SetShaded();}
+		}
+
+		GControlUI::Render(pContext);
+	}
 public:
-	GButtonCtl() { m_type = GUI_TYPE_BUTTON; };
+	GButtonCtl() {
+		m_fCoolTime = 0.5f;
+		m_Timer = NULL;
+		m_bClicked = false;
+		m_fClickStTime = 0.0f;
+		m_type = GUI_TYPE_BUTTON; };
 	virtual ~GButtonCtl() {};
 };
 

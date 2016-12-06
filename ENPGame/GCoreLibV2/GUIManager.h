@@ -16,6 +16,8 @@ public:
 public:
 	virtual bool		Init();
 	virtual bool		Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
+	virtual bool		Frame(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc, GTimer* timer);
+	virtual bool		Render(int* iClickedEndNum);
 	virtual bool		Render();
 	virtual bool		Release();
 	//--------------------------------------------------------------------------------------

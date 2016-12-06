@@ -201,7 +201,7 @@ bool GSeqSinglePlay::Frame()
 	FrameEffect();
 	FrameChar();
 
-	g_pMain->m_UIManager[G_SEQ_SINGLE].Frame(&g_pMain->m_SwapChainDesc);
+	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
 
 	FrameGun();
 	return true;
@@ -222,7 +222,7 @@ bool GSeqSinglePlay::Render()
 	RenderGame();
 	
 	//render UI
-	g_pMain->m_UIManager[G_SEQ_SINGLE].Render();
+	m_UIManager.Render();
 
 	RenderEffect();
 

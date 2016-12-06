@@ -1,6 +1,6 @@
 #include "_stdafx.h"
 
-GAIDie * GAIDie::pInstance_ = 0;
+//GAIDie * GAIDie::pInstance_ = 0;
 
 bool GAIDie::Init(int iMyIndex)
 {
@@ -36,10 +36,8 @@ HRESULT GAIDie::DeleteResource()
 }
 GAIDie::GAIDie()
 {
-	pInstance_ = 0;
-	D3DXMatrixIdentity(&m_matWorld);
-	D3DXMatrixIdentity(&Trans);
-	D3DXMatrixIdentity(&Rotation);
+	//pInstance_ = 0;
+	GAISeq::InitGSeq();
 }
 
 

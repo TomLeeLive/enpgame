@@ -225,6 +225,12 @@ void GControlUI::Retrans() {
 HRESULT GControlUI::CreateResource(int iRectWidth, int iRectHeight)
 {
 	HRESULT hr = S_OK;
+
+	//viewport 업데이트
+	m_matViewPort._41 = (iRectWidth / 2.0f);
+	m_matViewPort._42 = (iRectHeight / 2.0f);
+
+
 	iRectWidth = iRectWidth / 2;
 	iRectHeight = iRectHeight / 2;
 
@@ -254,6 +260,8 @@ HRESULT GControlUI::CreateResource(int iRectWidth, int iRectHeight)
 
 	m_iWidthBefore = m_iWidthAfter;
 	m_iHeightBefore = m_iHeightAfter;
+
+
 
 	return hr;
 }

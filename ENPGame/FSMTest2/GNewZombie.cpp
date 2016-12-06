@@ -1,123 +1,91 @@
 #include "_stdafx.h"
 
-void GNewZombie::RandomMove(int i, D3DXVECTOR3 vZombiePosition)
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//									랜덤 목적지 만들기
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		srand(time(NULL));
-		if ((rand() * 3) % 2 == 0)
-		{
-			m_RandomPoint.x = -((rand() * 3) % 50);
-		}
-		else
-		{
-			m_RandomPoint.x = (rand() * 3) % 50;
-			
-		}
-		if ((rand() * 3) % 2 == 0)
-		{
-			m_RandomPoint.z = -((rand() * 3) % 50);
-		}
-		else
-		{
-			m_RandomPoint.z = (rand() * 3) % 50;
-		}
-
-		// 랜덤 목적지
-		m_RandomDestination.x = m_RandomPoint.x;
-		m_RandomDestination.y = 0.0f;
-		m_RandomDestination.z = m_RandomPoint.z;
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 랜덤 목적지 방향으로 회전하기 위한 벡터 구현
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-		m_vRDestLook = vZombiePosition - m_RandomDestination;  // 랜덤 목적지 방향 벡터
-		D3DXVec3Normalize(&m_vRDestLook, &m_vRDestLook);
-		m_vZRight = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		m_vZUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&m_vZRight, &m_vZUp, &m_vRDestLook);
-		D3DXVec3Cross(&m_vZUp, &m_vRDestLook, &m_vZRight);
-
-		g_pMain->m_Zomb[i]->vLook = m_vRDestLook;
-		g_pMain->m_Zomb[i]->m_vZRight = m_vZRight;
-		g_pMain->m_Zomb[i]->m_vZUp = m_vZUp;
-
-}
-void GNewZombie::FollowMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition)
-{
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	m_vBDestLook = vZombiePosition - vBoxPosition;//- vZombiePosition; // 정규화 할 박스로의 목적지 벡터
-	D3DXVec3Normalize(&m_vBDestLook, &m_vBDestLook);
-	m_vBRight= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_vBUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	D3DXVec3Cross(&m_vBRight, &m_vBUp, &m_vBDestLook);
-	D3DXVec3Cross(&m_vBUp, &m_vBDestLook, &m_vBRight);
 
 
-	g_pMain->m_Zomb[i]->vLook = m_vBDestLook;
-	g_pMain->m_Zomb[i]->m_vZRight = m_vBRight;
-	g_pMain->m_Zomb[i]->m_vZUp = m_vBUp;
+bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 
-}
+	D3DXVECTOR3 vLook_toPos;
+	D3DXMATRIX matZombie, matScl, matRot, matTrans;
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
 
-void GNewZombie::AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition) 
-{
+	matZombie = m_matZombWld;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-		m_vADestLook = vZombiePosition - vBoxPosition; // 정규화 할 박스로의 목적지 벡터
-		D3DXVec3Normalize(&m_vADestLook, &m_vADestLook);
-		m_vARight = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		m_vAUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&m_vARight, &m_vAUp, &m_vADestLook);
-		D3DXVec3Cross(&m_vAUp, &m_vADestLook, &m_vARight);
+	//�÷��̾� �������� ȸ���� �ϱ� ���ؼ�..
+	D3DXVECTOR3 vPos = D3DXVECTOR3(m_matZombWld._41, 0.0f, m_matZombWld._43);
+	vLook_toPos = vPos - pos;
 
-		g_pMain->m_Zomb[i]->vLook = m_vADestLook;
-		g_pMain->m_Zomb[i]->m_vZRight = m_vARight;
-		g_pMain->m_Zomb[i]->m_vZUp = m_vAUp;
+	if (abs(vPos.x - pos.x) < G_DEFINE_AI_ALMOST_ZERO && abs(vPos.z - pos.z) < G_DEFINE_AI_ALMOST_ZERO)
+	{
+		TCHAR buf[256];
+		_stprintf_s(buf, _countof(buf), _T("ALMOST_ZERO\n"));
+		OutputDebugString(buf);
 
+		return false;
+	}
+
+
+
+	D3DXVec3Normalize(&vLook_toPos, &vLook_toPos);
+	D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	D3DXVec3Cross(&vRight, &vUp, &vLook_toPos);
+	D3DXVec3Cross(&vUp, &vLook_toPos, &vRight);
+
+	matRot._11 = vRight.x;		    matRot._12 = vRight.y;			matRot._13 = vRight.z;
+	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
+	matRot._31 = vLook_toPos.x;  matRot._32 = vLook_toPos.y;  matRot._33 = vLook_toPos.z;
+
+	//if (m_State == G_ZOMB_ST_WALK){
+	D3DXVECTOR3 vMove = D3DXVECTOR3(matZombie._41, matZombie._42, matZombie._43);
+	D3DXVECTOR3 vNewPos;
+	vNewPos = vMove - 100.0f*g_fSecPerFrame * vLook_toPos;
+	D3DXMatrixTranslation(&matTrans, vNewPos.x, vNewPos.y, vNewPos.z);
+	//}
+	matZombie = matScl * matRot * matTrans;
+
+	m_matZombWld = matZombie;
+
+	return true;
+	//m_matWorld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
 }
 
 bool	GNewZombie::Init()
 {
 	GZombie::Init();
 	
-	m_GameSeq[G_AI_IDLE] = GAIIdle::CreateInstance();
-	m_GameSeq[G_AI_MOVE] = GAIMove::CreateInstance();
-	m_GameSeq[G_AI_FOLLOW] = GAIFollow::CreateInstance();
-	m_GameSeq[G_AI_ATTACK] = GAIAttack::CreateInstance();
-	m_GameSeq[G_AI_DIE] = GAIDie::CreateInstance();
+	m_GameSeq[G_AI_IDLE] = new GAIIdle;//CreateInstance();
+	m_GameSeq[G_AI_MOVE] = new GAIMove;//::CreateInstance();
+	m_GameSeq[G_AI_FOLLOW] = new GAIFollow;//::CreateInstance();
+	m_GameSeq[G_AI_ATTACK] = new GAIAttack;//::CreateInstance();
+	m_GameSeq[G_AI_DIE] = new GAIDie;//::CreateInstance();
 	
 
 	
-	m_pCurrentSeq = m_GameSeq[G_AI_MOVE];
+	m_pCurrentSeq = m_GameSeq[G_AI_IDLE];
 	
 	return true;
 };
 bool	GNewZombie::Frame(int iMyIndex)
 {
 	GZombie::Frame();
+
+	//if (g_pMain->m_Zomb[iMyIndex]->m_State != G_AI_IDLE && m_matTrans._41 != 0.0f)
+	//{
+	//	m_matZombWld = m_matRot * m_matTrans;
+	//	//m_vZombPos.x = m_matWorld._41;
+	//	//m_vZombPos.z = m_matWorld._43;
+	//}
+	
 	m_pCurrentSeq->Frame(iMyIndex);
 
+	/*
+	m_vBoxPos.x = g_pMain->m_matBoxWorld._41;
+	m_vBoxPos.y = g_pMain->m_matBoxWorld._42;
+	m_vBoxPos.z = g_pMain->m_matBoxWorld._43;
 
-	vBoxPosition.x = g_pMain->m_matBoxWorld._41;
-	vBoxPosition.y = g_pMain->m_matBoxWorld._42;
-	vBoxPosition.z = g_pMain->m_matBoxWorld._43;
-	
-
-	
-
-	m_ZombieWorld = m_Rotation * m_Trans;
-	
-
+	*/
 
 	return true;
 };
@@ -137,18 +105,25 @@ bool	GNewZombie::Release()
 	
 GNewZombie::GNewZombie()
 {
-
-	D3DXMatrixIdentity(&m_Rotation);
-	D3DXMatrixIdentity(&m_Trans);
-
+	/*
+	D3DXMatrixIdentity(&m_matRot);
+	D3DXMatrixIdentity(&m_matTrans);
+	*/
+	D3DXMatrixIdentity(&m_matZombWld);
+	/*
+	m_vZombPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vBoxPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	*/
+	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 
 	m_State = G_AI_MOVE;
-	D3DXMatrixIdentity(&m_ZombieWorld);
-	vBoxPosition.x = g_pMain->m_matBoxWorld._41;
-	vBoxPosition.y = g_pMain->m_matBoxWorld._42;
-	vBoxPosition.z = g_pMain->m_matBoxWorld._43;
+	D3DXMatrixIdentity(&m_matZombWld);
+	/*
+	m_vBoxPos.x = g_pMain->m_matBoxWorld._41;
+	m_vBoxPos.y = g_pMain->m_matBoxWorld._42;
+	m_vBoxPos.z = g_pMain->m_matBoxWorld._43;
+	*/
 	
-	hp = 100;
 }
 
 

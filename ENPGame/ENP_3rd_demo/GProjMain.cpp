@@ -52,15 +52,22 @@ bool GProjMain::Init()
 	for (int i = 0; i < G_SEQ_CNT; i++)
 		m_pGameSeq[i]->Init();
 
-
+	/*
 	//UI Init
 	for (int i = 0; i < G_SEQ_CNT; i++) {
-		m_UIManager[i].Init();
+		m_pGameSeq[i]->m_UIManager.Init();
 
 		T_STR strFile = L"UI_TEST6.gui";
-		m_UIManager[i].UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
+		m_pGameSeq[i]->m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 	}
-
+	*/
+	m_pGameSeq[G_SEQ_MENU]->m_UIManager.Init();
+	T_STR strFile = L"ui_menu.gui";
+	m_pGameSeq[G_SEQ_MENU]->m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
+	
+	m_pGameSeq[G_SEQ_SINGLE]->m_UIManager.Init();
+	strFile = L"UI_TEST6.gui";
+	m_pGameSeq[G_SEQ_SINGLE]->m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 	
 	return true;
 }
@@ -73,7 +80,7 @@ bool GProjMain::Render()
 bool GProjMain::Release()
 {
 	for (int i = 0; i < G_SEQ_CNT; i++)
-		m_UIManager[i].Release();
+		m_pGameSeq[i]->m_UIManager.Release();
 
 	m_pSound.Release();
 
@@ -108,7 +115,7 @@ HRESULT GProjMain::CreateResource()
 	m_pCurrentSeq->CreateResource();
 
 	for (int i = 0; i < G_SEQ_CNT; i++)
-		m_UIManager[i].CreateResource(&m_SwapChainDesc);
+		m_pCurrentSeq->m_UIManager.CreateResource(&m_SwapChainDesc);
 	
 	ClipMouse(true);
 	
@@ -133,7 +140,7 @@ GProjMain::GProjMain(void)
 	m_pGameSeq[G_SEQ_SINGLE] = GSeqSinglePlay::CreateInstance();
 	m_pGameSeq[G_SEQ_SURVIVAL] = GSeqSurvivalMode::CreateInstance();
 
-	ChangeSeq(G_SEQ_SINGLE);
+	ChangeSeq(G_SEQ_MENU);
 }
 
 GProjMain::~GProjMain(void)
