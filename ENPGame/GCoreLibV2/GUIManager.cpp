@@ -445,6 +445,14 @@ int GUIManager::SelectRect(GControlUI** pSelectedRect) {
 			{
 				if (rt.top <= mouse.y && rt.bottom >= mouse.y)
 				{
+#if defined(_DEBUG) || defined(DEBUG)
+					TCHAR buf[MAX_PATH];
+					wsprintf(buf, L"rt top:%ld bottom:%ld left:%ld right:%ld  mouse x:%ld y:%ld \n", 
+						rt.top, rt.bottom,
+						rt.left,rt.right,
+						mouse.x,mouse.y);
+					OutputDebugString(buf);
+#endif
 					*pSelectedRect = pRect;
 					return iRect;
 				}
