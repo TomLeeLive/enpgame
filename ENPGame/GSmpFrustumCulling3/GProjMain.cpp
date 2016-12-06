@@ -167,8 +167,8 @@ bool GProjMain::Render()
 
 			if (m_pMainCamera->CheckOBBInPlane(&pBox2))
 			{
-				m_pBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
-				m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+				//m_pBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->SetMatrix(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+				//m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->Render(&m_matWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 			}
 		}
 	}

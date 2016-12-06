@@ -4,6 +4,7 @@
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
+#define IDD_FORMVIEW                    101
 #define IDR_POPUP_EDIT                  119
 #define ID_STATUSBAR_PANE1              120
 #define ID_STATUSBAR_PANE2              121
@@ -97,7 +98,7 @@
 #define IDC_TILEHEIGHTSIZE2             1015
 #define IDC_COMBO2                      1015
 #define IDC_EDIT7                       1016
-#define IDCANCEL                        1016
+#define IDC_TAB1                        1017
 #define ID_CREATEMAP                    32771
 #define ID_32774                        32774
 #define ID_32775                        32775
@@ -118,9 +119,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
+#define _APS_NEXT_RESOURCE_VALUE        327
 #define _APS_NEXT_COMMAND_VALUE         32797
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
