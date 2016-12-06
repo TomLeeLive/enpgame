@@ -21,6 +21,8 @@ enum G_AI {
 class GAISeq 
 {
 public:
+	CStopwatch m_Stopwatch;//for debug
+
 	//float m_fDistance;
 	//float m_fRandTime;
 	//D3DXVECTOR3 m_vRDestLook;

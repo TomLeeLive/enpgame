@@ -81,13 +81,15 @@ D3DXVECTOR3 GAIMove::RandomMove( )
 	RandomPoint.z = rand() % 200 - 100;
 
 
-	//CStopwatch stopwatch;//½ÃÀÛ
+	
 
 	TCHAR buf[256];
 	_stprintf_s(buf, _countof(buf), _T("Rand X:%5f, Rand Z:%5f\n"), RandomPoint.x, RandomPoint.z);
 	OutputDebugString(buf);
 
-	//stopwatch.Output(L"Rand End \n");
+	
+
+	
 
 	return RandomPoint;
 }
@@ -177,6 +179,8 @@ bool GAIMove::Frame(int iMyIndex)
 
 
 	if (!m_bTime) {
+		m_Stopwatch.Start();
+
 		fTime = g_fDurationTime;
 		m_vPos = RandomMove();
 		m_bTime = true;
@@ -188,9 +192,16 @@ bool GAIMove::Frame(int iMyIndex)
 	if (g_fDurationTime - fTime > fCoolTime) {  
 		m_bTime = false;
 
+		m_Stopwatch.Output(L"End");
 	}
 	else {
-		g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(m_vPos);
+		if (g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(m_vPos) == false)
+		{
+			fTime = g_fDurationTime;
+			m_vPos = RandomMove();
+			m_bTime = true;
+		}
+		//g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(m_vPos);
 	}
 
 
