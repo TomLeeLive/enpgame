@@ -9,7 +9,7 @@ bool GAIDie::Init(int iMyIndex)
 }
 bool GAIDie::Frame(int iMyIndex)
 {
-  // die 애니메이션 연출
+	g_pMain->ChangeZombState(iMyIndex, G_AI_DIE);
 	
 	return true;
 }

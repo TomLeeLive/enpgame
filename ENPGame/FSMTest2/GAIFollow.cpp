@@ -24,9 +24,12 @@ bool GAIFollow::Frame(int iMyIndex)
 	{
 		g_pMain->ChangeZombState(iMyIndex, G_AI_ATTACK);
 	}
-	
 	g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(vHeroPos);
-
+	
+	/*if (fDistance > G_DEFINE_AI_ATTACK_CHECK)
+	{
+		g_pMain->ChangeZombState(iMyIndex, G_AI_MOVE);
+	}*/
 
 	return true;
 }

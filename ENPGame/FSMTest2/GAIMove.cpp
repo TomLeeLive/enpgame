@@ -41,11 +41,16 @@ bool GAIMove::Frame(int iMyIndex)
 		m_bTime = true;
 
 	}
-
-	if (fDistance < G_DEFINE_AI_FOLLOW_CHECK) {
-		g_pMain->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+	if (g_pMain->m_Zomb[iMyIndex]->m_bDead == false)
+	{
+		if (fDistance < G_DEFINE_AI_FOLLOW_CHECK) {
+			g_pMain->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+		}
 	}
-
+	else
+	{
+		g_pMain->ChangeZombState(iMyIndex, G_AI_DIE);
+	}
 
 
 	//현재시간에서 - 처음셋팅된 시간 > 쿨타임보다 크면...

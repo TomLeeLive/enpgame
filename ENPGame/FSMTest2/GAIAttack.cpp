@@ -38,6 +38,11 @@ bool GAIAttack::Frame(int iMyIndex)
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	float fDistance = D3DXVec3Length(&Temp);
 
+	if (fDistance > G_DEFINE_AI_ATTACK_CHECK)
+	{
+		g_pMain->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+	}
+	
 
 	g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(vHeroPos);
 
