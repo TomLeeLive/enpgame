@@ -1,6 +1,6 @@
 #include "_stdafx.h"
 
-bool GAIFollow::Init(int iMyIndex)
+bool GAIFollow::Init(GNewZombie* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
@@ -10,21 +10,21 @@ bool GAIFollow::Init(int iMyIndex)
 }
 
 
-bool GAIFollow::Frame(int iMyIndex)
+bool GAIFollow::Frame(GNewZombie* iMyIndex)
 {
 	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(g_pMain->m_Box->m_matWorld._41, g_pMain->m_Box->m_matWorld._42, g_pMain->m_Box->m_matWorld._43);
 	
-	D3DXVECTOR3 vPos = D3DXVECTOR3(g_pMain->m_Zomb[iMyIndex]->m_matZombWld._41,
-		g_pMain->m_Zomb[iMyIndex]->m_matZombWld._42, g_pMain->m_Zomb[iMyIndex]->m_matZombWld._43);
+	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,
+		iMyIndex->m_matZombWld._42, iMyIndex->m_matZombWld._43);
 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	float fDistance = D3DXVec3Length(&Temp);
 
 	if (fDistance < G_DEFINE_AI_ATTACK_CHECK) 
 	{
-		g_pMain->ChangeZombState(iMyIndex, G_AI_ATTACK);
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_ATTACK);
 	}
-	g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(vHeroPos);
+	iMyIndex->RotationAndTrans(vHeroPos);
 	
 	/*if (fDistance > G_DEFINE_AI_ATTACK_CHECK)
 	{

@@ -1,5 +1,5 @@
 #pragma once
-#include"GNewZombieMgr.h"
+//#include"GNewZombieMgr.h"
 enum ZombieNum {
 	ZombieNum = G_DEFINE_MAX_AI_ZOMBIE
 };
@@ -11,8 +11,8 @@ public:
 
 	static D3DXVECTOR3 RandomMove();
 
-	bool Init(int iMyIndex);
-	bool Frame(int iMyIndex);
+	bool Init(GNewZombie* iMyIndex);
+	bool Frame(GNewZombie* iMyIndex);
 	bool Render();
 	bool Release();
 

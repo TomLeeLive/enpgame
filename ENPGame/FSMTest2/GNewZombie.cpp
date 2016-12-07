@@ -1,5 +1,80 @@
 #include "_stdafx.h"
+//#include "GAISeq.h"
+void		GNewZombie::ChangeZombState(GNewZombie* iNum, G_AI state) {
 
+	iNum->setState(state);
+
+
+	GCharacter* pChar0 = NULL;
+
+	switch (state) {
+	case 	G_ZOMB_ST_WALK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_WALK];
+	}
+							break;
+	case 	G_ZOMB_ST_IDLE: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_IDLE];
+	}
+							break;
+	case 	G_ZOMB_ST_ATTACK: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_ATTACK];
+	}
+							  break;
+	case 	G_ZOMB_ST_DEAD: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_DEAD];
+	}
+							break;
+	case 	G_ZOMB_ST_FOLLOW: {
+		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_FLW);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_FOLLOW];
+	}
+							  break;
+	}
+
+	iNum->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+}
+void		GNewZombie::ChangeZombState(GNewZombie* iNum, TCHAR* str) {
+
+	//GCharacter* pChar0 = I_CharMgr.GetPtr(str);
+	auto pChar0 = I_CharMgr.GetPtr(str);
+
+	iNum->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_DIE)) {
+		iNum->setState(G_AI_DIE);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_DIE];
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_ATT)) {
+		iNum->setState(G_AI_ATTACK);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_ATTACK];
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_WLK)) {
+		iNum->setState(G_AI_MOVE);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_MOVE];
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_IDL)) {
+		iNum->setState(G_AI_IDLE);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_IDLE];
+	}
+	else if (0 == _tcscmp(str, G_DEFINE_ANI_ZOMB_FLW)) {
+		iNum->setState(G_AI_FOLLOW);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_FOLLOW];
+	}
+	else {
+		iNum->setState(G_AI_IDLE);
+	}
+}
 
 bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 
@@ -65,7 +140,7 @@ bool	GNewZombie::Init()
 	
 	return true;
 };
-bool	GNewZombie::Frame(int iMyIndex)
+bool	GNewZombie::Frame(GNewZombie* iMyIndex)
 {
 	GZombie::Frame();
 	

@@ -11,7 +11,7 @@
 #define G_DEFINE_ANI_ZOMB_IDL L"ZOMBIE_IDLE"
 #define G_DEFINE_ANI_ZOMB_FLW L"ZOMBIE_WALK"
 
-#define G_DEFINE_MAX_AI_ZOMBIE  1
+#define G_DEFINE_MAX_AI_ZOMBIE  4
 #define G_DEFINE_AI_ALMOST_ZERO	0.2f
 #define G_DEFINE_AI_MOVE_COOLTIME 3.0f
 #define G_DEFINE_AI_FOLLOW_CHECK 70.0f
@@ -19,13 +19,35 @@
 #define G_DEFINE_AI_MOVE_SPEED 50.0f
 #define G_DEFINE_AI_TEST_HERO_SPEED 100.0f
 
+enum G_ZOMB_ST {
+	G_ZOMB_ST_IDLE = 0,
+	G_ZOMB_ST_WALK,
+	G_ZOMB_ST_ATTACK,
+	G_ZOMB_ST_DEAD,
+	G_ZOMB_ST_FOLLOW,
+	G_ZOMB_ST_CNT
+};
 
+enum G_AI {
+	G_AI_IDLE = 0,
+	G_AI_MOVE,
+	G_AI_ATTACK,
+	G_AI_DIE,
+	G_AI_FOLLOW,
+	G_AI_CNT
+};
 
 //공통 사용 헤더
 #include "GCamera.h"
 #include "GTimer.h"
 
 #include "GCharacter.h"
+#include "GModel.h"
+#include "GZombie.h"
+#include "GNewZombie.h"
+#include "GObjMgr.h"
+#include "GAIZombieMgr.h"
+
 #include "GAISeq.h"
 #include "GAIIdle.h"
 #include "GAIMove.h"
@@ -37,10 +59,7 @@
 #include "GMatrix.h"
 #include "GShape.h"
 
-#include "GModel.h"
-#include "GZombie.h"
-#include "GNewZombie.h"
-#include "GObjMgr.h"
+
 
 #include <time.h>
 //Main

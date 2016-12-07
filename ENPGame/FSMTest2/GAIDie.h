@@ -13,8 +13,8 @@ public:
 	shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
-	bool Init(int iMyIndex);
-	bool Frame(int iMyIndex);
+	bool Init(GNewZombie* iMyIndex);
+	bool Frame(GNewZombie* iMyIndex);
 	bool Render();
 	bool Release();
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

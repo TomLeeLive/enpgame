@@ -1,12 +1,12 @@
 #include "_stdafx.h"
 
-bool GAIIdle::Init(int iMyIndex)
+bool GAIIdle::Init(GNewZombie* iMyIndex)
 {
 	
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 	return true;
 }
-bool GAIIdle::Frame(int iMyIndex)
+bool GAIIdle::Frame(GNewZombie* iMyIndex)
 {
 	//처음 셋팅된 시간을 저장
 	float fTime = 0.0f;
@@ -22,9 +22,9 @@ bool GAIIdle::Frame(int iMyIndex)
 	//현재시간에서 - 처음셋팅된 시간 > 쿨타임보다 크면...
 	if (g_fDurationTime - fTime > fCoolTime && !m_bDebug)
 	{
-		g_pMain->ChangeZombState(iMyIndex, G_AI_MOVE);
-		//g_pMain->m_Zomb[iMyIndex]->m_pCurrentSeq = g_pMain->m_Zomb[iMyIndex]->m_GameSeq[G_AI_MOVE];
-		//g_pMain->m_Zomb[iMyIndex]->m_State = G_AI_MOVE;
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_MOVE);
+		//iMyIndex->m_pCurrentSeq = iMyIndex->m_GameSeq[G_AI_MOVE];
+		//iMyIndex->m_State = G_AI_MOVE;
 		m_bDebug = true;
 	}
 

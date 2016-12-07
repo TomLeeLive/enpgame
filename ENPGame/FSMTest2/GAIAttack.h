@@ -17,8 +17,8 @@ public:
 	//}
 	//shared_ptr<GCamera > m_pMainCamera;
 
-	bool Init(int iMyIndex);
-	bool Frame(int iMyIndex);
+	bool Init(GNewZombie* iMyIndex);
+	bool Frame(GNewZombie* iMyIndex);
 	bool Render();
 	bool Release();
 	bool ZombieAttack(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);

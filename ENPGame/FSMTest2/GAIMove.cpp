@@ -1,6 +1,6 @@
 #include "_stdafx.h"
 
-bool GAIMove::Init(int iMyIndex)
+bool GAIMove::Init(GNewZombie* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 	
@@ -20,12 +20,12 @@ D3DXVECTOR3 GAIMove::RandomMove( )
 	return RandomPoint;
 }
 
-bool GAIMove::Frame(int iMyIndex)
+bool GAIMove::Frame(GNewZombie* iMyIndex)
 {
 	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(g_pMain->m_Box->m_matWorld._41, g_pMain->m_Box->m_matWorld._42, g_pMain->m_Box->m_matWorld._43);
 
-	D3DXVECTOR3 vPos = D3DXVECTOR3(g_pMain->m_Zomb[iMyIndex]->m_matZombWld._41,
-		g_pMain->m_Zomb[iMyIndex]->m_matZombWld._42, g_pMain->m_Zomb[iMyIndex]->m_matZombWld._43);
+	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,
+		iMyIndex->m_matZombWld._42, iMyIndex->m_matZombWld._43);
 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	float fDistance = D3DXVec3Length(&Temp);
@@ -41,15 +41,15 @@ bool GAIMove::Frame(int iMyIndex)
 		m_bTime = true;
 
 	}
-	if (g_pMain->m_Zomb[iMyIndex]->m_bDead == false)
+	if (iMyIndex->m_bDead == false)
 	{
 		if (fDistance < G_DEFINE_AI_FOLLOW_CHECK) {
-			g_pMain->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+			iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
 		}
 	}
 	else
 	{
-		g_pMain->ChangeZombState(iMyIndex, G_AI_DIE);
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
 	}
 
 
@@ -59,7 +59,7 @@ bool GAIMove::Frame(int iMyIndex)
 	}
 	else 
 	{
-		if (g_pMain->m_Zomb[iMyIndex]->RotationAndTrans(m_vPos) == false)
+		if (iMyIndex->RotationAndTrans(m_vPos) == false)
 		{
 			m_vPos = RandomMove();
 			m_bTime = true;
