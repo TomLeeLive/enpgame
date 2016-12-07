@@ -12,22 +12,27 @@ void		GProjMain::ChangeZombState(int iNum, G_AI state) {
 	switch (state) {
 		case 	G_ZOMB_ST_WALK: {
 			pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
+			g_pMain->m_Zomb[iNum]->m_pCurrentSeq = g_pMain->m_Zomb[iNum]->m_GameSeq[G_ZOMB_ST_WALK];
 		}
 		break;
 		case 	G_ZOMB_ST_IDLE: {
 			pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
+			g_pMain->m_Zomb[iNum]->m_pCurrentSeq = g_pMain->m_Zomb[iNum]->m_GameSeq[G_ZOMB_ST_IDLE];
 		}
 		break;
 		case 	G_ZOMB_ST_ATTACK: {
 			pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
+			g_pMain->m_Zomb[iNum]->m_pCurrentSeq = g_pMain->m_Zomb[iNum]->m_GameSeq[G_ZOMB_ST_ATTACK];
 		}
 		break;
 		case 	G_ZOMB_ST_DEAD: {
 			pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
+			g_pMain->m_Zomb[iNum]->m_pCurrentSeq = g_pMain->m_Zomb[iNum]->m_GameSeq[G_ZOMB_ST_DEAD];
 		}
 		break;
 		case 	G_ZOMB_ST_FOLLOW: {
 			pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_FLW);
+			g_pMain->m_Zomb[iNum]->m_pCurrentSeq = g_pMain->m_Zomb[iNum]->m_GameSeq[G_ZOMB_ST_FOLLOW];
 		}
 		break;
 	}

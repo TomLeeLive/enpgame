@@ -3,7 +3,7 @@
 #include "EffManager.h"
 
 void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
-	D3DXVECTOR3 vScl, float fTime ) {
+	D3DXVECTOR3 vScl, float fTime, int Width, int WidthSize, int Height, int HeightSize) {
 	int iType = type;
 
 	/*
@@ -27,9 +27,15 @@ void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 		//p_CParctice->m_EffMgr.GetStringWeNeed(tchr, tchr);
 		//m_ImageList.push_back(strFile->c_str());
 
-		// 애니메이션 관련, 가로4x4
-		Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
-
+		// 애니메이션 관련, Width x Height
+		if (Width <= 0 || WidthSize <= 0 || Height <= 0 || HeightSize <= 0)
+		{
+			Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
+		}
+		else
+		{
+			Effect->m_pSprite->SetRectAnimation(fTime, Width, WidthSize, Height, HeightSize);
+		}
 
 		Effect->m_bCheck = true;
 
@@ -126,6 +132,7 @@ void EffManager::Load(T_STR* strFile) {
 		//vecStr[iItem + 1];//IMAGE 경로		D:\data\ds1.dds
 		//vecStr[iItem + 2];//SCL				1.000000/1.000000/1.000000
 		//vecStr[iItem + 3];//time				0.000000
+		//vecStr[iItem + 4];//RectAniMation		1.000000/4/128/4/128
 
 		TCHAR pOutStr[MAX_PATH] = { 0, };
 		TCHAR* pInStr = (TCHAR*)(LPCTSTR)vecStr[iItem + 1];
@@ -139,6 +146,16 @@ void EffManager::Load(T_STR* strFile) {
 
 		float fTime = _ttof(vecStr[iItem + 3]);
 
+		CString strWid, strWidSize, strHeight, strHeightSize;
+
+		ExtractSubString(strWid,vecStr[iItem + 4], 0, '/');
+		ExtractSubString(strWidSize,vecStr[iItem + 4], 1, '/');
+		ExtractSubString(strHeight,vecStr[iItem + 4], 2, '/');
+		ExtractSubString(strHeightSize,vecStr[iItem + 4], 3, '/');
+
+
+
+
 		T_STR imgFile = pOutStr;
 
 		float fSclX, fSclY, fSclZ;
@@ -147,9 +164,15 @@ void EffManager::Load(T_STR* strFile) {
 		fSclY = _wtof(strSclY);
 		fSclZ = _wtof(strSclZ);
 
+		int  iWidth, iWidthSize, iHeight, iHeightSize;
+		
+		iWidth = _wtoi(strWid);
+		iWidthSize = _wtoi(strWidSize);
+		iHeight= _wtoi(strHeight);
+		iHeightSize= _wtoi(strHeightSize);
 
 		if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BULLET")) {
-			Create(G_EFFECT_BULLET, &imgFile,  D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime);
+			Create(G_EFFECT_BULLET, &imgFile,  D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime, iWidth, iWidthSize, iHeight, iHeightSize);
 		}
 		//else if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BLOOD")) {
 		//	UICreate(GUI_TYPE_BUTTON, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
@@ -180,9 +203,8 @@ void EffManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 
 bool		EffManager::Init() {
 
-
 	return true;
-};;;;;;;;;;;;;;;;;;;;;;;;;
+};
 bool		EffManager::Frame(GCamera* camera, GTimer* timer) { 
 	for (int i = 0;i < m_List.size();i++)
 		m_List[i]->Frame(camera, timer);
