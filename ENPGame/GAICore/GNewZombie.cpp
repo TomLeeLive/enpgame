@@ -1,4 +1,4 @@
-#include "_stdafx.h"
+#include "_ai_std.h"
 //#include "GAISeq.h"
 void		GNewZombie::ChangeZombState(GNewZombie* iNum, G_AI state) {
 

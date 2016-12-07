@@ -1,4 +1,4 @@
-#include "_stdafx.h"
+#include "_ai_std.h"
 
 bool GAIFollow::Init(GNewZombie* iMyIndex)
 {

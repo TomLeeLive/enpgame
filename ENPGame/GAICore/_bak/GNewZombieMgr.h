@@ -1,5 +1,5 @@
 #pragma once
-#include "_stdafx.h"
+#include "_ai_std.h"
 #include "GCharMgr.h"
 
 #define MAX_BONE_MATRICES 255

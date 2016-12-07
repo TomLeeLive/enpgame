@@ -1,4 +1,4 @@
-#include "_stdafx.h"
+#include "_ai_std.h"
 
 //GAIDie * GAIDie::pInstance_ = 0;
 
