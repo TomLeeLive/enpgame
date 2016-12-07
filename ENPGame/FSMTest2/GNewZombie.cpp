@@ -92,11 +92,7 @@ GNewZombie::GNewZombie()
 
 	D3DXMatrixIdentity(&m_matZombWld);
 	
-	//m_vZombPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	//m_vBoxPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-
 	m_State = G_AI_MOVE;
 	D3DXMatrixIdentity(&m_matZombWld);
 	
