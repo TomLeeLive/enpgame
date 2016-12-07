@@ -5,13 +5,19 @@ bool GBspParser::LoadTexture()
 	//_tcscpy( szFilePath, I_Register.m_szDefaultResPath);	
 	//lstrcat( szFilePath, _T(""));	
 	DWORD dwIndex = 0;
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	dwIndex =  I_Texture.Add(g_pd3dDevice, L"../../data/front.bmp" );	
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	if(dwIndex <= 0 )
 	{
 		MessageBox( 0, _T("LoadTexture  실패"), _T("Fatal error"), MB_OK );		
 		return false;
 	}
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	dwIndex = I_Texture.Add(g_pd3dDevice, L"../../data/back.bmp" );
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	if(dwIndex <= 0 )
 	{
 		MessageBox( 0, _T("LoadTexture  실패"), _T("Fatal error"), MB_OK );		
@@ -448,20 +454,25 @@ void GBspParser::SetBufferOpti(GNode* pNode, int iBuffer )
 	////////////////////////////////////////////////////////////////////////////////////////
 	// 인덱스 버퍼 생성
 	////////////////////////////////////////////////////////////////////////////////////////
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	pNode->m_pIBList[iBuffer].Attach(DX::CreateIndexBuffer(m_pd3dDevice,
 		&indexlist.at(0),
 		pNode->m_MtrlList[iBuffer].iNumFaces * 3,
 		sizeof(DWORD)));
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	////////////////////////////////////////////////////////////////////////////////////////
 	// 정점 버퍼 생성
 	////////////////////////////////////////////////////////////////////////////////////////	
 	vector<PNCT_VERTEX> vertexlist(VListData.begin(), VListData.end());
 
 	pNode->m_MtrlList[iBuffer].iNumVertex = VListData.size();
+	//EnterCriticalSection(&g_CSd3dDevice);
 	pNode->m_pVBList[iBuffer].Attach(DX::CreateVertexBuffer(m_pd3dDevice,
 		&vertexlist.at(0),
 		pNode->m_MtrlList[iBuffer].iNumVertex,
 		sizeof(PNCT_VERTEX)));	
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	VListData.clear();
 }
 

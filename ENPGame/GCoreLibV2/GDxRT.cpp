@@ -333,7 +333,10 @@ namespace DX
 		texDesc.SampleDesc = desc.SampleDesc;
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
 
+		//EnterCriticalSection(&g_CSd3dDevice);
 		V(g_pd3dDevice->CreateTexture2D(&texDesc, 0, &texture));
+		//LeaveCriticalSection(&g_CSd3dDevice);
+
 		pContext->CopyResource(texture, backbufferRes);
 
 		V(D3DX11SaveTextureToFile(pContext,	texture, D3DX11_IFF_BMP, name.c_str()));

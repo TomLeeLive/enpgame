@@ -133,7 +133,8 @@ bool GProjMain::Render()
 bool GProjMain::Release()
 {
 	m_CustomMap.Release();
-	SAFE_ZERO(m_pMainCamera);
+	SAFE_DEL(m_pBoxShape);
+	SAFE_DEL(m_pMainCamera);
 
 	
 	return true;

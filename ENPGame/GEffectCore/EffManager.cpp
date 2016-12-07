@@ -20,7 +20,9 @@ void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 		
 
 		//play 버튼시 init() 부분
+		//EnterCriticalSection(&g_CSd3dDevice);
 		Effect->m_pSprite->Create(g_pd3dDevice, L"data/shader/plane.hlsl", strFile->c_str());
+		//LeaveCriticalSection(&g_CSd3dDevice);
 
 		//이미지 이름을 저장해 놓는다. 나중에 save 할때 쓴다.
 		//TCHAR  *tchr = (TCHAR*)(LPCTSTR)strFile;
@@ -215,7 +217,9 @@ bool		EffManager::Render() {
 	for (int i = 0;i < m_List.size();i++)
 		m_List[i]->Render();
 
+	//EnterCriticalSection(&g_CSImmediateContext);
 	ClearD3D11DeviceContext(g_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 
 	return true; 
 
@@ -252,10 +256,13 @@ HRESULT EffManager::SetBlendState()
 	//계산된 최종 컬러값의 일부 요소만 렌더타겟에 기록할 수 있도록 한다.
 	BlendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(hr = g_pd3dDevice->CreateBlendState(&BlendState, &m_pAlphaBlendFactor)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return hr;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	ZeroMemory(&BlendState, sizeof(D3D11_BLEND_DESC));
 	BlendState.RenderTarget[0].BlendEnable = TRUE;
@@ -268,10 +275,13 @@ HRESULT EffManager::SetBlendState()
 	BlendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 
 	BlendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(hr = g_pd3dDevice->CreateBlendState(&BlendState, &m_pAlphaBlend)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return hr;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	return hr;
 }

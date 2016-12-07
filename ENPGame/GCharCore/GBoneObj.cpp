@@ -379,11 +379,14 @@ HRESULT GBoneObj::SetInputLayout()
 		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pInputlayout.Attach(DX::CreateInputlayout(m_pd3dDevice,
 		m_dxobj.g_pVSBlob.Get()->GetBufferSize(),
 		m_dxobj.g_pVSBlob.Get()->GetBufferPointer(), layout, numElements));
 
 	SetBuffer(m_pd3dDevice);
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	return S_OK;
 }
@@ -443,7 +446,9 @@ bool GBoneObj::Frame()
 			m_fElapseTime = (float)m_iStartFrame;// + fElapsedTime;		
 		}
 	}
+	//EnterCriticalSection(&g_CSImmediateContext);
 	SetBoneMatrices(g_pImmediateContext);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	return true;
 }
 
@@ -503,7 +508,9 @@ bool GBoneObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 			pMesh->m_dxobj.m_BoxVB.top = 0; pMesh->m_dxobj.m_BoxVB.bottom = 1;
 			pMesh->m_dxobj.m_BoxVB.front = 0; pMesh->m_dxobj.m_BoxVB.back = 1;
 
+			//EnterCriticalSection(&g_CSImmediateContext);
 			g_pImmediateContext->UpdateSubresource(pVB, 0, &pMesh->m_dxobj.m_BoxVB, (void*)&pData->m_VertexArray.at(0), 0, 0);
+			//LeaveCriticalSection(&g_CSImmediateContext);
 
 			pMesh->m_dxobj.m_iBeginVB = vbOffset;
 			vbOffset += pMesh->m_dxobj.m_iNumVertex;

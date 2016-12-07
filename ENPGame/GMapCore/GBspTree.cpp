@@ -4,10 +4,15 @@
 bool GBspTree::Load( ID3D11Device*  pd3dDevice, TCHAR* szFileName, bool Binary )
 {
 	SAFE_NEW( m_pRootNode, GNode );	
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if( !m_BspParser.Load( GetDevice(), m_pRootNode, szFileName, Binary ) )
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return false;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	m_pRootNode->iNumPolygon = CalculateBox( &m_pRootNode->m_tBox, m_pRootNode->m_pSplitter );
 	
 	return true;

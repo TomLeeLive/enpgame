@@ -91,8 +91,12 @@ HRESULT GLineShape::SetInputLayout()
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pInputlayout.Attach(DX::CreateInputlayout(m_pd3dDevice, m_dxobj.g_pVSBlob.Get()->GetBufferSize(),
 		m_dxobj.g_pVSBlob.Get()->GetBufferPointer(), layout, numElements));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return hr;
 }
 bool GLineShape::CreateVertexData()
@@ -120,10 +124,14 @@ bool GLineShape::CreateIndexData()
 HRESULT GLineShape::CreateVertexBuffer()
 {
 	if (m_dxobj.m_iNumVertex <= 0) return S_OK;
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pVertexBuffer.Attach(DX::CreateVertexBuffer(m_pd3dDevice,
 		&m_LineVertexList.at(0),
 		m_dxobj.m_iNumVertex,
 		m_dxobj.m_iVertexSize));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return S_OK;
 }
 bool GLineShape::Draw(ID3D11DeviceContext* pContext, D3DXVECTOR3 vStart, D3DXVECTOR3 vEnd, D3DXVECTOR4 vColor)
@@ -166,8 +174,12 @@ HRESULT GDirectionLineShape::SetInputLayout()
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pInputlayout.Attach(DX::CreateInputlayout(m_pd3dDevice, m_dxobj.g_pVSBlob.Get()->GetBufferSize(),
 		m_dxobj.g_pVSBlob.Get()->GetBufferPointer(), layout, numElements));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return hr;
 }
 bool GDirectionLineShape::CreateVertexData()
@@ -198,10 +210,14 @@ bool GDirectionLineShape::CreateIndexData()
 HRESULT GDirectionLineShape::CreateVertexBuffer()
 {
 	if (m_dxobj.m_iNumVertex <= 0) return S_OK;
+
+	//EnterCriticalSection(&g_CSd3dDevice);
 	m_dxobj.g_pVertexBuffer.Attach(DX::CreateVertexBuffer(m_pd3dDevice,
 		&m_LineVertexList.at(0),
 		m_dxobj.m_iNumVertex,
 		m_dxobj.m_iVertexSize));
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return S_OK;
 }
 //--------------------------------------------------------------------------------------

@@ -111,8 +111,10 @@ bool GAseParser::LoadTexture(GTextexMap& TexMap)
 		{
 			GetData(&szTexName, STRING_DATA);
 			TexMap.m_strTextureName = szTexName;
+			//EnterCriticalSection(&g_CSd3dDevice);
 			TexMap.m_dwIndex = I_Texture.Add(
 				g_pd3dDevice, szTexName, m_szDirName.c_str());
+			//LeaveCriticalSection(&g_CSd3dDevice);
 		}
 		break;
 		default:

@@ -6,7 +6,7 @@ public:
 		if (pInstance_ == 0) pInstance_ = new GSeqMenu;
 		return pInstance_;
 	}
-	bool Init() { return true; };
+	bool Init();
 	bool Frame();
 	bool Render();
 	bool Release() { return true; };

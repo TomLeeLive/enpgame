@@ -20,7 +20,11 @@ public:
 	}
 	virtual void	SetColor(D3DXVECTOR4 vColor = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f)) {
 		m_cbData.Color = vColor;
+
+		//EnterCriticalSection(&g_CSd3dDevice);
 		m_dxobj.g_pConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbData, 1, sizeof(VS_CONSTANT_BUFFER)));
+		//LeaveCriticalSection(&g_CSd3dDevice);
+
 	}
 	void	CreateOBBBox(	float fExtX = 1.0f, float fExtY = 1.0f, float fExtZ = 1.0f,
 							D3DXVECTOR3 vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f),

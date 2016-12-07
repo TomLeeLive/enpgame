@@ -446,7 +446,9 @@ INT	TShaderMgr::Add(TCHAR* pLoadShaderFile,
 
 	GDxShader *pPoint = NULL;
 	SAFE_NEW(pPoint, GDxShader);
+	//EnterCriticalSection(&g_CSd3dDevice);
 	pPoint->Load(m_pd3dDevice, pLoadShaderFile, pEntryPoint, pCompiler, type, pLoadBlob);
+	//LeaveCriticalSection(&g_CSd3dDevice);
 	TMap.insert(make_pair(++m_iCurIndex, pPoint));
 	pPoint->m_iIndex = m_iCurIndex;
 	pPoint->m_szName = szFileName;
@@ -484,7 +486,9 @@ INT TShaderMgr::Add(const TCHAR *pLoadShaderFile, LPCSTR strVSEntryPoint,
 
 	GDxShader *pPoint = NULL;
 	SAFE_NEW(pPoint, GDxShader);
+	//EnterCriticalSection(&g_CSd3dDevice);
 	pPoint->Load(m_pd3dDevice, pLoadShaderFile, strVSEntryPoint, strPSEntryPoint, strShaderModel);
+	//LeaveCriticalSection(&g_CSd3dDevice);
 
 	TMap.insert(make_pair(++m_iCurIndex, pPoint));
 	pPoint->m_iIndex = m_iCurIndex;

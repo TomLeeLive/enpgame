@@ -117,7 +117,9 @@ bool GCoreLibV2::PreFrame()
 {
 	if( !m_Timer.Frame() ) return false;
 	if( !I_Input.Frame() ) return false;	
+	//EnterCriticalSection(&g_CSImmediateContext);
 	if (!Update(m_pImmediateContext)) return false;
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	return true;
 }
 bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
@@ -202,22 +204,26 @@ bool GCoreLibV2::GRelease()
 }
 bool GCoreLibV2::GFrame()
 {
-	PreFrame();
-	Frame();
-	PostFrame();
+	if(!m_bRenderManually){
+		PreFrame();
+		Frame();
+		PostFrame();
+	}
 	return true;
 }
 bool GCoreLibV2::GRender()
 {
-	I_Input.Render();
-	m_Timer.Render();
+	if (!m_bRenderManually) {
+		I_Input.Render();
+		m_Timer.Render();
 
-	PreRender();
-	Render();
+		PreRender();
+		Render();
 
-	if( m_bDebugFpsPrint )	DrawDebug();
-	if (m_bDebugInfoPrint)	DrawInfo();
-	PostRender();	
+		if (m_bDebugFpsPrint)	DrawDebug();
+		if (m_bDebugInfoPrint)	DrawInfo();
+		PostRender();
+	}
 	return true;
 }
 
@@ -229,11 +235,13 @@ bool GCoreLibV2::PreRender()
 {
 	// Just clear the backbuffer
     float ClearColor[4] = { m_fScreenColor[0], m_fScreenColor[1], m_fScreenColor[2], m_fScreenColor[3] }; //red,green,blue,alpha
+	//EnterCriticalSection(&g_CSImmediateContext);
 	m_pImmediateContext->ClearRenderTargetView( GetRenderTargetView(), ClearColor );	
 	m_pImmediateContext->ClearDepthStencilView(m_DefaultRT.m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_pImmediateContext->OMSetRenderTargets(1, GetRenderTargetViewAddress(), m_DefaultRT.m_pDepthStencilView.Get() );
 	m_pImmediateContext->RSSetViewports(1, &m_DefaultRT.m_vp);
 	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthEnable);
+	//LeaveCriticalSection(&g_CSImmediateContext);
 	return true;
 }
 bool GCoreLibV2::DrawInfo() {
@@ -441,10 +449,14 @@ HRESULT GCoreLibV2::CreateDxResource()
 		return hr;
 	}	
 
+	//EnterCriticalSection(&g_CSd3dDevice);
 	if (FAILED(hr = m_DefaultRT.UpdateDepthStencilView(m_pd3dDevice, m_SwapChainDesc.BufferDesc.Width, m_SwapChainDesc.BufferDesc.Height)))
 	{
+		//LeaveCriticalSection(&g_CSd3dDevice);
 		return hr;
 	}
+	//LeaveCriticalSection(&g_CSd3dDevice);
+
 	return CreateResource();
 }
 HRESULT GCoreLibV2::DeleteDxResource()
@@ -462,6 +474,7 @@ HRESULT GCoreLibV2::DeleteResource()
 }
 GCoreLibV2::GCoreLibV2(void)
 {
+	m_bRenderManually = false;
 	m_fScreenColor[0] = 0.5f; // R
 	m_fScreenColor[1] = 1.0f; // G
 	m_fScreenColor[2] = 0.5f; // B
