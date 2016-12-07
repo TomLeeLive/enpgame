@@ -75,9 +75,6 @@ void		GProjMain::ChangeZombState(int iNum, TCHAR* str) {
 
 bool GProjMain::Load()
 {
-	srand((unsigned)time(NULL));
-	//srand(time(NULL));
-
 
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
 	{
@@ -109,7 +106,7 @@ bool GProjMain::Load()
 
 bool GProjMain::Init()
 {
-	//srand(time(NULL));
+	srand((unsigned)time(NULL));
 
 	I_CharMgr.Init();
 	 Load();
@@ -149,25 +146,25 @@ bool GProjMain::Frame()
 	D3DXMATRIX Logic;
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
-		g_pMain->m_matBoxWorld._43 += 30.0f * g_fSecPerFrame;
+		g_pMain->m_matBoxWorld._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 		Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
 	{
-		g_pMain->m_matBoxWorld._43 -= 30.0f * g_fSecPerFrame;
+		g_pMain->m_matBoxWorld._43 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 		Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
 	{
-		g_pMain->m_matBoxWorld._41 -= 30.0f * g_fSecPerFrame;
+		g_pMain->m_matBoxWorld._41 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 		Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 
 	if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
 	{
-		g_pMain->m_matBoxWorld._41 += 30.0f * g_fSecPerFrame;
+		g_pMain->m_matBoxWorld._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 		Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 	for (int i = 0; i < m_Zomb.size(); i++)

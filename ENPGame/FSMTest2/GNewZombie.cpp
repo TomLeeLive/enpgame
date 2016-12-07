@@ -36,7 +36,7 @@ bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 
 	D3DXVECTOR3 vMove = D3DXVECTOR3(matZombie._41, matZombie._42, matZombie._43);
 	D3DXVECTOR3 vNewPos;
-	vNewPos = vMove - SPEED * g_fSecPerFrame * vLook_toPos;
+	vNewPos = vMove - G_DEFINE_AI_MOVE_SPEED * g_fSecPerFrame * vLook_toPos;
 	D3DXMatrixTranslation(&matTrans, vNewPos.x, vNewPos.y, vNewPos.z);
 
 
