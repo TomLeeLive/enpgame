@@ -8,7 +8,7 @@ public:
 	}
 	bool Init();
 	 bool Frame() ;
-	 bool RenderManually(float fValue);
+	 bool RenderManually(void* arg1 = NULL, void* arg2 = NULL);
 	 bool Render();
 	 bool Release() { return true; };
 

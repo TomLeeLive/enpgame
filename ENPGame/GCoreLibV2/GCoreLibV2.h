@@ -41,6 +41,9 @@ public:
 	virtual	bool		PreRender();
 	virtual bool		DrawDebug();
 	virtual	bool		DrawInfo();
+
+	virtual bool		DrawDebugRect(RECT* rcDest = NULL, TCHAR* pString = 0, DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING, D3DXCOLOR color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
 	virtual bool		DrawDebugRect(RECT* rcDest = NULL, TCHAR* pString = 0, D3DXCOLOR color = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f) );
 	virtual	bool		PostRender();
 

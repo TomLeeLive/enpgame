@@ -11,7 +11,7 @@ bool GProjMain::Load()
 		return false;
 	}
 
-	GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_IDLE");
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_IDLE");
 	//GCharacter* pChar1 = I_CharMgr.GetPtr(L"TEST_CHAR1");
 	//GCharacter* pChar2 = I_CharMgr.GetPtr(L"TEST_CHAR2");
 	//GCharacter* pChar3 = I_CharMgr.GetPtr(L"TEST_CHAR3");
@@ -127,7 +127,7 @@ bool GProjMain::Frame()
 		switch (iChange) {
 		case G_ZOMB_DIE:
 		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_DIE");
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_DIE");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,
@@ -137,7 +137,7 @@ bool GProjMain::Frame()
 		break;
 		case G_ZOMB_ATTACK:
 		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_ATTACK");
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_ATTACK");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,
@@ -147,7 +147,7 @@ bool GProjMain::Frame()
 		break;	
 		case G_ZOMB_WALK:
 		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_WALK");
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_WALK");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,
@@ -157,7 +157,7 @@ bool GProjMain::Frame()
 		break;	
 		case G_ZOMB_IDLE:
 		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_IDLE");
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_IDLE");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,
@@ -168,7 +168,7 @@ bool GProjMain::Frame()
 
 		case G_ZOMB_RUN:
 		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_RUN");
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_RUN");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,
@@ -178,7 +178,7 @@ bool GProjMain::Frame()
 		break;
 		case G_ZOMB_JUMP:
 		{
-			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO_JUMP");
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"HERO1_JUMP");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,
