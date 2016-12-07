@@ -2,10 +2,6 @@
 GProjMain* g_pMain;
 
 
-
-
-
-
 bool GProjMain::Init()
 {
 
