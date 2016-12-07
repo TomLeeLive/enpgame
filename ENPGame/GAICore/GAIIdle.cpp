@@ -6,7 +6,7 @@ bool GAIIdle::Init(GNewZombie* iMyIndex)
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 	return true;
 }
-bool GAIIdle::Frame(GNewZombie* iMyIndex)
+bool GAIIdle::Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld)
 {
 	//처음 셋팅된 시간을 저장
 	float fTime = 0.0f;

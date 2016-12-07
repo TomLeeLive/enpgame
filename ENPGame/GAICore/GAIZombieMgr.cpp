@@ -50,10 +50,10 @@ bool		GAIZombieMgr::Init() {
 	}
 	
 	return true; };
-bool		GAIZombieMgr::Frame() { 
+bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		m_Zomb[i]->Frame(m_Zomb[i].get());
+		m_Zomb[i]->Frame(m_Zomb[i].get(), matHeroWorld);
 	}
 
 

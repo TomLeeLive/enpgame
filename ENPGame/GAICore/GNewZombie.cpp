@@ -140,17 +140,17 @@ bool	GNewZombie::Init()
 	
 	return true;
 };
-bool	GNewZombie::Frame(GNewZombie* iMyIndex)
+bool	GNewZombie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 {
 	GZombie::Frame();
 	
-	m_pCurrentSeq->Frame(iMyIndex);
+	m_pCurrentSeq->Frame(iMyIndex, matHeroWorld);
 
 	return true;
 };
 bool	GNewZombie::Render(){
 	m_pCurrentSeq->Render();
-	GZombie::Render(g_pMain->GetContext());
+	GZombie::Render(g_pImmediateContext);
 	return true;
 };
 bool	GNewZombie::Release()

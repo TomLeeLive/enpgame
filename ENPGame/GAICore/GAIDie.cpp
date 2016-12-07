@@ -7,7 +7,7 @@ bool GAIDie::Init(GNewZombie* iMyIndex)
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
 	return true;
 }
-bool GAIDie::Frame(GNewZombie* iMyIndex)
+bool GAIDie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 {
 	iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
 	

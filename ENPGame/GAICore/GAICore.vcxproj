@@ -158,7 +158,6 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <ClInclude Include="GAISeq.h" />
     <ClInclude Include="GAIZombieMgr.h" />
     <ClInclude Include="GNewZombie.h" />
-    <ClInclude Include="GProjMain.h" />
     <ClInclude Include="_ai_std.h" />
   </ItemGroup>
   <ItemGroup>

@@ -64,7 +64,7 @@ bool GProjMain::Frame()
 	m_pMainCamera->Frame();
 
 
-	m_GAIZombMgr.Frame();
+	m_GAIZombMgr.Frame(m_Box->m_matWorld);
 
 	return true;
 }
