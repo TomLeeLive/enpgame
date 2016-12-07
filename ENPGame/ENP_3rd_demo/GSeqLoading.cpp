@@ -138,9 +138,9 @@ bool GSeqLoading::RenderManually(void* arg1, void* arg2) {
 
 	RECT rc;
 	
-	rc.top = g_pMain->m_DefaultRT.m_vp.Height / 3 * 1;
+	rc.top = g_pMain->m_DefaultRT.m_vp.Height / 3 * 2;
 	rc.bottom = g_pMain->m_DefaultRT.m_vp.Height;
-	rc.left = g_pMain->m_DefaultRT.m_vp.Width / 3 * 1;
+	rc.left = 0;
 	rc.right = g_pMain->m_DefaultRT.m_vp.Width;
 	
 	//rc.top = g_pMain->m_DefaultRT.m_vp.Height - 60;
@@ -149,7 +149,7 @@ bool GSeqLoading::RenderManually(void* arg1, void* arg2) {
 	//rc.right = g_pMain->m_DefaultRT.m_vp.Width;
 
 	if(pStr!=NULL)
-		g_pMain->DrawDebugRect(&rc, pStr, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		g_pMain->DrawDebugRect(&rc, pStr, DWRITE_TEXT_ALIGNMENT_CENTER,D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 
 	//PostRender
 	g_pMain->GCoreLibV2::PostRender();

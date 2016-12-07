@@ -362,6 +362,36 @@ bool GCoreLibV2::DrawDebug()
 	return true;
 }
 
+bool GCoreLibV2::DrawDebugRect(RECT* rcDest, TCHAR* pString, DWRITE_TEXT_ALIGNMENT align, D3DXCOLOR color)
+{
+	if (rcDest == NULL) return false;
+
+	if (m_Font.m_pTextFormat)
+	{
+		D2D1_SIZE_F rtSize = m_Font.m_pRT->GetSize();
+		//Draw a grid background.
+		int width = static_cast <int> (rtSize.width);
+		int height = static_cast <int> (rtSize.height);
+
+		m_Font.Begin();
+		m_Font.m_pTextFormat->SetTextAlignment(align);
+		m_Font.m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		//RECT rc1 = {0,0, m_iWindowWidth, m_iWindowHeight};
+
+		m_Font.SetText(D2D1::Point2F(rcDest->right, rcDest->bottom), pString, D2D1::ColorF(1, 1, 0, 1));
+		//m_Font.SetFont(L"Consolas");
+		m_Font.SetBold(false);
+		//m_Font.SetFontSize(100);
+		m_Font.SetItalic(false);
+		m_Font.SetUnderline(false);
+
+		m_Font.DrawText(D2D1::Point2F(rcDest->left, rcDest->top), D2D1::ColorF(color.r, color.g, color.b, 1.0f));
+		m_Font.End();
+	}
+
+	return true;
+}
+
 bool GCoreLibV2::DrawDebugRect(RECT* rcDest, TCHAR* pString, D3DXCOLOR color )
 {
 	if( rcDest == NULL ) return false;	
