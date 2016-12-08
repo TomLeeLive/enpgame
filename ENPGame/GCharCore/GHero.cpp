@@ -171,7 +171,7 @@ bool		GHero::Frame()
 		}
 	}
 
-	m_OBB.Frame(m_matWorld);
+	m_OBB.Frame(&m_matWorld);
 
 	return true;
 }
