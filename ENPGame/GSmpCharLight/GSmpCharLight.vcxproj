@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>GSmpCharHeroGunAttach</ProjectName>
+    <ProjectName>GSmpCharLight</ProjectName>
     <ProjectGuid>{0C8872C6-483A-439A-93D6-1EBA21C14D2E}</ProjectGuid>
     <RootNamespace>SampleBindPoseAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>

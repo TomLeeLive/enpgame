@@ -5,6 +5,20 @@ GProjMain* g_pMain;
 
 bool GProjMain::Load()
 {
+	/*
+	int iIndex = -1;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/box.hlsl");
+	
+	if (iIndex < 0) 
+		return false;
+
+	//샷건 로드
+	m_ObjGun = I_ObjMgr.GetPtr(G_OBJ_NAME_GUN_SHOTGUN);
+	D3DXMatrixScaling(&m_matObjGunScl, 1, 1, 1);
+	D3DXMatrixTranslation(&m_matObjGunTrans, 0.0f, 0.0f, 0.0f);
+	m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
+	*/
+
 	//if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharHero1.gci")))
 	{
@@ -22,6 +36,7 @@ bool GProjMain::Load()
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 
+
 	pObjA->Init();
 
 	m_HeroObj.push_back(pObjA);
@@ -37,7 +52,7 @@ bool GProjMain::Init()
 
 	Load();
 
-	
+
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -66,10 +81,22 @@ bool GProjMain::Render()
 		m_HeroObj[iChar]->SetMatrix(&m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
+	/*
+	m_ObjGun->SetMatrix(&(
+		m_matObjGunWld
+
+		* m_HeroObj[0]->m_pMatrix[25]
+		
+		
+		), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_ObjGun->Render(g_pImmediateContext);
+	*/
 	return true;
 }
 bool GProjMain::Release()
 {
+	I_ObjMgr.Release();
+
 	I_CharMgr.Release();
 	return true;
 }
@@ -193,7 +220,9 @@ bool GProjMain::Frame()
 
 
 	}
-	
+	/*
+	m_ObjGun->Frame();
+	*/
 
 	return true;
 }
@@ -223,6 +252,12 @@ HRESULT GProjMain::DeleteResource()
 }
 GProjMain::GProjMain(void)
 {
+	/*
+	D3DXMatrixIdentity(&m_matObjGunWld);
+	D3DXMatrixIdentity(&m_matObjGunScl);
+	D3DXMatrixIdentity(&m_matObjGunRot);
+	D3DXMatrixIdentity(&m_matObjGunTrans);
+	*/
 }
 
 GProjMain::~GProjMain(void)

@@ -4,6 +4,13 @@
 #include "GHero.h"
 
 
+//오브젝트 위치
+#define G_OBJ_LOC_GUN_SHOTGUN _T("data/object/shotgun/shotgun.GBS")
+//오브젝트 매니저 등록 이름
+#define G_OBJ_NAME_GUN_SHOTGUN L"shotgun.GBS"
+
+
+
 //#define G_MACRO_MODELVIEW 1
 
 #ifdef G_MACRO_MODELVIEW
@@ -25,7 +32,10 @@ class GProjMain : public GCoreLibV2
 #else
 	shared_ptr<GCamera > m_pMainCamera;
 #endif
-	
+	/*
+	GModel*		m_ObjGun;
+	D3DXMATRIX	m_matObjGunWld, m_matObjGunScl, m_matObjGunRot, m_matObjGunTrans;
+	*/
 	D3DXMATRIX  m_matWorld;
 	vector<shared_ptr<GHero>>	m_HeroObj;
 public:	
