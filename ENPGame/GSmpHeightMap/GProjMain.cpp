@@ -114,12 +114,19 @@ bool GProjMain::Frame()
 		m_HeightMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_HeightMap.m_VertexList.at(0), 0, 0);
 
 	
-
-	G_BOX pBox2;
 	m_Objbit.reset();	
 
 
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_Obj[i]->Frame();
 
+		if (m_pMainCamera->CheckOBBInPlane(&(((GGbsObj*)m_Obj[i])->m_OBB)))
+		{
+			m_Objbit.set(i);
+		}
+	}
 
 
 	return true;
@@ -129,38 +136,6 @@ bool GProjMain::Render()
 	m_HeightMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_HeightMap.Render(m_pImmediateContext);
 
-	G_BOX pBox2;
-
-	for (int i = 0; i < G_OBJ_CNT; i++)
-	{
-		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-		m_Obj[i]->Frame();
-
-	
-		float f2 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[0];
-		float f3 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[1];
-		float f4 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[2];
-
-		D3DXVECTOR3 v1 = ((GGbsObj*)m_Obj[i])->m_OBB.center;
-		D3DXVECTOR3 v2 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[0];
-		D3DXVECTOR3 v3 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[1];
-		D3DXVECTOR3 v4 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[2];
-
-
-		pBox2.vCenter = ((GGbsObj*)m_Obj[i])->m_OBB.center;
-
-		pBox2.fExtent[0] = ((GGbsObj*)m_Obj[i])->m_OBB.extent[0];
-		pBox2.fExtent[1] = ((GGbsObj*)m_Obj[i])->m_OBB.extent[1];
-		pBox2.fExtent[2] = ((GGbsObj*)m_Obj[i])->m_OBB.extent[2];
-
-		pBox2.vAxis[0] = ((GGbsObj*)m_Obj[i])->m_OBB.axis[0];
-		pBox2.vAxis[1] = ((GGbsObj*)m_Obj[i])->m_OBB.axis[1];
-		pBox2.vAxis[2] = ((GGbsObj*)m_Obj[i])->m_OBB.axis[2];
-		if (m_pMainCamera->CheckOBBInPlane(&pBox2))
-		{
-			m_Objbit.set(i);
-		}
-	}
 
 	for (int i = 0; i < G_OBJ_CNT; i++) 
 	{
@@ -169,7 +144,6 @@ bool GProjMain::Render()
 		if (m_Objbit[i])
 		{
 			m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-			m_Obj[i]->Frame();
 			m_Obj[i]->Render(g_pImmediateContext);
 		}
 		

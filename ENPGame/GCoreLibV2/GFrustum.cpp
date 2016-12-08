@@ -1,4 +1,5 @@
 #include "GFrustum.h"
+
 #define		PLANE_EPSILON	0.001f
 
 bool G_PLANE::CreatePlane( D3DXVECTOR3 v0, D3DXVECTOR3 v1, D3DXVECTOR3 v2 )
@@ -250,6 +251,31 @@ BOOL GFrustum::ClassifySphere( G_SPHERE* pSphere )//D3DXVECTOR3* pv, float radiu
 	return TRUE;
 }
 // OBB 제외처리( 프로스텀 내부에 존재( 걸쳐 있어도)하면 TRUE, 아니면 FALSE )
+BOOL GFrustum::CheckOBBInPlane(GBBox*  pBox)
+{
+	float		fPlaneToCenter = 0.0;
+	float		fDistance = 0.0f;
+	D3DXVECTOR3 vDir;
+	for (int iPlane = 0; iPlane < 6; iPlane++)
+	{
+		vDir = pBox->axis[0] * pBox->extent[0];
+		fDistance = fabs(m_Plane[iPlane].fA * vDir.x + m_Plane[iPlane].fB*vDir.y + m_Plane[iPlane].fC * vDir.z);
+		vDir = pBox->axis[1] * pBox->extent[1];
+		fDistance += fabs(m_Plane[iPlane].fA * vDir.x + m_Plane[iPlane].fB*vDir.y + m_Plane[iPlane].fC * vDir.z);
+		vDir = pBox->axis[2] * pBox->extent[2];
+		fDistance += fabs(m_Plane[iPlane].fA * vDir.x + m_Plane[iPlane].fB*vDir.y + m_Plane[iPlane].fC * vDir.z);
+
+		fPlaneToCenter = m_Plane[iPlane].fA * pBox->center.x + m_Plane[iPlane].fB*pBox->center.y +
+			m_Plane[iPlane].fC * pBox->center.z + m_Plane[iPlane].fD;
+
+		if (fPlaneToCenter <= -fDistance)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
 BOOL GFrustum::CheckOBBInPlane( G_BOX*  pBox )
 {
 	float		fPlaneToCenter=0.0;
