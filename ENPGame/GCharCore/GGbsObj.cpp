@@ -510,7 +510,7 @@ bool GGbsObj::Frame()
 		pMesh->m_matCalculation = pMesh->m_matCalculation * m_matWorld;
 	}*/
 
-	m_OBB.Frame(&m_matWorld);
+	m_OBB.Frame(m_matWorld);
 
 	return true;
 }

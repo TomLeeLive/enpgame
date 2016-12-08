@@ -70,7 +70,7 @@ public:
  }
  // Ãß°¡ÇÔ.
  bool Init(D3DXVECTOR3 &min, D3DXVECTOR3 &max);
- bool Frame(D3DXMATRIX* mat);
+ bool Frame(D3DXMATRIX mat);
  bool Render(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
  bool Release();
 };
@@ -87,7 +87,7 @@ namespace GBBOXFUNC {
 	D3DXMATRIX* GetBoxTransform(D3DXMATRIX *pMat, GBBox* pBox);
 	void SetBoxTransform(const D3DXMATRIX *pMat, GBBox* pBox);
 	void initBox(GBBox *pBox, const D3DXVECTOR3& vecMin, const D3DXVECTOR3& vecMax);
-	void moveBox(GBBox *pBox, const D3DXMATRIX& mat);
+	void moveBox(GBBox *pBox, D3DXMATRIX mat);
 }
 
 

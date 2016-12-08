@@ -116,22 +116,35 @@ bool GProjMain::Frame()
 	
 
 	G_BOX pBox2;
-	m_Objbit.reset();		
+	m_Objbit.reset();	
+
+
+
+
+
+	return true;
+}
+bool GProjMain::Render()
+{
+	m_HeightMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_HeightMap.Render(m_pImmediateContext);
+
+	G_BOX pBox2;
+
 	for (int i = 0; i < G_OBJ_CNT; i++)
 	{
 		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
 
-		GGbsObj* obj = ((GGbsObj*)m_Obj[i]);
-		((GGbsObj*)m_Obj[i])->m_OBB.center;
+	
+		float f2 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[0];
+		float f3 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[1];
+		float f4 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[2];
 
-		float f1= ((GGbsObj*)m_Obj[i])->m_OBB.extent[0];
-		float f2 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[1];
-		float f3 = ((GGbsObj*)m_Obj[i])->m_OBB.extent[2];
-
-		D3DXVECTOR3 v1 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[0];
-		D3DXVECTOR3 v2 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[1];
-		D3DXVECTOR3 v3 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[2];
+		D3DXVECTOR3 v1 = ((GGbsObj*)m_Obj[i])->m_OBB.center;
+		D3DXVECTOR3 v2 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[0];
+		D3DXVECTOR3 v3 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[1];
+		D3DXVECTOR3 v4 = ((GGbsObj*)m_Obj[i])->m_OBB.axis[2];
 
 
 		pBox2.vCenter = ((GGbsObj*)m_Obj[i])->m_OBB.center;
@@ -145,22 +158,18 @@ bool GProjMain::Frame()
 		pBox2.vAxis[2] = ((GGbsObj*)m_Obj[i])->m_OBB.axis[2];
 		if (m_pMainCamera->CheckOBBInPlane(&pBox2))
 		{
-			m_Objbit.set(i);			
+			m_Objbit.set(i);
 		}
-		
 	}
-
-	return true;
-}
-bool GProjMain::Render()
-{
-	m_HeightMap.SetMatrix(m_pMainCamera->GetWorldMatrix(), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
-	m_HeightMap.Render(m_pImmediateContext);
 
 	for (int i = 0; i < G_OBJ_CNT; i++) 
 	{
+		D3DXMATRIX mat = m_Obj[i]->m_matWorld;
+
 		if (m_Objbit[i])
 		{
+			m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+			m_Obj[i]->Frame();
 			m_Obj[i]->Render(g_pImmediateContext);
 		}
 		

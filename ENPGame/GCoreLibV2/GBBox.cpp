@@ -29,10 +29,10 @@ bool GBBox::Init(D3DXVECTOR3 &min, D3DXVECTOR3 &max)
 
 	return true;
 }
-bool GBBox::Frame(D3DXMATRIX* mat)
+bool GBBox::Frame(D3DXMATRIX mat)
 {
 	GBBOXFUNC::initBox(this, this->m_vMin, this->m_vMax);
-	GBBOXFUNC::moveBox(this, *mat);
+	GBBOXFUNC::moveBox(this, mat);
 
 	m_vPoint[0] = D3DXVECTOR3(this->m_vMin.x, this->m_vMax.y, this->m_vMax.z);
 	m_vPoint[1] = D3DXVECTOR3(this->m_vMax.x, this->m_vMax.y, this->m_vMax.z);
@@ -451,7 +451,7 @@ namespace GBBOXFUNC {
 
 	}
 
-	void moveBox(GBBox *pBox, const D3DXMATRIX& mat)
+	void moveBox(GBBox *pBox, D3DXMATRIX mat)
 	{
 		D3DXMATRIX matBox;
 		// 박스의 transform을 가져온다.

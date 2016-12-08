@@ -170,7 +170,7 @@ bool		GZombie::Frame()
 				pModel->GetMatrix());*/
 		}
 	}
-	m_OBB.Frame(&m_matWorld);
+	m_OBB.Frame(m_matWorld);
 
 	return true;
 }
