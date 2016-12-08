@@ -21,6 +21,9 @@ bool GProjMain::Load()
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjA->Init();
+
 	m_HeroObj.push_back(pObjA);
 
 	return true;

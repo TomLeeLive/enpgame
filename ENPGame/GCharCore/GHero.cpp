@@ -75,7 +75,20 @@ void GHero::SetBoneMatrices(vector<D3DXMATRIX>* pList)
 }
 bool		GHero::Init()
 {
+	//¼¦°Ç ·Îµå
+	int iIndex = -1;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/box.hlsl");
+
+	if (iIndex < 0)
+		return false;
+
+	m_ObjGun = I_ObjMgr.GetPtr(G_OBJ_NAME_GUN_SHOTGUN);
+	D3DXMatrixScaling(&m_matObjGunScl, 1, 1, 1);
+	D3DXMatrixTranslation(&m_matObjGunTrans, 0.0f, 0.0f, 0.0f);
+	m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
+
 	m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+
 	return true;
 }
 bool	GHero::Set(GCharacter* pChar, GBoneObj* pBone, 
@@ -91,7 +104,7 @@ bool	GHero::Set(GCharacter* pChar, GBoneObj* pBone,
 	if (FAILED(CreateConstantBuffer()))
 	{
 		return false;
-	}	
+	}
 	return true;
 }
 bool		GHero::Frame()
@@ -173,6 +186,8 @@ bool		GHero::Frame()
 
 	m_OBB.Frame(&m_matWorld);
 
+	m_ObjGun->Frame();
+
 	return true;
 }
 bool		GHero::Render(ID3D11DeviceContext*    pContext)
@@ -217,11 +232,32 @@ bool		GHero::Render(ID3D11DeviceContext*    pContext)
 		m_pBoneObject->SetMatrix(&m_matWorld, &m_matView, &m_matProj);
 		m_pBoneObject->Render(pContext);
 	}
+
+	// ÃÑ ·»´õ
+	if(m_HeroType == G_HERO_TOM)
+		m_ObjGun->SetMatrix(&(m_matObjGunWld * m_pMatrix[G_DEFINE_HERO1_GUN_POS_RIGHT_HAND] * m_matWorld), &m_matView, &m_matProj);
+	else
+		m_ObjGun->SetMatrix(&(m_matObjGunWld * m_pMatrix[G_DEFINE_HERO2_GUN_POS_RIGHT_HAND] * m_matWorld), &m_matView, &m_matProj);
+
+	m_ObjGun->Render(g_pImmediateContext);
+
+	return true;
+}
+bool GHero::Release() {
+	//I_ObjMgr.Release();
+	I_ObjMgr.Delete(m_ObjGun);
 	return true;
 }
 
 GHero::GHero()
 {
+	m_HeroType = G_HERO_TOM;
+
+	D3DXMatrixIdentity(&m_matObjGunWld);
+	D3DXMatrixIdentity(&m_matObjGunScl);
+	D3DXMatrixIdentity(&m_matObjGunRot);
+	D3DXMatrixIdentity(&m_matObjGunTrans);
+
 	int				m_iScore;
 	int				m_iBullet;
 	int				m_iHP;

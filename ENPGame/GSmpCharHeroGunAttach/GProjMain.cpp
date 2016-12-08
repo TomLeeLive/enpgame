@@ -5,6 +5,7 @@ GProjMain* g_pMain;
 
 bool GProjMain::Load()
 {
+	/*
 	int iIndex = -1;
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/box.hlsl");
 	
@@ -16,7 +17,7 @@ bool GProjMain::Load()
 	D3DXMatrixScaling(&m_matObjGunScl, 1, 1, 1);
 	D3DXMatrixTranslation(&m_matObjGunTrans, 0.0f, 0.0f, 0.0f);
 	m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
-
+	*/
 
 	//if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharHero1.gci")))
@@ -34,6 +35,10 @@ bool GProjMain::Load()
 		pChar0->m_pBoneObject,
 		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
+
+	pObjA->Init();
+
 	m_HeroObj.push_back(pObjA);
 
 	return true;
@@ -47,7 +52,7 @@ bool GProjMain::Init()
 
 	Load();
 
-	
+
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -77,21 +82,6 @@ bool GProjMain::Render()
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
 	/*
-	D3DXMATRIX matHeroHandWld =
-		m_HeroObj[0]->m_pBoneObject->m_pMesh[0].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[1].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[8].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[9].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[10].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[11].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[12].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[22].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[23].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[24].get()->m_matWorld
-		* m_HeroObj[0]->m_pBoneObject->m_pMesh[25].get()->m_matWorld;
-	*/
-
-	//* m_HeroObj[0]->m_pBoneObject->m_pMesh[25].get()->m_matWorld
 	m_ObjGun->SetMatrix(&(
 		m_matObjGunWld
 
@@ -100,7 +90,7 @@ bool GProjMain::Render()
 		
 		), m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_ObjGun->Render(g_pImmediateContext);
-
+	*/
 	return true;
 }
 bool GProjMain::Release()
@@ -230,11 +220,9 @@ bool GProjMain::Frame()
 
 
 	}
-	
+	/*
 	m_ObjGun->Frame();
-
-	//m_ObjGun->m_matWorld = m_ObjGun->m_matWorld * m_HeroObj[0]->m_pBoneObject->m_pMesh[13].get()->m_matWorld;
-
+	*/
 
 	return true;
 }
@@ -264,10 +252,12 @@ HRESULT GProjMain::DeleteResource()
 }
 GProjMain::GProjMain(void)
 {
+	/*
 	D3DXMatrixIdentity(&m_matObjGunWld);
 	D3DXMatrixIdentity(&m_matObjGunScl);
 	D3DXMatrixIdentity(&m_matObjGunRot);
 	D3DXMatrixIdentity(&m_matObjGunTrans);
+	*/
 }
 
 GProjMain::~GProjMain(void)

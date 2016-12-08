@@ -1068,6 +1068,9 @@ bool GSeqSinglePlay::Load()
 		pChar1->m_pBoneObject,
 		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar1->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjB->Init();
+
 	m_CharHero.push_back(pObjB);
 
 	//주인공2 로드
@@ -1084,6 +1087,10 @@ bool GSeqSinglePlay::Load()
 		pChar2->m_pBoneObject,
 		pChar2->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar2->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjC->Init();
+
+	pObjC.get()->m_HeroType = G_HERO_JAKE;
 	m_CharHero.push_back(pObjC);
 
 

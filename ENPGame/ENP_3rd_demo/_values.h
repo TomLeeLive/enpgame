@@ -26,11 +26,7 @@ enum G_OBJECT {
 	G_OBJ_CNT
 };
 
-enum G_HERO {
-	G_HERO_TOM = 0,
-	G_HERO_JAKE,
-	G_HERO_CNT
-};
+
 
 enum G_ZOMB_ST {
 	G_ZOMB_ST_WALK =0,

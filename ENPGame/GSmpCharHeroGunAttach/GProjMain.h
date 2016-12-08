@@ -32,10 +32,10 @@ class GProjMain : public GCoreLibV2
 #else
 	shared_ptr<GCamera > m_pMainCamera;
 #endif
-	
+	/*
 	GModel*		m_ObjGun;
 	D3DXMATRIX	m_matObjGunWld, m_matObjGunScl, m_matObjGunRot, m_matObjGunTrans;
-
+	*/
 	D3DXMATRIX  m_matWorld;
 	vector<shared_ptr<GHero>>	m_HeroObj;
 public:	
