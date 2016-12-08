@@ -609,7 +609,7 @@ bool CGciCharToolApp::Render() {
 			T_STR str = ViewStyle[iVp];
 			TCHAR strNumber[32];
 			str += _itow(iVp, strNumber, 10);// _wtoi
-			DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
+			DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()),D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		}
 		//-----------------------------------------------------------------------
 		// 적용되어 있는 카메라 타입 표시
@@ -621,7 +621,7 @@ bool CGciCharToolApp::Render() {
 		T_STR str = ViewStyle[m_iCameraType];
 		TCHAR strNumber[32];
 		str += _itow(m_iCameraType, strNumber, 10);// _wtoi
-		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
+		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		//-----------------------------------------------------------------------
 		// 적용되어 있는 카메라의 방향벡터 표시
 		//-----------------------------------------------------------------------
@@ -649,7 +649,7 @@ bool CGciCharToolApp::Render() {
 		rc.top = m_DefaultRT.m_vp.Height - 75;
 		rc.right = m_DefaultRT.m_vp.Width;
 		rc.bottom = m_DefaultRT.m_vp.Height;
-		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()));
+		DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
 
 
