@@ -19,7 +19,13 @@ bool GProjMain::Init()
 		0.1f, 10000.0f);
 		
 	//CustomizeMap
-	MapDesc = { 5, 5, 1.0f, 0.1f,L"data/baseColor.jpg", L"data/shader/CustomizeMap.hlsl" };
+	MapDesc = 
+	{ 
+		5, 5, 
+		1.0f, 0.1f,
+		L"data/baseColor.jpg", 
+		L"data/shader/CustomizeMap.hlsl" 
+	};
 	m_CustomMap.Init(GetDevice(), m_pImmediateContext);
 	if (FAILED(m_CustomMap.Load(MapDesc)))
 	{
@@ -157,7 +163,7 @@ bool GProjMain::Render()
 			pBox2.fExtent[1] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[1];
 			pBox2.fExtent[2] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[2];
 			
-			pBox2.vAxis[0] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[0];
+			pBox2qqq.vAxis[0] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[0];
 			pBox2.vAxis[1] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[1];
 			pBox2.vAxis[2] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[2];
 

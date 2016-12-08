@@ -269,7 +269,7 @@ BOOL GFrustum::CheckOBBInPlane( G_BOX*  pBox )
 
 		if( fPlaneToCenter <= -fDistance ) 
 		{
-			return FALSE;
+          			return FALSE;
 		}
 	}	
 	return TRUE;
