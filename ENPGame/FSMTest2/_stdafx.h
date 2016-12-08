@@ -5,39 +5,20 @@
 #else
 #pragma comment( lib, "GCharCore32.lib" )
 #endif
-#define G_DEFINE_ANI_ZOMB_DIE L"ZOMBIE_DIE"
-#define G_DEFINE_ANI_ZOMB_ATT L"ZOMBIE_ATTACK"
-#define G_DEFINE_ANI_ZOMB_WLK L"ZOMBIE_WALK"
-#define G_DEFINE_ANI_ZOMB_IDL L"ZOMBIE_IDLE"
-#define G_DEFINE_ANI_ZOMB_FLW L"ZOMBIE_FOLLOW"
 
-#define G_DEFINE_MAX_AI_ZOMBIE  10
-#define G_DEFINE_AI_ALMOST_ZERO	0.2f
-#define SPEED 10.0f
-
-
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GAICore32d.lib" )	
+#else
+#pragma comment( lib, "GAICore32.lib" )
+#endif
 
 
 //공통 사용 헤더
 #include "GCamera.h"
 #include "GTimer.h"
 
-#include "GCharacter.h"
-#include "GAISeq.h"
-#include "GAIIdle.h"
-#include "GAIMove.h"
-#include "GAIFollow.h"
-#include "GAIDie.h"
-#include "GAIAttack.h"
+#include "_ai_std.h"
 
-#include "GDxHelperEX.h"
-#include "GMatrix.h"
-#include "GShape.h"
-
-#include "GModel.h"
-#include "GZombie.h"
-#include "GNewZombie.h"
-#include "GObjMgr.h"
 
 #include <time.h>
 //Main

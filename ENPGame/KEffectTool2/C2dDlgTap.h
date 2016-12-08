@@ -12,9 +12,6 @@ public:
 
 public:
 	CListBox m_list;
-	//CString m_strValue;
-	//CString m_strPath;
-	//CString m_strPath2;
 	CStdioFile file;
 	CListBox *InsertList;
 	CListBox *SaveList;
@@ -37,4 +34,5 @@ public:
 	afx_msg void OnBnClickedOnbnclick2dsave();
 	afx_msg void OnBnClickedOnbnclick2dplay();
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton5();
 };

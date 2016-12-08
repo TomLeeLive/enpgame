@@ -208,6 +208,12 @@ bool GSeqSinglePlay::Frame()
 
 	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
 
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_HEALTH])->SetXSize(m_CharHero[0].get()->m_iHP);
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_HEALTH])->SetXSize(m_CharHero[1].get()->m_iHP);
+
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_BULLET])->SetXSize(m_CharHero[0].get()->m_iBullet);
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_BULLET])->SetXSize(m_CharHero[1].get()->m_iBullet);
+
 	FrameGun();
 	return true;
 }

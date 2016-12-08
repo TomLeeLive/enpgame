@@ -1,15 +1,15 @@
-#include "_stdafx.h"
+#include "_ai_std.h"
 
 //GAIDie * GAIDie::pInstance_ = 0;
 
-bool GAIDie::Init(int iMyIndex)
+bool GAIDie::Init(GNewZombie* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
 	return true;
 }
-bool GAIDie::Frame(int iMyIndex)
+bool GAIDie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 {
-  // die 애니메이션 연출
+	iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
 	
 	return true;
 }

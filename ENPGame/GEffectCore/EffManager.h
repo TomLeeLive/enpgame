@@ -7,7 +7,7 @@
 #include "GCamera.h"
 #include "KEffect.h"
 
-#define G_EFF_ITEM_INFO_LINES 4
+#define G_EFF_ITEM_INFO_LINES 5
 
 enum G_EFF_TOOL_EXT {
 	G_EFF_TOOL_EXT1,//.eff
@@ -30,7 +30,7 @@ public:
 	vector<shared_ptr<KEffect>> m_List;
 	virtual void				Load(T_STR* strFile);
 	virtual void		Create(G_EFFECT_TYPE type, T_STR* strFile,
-		D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f
+		D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f, int Width, int WidthSize, int Height, int HeightSize
 		);
 	static void			GetStringWeNeed(VOID* pOutStr, VOID* pInStr);
 public:

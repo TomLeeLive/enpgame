@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(C2dDlgTap, CDialog)
 	ON_BN_CLICKED(IDC_OnBnClick2DSave, &C2dDlgTap::OnBnClickedOnbnclick2dsave)
 	ON_BN_CLICKED(IDC_OnBnClick2DPlay, &C2dDlgTap::OnBnClickedOnbnclick2dplay)
 	ON_BN_CLICKED(IDC_BUTTON1, &C2dDlgTap::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON5, &C2dDlgTap::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -46,7 +47,6 @@ void C2dDlgTap::OnBnClickedOnbnclick2dopen()
 	auto Effect = make_shared<KEffect>();
 	Effect->Init();
 	pApp->m_EffMgr.m_List.push_back(Effect);
-
 
 	CString strValue;
 
@@ -127,6 +127,8 @@ void C2dDlgTap::OnBnClickedOnbnclick2dsave()
 				D3DXVECTOR3 scl;
 				D3DXVECTOR3 trans;
 
+				int Width = 0, WidthSize = 0, Height = 0, HeightSize = 0;
+
 				MatrixDecompose(&scl, &trans, &pApp->m_EffMgr.m_List[iUiItem]->m_matBillboard);
 
 				/*
@@ -183,6 +185,22 @@ void C2dDlgTap::OnBnClickedOnbnclick2dsave()
 				strNum.Format(_T("%f\n"), pApp->m_EffMgr.m_List[iUiItem]->m_fPlayTime);
 				str = strNum;
 				fprintf(fp, (CStringA)str);
+
+				// Animation
+				strNum.Format(_T("%d"), Width);
+				str = strNum;
+				str.Append(_T("/"));
+				strNum.Format(_T("%d"), WidthSize);
+				str.Append(strNum);
+				str.Append(_T("/"));
+				strNum.Format(_T("%d"), Height);
+				str.Append(strNum);
+				str.Append(_T("/"));
+				strNum.Format(_T("%d"), HeightSize);
+				str.Append(strNum);
+				fprintf(fp, (CStringA)str);
+
+
 				
 			}
 
@@ -235,5 +253,20 @@ void C2dDlgTap::OnBnClickedButton1()
 	int iLoad = pApp->m_LoadFiles.size() - 1;
 
 	pApp->m_EffMgr.Load(&pApp->m_LoadFiles[iLoad]);
+
+}
+
+
+void C2dDlgTap::OnBnClickedButton5()
+{
+	float  Ani_Time;
+	int Width, WidthSize, Height, HeightSize;
+
+	Ani_Time = IDC_Ani_Time;
+	Width = IDC_Width;
+	WidthSize = IDC_WidthSize;
+	Height = IDC_Height;
+	HeightSize = IDC_HeigthSize;
+
 
 }

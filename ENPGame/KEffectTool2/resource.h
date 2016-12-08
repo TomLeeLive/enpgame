@@ -24,6 +24,12 @@
 #define IDC_2DTime                      1011
 #define IDC_2DFI                        1012
 #define IDC_2DFO                        1013
+#define IDC_Widh                        1014
+#define IDC_Width                       1014
+#define IDC_HeigthSize                  1015
+#define IDC_Height                      1017
+#define IDC_Ani_Time                    1018
+#define IDC_WidthSize                   1019
 
 // Next default values for new objects
 // 
@@ -31,7 +37,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        317
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           311
 #endif
 #endif

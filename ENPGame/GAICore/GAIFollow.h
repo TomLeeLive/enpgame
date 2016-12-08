@@ -18,11 +18,11 @@ public:
 	shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
-	bool Init(int iMyIndex);
-	bool Frame(int iMyIndex);
+	bool Init(GNewZombie* iMyIndex);
+	bool Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld);
 	bool Render();
 	bool Release();
-	bool ZombieFollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
+	//bool ZombieFollow(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
 	int hp;
 	//GNewZombieMgr * ZombieMgr;
 

@@ -154,23 +154,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GAIAttack.cpp" />
-    <ClCompile Include="GAIDie.cpp" />
-    <ClCompile Include="GAIFollow.cpp" />
-    <ClCompile Include="GAIIdle.cpp" />
-    <ClCompile Include="GAIMove.cpp" />
-    <ClCompile Include="GAISeq.cpp" />
-    <ClCompile Include="GNewZombie.cpp" />
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GAIAttack.h" />
-    <ClInclude Include="GAIDie.h" />
-    <ClInclude Include="GAIFollow.h" />
-    <ClInclude Include="GAIIdle.h" />
-    <ClInclude Include="GAIMove.h" />
-    <ClInclude Include="GAISeq.h" />
-    <ClInclude Include="GNewZombie.h" />
     <ClInclude Include="GProjMain.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>

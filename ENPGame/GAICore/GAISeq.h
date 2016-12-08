@@ -1,22 +1,7 @@
+//#include "GNewZombie.h"
+
 #pragma once
 
-enum G_ZOMB_ST {
-	G_ZOMB_ST_IDLE = 0,
-	G_ZOMB_ST_WALK,
-	G_ZOMB_ST_ATTACK,
-	G_ZOMB_ST_DEAD,
-	G_ZOMB_ST_FOLLOW,
-	G_ZOMB_ST_CNT
-};
-
-enum G_AI {
-	G_AI_IDLE = 0,
-	G_AI_MOVE,
-	G_AI_ATTACK,
-	G_AI_DIE,
-	G_AI_FOLLOW,
-	G_AI_CNT
-};
 
 class GAISeq 
 {
@@ -40,8 +25,10 @@ public:
 	GCharacter*	 pChar0;
 
 	//static GAISeq* CreateInstance() { return 0; }
-	virtual bool Init(int iMyIndex) = 0;
-	virtual bool Frame(int iMyIndex) = 0;
+	//virtual bool Init(int iMyIndex) = 0;
+	//virtual bool Frame(int iMyIndex) = 0;
+	virtual bool Init(GNewZombie* iMyIndex) = 0;
+	virtual bool Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld) = 0;
 	virtual bool Render() = 0;
 	virtual bool Release() = 0;
 	void		InitGSeq() {

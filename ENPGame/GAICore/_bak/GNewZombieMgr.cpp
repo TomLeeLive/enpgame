@@ -1,4 +1,4 @@
-#include "_stdafx.h"
+#include "_ai_std.h"
 inline void DXUT_SetDebugName(ID3D11DeviceChild* pObj, const CHAR* pstrName)
 {
 	if (pObj)
