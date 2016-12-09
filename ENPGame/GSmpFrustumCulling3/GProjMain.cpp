@@ -163,10 +163,11 @@ bool GProjMain::Render()
 			pBox2.fExtent[1] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[1];
 			pBox2.fExtent[2] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->extent[2];
 			
-			pBox2qqq.vAxis[0] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[0];
+			pBox2.vAxis[0] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[0];
 			pBox2.vAxis[1] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[1];
 			pBox2.vAxis[2] = m_pBBox2[iCol*(MapDesc.iNumCols - 1) + iRow]->axis[2];
 
+			//(GGbsObj*)
 
 			if (m_pMainCamera->CheckOBBInPlane(&pBox2))
 			{

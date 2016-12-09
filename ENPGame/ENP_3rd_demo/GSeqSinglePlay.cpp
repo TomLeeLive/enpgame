@@ -713,8 +713,18 @@ bool		GSeqSinglePlay::FrameChar() {
 };
 bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
-	for (int i = 0; i < G_OBJ_CNT; i++) {
+	m_Objbit.reset();
+
+
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
+
+		if (m_pCamera->CheckOBBInPlane(&(((GGbsObj*)m_Obj[i])->m_OBB)))
+		{
+			m_Objbit.set(i);
+		}
 	}
 #endif
 	return true;
@@ -863,9 +873,15 @@ bool		GSeqSinglePlay::RenderChar() {
 };
 bool		GSeqSinglePlay::RenderObj() {
 #ifdef G_MACRO_MAP_ADD
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-		m_Obj[i]->Render(g_pImmediateContext);
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		D3DXMATRIX mat = m_Obj[i]->m_matWorld;
+
+		if (m_Objbit[i])
+		{
+			m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_Obj[i]->Render(g_pImmediateContext);
+		}
 
 		if(m_bDebugMode)
 			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());

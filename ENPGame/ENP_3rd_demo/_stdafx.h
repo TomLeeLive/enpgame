@@ -65,9 +65,8 @@
 #pragma comment( lib, "GMapCore32.lib" )
 #endif
 
-//#include "GMiniMap.h"
-//#include "map/GNoiseMap.h"
-//#include "map/GQuadTreeIndex.h"
+#include <bitset>
+
 #include "GN2Skybox.h"
 #include "map/GMap.h"
 #include "map/GHeightMap.h"
