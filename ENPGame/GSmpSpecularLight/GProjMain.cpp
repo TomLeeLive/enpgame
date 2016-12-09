@@ -1,6 +1,8 @@
-#include "Sample.h"
+#include "GProjMain.h"
 
-bool Sample::Init()
+GProjMain* g_pMain;
+
+bool GProjMain::Init()
 {
 	m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1);
 	m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
@@ -13,7 +15,7 @@ bool Sample::Init()
 	m_pConstantBufferLight.Attach(DX::CreateConstantBuffer(
 		m_pd3dDevice, &m_cbLight, 1, sizeof(LIGHT_CONSTANT_BUFFER)));
 
-	if (FAILED(m_LineDraw.Create(GetDevice(), L"../../data/shader/line.hlsl")))
+	if (FAILED(m_LineDraw.Create(GetDevice(), L"data_test/shader/line.hlsl")))
 	{
 		MessageBox(0, _T("m_LineDraw 실패"), _T("Fatal error"), MB_OK);
 		return 0;
@@ -21,7 +23,7 @@ bool Sample::Init()
 	//--------------------------------------------------------------------------------------
 	// 박스 오브젝트를 구 오브젝트로 변환(기하 쉐이더 및 스트림 아웃 처리)
 	//--------------------------------------------------------------------------------------
-	if (FAILED(m_SphereObj.Create(GetDevice(), L"BoxSO.hlsl", L"../../data/tilea.jpg")))
+	if (FAILED(m_SphereObj.Create(GetDevice(), L"data_test/shader/BoxSO_3.hlsl", L"data_test/tilea.jpg")))
 	{
 		MessageBox(0, _T("m_SphereObj 실패"), _T("Fatal error"), MB_OK);
 		return 0;
@@ -31,11 +33,11 @@ bool Sample::Init()
 	// 높이맵 생성
 	//--------------------------------------------------------------------------------------
 	m_HeightMap.Init(m_pd3dDevice, m_pImmediateContext);
-	if (FAILED(m_HeightMap.CreateHeightMap(L"../../data/heightMap513.bmp")))
+	if (FAILED(m_HeightMap.CreateHeightMap(L"data_test/heightMap513.bmp")))
 	{
 		return false;
 	}
-	TMapDesc MapDesc = { m_HeightMap.m_iNumRows,m_HeightMap.m_iNumCols,	2.0f,0.5f,L"../../data/baseColor.jpg",	L"SpecularLight.hlsl" };
+	TMapDesc MapDesc = { m_HeightMap.m_iNumRows,m_HeightMap.m_iNumCols,	2.0f,0.5f,L"data_test/baseColor.jpg",	L"data_test/shader/SpecularLight.hlsl" };
 	if (!m_HeightMap.Load(MapDesc))
 	{
 		return false;
@@ -43,15 +45,15 @@ bool Sample::Init()
 	//--------------------------------------------------------------------------------------
 	// 메인 카메라 
 	//--------------------------------------------------------------------------------------
-	m_pMainCamera = make_shared<TCamera>();
+	m_pMainCamera = make_shared<GCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 300.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f, m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
 	return true;
 }
-bool Sample::Render()
+bool GProjMain::Render()
 {
-	DX::ApplyDSS(m_pImmediateContext, DX::TDxState::g_pDSSDepthEnable);
-	DX::ApplyBS(m_pImmediateContext, DX::TDxState::g_pAlphaBlend);
+	DX::ApplyDSS(m_pImmediateContext, DX::GDxState::g_pDSSDepthEnable);
+	DX::ApplyBS(m_pImmediateContext, DX::GDxState::g_pAlphaBlend);
 
 	D3DXMATRIX matWorld, matScale;
 	D3DXMatrixScaling(&matScale, 100, 100, 100);
@@ -88,7 +90,7 @@ bool Sample::Render()
 	m_HeightMap.Render(m_pImmediateContext);
 	return true;
 }
-bool Sample::DrawDebug()
+bool GProjMain::DrawDebug()
 {
 	if( I_Input.KeyCheck( DIK_P ) )
 	{
@@ -120,16 +122,16 @@ bool Sample::DrawDebug()
 			}
 		}
 	}
-	if (!TBasisLib_0::DrawDebug()) return false;
+	if (!GCoreLibV2::DrawDebug()) return false;
 	return true;
 }
-bool Sample::Release()
+bool GProjMain::Release()
 {
 	m_SphereObj.Release();
 	return m_HeightMap.Release();
 }
 
-bool Sample::Frame()
+bool GProjMain::Frame()
 {
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;
 	m_pMainCamera->Frame();
@@ -167,7 +169,7 @@ bool Sample::Frame()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::CreateResource()
+HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
 	if (m_pMainCamera != nullptr)
@@ -180,19 +182,19 @@ HRESULT Sample::CreateResource()
 //--------------------------------------------------------------------------------------
 // 
 //--------------------------------------------------------------------------------------
-HRESULT Sample::DeleteResource()
+HRESULT GProjMain::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (m_pImmediateContext) m_pImmediateContext->ClearState();
 	return S_OK;
 }
-Sample::Sample(void)
+GProjMain::GProjMain(void)
 {
 	m_pMainCamera = nullptr;
 }
 
-Sample::~Sample(void)
+GProjMain::~GProjMain(void)
 {
 }
-TBASIS_RUN(L"TBasisSample DiffuseLight");
+GCORE_RUN(L"TBasisSample DiffuseLight");
 

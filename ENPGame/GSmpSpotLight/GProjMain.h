@@ -1,10 +1,17 @@
 #pragma once
-#include "TBasisLib_0.h"
-#include "TShape.h"
-#include "map/THeightMap.h"
-#include "TCamera.h"
-#include "TBoxObj.h"
-#include "TLightObj.h"
+
+#if defined(_DEBUG) || defined(DEBUG)
+#pragma comment( lib, "GMapCore32d.lib" )
+#else
+#pragma comment( lib, "GMapCore32.lib" )
+#endif
+
+#include "GCoreLibV2.h"
+#include "GShape.h"
+#include "map/GHeightMap.h"
+#include "GCamera.h"
+#include "GBoxObj.h"
+#include "GLightObj.h"
 
 const int g_iNumLight = 3;
 
@@ -38,19 +45,19 @@ struct LIGHT_CONSTANT_BUFFER3
 
 const int g_iMaxLight = 3;
 
-class Sample : public TBasisLib_0
+class GProjMain : public GCoreLibV2
 {
 public:
-	THeightMap		m_HeightMap;
-	TLineShape		m_LineDraw;
-	shared_ptr<TCamera > m_pMainCamera;
-	TBoxObj			m_SphereObj;
+	GHeightMap		m_HeightMap;
+	GLineShape		m_LineDraw;
+	shared_ptr<GCamera > m_pMainCamera;
+	GBoxObj			m_SphereObj;
 	D3DXVECTOR3		m_vLightVector;
 	LIGHT_CONSTANT_BUFFER1   m_cbLight1;
 	LIGHT_CONSTANT_BUFFER2   m_cbLight2;
 	LIGHT_CONSTANT_BUFFER3   m_cbLight3;
 	ComPtr<ID3D11Buffer>	m_pConstantBufferLight[g_iMaxLight];
-	TLightObj				m_PointLight[g_iMaxLight];
+	GLightObj				m_PointLight[g_iMaxLight];
 public:
 	bool		Init();
 	bool		Frame();
@@ -63,7 +70,7 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	Sample(void);
-	virtual ~Sample(void);
+	GProjMain(void);
+	virtual ~GProjMain(void);
 };
 

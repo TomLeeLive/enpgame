@@ -1,9 +1,16 @@
 #pragma once
-#include "TBasisLib_0.h"
-#include "TShape.h"
-#include "map/THeightMap.h"
-#include "TCamera.h"
-#include "TBoxObj.h"
+
+#if defined(_DEBUG) || defined(DEBUG)
+#pragma comment( lib, "GMapCore32d.lib" )
+#else
+#pragma comment( lib, "GMapCore32.lib" )
+#endif
+
+#include "GCoreLibV2.h"
+#include "GShape.h"
+#include "map/GHeightMap.h"
+#include "GCamera.h"
+#include "GBoxObj.h"
 
 struct LIGHT_CONSTANT_BUFFER
 {
@@ -23,13 +30,13 @@ struct LIGHT_CONSTANT_BUFFER
 	D3DXVECTOR4			g_vEyePos;// w = light radius	
 };
 
-class Sample : public TBasisLib_0
+class GProjMain : public GCoreLibV2
 {
 public:
-	THeightMap		m_HeightMap;
-	TLineShape		m_LineDraw;
-	shared_ptr<TCamera > m_pMainCamera;
-	TBoxObj			m_SphereObj;
+	GHeightMap		m_HeightMap;
+	GLineShape		m_LineDraw;
+	shared_ptr<GCamera > m_pMainCamera;
+	GBoxObj			m_SphereObj;
 	D3DXVECTOR3		m_vLightVector;
 	LIGHT_CONSTANT_BUFFER m_cbLight;
 	ComPtr<ID3D11Buffer>	m_pConstantBufferLight;
@@ -45,6 +52,6 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	Sample(void);
-	virtual ~Sample(void);
+	GProjMain(void);
+	virtual ~GProjMain(void);
 };
