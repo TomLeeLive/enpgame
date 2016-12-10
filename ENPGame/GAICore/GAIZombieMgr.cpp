@@ -6,7 +6,7 @@
 bool GAIZombieMgr::Load()
 {
 
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharZombie.gci")))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci")))
 	{
 		return false;
 	}

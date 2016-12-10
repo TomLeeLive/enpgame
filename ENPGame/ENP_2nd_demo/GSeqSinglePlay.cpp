@@ -1001,7 +1001,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 bool GSeqSinglePlay::Load()
 {
 	//좀비 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharZombie.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -1010,7 +1010,7 @@ bool GSeqSinglePlay::Load()
 
 
 	//주인공1 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero1.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero1.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -1026,7 +1026,7 @@ bool GSeqSinglePlay::Load()
 	m_CharHero.push_back(pObjB);
 
 	//주인공2 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero2.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero2.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}

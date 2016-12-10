@@ -794,7 +794,7 @@ bool CGciCharToolApp::Load()
 
 		int iLoad = m_LoadFiles.size() - 1;
 
-		if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+		if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("data/CharTable.gci")*/))
 		{
 			return false;
 		}

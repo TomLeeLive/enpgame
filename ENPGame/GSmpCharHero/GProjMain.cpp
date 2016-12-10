@@ -19,8 +19,8 @@ bool GProjMain::Load()
 	m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
 	*/
 
-	//if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharZombie.gci")))
-	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("CharHero1.gci")))
+	//if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharZombie.gci")))
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharHero1.gci")))
 	{
 		return false;
 	}
