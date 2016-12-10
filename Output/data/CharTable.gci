@@ -1,6 +1,6 @@
 #NUM_OF_CHARACTER		1
 #CHAR_NAME		ZOMBIE_WALK
-#SHADER_FILE		Character.hlsl
+#SHADER_FILE		data/shader/Character.hlsl
 #MATRIX_FILE		data/Char/test6.gmt 
 #ACTION_LOOP		1   
 #ACTION_TABLE		8

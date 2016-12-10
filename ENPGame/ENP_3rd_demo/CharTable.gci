@@ -1,7 +1,7 @@
 #NUM_OF_CHARACTER		4
 //////////////////////////////////////////////////////////////////////////
 #CHAR_NAME		TEST_CHAR0
-#SHADER_FILE		Character.hlsl
+#SHADER_FILE		data/shader/Character.hlsl
 #MATRIX_FILE		data/Char/mob.mat    
 #ACTION_TABLE		8
 
@@ -30,7 +30,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 #CHAR_NAME		TEST_CHAR1
-#SHADER_FILE		Character.hlsl
+#SHADER_FILE		data/shader/Character.hlsl
 #MATRIX_FILE		data/Char/Man.Mat
 #ACTION_TABLE		8
 
@@ -58,7 +58,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 #CHAR_NAME		TEST_CHAR2
-#SHADER_FILE		Character.hlsl
+#SHADER_FILE		data/shader/Character.hlsl
 #MATRIX_FILE		data/Char/SwatRifle.Mat
 #ACTION_TABLE		8
 
@@ -84,7 +84,7 @@
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////////////////////
 #CHAR_NAME		TEST_CHAR3
-#SHADER_FILE		Character.hlsl
+#SHADER_FILE		data/shader/Character.hlsl
 #MATRIX_FILE		data/Char/char0.Mat
 #ACTION_TABLE		8
 

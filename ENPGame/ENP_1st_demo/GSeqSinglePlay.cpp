@@ -73,7 +73,7 @@ bool GSeqSinglePlay::Load()
 
 
 	//int iLoad = m_LoadFiles.size() - 1;
-	//if (!m_tObject.Load(g_pd3dDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
+	//if (!m_tObject.Load(g_pd3dDevice(), m_LoadFiles[iLoad].c_str(), L"data/shader/MatrixViewer.hlsl"))
 	//{
 	//	return false;
 	//}

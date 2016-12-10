@@ -130,7 +130,7 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 			// 케릭터 전체에서 사용
 			if( _tcsicmp( strMatrixName, _T("null")) )
 			{				
-				iMatrixIndex = I_ObjMgr.Load(pd3dDevice, strMatrixName, _T("MatrixViewer.hlsl"));
+				iMatrixIndex = I_ObjMgr.Load(pd3dDevice, strMatrixName, _T("data/shader/MatrixViewer.hlsl"));
 			}	
 
 			iCharacterIndex = Create(	pd3dDevice,pImmediateContext, 
@@ -149,7 +149,7 @@ bool	GCharMgr::Load(	ID3D11Device* pd3dDevice,
 					if( _tcsicmp( strMatrixName, _T("null")) )
 					{
 						// 메쉬 단위로 별도의 매트릭스 사용시 적용됨.
-						iModelMatrixIndex = I_ObjMgr.Load(pd3dDevice, strMatrixName, _T("MatrixViewer.hlsl"));						
+						iModelMatrixIndex = I_ObjMgr.Load(pd3dDevice, strMatrixName, _T("data/shader/MatrixViewer.hlsl"));						
 					}					
 					if( pChar  )
 					{
