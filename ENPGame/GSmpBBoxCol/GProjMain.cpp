@@ -5,25 +5,25 @@ GProjMain* g_pMain;
 bool GProjMain::Init()
 {
 
-	if (FAILED(m_pDirectionLine.Create(GetDevice(), L"data/shader/Line.hlsl")))
+	if (FAILED(m_pDirectionLine.Create(GetDevice(), L"data_test/shader/Line.hlsl")))
 	{
 		MessageBox(0, _T("m_pDirectionLIne 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
 
-	if (FAILED(m_pPlane.Create(GetDevice(), L"data/shader/Plane.hlsl", L"data/Sand.jpg")))
+	if (FAILED(m_pPlane.Create(GetDevice(), L"data_test/shader/Plane.hlsl", L"data_test/Sand.jpg")))
 	{
 		MessageBox(0, _T("m_pPlane 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
-	if (FAILED(m_pBox.Create(GetDevice(), L"data/shader/Box.hlsl", L"data/checker_with_numbers.bmp")))
+	if (FAILED(m_pBox.Create(GetDevice(), L"data_test/shader/Box.hlsl", L"data_test/checker_with_numbers.bmp")))
 	{
 		MessageBox(0, _T("m_pBox 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
 
 #ifdef G_MACRO_ENEMYBOX
-	if (FAILED(m_pBoxEnemy.Create(GetDevice(), L"data/shader/Box.hlsl", L"data/checker_with_numbers.bmp")))
+	if (FAILED(m_pBoxEnemy.Create(GetDevice(), L"data_test/shader/Box.hlsl", L"data_test/checker_with_numbers.bmp")))
 	{
 		MessageBox(0, _T("m_pBoxEnemy 실패"), _T("Fatal error"), MB_OK);
 		return 0;
