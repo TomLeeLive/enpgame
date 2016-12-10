@@ -5,7 +5,7 @@ GProjMain* g_pMain;
 const float g_fMaxSize = 1024;
 bool GProjMain::Init()
 {
-	TMapDesc MapDesc = { 33, 33, 1.0f,1.0f, L"../../data/write.png", L"CustomizeMap.hlsl" };
+	TMapDesc MapDesc = { 33, 33, 1.0f,1.0f, L"data_test/write.png", L"data_test/shader_shadow/CustomizeMap.hlsl" };
 	m_CustomMap.Init( GetDevice(), m_pImmediateContext );
 	if( FAILED( m_CustomMap.Load(MapDesc) ))
 	{
@@ -19,7 +19,7 @@ bool GProjMain::Init()
 	SAFE_NEW( m_pQuad, GPlaneShape );
 	m_pQuad->SetScreenVertex(15, 15, 300, 300, 
 		D3DXVECTOR2( m_iWindowWidth, m_iWindowHeight ) );
-	if( FAILED( m_pQuad->Create(GetDevice(), L"../../data/shader/plane.hlsl", L"../../data/castle.jpg") ) )
+	if( FAILED( m_pQuad->Create(GetDevice(), L"data_test/shader/plane.hlsl", L"data_test/castle.jpg") ) )
 	{
 		MessageBox( 0, _T("m_pLIne 실패"), _T("Fatal error"), MB_OK );
 		return false;
@@ -33,14 +33,14 @@ bool GProjMain::Init()
 	// 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	SAFE_NEW(m_pBoxShape, GBoxShape);
-	if (FAILED(m_pBoxShape->Create(GetDevice(), L"DepthMapShadow.hlsl", L"../../data/castle.jpg")))
+	if (FAILED(m_pBoxShape->Create(GetDevice(), L"data_test/shader_shadow/DepthMapShadow.hlsl", L"data_test/castle.jpg")))
 	{
 		MessageBox(0, _T("m_pBoxShape 실패"), _T("Fatal error"), MB_OK);
 		return 0;
 	}
 	ComPtr<ID3DBlob> pVSBlob;
-	m_pShadowVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"CustomizeMap.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
-	m_pShadowPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"CustomizeMap.hlsl", "SHADOW_PS"));
+	m_pShadowVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"data_test/shader_shadow/CustomizeMap.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
+	m_pShadowPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data_test/shader_shadow/CustomizeMap.hlsl", "SHADOW_PS"));
 	
 	// Create Source and Dest textures
 	m_RT.m_DSFormat = DXGI_FORMAT_R32_TYPELESS;

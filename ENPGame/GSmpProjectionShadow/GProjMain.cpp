@@ -4,7 +4,7 @@ GProjMain* g_pMain;
 
 bool GProjMain::Init()
 {
-	TMapDesc MapDesc = { 33, 33, 1.0f, 10.0f,L"../../data/base1.bmp", L"HeightMap.hlsl" };
+	TMapDesc MapDesc = { 33, 33, 1.0f, 10.0f,L"data_test/base1.bmp", L"data_test/shader_shadow/HeightMap_2.hlsl" };
 	m_CustomMap.Init( GetDevice(), m_pImmediateContext );
 	if( FAILED( m_CustomMap.Load(MapDesc) ))
 	{
@@ -18,7 +18,7 @@ bool GProjMain::Init()
 	SAFE_NEW( m_pQuad, GPlaneShape );
 	m_pQuad->SetScreenVertex(15, 15, 300, 300, 
 		D3DXVECTOR2( m_iWindowWidth, m_iWindowHeight ) );
-	if( FAILED( m_pQuad->Create(GetDevice(),L"../../data/shader/plane.hlsl", L"../../data/castle.jpg") ) )
+	if( FAILED( m_pQuad->Create(GetDevice(),L"data_test/shader/plane.hlsl", L"data_test/castle.jpg") ) )
 	{
 		MessageBox( 0, _T("m_pLIne 실패"), _T("Fatal error"), MB_OK );
 		return false;
@@ -30,12 +30,12 @@ bool GProjMain::Init()
 	// 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	SAFE_NEW( m_pBoxShape, GBoxShape );
-	if( FAILED( m_pBoxShape->Create(GetDevice(), L"ProjShadow.hlsl", L"../../data/castle.jpg")) )
+	if( FAILED( m_pBoxShape->Create(GetDevice(), L"data_test/shader_shadow/ProjShadow.hlsl", L"data_test/castle.jpg")) )
 	{
 		MessageBox( 0, _T("m_pBoxShape 실패"), _T("Fatal error"), MB_OK );
 		return 0;
 	}	
-	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(),	L"ProjShadow.hlsl", "PS_Color"));
+	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(),	L"data_test/shader_shadow/ProjShadow.hlsl", "PS_Color"));
 
 	// Create Source and Dest textures
 	m_RT[0].Create( GetDevice(), 1024, 1024 );

@@ -70,7 +70,7 @@ D3DXMATRIX GProjMain::CreateMatrixShadow( D3DXVECTOR4 plane,
  
 bool GProjMain::Init()
 {
-	TMapDesc MapDesc = { 33, 33, 1.0f,10.0f, L"../../data/base1.bmp", L"HeightMap.hlsl" };
+	TMapDesc MapDesc = { 33, 33, 1.0f,10.0f, L"data_test/base1.bmp", L"data_test/shader_shadow/HeightMap.hlsl" };
 	m_CustomMap.Init( GetDevice(), m_pImmediateContext );
 	if( FAILED( m_CustomMap.Load(MapDesc) ))
 	{
@@ -85,13 +85,13 @@ bool GProjMain::Init()
 	// 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	SAFE_NEW( m_pBoxShape, GBoxShape );
-	if( FAILED( m_pBoxShape->Create(GetDevice(), L"PlaneShadow.hlsl",L"../../data/castle.jpg") ) )
+	if( FAILED( m_pBoxShape->Create(GetDevice(), L"data_test/shader_shadow/PlaneShadow.hlsl",L"data_test/castle.jpg") ) )
 	{
 		MessageBox( 0, _T("m_LineShape 실패"), _T("Fatal error"), MB_OK );
 		return 0;
 	}	
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(GetDevice(), 
-		L"PlaneShadow.hlsl", "PS_Color"));
+		L"data_test/shader_shadow/PlaneShadow.hlsl", "PS_Color"));
 
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 

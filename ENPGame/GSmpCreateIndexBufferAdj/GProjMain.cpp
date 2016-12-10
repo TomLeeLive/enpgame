@@ -78,14 +78,14 @@ bool GProjMain::Init()
 	HRESULT hr;
 	m_SampleObj.Init();
 	//if (!m_SampleObj.Load(GetDevice(), _T("../../data/Obj/Turret_Deploy.tbs"), L"ObjectAdj.hlsl"))
-	if (!m_SampleObj.Load(GetDevice(), _T("../../data/Obj/mob2.tbs"), L"ObjectAdj.hlsl"))
+	if (!m_SampleObj.Load(GetDevice(), _T("data_test/Obj/mob2.tbs"), L"data_test/shader_shadow/ObjectAdj.hlsl"))
 	{
 		return false;
 	}
 	ComPtr<ID3DBlob> vsBlob, gsBlob;
-	m_pShadowVolumeVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"ObjectAdj.hlsl", vsBlob.GetAddressOf(), "VS_VolumeShadow"));
-	m_pShadowVolumeGS.Attach(DX::LoadGeometryShaderFile(GetDevice(), L"ObjectAdj.hlsl", gsBlob.GetAddressOf(), "GS_VolumeShadow"));
-	m_pShadowVolumePS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"ObjectAdj.hlsl", "PS_VolumeShadow"));
+	m_pShadowVolumeVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"data_test/shader_shadow/ObjectAdj.hlsl", vsBlob.GetAddressOf(), "VS_VolumeShadow"));
+	m_pShadowVolumeGS.Attach(DX::LoadGeometryShaderFile(GetDevice(), L"data_test/shader_shadow/ObjectAdj.hlsl", gsBlob.GetAddressOf(), "GS_VolumeShadow"));
+	m_pShadowVolumePS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data_test/shader_shadow/ObjectAdj.hlsl", "PS_VolumeShadow"));
 	//--------------------------------------------------------------------------------------
 	// 초기 라이트 위치 
 	//--------------------------------------------------------------------------------------	
@@ -96,13 +96,13 @@ bool GProjMain::Init()
 
 	m_HeightMap.Init(m_pd3dDevice, m_pImmediateContext);
 	// 높이맵의 정점 y 값을 텍스쳐로부터 얻는다.
-	if (FAILED(m_HeightMap.CreateHeightMap(L"../../data/clods256.png")))
+	if (FAILED(m_HeightMap.CreateHeightMap(L"data_test/clods256.png")))
 	{
 		return false;
 	}
 
 	m_HeightMap.m_bStaticLight = true;
-	TMapDesc MapDesc = { m_HeightMap.m_iNumRows,m_HeightMap.m_iNumCols,	1.0f, 0.2f,	L"../../data/baseColor.jpg",	L"ObjectAdj.hlsl" };
+	TMapDesc MapDesc = { m_HeightMap.m_iNumRows,m_HeightMap.m_iNumCols,	1.0f, 0.2f,	L"data_test/baseColor.jpg",	L"data_test/shader_shadow/ObjectAdj.hlsl" };
 	if (!m_HeightMap.Load(MapDesc))
 	{
 		return false;
@@ -112,7 +112,7 @@ bool GProjMain::Init()
 	// 평면 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	m_pQuadObj = make_shared<GPlaneShape>();
-	if (m_pQuadObj->Create(GetDevice(), L"Quad.hlsl") == false)
+	if (m_pQuadObj->Create(GetDevice(), L"data_test/shader_shadow/Quad.hlsl") == false)
 	{
 		MessageBox(0, _T("m_pQuadObj->Create"), _T("Fatal error"), MB_OK);
 		return 0;
