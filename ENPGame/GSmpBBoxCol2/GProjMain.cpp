@@ -366,7 +366,7 @@ bool GProjMain::Frame()
 		}
 		if (I_Input.KeyCheck(DIK_DOWN)) {
 
-			vPos = vPos - m_Timer.GetSPF()*fSpeed * slidingVector;
+			vPos = vPos - m_Timer.GetSPF()*fSpeed * -slidingVector;
 		}
 
 	}
