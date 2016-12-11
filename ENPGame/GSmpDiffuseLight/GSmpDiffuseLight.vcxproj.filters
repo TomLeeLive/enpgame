@@ -15,10 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BoxSO.hlsl" />
-    <FxCompile Include="DiffuseLight.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="GProjMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -27,5 +23,9 @@
     <ClInclude Include="GProjMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\BoxSO.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\DiffuseLight.hlsl" />
   </ItemGroup>
 </Project>

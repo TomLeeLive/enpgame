@@ -99,20 +99,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="BoxSO.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="DiffuseLight.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GProjMain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\BoxSO.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\DiffuseLight.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

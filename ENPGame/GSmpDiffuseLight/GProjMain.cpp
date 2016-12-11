@@ -20,7 +20,7 @@ bool GProjMain::Init()
 	//--------------------------------------------------------------------------------------
 	// 박스 오브젝트를 구 오브젝트로 변환(기하 쉐이더 및 스트림 아웃 처리)
 	//--------------------------------------------------------------------------------------
-	if (FAILED(m_SphereObj.Create(GetDevice(), L"data_test/shader/BoxSO.hlsl", L"data_test/tilea.jpg")))
+	if (FAILED(m_SphereObj.Create(GetDevice(), L"data_test/shader_shadow/BoxSO.hlsl", L"data_test/tilea.jpg")))
 	{
 		MessageBox(0, _T("m_SphereObj 실패"), _T("Fatal error"), MB_OK);
 		return 0;
@@ -34,7 +34,7 @@ bool GProjMain::Init()
 	{
 		return false;
 	}
-	TMapDesc MapDesc = { m_HeightMap.m_iNumRows,m_HeightMap.m_iNumCols,	2.0f,0.5f,L"data_test/baseColor.jpg",	L"data_test/shader/DiffuseLight.hlsl" };
+	TMapDesc MapDesc = { m_HeightMap.m_iNumRows,m_HeightMap.m_iNumCols,	2.0f,0.5f,L"data_test/baseColor.jpg",	L"data_test/shader_shadow/DiffuseLight.hlsl" };
 	if (!m_HeightMap.Load(MapDesc))
 	{
 		return false;
