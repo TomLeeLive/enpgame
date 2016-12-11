@@ -96,6 +96,22 @@ float4 PS(VS_OUTPUT vIn) : SV_Target
 	return vFinalColor;
 }
 
+/*
+float4 Diffuse(float3 vNormal)
+{
+	float fIntensity = max(0, dot(vNormal, normalize(-g_vLightDir)));
+	float4 diffuse = fIntensity;
+	return diffuse;
+}
+float4 PS(VS_OUTPUT vIn) : SV_Target
+{
+	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
+	float4 vFinalColor = Diffuse(vIn.n);
+	vFinalColor.a = 1.0f;
+	return vFinalColor;
+}
+*/
+
 float4 PS_Texture(VS_OUTPUT vIn) : SV_Target
 {
 	return g_txDiffuse.Sample(g_samLinear, vIn.t);
