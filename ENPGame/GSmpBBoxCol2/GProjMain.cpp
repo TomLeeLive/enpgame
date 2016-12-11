@@ -302,12 +302,12 @@ bool GProjMain::Frame()
 	// 3   4  5
 	D3DXVECTOR3 vRayPos[6];
 
-	vRayPos[0] = D3DXVECTOR3(-1.5f, 0.0f, 1.5f);
-	vRayPos[1]= D3DXVECTOR3(0.0f, 0.0f, 1.5f);
-	vRayPos[2] = D3DXVECTOR3(1.5f, 0.0f, 1.5f);
-	vRayPos[3] = D3DXVECTOR3(-1.5f, 0.0f, -1.5f);
-	vRayPos[4] = D3DXVECTOR3(0.0f, 0.0f, -1.5f);
-	vRayPos[5] = D3DXVECTOR3(1.5f, 0.0f, -1.5f);
+	vRayPos[0] = D3DXVECTOR3(-1.5f, 0.0f, 1.5f -0.5f);
+	vRayPos[1]= D3DXVECTOR3(0.0f, 0.0f, 1.5f - 0.5f);
+	vRayPos[2] = D3DXVECTOR3(1.5f, 0.0f, 1.5f - 0.5f);
+	vRayPos[3] = D3DXVECTOR3(-1.5f, 0.0f, -1.5f + 0.5f);
+	vRayPos[4] = D3DXVECTOR3(0.0f, 0.0f, -1.5f + 0.5f);
+	vRayPos[5] = D3DXVECTOR3(1.5f, 0.0f, -1.5f + 0.5f);
 
 	for(int i=0;i<6;i++)
 		D3DXVec3TransformCoord(&vRayPos[i], &vRayPos[i], &m_matWorld);

@@ -127,7 +127,7 @@ bool GProjMain::Frame()
 #ifdef G_MACRO_ENEMYBOX
 	m_pBBoxEnemy.Frame(&m_matWorldEnemy);
 
-	/*
+	
 	int nRet = GBBOXFUNC::ColCheck(&m_pBBoxEnemy, &m_pBBox);
 
 	if (nRet == 1) {
@@ -177,7 +177,7 @@ bool GProjMain::Frame()
 		m_matTrans = matTran;
 	}
 	else {
-	*/
+	
 
 
 		if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
@@ -209,7 +209,7 @@ bool GProjMain::Frame()
 
 
 		m_matWorld = m_matScale * m_matRotation * m_matTrans;
-	//}
+	}
 
 #endif
 
