@@ -77,7 +77,7 @@ bool		GHero::Init()
 {
 	//¼¦°Ç ·Îµå
 	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/box.hlsl");
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/Obj_Diffuse.hlsl");
 
 	if (iIndex < 0)
 		return false;

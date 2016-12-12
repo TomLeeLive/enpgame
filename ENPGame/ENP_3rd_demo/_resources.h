@@ -26,3 +26,4 @@ enum SNDRESOURCES {
 #define G_SHA_PLANE L"data/shader/plane.hlsl"
 #define G_SHA_LINE L"data/shader/line.hlsl"
 #define G_SHA_BOX L"data/shader/box.hlsl"
+#define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
