@@ -30,7 +30,8 @@ public:
 	vector<shared_ptr<KEffect>> m_List;
 	virtual void				Load(T_STR* strFile);
 	virtual void		Create(G_EFFECT_TYPE type, T_STR* strFile,
-		D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f, int Width, int WidthSize, int Height, int HeightSize
+		//D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f, int Width, int WidthSize, int Height, int HeightSize
+		D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f
 		);
 	static void			GetStringWeNeed(VOID* pOutStr, VOID* pInStr);
 public:

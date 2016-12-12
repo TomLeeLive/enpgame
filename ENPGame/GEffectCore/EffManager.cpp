@@ -3,7 +3,8 @@
 #include "EffManager.h"
 
 void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
-	D3DXVECTOR3 vScl, float fTime, int Width, int WidthSize, int Height, int HeightSize) {
+	D3DXVECTOR3 vScl, float fTime) {
+	//D3DXVECTOR3 vScl, float fTime, int Width, int WidthSize, int Height, int HeightSize) {
 	int iType = type;
 
 	/*
@@ -29,6 +30,8 @@ void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 		//p_CParctice->m_EffMgr.GetStringWeNeed(tchr, tchr);
 		//m_ImageList.push_back(strFile->c_str());
 
+		Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
+		/*
 		// 애니메이션 관련, Width x Height
 		if (Width <= 0 || WidthSize <= 0 || Height <= 0 || HeightSize <= 0)
 		{
@@ -38,6 +41,7 @@ void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 		{
 			Effect->m_pSprite->SetRectAnimation(fTime, Width, WidthSize, Height, HeightSize);
 		}
+		*/
 
 		Effect->m_bCheck = true;
 
@@ -174,7 +178,8 @@ void EffManager::Load(T_STR* strFile) {
 		iHeightSize= _wtoi(strHeightSize);
 
 		if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BULLET")) {
-			Create(G_EFFECT_BULLET, &imgFile,  D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime, iWidth, iWidthSize, iHeight, iHeightSize);
+			//Create(G_EFFECT_BULLET, &imgFile,  D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime, iWidth, iWidthSize, iHeight, iHeightSize);
+			Create(G_EFFECT_BULLET, &imgFile, D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime);
 		}
 		//else if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BLOOD")) {
 		//	UICreate(GUI_TYPE_BUTTON, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
