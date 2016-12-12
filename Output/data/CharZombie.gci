@@ -1,7 +1,7 @@
 #NUM_OF_CHARACTER		4
 //////////////////////////////////////////////////////////
 #CHAR_NAME		ZOMBIE_DIE
-#SHADER_FILE		data/shader/Character.hlsl
+#SHADER_FILE		data/shader/Character_diffuse.hlsl
 #MATRIX_FILE		data/character/zombie/zombie_die.gmt
 #ACTION_LOOP		0 
 #ACTION_TABLE		8
@@ -25,7 +25,7 @@
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
 #CHAR_NAME		ZOMBIE_IDLE
-#SHADER_FILE		data/shader/Character.hlsl
+#SHADER_FILE		data/shader/Character_diffuse.hlsl
 #MATRIX_FILE		data/character/zombie/zombie_idle.gmt
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
@@ -49,7 +49,7 @@
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
 #CHAR_NAME		ZOMBIE_WALK
-#SHADER_FILE		data/shader/Character.hlsl
+#SHADER_FILE		data/shader/Character_diffuse.hlsl
 #MATRIX_FILE		data/character/zombie/zombie_walk.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8
@@ -73,7 +73,7 @@
 #SKN_ETCETERA_COUNT	0
 //////////////////////////////////////////////////////////
 #CHAR_NAME		ZOMBIE_ATTACK
-#SHADER_FILE		data/shader/Character.hlsl
+#SHADER_FILE		data/shader/Character_diffuse.hlsl
 #MATRIX_FILE		data/character/zombie/zombie_attack.gmt 
 #ACTION_LOOP		1  
 #ACTION_TABLE		8

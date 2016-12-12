@@ -12,11 +12,10 @@ cbuffer cb0: register (b0)
 	float4x4	g_matProj	: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
-
 //--------------------------------------------------------------------------------------
 //Lighting Variables
 //--------------------------------------------------------------------------------------
-cbuffer cb2: register(b2)
+cbuffer cb2: register(b1)
 {
 	matrix				g_matWorldInverse: packoffset(c0);
 	float4				g_AmbientMaterial: packoffset(c4);
@@ -37,6 +36,7 @@ cbuffer cb2: register(b2)
 	float			    g_fEyeRadius : packoffset(c14.w);
 };
 //--------------------------------------------------------------------------------------
+
 
 
 #ifdef FT_CONSTANTBUFFER
@@ -82,7 +82,7 @@ struct VS_OUTPUT
 	float3 n : NORMAL;
 	float4 c : COLOR0;
 	float2 t : TEXCOORD0;
-	float4 d : TEXCOORD1;
+	//float4 d : TEXCOORD1;
 };
 //--------------------------------------------------------------------------------------
 // Vertex Shader
@@ -123,8 +123,8 @@ VS_OUTPUT VS(PNCT5_VS_INPUT input)//,uniform bool bHalfVector )
 	}
 
 	output.p = mul(output.p, g_matWorld);
-	//output.n = normalize(mul(output.n, (float3x3)g_matWorld));// g_matWorldInvTrans));
-	output.n = normalize(mul(output.n, (float3x3)g_matWorldInverse));
+	output.n = normalize(mul(output.n, (float3x3)g_matWorld));// g_matWorldInvTrans));
+	//output.n = normalize(mul(output.n, (float3x3)g_matWorldInverse));
 
 	output.p = mul(output.p, g_matView);
 	output.p = mul(output.p, g_matProj);
