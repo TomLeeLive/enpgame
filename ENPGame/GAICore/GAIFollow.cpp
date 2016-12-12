@@ -10,9 +10,9 @@ bool GAIFollow::Init(GNewZombie* iMyIndex)
 }
 
 
-bool GAIFollow::Frame(GNewZombie* iMyIndex)
+bool GAIFollow::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 {
-	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(g_pMain->m_Box->m_matWorld._41, g_pMain->m_Box->m_matWorld._42, g_pMain->m_Box->m_matWorld._43);
+	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
 	
 	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,
 		iMyIndex->m_matZombWld._42, iMyIndex->m_matZombWld._43);

@@ -85,7 +85,7 @@ bool GSeqLoading::Init() {
 
 	T_STR strFile;
 	m_UIManager.Init();
-	strFile = L"ui_loading.gui";
+	strFile = L"data/ui_loading.gui";
 	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
 
 

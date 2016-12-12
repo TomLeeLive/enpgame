@@ -6,7 +6,7 @@
 bool GAIZombieMgr::Load()
 {
 
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharZombie.gci")))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci")))
 	{
 		return false;
 	}
@@ -50,10 +50,10 @@ bool		GAIZombieMgr::Init() {
 	}
 	
 	return true; };
-bool		GAIZombieMgr::Frame() { 
+bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		m_Zomb[i]->Frame(m_Zomb[i].get());
+		m_Zomb[i]->Frame(m_Zomb[i].get(), matHeroWorld);
 	}
 
 

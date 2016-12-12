@@ -73,7 +73,7 @@ bool GSeqSinglePlay::Load()
 
 
 	//int iLoad = m_LoadFiles.size() - 1;
-	//if (!m_tObject.Load(g_pd3dDevice(), m_LoadFiles[iLoad].c_str(), L"MatrixViewer.hlsl"))
+	//if (!m_tObject.Load(g_pd3dDevice(), m_LoadFiles[iLoad].c_str(), L"data/shader/MatrixViewer.hlsl"))
 	//{
 	//	return false;
 	//}
@@ -84,12 +84,12 @@ bool GSeqSinglePlay::Load()
 
 
 
-	//if (!I_CharMgr.Load(g_pd3dDevice(), g_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("CharTable.gci")*/))
+	//if (!I_CharMgr.Load(g_pd3dDevice(), g_pImmediateContext, m_LoadFiles[iLoad].c_str()/*_T("data/CharTable.gci")*/))
 	//{
 	//	return false;
 	//}
 
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharTable3.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharTable3.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}

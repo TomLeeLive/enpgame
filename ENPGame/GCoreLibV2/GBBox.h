@@ -53,7 +53,7 @@ public:
  {
   t[0]=axis[0][0];
   t[1]=axis[0][1];
-  t[2]=axis[0][2];
+  t[2]=axis[0][2];  
   t[3]=((real)0.0);
   t[4]=axis[1][0];
   t[5]=axis[1][1];
@@ -65,7 +65,7 @@ public:
   t[11]=((real)0.0);
   t[12]=translation[0];
   t[13]=translation[1];
-  t[14]=translation[2];
+  t[14]=translation[2];   
   t[15]=((real)1.0);
  }
  // Ãß°¡ÇÔ.

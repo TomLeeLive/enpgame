@@ -65,7 +65,7 @@ bool GProjMain::Load()
 		return false;
 	}
 	int iLoad = m_LoadFiles.size()-1;
-	if(!m_GObject.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"SkinViewer.hlsl" )  )	
+	if(!m_GObject.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"data/shader/SkinViewer.hlsl" )  )	
 	{
 		return false;
 	}	

@@ -7,7 +7,7 @@ bool GProjMain::Init()
 	m_UIManager.Init();
 
 	//T_STR strFile = L"UI_TEST4.gui";
-	T_STR strFile = L"ui_menu.gui";
+	T_STR strFile = L"data/ui_menu.gui";
 	m_UIManager.UILoad(&strFile, &m_SwapChainDesc, m_DefaultRT.m_vp.Width, m_DefaultRT.m_vp.Height);
 	return true;
 }

@@ -72,7 +72,7 @@ bool GSeqSinglePlay::Init()
 {
 	T_STR strFile;
 	m_UIManager.Init();
-	strFile = L"ui_singleplay.gui";
+	strFile = L"data/ui_singleplay.gui";
 	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
 
 	InitGame();
@@ -713,8 +713,18 @@ bool		GSeqSinglePlay::FrameChar() {
 };
 bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
-	for (int i = 0; i < G_OBJ_CNT; i++) {
+	m_Objbit.reset();
+
+
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
+
+		if (m_pCamera->CheckOBBInPlane(&(((GGbsObj*)m_Obj[i])->m_OBB)))
+		{
+			m_Objbit.set(i);
+		}
 	}
 #endif
 	return true;
@@ -863,9 +873,15 @@ bool		GSeqSinglePlay::RenderChar() {
 };
 bool		GSeqSinglePlay::RenderObj() {
 #ifdef G_MACRO_MAP_ADD
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-		m_Obj[i]->Render(g_pImmediateContext);
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		D3DXMATRIX mat = m_Obj[i]->m_matWorld;
+
+		if (m_Objbit[i])
+		{
+			m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_Obj[i]->Render(g_pImmediateContext);
+		}
 
 		if(m_bDebugMode)
 			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
@@ -1046,7 +1062,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 bool GSeqSinglePlay::Load()
 {
 	//좀비 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharZombie.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -1055,7 +1071,7 @@ bool GSeqSinglePlay::Load()
 
 
 	//주인공1 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero1.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero1.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -1068,10 +1084,13 @@ bool GSeqSinglePlay::Load()
 		pChar1->m_pBoneObject,
 		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar1->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjB->Init();
+
 	m_CharHero.push_back(pObjB);
 
 	//주인공2 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("CharHero2.gci") /*_T("CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero2.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}
@@ -1084,6 +1103,10 @@ bool GSeqSinglePlay::Load()
 		pChar2->m_pBoneObject,
 		pChar2->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar2->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjC->Init();
+
+	pObjC.get()->m_HeroType = G_HERO_JAKE;
 	m_CharHero.push_back(pObjC);
 
 

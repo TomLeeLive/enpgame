@@ -1,6 +1,7 @@
 #pragma once
 #include "GCoreStd.h"
 #include "GShape.h"
+#include "GBBox.h"
 
 enum G_POSITION
 {
@@ -44,6 +45,7 @@ public:
 	BOOL	ClassifyPoint( D3DXVECTOR3* pv );
 	BOOL	ClassifySphere( G_SPHERE* pSphere );
 	BOOL	CheckOBBInPlane( G_BOX*  pBox );
+	BOOL	CheckOBBInPlane(GBBox*  pBox);
 	G_POSITION CheckPoitionOBBInPlane( G_BOX*  pBox );
 public:
 	/// »ý¼ºÀÚ

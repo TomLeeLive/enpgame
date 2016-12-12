@@ -14,9 +14,11 @@
 #define G_MACRO_EFFECT_ADD   1
 #define G_MACRO_CHAR_ADD     1
 
-
+#include <bitset>
 
 //공통 사용 헤더
+
+
 #include "GCamera.h"
 #include "GTimer.h"
 
