@@ -123,7 +123,7 @@ bool GSeqSinglePlay::FrameGun() {
 			}
 		}
 
-		for (int i = 0; i < G_HERO_CNT; i++) {
+		for (int i = 0; i < m_CharHero.size(); i++) {
 
 			if (i == m_CurrentHero)
 				continue;
@@ -201,10 +201,11 @@ bool GSeqSinglePlay::Frame()
 
 
 	FrameGame();
+	FrameChar();
 	FrameMap();
 	FrameObj();
 	FrameEffect();
-	FrameChar();
+
 
 	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
 
@@ -640,6 +641,24 @@ void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
 bool		GSeqSinglePlay::FrameChar() {
 #ifdef G_MACRO_CHAR_ADD
 
+	D3DXMATRIX matHeroWld[G_HERO_CNT];
+	D3DXMATRIX matHeroScl[G_HERO_CNT];
+	D3DXMATRIX matHeroRot[G_HERO_CNT];
+	D3DXMATRIX matHeroTrans[G_HERO_CNT];
+
+	for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
+		D3DXMatrixIdentity(&matHeroWld[iChar]);
+		D3DXMatrixIdentity(&matHeroScl[iChar]);
+		D3DXMatrixIdentity(&matHeroRot[iChar]);
+		D3DXMatrixIdentity(&matHeroTrans[iChar]);
+		D3DXMatrixTranslation(&matHeroTrans[iChar], m_pFPSCamera[iChar].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[iChar].get()->m_vCameraPos.z);
+		matHeroRot[iChar] = m_pFPSCamera[iChar].get()->GetRotMatY();
+
+		matHeroWld[iChar] = matHeroScl[iChar] * matHeroRot[iChar] * matHeroTrans[iChar];
+
+		m_CharHero[iChar]->m_matWorld = matHeroWld[iChar];
+	}
+
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
 		m_CharHero[iChar]->Frame();
@@ -828,27 +847,14 @@ bool		GSeqSinglePlay::RenderChar() {
 	//matCharWld = m_matWorld;
 	//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
 
-	D3DXMATRIX matHeroWld[G_HERO_CNT];
-	D3DXMATRIX matHeroScl[G_HERO_CNT];
-	D3DXMATRIX matHeroRot[G_HERO_CNT];
-	D3DXMATRIX matHeroTrans[G_HERO_CNT];
 
-	for (int i = 0; i < G_HERO_CNT; i++){
-		D3DXMatrixIdentity(&matHeroWld[i]);
-		D3DXMatrixIdentity(&matHeroScl[i]);
-
-		D3DXMatrixIdentity(&matHeroTrans[i]);
-		D3DXMatrixTranslation(&matHeroTrans[i], m_pFPSCamera[i].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[i].get()->m_vCameraPos.z);
-		matHeroRot[i] = m_pFPSCamera[i].get()->GetRotMatY();
-
-		matHeroWld[i] = matHeroScl[i] * matHeroRot[i] * matHeroTrans[i];
-	}
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
 		if (iChar == m_CurrentHero && m_bDebugMode==false)
 			continue;
-		m_CharHero[iChar].get()->SetMatrix(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+
+		m_CharHero[iChar].get()->SetMatrix(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharHero[iChar].get()->Render(g_pImmediateContext);
 	}
 
@@ -864,7 +870,7 @@ bool		GSeqSinglePlay::RenderChar() {
 			m_CharZombie[iChar].get()->m_OBB.Render(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
-			m_CharHero[iChar].get()->m_OBB.Render(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_CharHero[iChar].get()->m_OBB.Render(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 	}
 

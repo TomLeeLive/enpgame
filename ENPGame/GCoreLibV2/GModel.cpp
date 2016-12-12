@@ -65,6 +65,18 @@ bool GModel::Create(ID3D11Device* pDevice,
 	}
 
 	//조명 [Start]
+	D3DXMATRIX mLightWorld, mTranslate, mRotation;
+	D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, -100.0f);
+	D3DXMatrixIdentity(&mRotation);
+	//D3DXMatrixRotationY(&mRotation, D3DXToRadian(90.0f));
+	D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+	m_vLightVector.x = mLightWorld._41;
+	m_vLightVector.y = mLightWorld._42;
+	m_vLightVector.z = mLightWorld._43;
+	D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+	m_vLightVector *= -1.0f;
+	
+	
 	m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
 	m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
 	m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
@@ -180,6 +192,21 @@ void GModel::UpdateConstantBuffer(ID3D11DeviceContext* pContext, GModel* pParent
 }
 bool GModel::PostRender(ID3D11DeviceContext* pContext)
 {
+	//조명 [Start]
+	m_cbLight.g_vLightDir.x = m_vLightVector.x;
+	m_cbLight.g_vLightDir.y = m_vLightVector.y;
+	m_cbLight.g_vLightDir.z = m_vLightVector.z;
+	m_cbLight.g_vLightDir.w = 1;
+	D3DXMATRIX matInvWorld;
+	D3DXMatrixInverse(&matInvWorld, NULL, &m_matWorld);
+	D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+	D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+	g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+	g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+	g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+	//조명 [End]
+
 	UpdateConstantBuffer(pContext);
 	m_dxobj.PostRender(pContext, m_dxobj.m_iNumIndex);
 	return true;
