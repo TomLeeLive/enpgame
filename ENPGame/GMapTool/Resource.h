@@ -4,7 +4,7 @@
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
-#define IDD_FORMVIEW                    101
+#define IDD_CREATEMAPFORMVIEW           101
 #define IDR_POPUP_EDIT                  119
 #define ID_STATUSBAR_PANE1              120
 #define ID_STATUSBAR_PANE2              121
@@ -99,6 +99,18 @@
 #define IDC_COMBO2                      1015
 #define IDC_EDIT7                       1016
 #define IDC_TAB1                        1017
+#define IDC_LIST2                       1022
+#define IDC_BUTTON2                     1023
+#define IDC_BUTTON3                     1024
+#define IDC_GUAGE_VALUE                 1027
+#define IDC_GUAGE_VALUE2                1028
+#define IDC_GUAGE_VALUE3                1029
+#define IDC_GUAGE_VALUE4                1030
+#define IDC_GUAGE_VALUE5                1031
+#define IDC_GUAGE_VALUE6                1032
+#define IDC_GUAGE_VALUE7                1033
+#define IDC_GUAGE_VALUE8                1034
+#define IDC_GUAGE_VALUE9                1035
 #define ID_CREATEMAP                    32771
 #define ID_32774                        32774
 #define ID_32775                        32775
@@ -119,7 +131,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        327
+#define _APS_NEXT_RESOURCE_VALUE        330
 #define _APS_NEXT_COMMAND_VALUE         32797
 #define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           310
