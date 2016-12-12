@@ -378,6 +378,22 @@ bool GSkinObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 		auto pMesh = m_pMesh[dwObject].get();
 		pParent->SetMatrix(&pParent->m_matWorld, &pParent->m_matView, &pParent->m_matProj);
 		UpdateConstantBuffer(pContext, pParent);
+
+		//조명 [Start]
+		m_cbLight.g_vLightDir.x = m_vLightVector.x;
+		m_cbLight.g_vLightDir.y = m_vLightVector.y;
+		m_cbLight.g_vLightDir.z = m_vLightVector.z;
+		m_cbLight.g_vLightDir.w = 1;
+		D3DXMATRIX matInvWorld;
+		D3DXMatrixInverse(&matInvWorld, NULL, &pParent->m_matWorld);
+		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+		g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+		g_pImmediateContext->VSSetConstantBuffers(2, 1, m_pConstantBufferLight.GetAddressOf());
+		g_pImmediateContext->PSSetConstantBuffers(2, 1, m_pConstantBufferLight.GetAddressOf());
+		//조명 [End]
+
 		if (pMesh->m_pSubMesh.size() > 0)
 		{
 			for (DWORD dwSub = 0; dwSub < pMesh->m_pSubMesh.size(); dwSub++)

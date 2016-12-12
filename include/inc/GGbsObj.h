@@ -6,9 +6,13 @@
 typedef GData<PNCT_VERTEX>				tTbsData;
 typedef vector<shared_ptr<tTbsData>>	tTbsMeshData;
 
+
+
 class GGbsObj : public GModel
 {
 public:
+
+
 	GBBox			m_OBB;
 	bool			m_bAniLoop;
 	void			ResetAni();

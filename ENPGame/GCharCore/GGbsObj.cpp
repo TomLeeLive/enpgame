@@ -2,6 +2,8 @@
 #include "GTimer.h"
 bool GGbsObj::Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, bool bThread )
 {
+
+
 	m_dxobj.m_iVertexSize = sizeof(PNCT_VERTEX);
 	m_dxobj.m_iIndexSize = sizeof(DWORD);
 
@@ -512,6 +514,23 @@ bool GGbsObj::Frame()
 
 	m_OBB.Frame(&m_matWorld);
 
+
+	//조명 [Start]
+	//float t = m_Timer.GetElapsedTime() * D3DX_PI;
+	D3DXMATRIX mLightWorld, mTranslate, mRotation;
+	D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+	//D3DXMatrixRotationY(&mRotation, t*0.1f);
+	D3DXMatrixIdentity(&mRotation);
+	D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+
+	m_vLightVector.x = mLightWorld._41;
+	m_vLightVector.y = mLightWorld._42;
+	m_vLightVector.z = mLightWorld._43;
+
+	D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+	m_vLightVector *= -1.0f;
+	//조명 [End]
+
 	return true;
 }
 
@@ -762,6 +781,7 @@ bool GGbsObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 }
 bool GGbsObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 {
+
 	//CStopwatch stopwatch;
 	for (DWORD dwObject = 0; dwObject < m_pData.size(); dwObject++)
 	{
@@ -769,7 +789,22 @@ bool GGbsObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 		D3DXMATRIX matWorld = pMesh->m_matCalculation * pParent->m_matWorld;
 		D3DXMatrixTranspose(&m_cbData.matWorld, &matWorld);
 		UpdateConstantBuffer(pContext, pParent);
-		
+
+		//조명 [Start]
+		m_cbLight.g_vLightDir.x = m_vLightVector.x;
+		m_cbLight.g_vLightDir.y = m_vLightVector.y;
+		m_cbLight.g_vLightDir.z = m_vLightVector.z;
+		m_cbLight.g_vLightDir.w = 1;
+		D3DXMATRIX matInvWorld;
+		D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
+		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+		g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+		g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+		g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+		//조명 [End]
+
 		if (pMesh->m_pSubMesh.size() > 0)
 		{
 			for (DWORD dwSub = 0; dwSub < pMesh->m_pSubMesh.size(); dwSub++)

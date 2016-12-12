@@ -183,6 +183,22 @@ bool		GHero::Frame()
 				pModel->GetMatrix());*/
 		}
 	}
+	
+	//조명 [Start]
+	//float t = m_Timer.GetElapsedTime() * D3DX_PI;
+	D3DXMATRIX mLightWorld, mTranslate, mRotation;
+	D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+	//D3DXMatrixRotationY(&mRotation, t*0.1f);
+	D3DXMatrixIdentity(&mRotation);
+	D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+
+	m_vLightVector.x = mLightWorld._41;
+	m_vLightVector.y = mLightWorld._42;
+	m_vLightVector.z = mLightWorld._43;
+
+	D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+	m_vLightVector *= -1.0f;
+	//조명 [End]
 
 	m_OBB.Frame(&m_matWorld);
 
@@ -195,6 +211,28 @@ bool		GHero::Render(ID3D11DeviceContext*    pContext)
 	// 메쉬 랜더링
 	for (int iObj = 0; iObj < m_pChar->m_pModelList.size(); iObj++)
 	{
+
+		
+		/*
+		//조명 [Start]
+		D3D11_MAPPED_SUBRESOURCE MappedResource;
+		pContext->Map(m_pConstantBufferLight.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
+
+		m_cbLight.g_vLightDir.x = m_vLightVector.x;
+		m_cbLight.g_vLightDir.y = m_vLightVector.y;
+		m_cbLight.g_vLightDir.z = m_vLightVector.z;
+		m_cbLight.g_vLightDir.w = 1;
+		D3DXMATRIX matInvWorld;
+		D3DXMatrixInverse(&matInvWorld, NULL, &m_matWorld);
+		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+		memcpy(MappedResource.pData, &m_cbLight, sizeof(LIGHT_CONSTANT_BUFFER));
+		pContext->Unmap(m_pCBConstBoneWorld.Get(), 0);
+		//조명 [End]
+		*/
+
+
 		GSkinObj* pModel = (GSkinObj*)m_pChar->m_pModelList[iObj]->m_pModel;
 		_ASSERT(pModel);
 		pModel->SetMatrix(&m_matWorld, &m_matView, &m_matProj);

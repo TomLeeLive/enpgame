@@ -64,6 +64,16 @@ bool GModel::Create(ID3D11Device* pDevice,
 		return 0;
 	}
 
+	//조명 [Start]
+	m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
+	m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
+	m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
+	m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
+
+	m_pConstantBufferLight.Attach(DX::CreateConstantBuffer(
+		m_pd3dDevice, &m_cbLight, 1, sizeof(LIGHT_CONSTANT_BUFFER)));
+	//조명 [End]
+
 	return Init();
 }
 HRESULT GModel::LoadTextures(ID3D11Device* pDevice, const TCHAR* pLoadTextureString)

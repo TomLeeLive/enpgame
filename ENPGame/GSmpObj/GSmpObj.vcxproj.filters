@@ -27,4 +27,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Output\data\shader\Obj_Diffuse.hlsl" />
+  </ItemGroup>
 </Project>
