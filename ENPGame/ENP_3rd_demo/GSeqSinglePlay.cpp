@@ -360,7 +360,7 @@ bool        GSeqSinglePlay::InitMap() {
 		//5,5,
 		30.0f, 1.0f,
 		L"data/Sand.jpg",
-		L"data/shader/CustomizeMap.hlsl" };
+		L"data/shader/CustomizeMap_Light.hlsl" };
 
 	if (!m_HeightMap.Load(MapDesc))
 	{
@@ -407,7 +407,7 @@ bool		GSeqSinglePlay::InitObj() {
 	//}
 
 	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_OBJ_DIFFUSE_REVERSE);				if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_OBJ_DIFFUSE_REVERSE);			if (iIndex < 0) return false;
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);	if (iIndex < 0) return false;
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
 
@@ -734,9 +734,15 @@ bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	m_Objbit.reset();
 
-
 	for (int i = 0; i < G_OBJ_CNT; i++)
 	{
+		if(m_Obj[i]->m_LightType == G_LIGHT_TYPE_SPECULAR)
+		{
+			//스페큘러 값 업데이트를 위해..
+			m_Obj[i]->m_cbLight.g_vEyeDir.x = m_pCamera->m_vLookVector.x;
+			m_Obj[i]->m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
+			m_Obj[i]->m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
+		}
 		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
 
