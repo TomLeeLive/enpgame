@@ -60,7 +60,7 @@ bool GProjMain::Init()
 								, 0.0f,-0.5f, 0.0f, 0.0f
 								, 0.0f, 0.0f, 1.0f, 0.0f
 								, 0.5f, 0.5f, 0.0f, 1.0f);
-	m_pConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbShadow, 1, sizeof(SHADOW_CONSTANT_BUFFER)));
+	m_pShadowConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbShadow, 1, sizeof(SHADOW_CONSTANT_BUFFER)));
 
 
 	m_vLightPos = D3DXVECTOR3( 15, 40, -35 );
@@ -130,9 +130,9 @@ bool GProjMain::Render()
 	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT);
 	m_cbShadow.g_ShadowID = 0;
 	m_cbShadow.g_iNumKernel = 3;
-	GetContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-	GetContext()->VSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
-	GetContext()->PSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
+	GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+	GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
 
 	m_CustomMap.PreRender(GetContext());
 		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
@@ -166,9 +166,9 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
 		m_cbShadow.g_ShadowID = m_fObjID[iObj];
 		m_cbShadow.g_iNumKernel = 3;
-		GetContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-		GetContext()->VSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
-		GetContext()->PSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
+		GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
 		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf() );
 
 		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);		

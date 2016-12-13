@@ -30,3 +30,6 @@ enum SNDRESOURCES {
 #define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
 #define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
 #define G_SHA_OBJ_SPECULAR_REVERSE L"data/shader/Obj_Specular_Rev.hlsl"
+#define G_SHA_OBJ_SHADOW L"data/shader/Obj_DepthMapShadow.hlsl"
+
+#define G_SHA_MAP_SHADOW L"data/shader/CustomizeMap_shadow.hlsl"
