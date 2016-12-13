@@ -179,10 +179,10 @@ HRESULT GN2Skybox::CreateTextureArray(ID3D11Device* pDevice, ID3D11DeviceContext
 #ifdef Mars
 	TCHAR* g_szSkyTextures[] =
 	{
-		L"data\\cube\\Mars_front.png",
-		L"data\\cube\\Mars_back.png",
 		L"data\\cube\\Mars_right.png",
 		L"data\\cube\\Mars_left.png",
+		L"data\\cube\\Mars_back.png",
+		L"data\\cube\\Mars_front.png",
 		L"data\\cube\\Mars_up.png",
 		L"data\\cube\\Mars_down.png"
 	};

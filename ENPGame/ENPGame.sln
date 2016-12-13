@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GbsViewer", "GbsViewer\GbsViewer.vcxproj", "{D80BC546-E88C-4698-B90F-733B2B16DD15}"
 EndProject
@@ -127,6 +127,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpBBoxCol2", "GSmpBBoxCol2\GSmpBBoxCol2.vcxproj", "{D427F7BB-E072-403A-9C7A-A04F1E1107DC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpObjSpecular", "GSmpObjSpecular\GSmpObjSpecular.vcxproj", "{07988677-53E8-41C4-8BE6-BAD1DF1C6AFD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpHeightMap2", "GSmpHeightMap2\GSmpHeightMap2.vcxproj", "{D300B241-D0E5-492F-A92B-717924354626}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -698,6 +700,18 @@ Global
 		{07988677-53E8-41C4-8BE6-BAD1DF1C6AFD}.Release|x64.Build.0 = Release|x64
 		{07988677-53E8-41C4-8BE6-BAD1DF1C6AFD}.Release|x86.ActiveCfg = Release|Win32
 		{07988677-53E8-41C4-8BE6-BAD1DF1C6AFD}.Release|x86.Build.0 = Release|Win32
+		{D300B241-D0E5-492F-A92B-717924354626}.Debug|x64.ActiveCfg = Debug|x64
+		{D300B241-D0E5-492F-A92B-717924354626}.Debug|x64.Build.0 = Debug|x64
+		{D300B241-D0E5-492F-A92B-717924354626}.Debug|x86.ActiveCfg = Debug|Win32
+		{D300B241-D0E5-492F-A92B-717924354626}.Debug|x86.Build.0 = Debug|Win32
+		{D300B241-D0E5-492F-A92B-717924354626}.Hybrid|x64.ActiveCfg = Release|x64
+		{D300B241-D0E5-492F-A92B-717924354626}.Hybrid|x64.Build.0 = Release|x64
+		{D300B241-D0E5-492F-A92B-717924354626}.Hybrid|x86.ActiveCfg = Release|Win32
+		{D300B241-D0E5-492F-A92B-717924354626}.Hybrid|x86.Build.0 = Release|Win32
+		{D300B241-D0E5-492F-A92B-717924354626}.Release|x64.ActiveCfg = Release|x64
+		{D300B241-D0E5-492F-A92B-717924354626}.Release|x64.Build.0 = Release|x64
+		{D300B241-D0E5-492F-A92B-717924354626}.Release|x86.ActiveCfg = Release|Win32
+		{D300B241-D0E5-492F-A92B-717924354626}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -754,6 +768,7 @@ Global
 		{642A3DE4-0B65-460D-B1E4-74FB7AE2D2AD} = {42063E21-7102-489F-9FB0-97C29E6D4CBE}
 		{D427F7BB-E072-403A-9C7A-A04F1E1107DC} = {08C84B95-560B-4C1E-92DC-12F70876C10E}
 		{07988677-53E8-41C4-8BE6-BAD1DF1C6AFD} = {08C84B95-560B-4C1E-92DC-12F70876C10E}
+		{D300B241-D0E5-492F-A92B-717924354626} = {E652D78E-2A59-4F85-ABE1-908424CAC9D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

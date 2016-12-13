@@ -12,6 +12,7 @@
 //추가
 #include "GCreateMapDlg.h"
 #include "GSaveMapDlg.h"
+#include "GObjectControl.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -23,7 +24,7 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	CString m_strSaveFileName;
-	//GCreateMapDlg GMapDlg;
+	GObjectControl m_wndDockObject;
 // 작업입니다.
 public:
 
@@ -65,6 +66,7 @@ protected:
 public:
 	afx_msg void OnCreatemap();
 	afx_msg void OnSavemap();
+	afx_msg void OnObjectformview();
 };
 
 

@@ -4,9 +4,8 @@
 #define Test_save
 
 #include "stdafx.h"
-#include "MapTool.h"
-
 #include "MainFrm.h"
+#include "MapTool.h"
 
 
 #ifdef _DEBUG
@@ -30,6 +29,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SETTINGCHANGE()
 	ON_COMMAND(ID_CREATEMAP, &CMainFrame::OnCreatemap)
 	ON_COMMAND(ID_SAVEMAP, &CMainFrame::OnSavemap)
+	ON_COMMAND(IDS_OBJECTFORMVIEW, &CMainFrame::OnObjectformview)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -493,14 +493,19 @@ void CMainFrame::OnSavemap()
 	f = fopen("StudentData.dat", "wt");
 
 
-	fprintf(f, buffer);
+	//fprintf(f, buffer);
 
 
 	fclose(f);
 
 #endif
 
+}
 
+
+void CMainFrame::OnObjectformview()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 
 
 }

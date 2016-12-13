@@ -47,6 +47,7 @@
 #define IDI_FILE_VIEW_HC                162
 #define IDI_CLASS_VIEW                  163
 #define IDI_CLASS_VIEW_HC               164
+#define IDD_OBJECTFORMVEIW              164
 #define IDI_OUTPUT_WND                  165
 #define IDI_OUTPUT_WND_HC               166
 #define IDI_PROPERTIES_WND              167
@@ -86,7 +87,7 @@
 #define IDS_EXPLORER                    305
 #define IDS_EDIT_MENU                   306
 #define IDD_CREATEMAP                   316
-#define IDD_SAVEMAP                     322
+#define IDD_CRAETEMAPFORMVIEW           323
 #define IDC_EDIT1                       1009
 #define IDC_EDIT2                       1010
 #define IDC_COMBO1                      1011
@@ -101,16 +102,27 @@
 #define IDC_TAB1                        1017
 #define IDC_LIST2                       1022
 #define IDC_BUTTON2                     1023
+#define IDC_ADD_OBJECT                  1023
 #define IDC_BUTTON3                     1024
+#define IDC_ADD_OBB                     1024
 #define IDC_GUAGE_VALUE                 1027
+#define IDC_SCALE_X                     1027
 #define IDC_GUAGE_VALUE2                1028
+#define IDC_SCALE_Y                     1028
 #define IDC_GUAGE_VALUE3                1029
+#define IDC_SCALE_Z                     1029
 #define IDC_GUAGE_VALUE4                1030
+#define IDC_TRANSLATION_X               1030
 #define IDC_GUAGE_VALUE5                1031
+#define IDC_TRANSLATION_Y               1031
 #define IDC_GUAGE_VALUE6                1032
+#define IDC_TRANSLATION_Z               1032
 #define IDC_GUAGE_VALUE7                1033
+#define IDC_ROTATION_X                  1033
 #define IDC_GUAGE_VALUE8                1034
+#define IDC_ROTATION_Y                  1034
 #define IDC_GUAGE_VALUE9                1035
+#define IDC_ROTATION_Z                  1035
 #define ID_CREATEMAP                    32771
 #define ID_32774                        32774
 #define ID_32775                        32775
@@ -126,13 +138,18 @@
 #define ID_32794                        32794
 #define ID_SAVEMAP                      32795
 #define ID_LOADMAP                      32796
+#define IDS_OBJECT_DOCKING              32797
+#define IDS_DOCKING_VIEW_OBEJCT         32798
+#define IDS_OBJECT_DOCKING_VEIW         32799
+#define IDS_OBJECTFORMVIEW              32800
+#define ID_OBJECTFORMVIEW               32801
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        330
-#define _APS_NEXT_COMMAND_VALUE         32797
+#define _APS_NEXT_RESOURCE_VALUE        334
+#define _APS_NEXT_COMMAND_VALUE         32802
 #define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
