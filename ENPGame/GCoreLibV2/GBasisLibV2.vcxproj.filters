@@ -275,6 +275,9 @@
     <ClInclude Include="GUIManager.h">
       <Filter>Common\UI</Filter>
     </ClInclude>
+    <ClInclude Include="GLight.h">
+      <Filter>Common\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

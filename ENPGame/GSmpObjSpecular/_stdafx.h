@@ -65,6 +65,7 @@
 #include "GSprite.h"
 #endif
 
+#include "GLight.h"
 
 
 //Main

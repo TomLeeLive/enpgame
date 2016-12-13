@@ -4,12 +4,12 @@
 // Constant Buffer Variables
 //--------------------------------------------------------------------------------------
 Texture2D g_txDiffuse: register (t0);
-SamplerState samLinear: register (s0);
-cbuffer cb0
+SamplerState g_samLinear: register (s0);
+cbuffer cb0: register(b0)
 {
-	row_major float4x4	g_matWorld	: packoffset(c0);
-	row_major float4x4	g_matView		: packoffset(c4);
-	row_major float4x4	g_matProj		: packoffset(c8);
+	matrix	g_matWorld		: packoffset(c0);
+	matrix	g_matView		: packoffset(c4);
+	matrix	g_matProj		: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
 //--------------------------------------------------------------------------------------
@@ -57,20 +57,15 @@ struct VS_OUTPUT
 //--------------------------------------------------------------------------------------
 VS_OUTPUT VS(VS_INPUT vIn)
 {
-	VS_OUTPUT output = (VS_OUTPUT)0;
-	//output.p = mul(g_matWorld, vIn.p);
+	VS_OUTPUT vOut = (VS_OUTPUT)0;
 	float4 vWorld = mul(vIn.p, WIDEN(matWorld));
-	//output.p = mul(g_matView,output.p );
-	output.p = mul(vWorld, WIDEN(matView));
-	output.p = mul(output.p,g_matProj);
-	output.n = normalize(mul(vIn.n, (float3x3)g_matWorldInverse));
-	output.c = vIn.c * g_MeshColor;//vIn.c;// *g_MeshColor;
-	output.t = vIn.t;// *10;
-	//output.n = vIn.n;
-	//output.t = vIn.t;
-	//output.c = vIn.c * g_MeshColor;
-	output.v = vWorld;
-	return output;
+	vOut.p = mul(vWorld, WIDEN(matView));
+	vOut.p = mul(vOut.p, WIDEN(matProj));
+	vOut.n = normalize(mul(vIn.n, (float3x3)g_matWorldInverse));
+	vOut.t = vIn.t;// *10;
+	vOut.c = vIn.c * g_MeshColor;
+	vOut.v = vWorld;
+	return vOut;
 }
 
 //--------------------------------------------------------------------------------------
@@ -83,7 +78,6 @@ float4 Diffuse(float3 vNormal)
 		(g_cDiffuseMaterial * g_cDiffuseLightColor * fIntensity);
 	return diffuse;
 }
-
 float4 Specular(float3 vNormal)
 {
 	// Specular Lighting
@@ -98,16 +92,16 @@ float4 Specular(float3 vNormal)
 	float4 specular = g_cSpecularMaterial * g_cSpecularLightColor * fPower;
 	return specular;
 }
-
 float4 PS(VS_OUTPUT vIn) : SV_Target
 {
-	//return g_txDiffuse.Sample(samLinear, vIn.t) * vIn.c;
-	float4 vTexColor = g_txDiffuse.Sample(samLinear, vIn.t);
-	//float4 vFinalColor = vTexColor *Diffuse(vIn.n) * vIn.c;
+	float4 vTexColor = g_txDiffuse.Sample(g_samLinear, vIn.t);
 	float4 vFinalColor = vTexColor * (Diffuse(vIn.n) + Specular(vIn.n)) * vIn.c;
 	vFinalColor.a = 1.0f;
-	//return vFinalColor;
 	return vTexColor *(Diffuse(vIn.n) + Specular(vIn.n));
+}
+float4 PS_Texture(VS_OUTPUT vIn) : SV_Target
+{
+	return g_txDiffuse.Sample(g_samLinear, vIn.t);
 }
 float4 PS_Color(VS_OUTPUT vIn) : SV_Target
 {
@@ -115,16 +109,16 @@ float4 PS_Color(VS_OUTPUT vIn) : SV_Target
 	vColor.a = 1.0f;
 	return vColor;
 }
-float4 Rim( VS_OUTPUT vIn)
+float4 Rim(VS_OUTPUT vIn)
 {
 	float fRimLightcolor = smoothstep(1.0f - vIn.v.w, 1.0f, 1.0f - max(0, dot(vIn.n, vIn.v.xyz)));
-	float4 vFinalColor = float4(fRimLightcolor, fRimLightcolor, fRimLightcolor, 1.0f);	
+	float4 vFinalColor = float4(fRimLightcolor, fRimLightcolor, fRimLightcolor, 1.0f);
 	return vFinalColor;
 }
 float Geom(VS_OUTPUT vIn)
 {
 	float3 vReflect = normalize(-g_vLightDir + -g_vEyeDir);
-	float fDot  = pow(saturate(dot(vIn.n, vReflect)), 1);
+	float fDot = pow(saturate(dot(vIn.n, vReflect)), 1);
 
 	float NdotL = saturate(dot(vIn.n, -g_vLightDir));
 	float NdotH = saturate(dot(vIn.n, vReflect));

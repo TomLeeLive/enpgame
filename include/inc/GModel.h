@@ -1,5 +1,6 @@
 #pragma once
 #include "GObjStd.h"
+#include "GLight.h"
 #include <tchar.h>
 class GMesh;
 class GModel;
@@ -32,29 +33,12 @@ struct TObjWM
 	}
 };
 
-//조명 [Start]
-struct LIGHT_CONSTANT_BUFFER
-{
-	D3DXMATRIX			g_matInvWorld;
-	// Material
-	D3DXVECTOR4			g_cAmbientMaterial;
-	D3DXVECTOR4			g_cDiffuseMaterial;
-	D3DXVECTOR4			g_cSpecularMaterial;
-	D3DXVECTOR4			g_cEmissionMaterial;
-	// Light
-	D3DXVECTOR4			g_cAmbientLightColor;
-	D3DXVECTOR4			g_cDiffuseLightColor;
-	D3DXVECTOR4			g_cSpecularLightColor;
-	D3DXVECTOR4			g_vLightDir; // w = light damping(attenuation) : 감쇠
-	D3DXVECTOR4			g_vLightPos; // w = light radius
-	D3DXVECTOR4			g_vEyeDir;// w = light intensity : 강도
-	D3DXVECTOR4			g_vEyePos;// w = light radius	
-};
-//조명 [End]
+
 
 class GModel
 {
 public:
+	G_LIGHT_TYPE	m_LightType;
 	//조명 [Start]
 	D3DXVECTOR3		m_vLightVector;
 	LIGHT_CONSTANT_BUFFER m_cbLight;
@@ -95,6 +79,7 @@ public:
 	virtual void				SetAmbientColor(float fR, float fG, float fB, float fA);
 	virtual bool				Convert(ID3D11Device* pDevice);
 	virtual bool				Load(ID3D11Device* pDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, bool bThread = false);
+	virtual bool				Load(ID3D11Device* pDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, G_LIGHT_TYPE type);
 	virtual HRESULT				LoadShaderFile(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile);
 	virtual HRESULT				SetInputLayout();
 	virtual bool				CreateVertexData();
@@ -108,7 +93,8 @@ public:
 	virtual bool				UpdateBuffer();
 	virtual void				ObjectFrame(TObjFrame* pObjFrame, float fTickFrame) {};
 	virtual void				ObjectRender(ID3D11DeviceContext*    pContext, TObjFrame* pObjFrame) {};
-	virtual bool				Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile, const TCHAR* pLoadTextureString = 0);
+	virtual bool				Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile, G_LIGHT_TYPE type, const TCHAR* pLoadTextureString = 0);
+	virtual bool				Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile,const TCHAR* pLoadTextureString = 0);
 	virtual bool				Init();
 	virtual bool				Frame();
 	virtual bool				PreRender(ID3D11DeviceContext* pContext);
