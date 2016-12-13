@@ -15,7 +15,7 @@ cbuffer cb0: register (b0)
 	matrix	g_matProj		: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
-cbuffer cb1: register (b1)
+cbuffer cb1: register (b2)
 {
 	float4x4		g_matShadow: packoffset(c0);
 	float			g_iObjectID : packoffset(c4.x);
