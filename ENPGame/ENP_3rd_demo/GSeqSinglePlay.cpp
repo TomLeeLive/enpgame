@@ -3,8 +3,8 @@
 GSeqSinglePlay * GSeqSinglePlay::pInstance_ = 0;
 
 //±×¸²ÀÚ [Start]
-const float g_fMaxSize = 1024;
 #ifdef G_DEFINE_SHADOW
+const float g_fMaxSize = 1024;
 void GSeqSinglePlay::RenderObject(D3DXMATRIX* matView, D3DXMATRIX* matProj)
 {
 	D3DXMATRIX matInvView;
