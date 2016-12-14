@@ -979,6 +979,13 @@ bool        GSeqSinglePlay::FrameGame() {
 		ShowCursor(true);
 	}
 
+	//1인칭 샷것 스페큘러 값 업데이트를 위해..
+	if (m_ObjGun.m_LightType == G_LIGHT_TYPE_SPECULAR) {
+		m_ObjGun.m_cbLight.g_vEyeDir.x = m_pCamera->m_vLookVector.x;
+		m_ObjGun.m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
+		m_ObjGun.m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
+	}
+
 	//디버그 모드 토글
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
 
@@ -1225,8 +1232,10 @@ bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	m_Objbit.reset();
 
+
+
 	for (int i = 0; i < G_OBJ_CNT; i++)
-	{
+	{		
 		if(m_Obj[i]->m_LightType == G_LIGHT_TYPE_SPECULAR)
 		{
 			//스페큘러 값 업데이트를 위해..
