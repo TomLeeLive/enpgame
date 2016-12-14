@@ -2,16 +2,10 @@
 GProjMain* g_pMain;
 
 
-
-
-
-
 bool GProjMain::Init()
 {
 
 	m_GAIZombMgr.Init();
-
-	//m_fSecondPerFrmae = g_fSecPerFrame;
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -74,11 +68,6 @@ bool GProjMain::Render()
 	m_Box->Render(m_pImmediateContext);
 
 	m_GAIZombMgr.Render(m_pMainCamera.get());
-	//for (int i = 0; i < m_Zomb.size(); i++)
-	//{
-	//	m_Zomb[i]->Render();
-	//}
-	
 	return true;
 }
 bool GProjMain::Release()

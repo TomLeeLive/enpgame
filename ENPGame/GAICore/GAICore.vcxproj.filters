@@ -13,14 +13,55 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+<<<<<<< HEAD
+    <Filter Include="Zombie">
+      <UniqueIdentifier>{63b72abc-91ce-4a40-b381-07679d6ba3c8}</UniqueIdentifier>
+=======
     <Filter Include="AISeq">
       <UniqueIdentifier>{0f155667-23b4-4ab7-a876-7b3aec810f51}</UniqueIdentifier>
+>>>>>>> 50577fc5ff386d39f2a96bcc887060f4e69738b1
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <ClInclude Include="_ai_std.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIAttack.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIDie.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIFollow.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIIdle.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIMove.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GAISeq.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIZombieMgr.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="GNewZombie.h">
+      <Filter>Zombie</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GAIAttack.cpp">
+      <Filter>Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIDie.cpp">
+      <Filter>Zombie</Filter>
+=======
     <ClInclude Include="GAIZombieMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -55,6 +96,7 @@
     </ClCompile>
     <ClCompile Include="GNewZombie.cpp">
       <Filter>소스 파일</Filter>
+>>>>>>> 50577fc5ff386d39f2a96bcc887060f4e69738b1
     </ClCompile>
     <ClCompile Include="GAIAttack.cpp">
       <Filter>AISeq</Filter>
@@ -63,6 +105,24 @@
       <Filter>AISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIFollow.cpp">
+<<<<<<< HEAD
+      <Filter>Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIIdle.cpp">
+      <Filter>Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIMove.cpp">
+      <Filter>Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="GAISeq.cpp">
+      <Filter>Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIZombieMgr.cpp">
+      <Filter>Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="GNewZombie.cpp">
+      <Filter>Zombie</Filter>
+=======
       <Filter>AISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIIdle.cpp">
@@ -73,6 +133,7 @@
     </ClCompile>
     <ClCompile Include="GAISeq.cpp">
       <Filter>AISeq</Filter>
+>>>>>>> 50577fc5ff386d39f2a96bcc887060f4e69738b1
     </ClCompile>
   </ItemGroup>
 </Project>

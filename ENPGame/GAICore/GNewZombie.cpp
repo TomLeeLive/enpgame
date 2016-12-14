@@ -8,29 +8,29 @@ void		GNewZombie::ChangeZombState(GNewZombie* iNum, G_AI state) {
 	GCharacter* pChar0 = NULL;
 
 	switch (state) {
-	case 	G_ZOMB_ST_WALK: {
+	case 	G_ZOMB_AI_ST_WALK: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
-		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_WALK];
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_WALK];
 	}
 							break;
-	case 	G_ZOMB_ST_IDLE: {
+	case 	G_ZOMB_AI_ST_IDLE: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
-		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_IDLE];
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_IDLE];
 	}
 							break;
-	case 	G_ZOMB_ST_ATTACK: {
+	case 	G_ZOMB_AI_ST_ATTACK: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
-		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_ATTACK];
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_ATTACK];
 	}
 							  break;
-	case 	G_ZOMB_ST_DEAD: {
+	case 	G_ZOMB_AI_ST_DEAD: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
-		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_DEAD];
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_DEAD];
 	}
 							break;
-	case 	G_ZOMB_ST_FOLLOW: {
+	case 	G_ZOMB_AI_ST_FOLLOW: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_FLW);
-		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_ST_FOLLOW];
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_FOLLOW];
 	}
 							  break;
 	}
