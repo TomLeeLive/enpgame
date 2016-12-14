@@ -30,6 +30,7 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 		//p_CParctice->m_EffMgr.GetStringWeNeed(tchr, tchr);
 		//m_ImageList.push_back(strFile->c_str());
 
+		// 애니메이션 관련, 가로4x4
 		Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
 		/*
 		// 애니메이션 관련, Width x Height
@@ -152,13 +153,14 @@ void KEffManager::Load(T_STR* strFile) {
 
 		float fTime = _ttof(vecStr[iItem + 3]);
 
+		/*
 		CString strWid, strWidSize, strHeight, strHeightSize;
 
 		ExtractSubString(strWid,vecStr[iItem + 4], 0, '/');
 		ExtractSubString(strWidSize,vecStr[iItem + 4], 1, '/');
 		ExtractSubString(strHeight,vecStr[iItem + 4], 2, '/');
 		ExtractSubString(strHeightSize,vecStr[iItem + 4], 3, '/');
-
+		*/
 
 
 
@@ -170,12 +172,14 @@ void KEffManager::Load(T_STR* strFile) {
 		fSclY = _wtof(strSclY);
 		fSclZ = _wtof(strSclZ);
 
+		/*
 		int  iWidth, iWidthSize, iHeight, iHeightSize;
 		
 		iWidth = _wtoi(strWid);
 		iWidthSize = _wtoi(strWidSize);
 		iHeight= _wtoi(strHeight);
 		iHeightSize= _wtoi(strHeightSize);
+		*/
 
 		if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BULLET")) {
 			//Create(G_EFFECT_BULLET, &imgFile,  D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime, iWidth, iWidthSize, iHeight, iHeightSize);

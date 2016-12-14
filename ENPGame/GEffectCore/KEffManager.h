@@ -7,7 +7,7 @@
 #include "GCamera.h"
 #include "KEffect.h"
 
-#define G_EFF_ITEM_INFO_LINES 5
+#define G_EFF_ITEM_INFO_LINES 4
 
 enum G_EFF_TOOL_EXT {
 	G_EFF_TOOL_EXT1,//.eff
