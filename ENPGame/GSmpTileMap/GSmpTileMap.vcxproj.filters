@@ -15,34 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="GProjMain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GTileMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GSprite.h">
+    <ClInclude Include="GProjMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GSpriteMgr.h">
+    <ClInclude Include="_stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="KEffect.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="KEffManager.h">
+    <ClInclude Include="GTileMap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GSprite.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GSpriteMgr.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="KEffect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="KEffManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <FxCompile Include="..\..\Output\data\shader\CustomizeMap.hlsl" />
   </ItemGroup>
 </Project>

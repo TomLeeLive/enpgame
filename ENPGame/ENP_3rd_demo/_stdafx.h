@@ -80,6 +80,7 @@
 #include "GN2Skybox.h"
 #include "map/GMap.h"
 #include "map/GHeightMap.h"
+#include "GTileMap.h"
 #include "map/GQuadTree.h"
 #include "map/GMapObject.h"
 #endif

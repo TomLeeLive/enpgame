@@ -144,6 +144,7 @@
     <ClCompile Include="GSeqSurvivalMode.cpp" />
     <ClCompile Include="GN2Skybox.cpp" />
     <ClCompile Include="GSound.cpp" />
+    <ClCompile Include="GTileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GFPSCamera.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="GSeqSurvivalMode.h" />
     <ClInclude Include="GN2Skybox.h" />
     <ClInclude Include="GSound.h" />
+    <ClInclude Include="GTileMap.h" />
     <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
     <ClInclude Include="_values.h" />

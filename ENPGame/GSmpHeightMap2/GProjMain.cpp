@@ -8,9 +8,9 @@ bool GProjMain::Init()
 	//카메라 생성
 	SAFE_NEW(m_pMainCamera, GCamera);
 
-	D3DXVECTOR3 vTargetPosition = D3DXVECTOR3(-1000.0f, -0.1f, 4500.0f);
+	D3DXVECTOR3 vTargetPosition = D3DXVECTOR3(-2000.0f, -0.1f, -4500.0f);
 	D3DXVECTOR3 vUpVector(0.0f, 1.0f, 0.0f);
-	D3DXVECTOR3 vCameraPosition = D3DXVECTOR3(-1000.0f, 1000.0f, -1000.0f);
+	D3DXVECTOR3 vCameraPosition = D3DXVECTOR3(-3500.0f, 1000.0f, 1000.0f);
 	// 메인 카메라 뷰 행렬 세팅
 	m_pMainCamera->SetViewMatrix(vCameraPosition, vTargetPosition, vUpVector);
 
@@ -63,16 +63,17 @@ bool GProjMain::Init()
 	//연구소 로드
 	m_Obj[G_OBJ_LAB] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
 	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB], 2, 2, 2);
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB], 0000.0f, 0.0f, 0000.0f);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB], -4000.0f, 0.0f, -4000.0f);
 	m_matObjWld[G_OBJ_LAB] = m_matObjScl[G_OBJ_LAB] * m_matObjRot[G_OBJ_LAB] * m_matObjTrans[G_OBJ_LAB];
 	//연구소 OBB 사이즈
 	((GGbsObj*)m_Obj[G_OBJ_LAB])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
 
 	//드롭십 로드
 	m_Obj[G_OBJ_DROPSHIP] = I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_DROPSHIP], 2.f, 2.f, 2.f);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_DROPSHIP], D3DXToRadian(45.0f + 180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_DROPSHIP], -1000.0f, 0.0f, -1000.0f);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_DROPSHIP], 3.f, 3.f, 3.f);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_DROPSHIP], D3DXToRadian(0.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_DROPSHIP], 5000.0f, 0.0f, 5000.0f);
 	m_matObjWld[G_OBJ_DROPSHIP] = m_matObjScl[G_OBJ_DROPSHIP] * m_matObjRot[G_OBJ_DROPSHIP] * m_matObjTrans[G_OBJ_DROPSHIP];
 	//드롭십 OBB 사이즈
 	((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(D3DXVECTOR3(-42.0f, 0.0f, -75.0f), D3DXVECTOR3(42.0f, 60.0f, 115.0f));
@@ -225,17 +226,140 @@ bool GProjMain::Init()
 	m_matObjWld[G_OBJ_LAB14] = m_matObjScl[G_OBJ_LAB14] * m_matObjRot[G_OBJ_LAB14] * m_matObjTrans[G_OBJ_LAB14];
 	//연구소 OBB 사이즈
 	((GGbsObj*)m_Obj[G_OBJ_LAB14])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+	//-------------------------------------------------------------------------------------------------------------
+	//하단 가로 길 만들기
+	//-----------------------------------------------------------------------------------------------------------
 
+	// 16
+	m_Obj[G_OBJ_LAB16] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB16], 5, 1.7, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB16], D3DXToRadian(135.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB16], 2880.0f, 0.0f, -850.0f);
+	m_matObjWld[G_OBJ_LAB16] = m_matObjScl[G_OBJ_LAB16] * m_matObjRot[G_OBJ_LAB16] * m_matObjTrans[G_OBJ_LAB16];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB16])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 17 
+	m_Obj[G_OBJ_LAB17] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB17], 2, 2, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB17], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB17], 2250.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB17] = m_matObjScl[G_OBJ_LAB17] * m_matObjRot[G_OBJ_LAB17] * m_matObjTrans[G_OBJ_LAB17];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB17])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 18 
+	m_Obj[G_OBJ_LAB18] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB18], 4, 2.5, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB18], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB18], 1700.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB18] = m_matObjScl[G_OBJ_LAB18] * m_matObjRot[G_OBJ_LAB18] * m_matObjTrans[G_OBJ_LAB18];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB18])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 19
+	m_Obj[G_OBJ_LAB19] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB19], 4, 2, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB19], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB19], 950.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB19] = m_matObjScl[G_OBJ_LAB19] * m_matObjRot[G_OBJ_LAB19] * m_matObjTrans[G_OBJ_LAB19];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB19])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 20
+	m_Obj[G_OBJ_LAB20] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB20], 3, 2.5, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB20], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB20], 300.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB20] = m_matObjScl[G_OBJ_LAB20] * m_matObjRot[G_OBJ_LAB20] * m_matObjTrans[G_OBJ_LAB20];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB20])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 21
+	m_Obj[G_OBJ_LAB21] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB21], 2.7, 2, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB21], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB21], -200.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB21] = m_matObjScl[G_OBJ_LAB21] * m_matObjRot[G_OBJ_LAB21] * m_matObjTrans[G_OBJ_LAB21];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB21])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 22
+	m_Obj[G_OBJ_LAB22] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB22], 4, 2.3, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB22], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB22], -800.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB22] = m_matObjScl[G_OBJ_LAB22] * m_matObjRot[G_OBJ_LAB22] * m_matObjTrans[G_OBJ_LAB22];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB22])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 23
+	m_Obj[G_OBJ_LAB23] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB23], 3, 3, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB23], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB23], -1450.0f, 0.0f, -1250.0f);
+	m_matObjWld[G_OBJ_LAB23] = m_matObjScl[G_OBJ_LAB23] * m_matObjRot[G_OBJ_LAB23] * m_matObjTrans[G_OBJ_LAB23];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB23])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 24
+	m_Obj[G_OBJ_LAB24] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB24], 4, 3, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB24], D3DXToRadian(135.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB24], 3480.0f, 0.0f, -250.0f);
+	m_matObjWld[G_OBJ_LAB24] = m_matObjScl[G_OBJ_LAB24] * m_matObjRot[G_OBJ_LAB24] * m_matObjTrans[G_OBJ_LAB24];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB24])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 25
+	m_Obj[G_OBJ_LAB25] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB25], 7, 3, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB25], D3DXToRadian(135.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB25], 4250.0f, 0.0f, 450.0f);
+	m_matObjWld[G_OBJ_LAB25] = m_matObjScl[G_OBJ_LAB25] * m_matObjRot[G_OBJ_LAB25] * m_matObjTrans[G_OBJ_LAB25];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB25])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+	
+	//-------------------------------------------------------------------------------------------------------------
+	//하단 세로길 만들기
+	//-------------------------------------------------------------------------------------------------------------
 	// 15
 	m_Obj[G_OBJ_LAB15] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB15], 2, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB15], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB15], 0000.0f, 0.0f, 0000.0f);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB15], 2, 2, 3);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB15], D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB15], -1900.0f, 0.0f, -1350.0f);
 	m_matObjWld[G_OBJ_LAB15] = m_matObjScl[G_OBJ_LAB15] * m_matObjRot[G_OBJ_LAB15] * m_matObjTrans[G_OBJ_LAB15];
 	//연구소 OBB 사이즈
 	((GGbsObj*)m_Obj[G_OBJ_LAB15])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
 
+	// 26
+	m_Obj[G_OBJ_LAB26] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB26], 3.5, 2, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB26], D3DXToRadian(90.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB26], -1900.0f, 0.0f, -2050.0f);
+	m_matObjWld[G_OBJ_LAB26] = m_matObjScl[G_OBJ_LAB26] * m_matObjRot[G_OBJ_LAB26] * m_matObjTrans[G_OBJ_LAB26];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB26])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 27
+	m_Obj[G_OBJ_LAB27] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB27], 4, 1.5, 2);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB27], D3DXToRadian(90.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB27], -1900.0f, 0.0f, -2750.0f);
+	m_matObjWld[G_OBJ_LAB27] = m_matObjScl[G_OBJ_LAB27] * m_matObjRot[G_OBJ_LAB27] * m_matObjTrans[G_OBJ_LAB27];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB27])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
+
+	// 28
+	m_Obj[G_OBJ_LAB28] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB28], 10, 2, 3);
+	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB28], D3DXToRadian(90.0f));
+	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB28], -1800.0f, 0.0f, -4000.0f);
+	m_matObjWld[G_OBJ_LAB28] = m_matObjScl[G_OBJ_LAB28] * m_matObjRot[G_OBJ_LAB28] * m_matObjTrans[G_OBJ_LAB28];
+	//연구소 OBB 사이즈
+	((GGbsObj*)m_Obj[G_OBJ_LAB28])->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
 	
+
 	for (int i = 0; i < G_OBJ_CNT; i++) 
 	{
 

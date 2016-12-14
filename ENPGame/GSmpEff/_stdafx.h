@@ -8,7 +8,7 @@
 #endif
 
 //#include "KEffect.h"
-#include "EffManager.h"
+#include "KEffManager.h"
 #include "GCamera.h"
 #include "GProjMain.h"
 

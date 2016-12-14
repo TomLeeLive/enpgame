@@ -7,7 +7,7 @@
 #include "GCamera.h"
 #include "KEffect.h"
 
-#define G_EFF_ITEM_INFO_LINES 5
+#define G_EFF_ITEM_INFO_LINES 4
 
 enum G_EFF_TOOL_EXT {
 	G_EFF_TOOL_EXT1,//.eff
@@ -16,7 +16,7 @@ enum G_EFF_TOOL_EXT {
 
 using namespace std;
 
-class EffManager
+class KEffManager
 {
 public:
 	BOOL ExtractSubString(CString& rString, LPCTSTR lpszFullString,
@@ -45,7 +45,7 @@ public:
 	virtual HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual HRESULT		DeleteResource();
 public:
-	EffManager();
-	virtual ~EffManager();
+	KEffManager();
+	virtual ~KEffManager();
 };
 
