@@ -122,6 +122,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpVolumeShadow", "GSmpVol
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSmpBBoxCol2", "GSmpBBoxCol2\GSmpBBoxCol2.vcxproj", "{D427F7BB-E072-403A-9C7A-A04F1E1107DC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestZombie", "TestZombie\ENP_3rd_demo\ENP_3rd_demo.vcxproj", "{151D1864-5A13-4412-A5A1-4230B88A9633}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -656,6 +658,16 @@ Global
 		{D427F7BB-E072-403A-9C7A-A04F1E1107DC}.Release|x64.Build.0 = Release|x64
 		{D427F7BB-E072-403A-9C7A-A04F1E1107DC}.Release|x86.ActiveCfg = Release|Win32
 		{D427F7BB-E072-403A-9C7A-A04F1E1107DC}.Release|x86.Build.0 = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Debug|x64.ActiveCfg = Debug|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Debug|x86.ActiveCfg = Debug|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Debug|x86.Build.0 = Debug|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Hybrid|x64.ActiveCfg = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Hybrid|x64.Build.0 = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Hybrid|x86.ActiveCfg = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Hybrid|x86.Build.0 = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Release|x64.ActiveCfg = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Release|x86.ActiveCfg = Release|Win32
+		{151D1864-5A13-4412-A5A1-4230B88A9633}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,7 @@ class GAIZombieMgr
 public:
 
 
-	vector<shared_ptr<GNewZombie>> m_Zomb;
+	list<shared_ptr<GNewZombie>> m_Zomb;
 	bool Load();
 
 
