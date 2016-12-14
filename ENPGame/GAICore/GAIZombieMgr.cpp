@@ -30,22 +30,16 @@ bool GAIZombieMgr::Load(int iNum)
 			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 			pChar0->m_pBoneObject->m_Scene.iLastFrame);
 
-		m_Zomb.push_back(pObjA);
-	}
-
-	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
-	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
-
-	for (; _F != _L; ++_F)
-	{
-		(*_F)->Init();
+		pObjA->Init();
 		for (int j = 0; j < G_AI_CNT; j++)
 		{
-			(*_F)->m_GameSeq[j]->Init((*_F).get());
+			pObjA->m_GameSeq[j]->Init(pObjA.get());
 		}
-
+	
 		//OBB ¹Ú½º Init.
-		(*_F)->m_OBB.Init((*_F)->m_pChar->m_vMin, (*_F)->m_pChar->m_vMax);
+		pObjA->m_OBB.Init(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
+
+		m_Zomb.push_back(pObjA);
 	}
 
 	return true;
@@ -54,7 +48,7 @@ bool		GAIZombieMgr::Init(int iNum) {
 
 	srand((unsigned)time(NULL));
 
-	I_CharMgr.Init();
+//	I_CharMgr.Init();
 	Load(iNum);
 
 #ifdef G_MACRO_TESTCODE_ADD

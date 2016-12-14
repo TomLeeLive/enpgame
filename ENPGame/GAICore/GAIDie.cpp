@@ -9,7 +9,7 @@ bool GAIDie::Init(GNewZombie* iMyIndex)
 }
 bool GAIDie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 {
-	iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
+	//iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
 	
 	return true;
 }

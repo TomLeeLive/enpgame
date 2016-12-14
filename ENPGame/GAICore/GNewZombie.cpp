@@ -12,27 +12,27 @@ void		GNewZombie::ChangeZombState(GNewZombie* iNum, G_AI state) {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
 		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_WALK];
 	}
-							break;
+	break;
 	case 	G_ZOMB_AI_ST_IDLE: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
 		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_IDLE];
 	}
-							break;
+	break;
 	case 	G_ZOMB_AI_ST_ATTACK: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
 		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_ATTACK];
 	}
-							  break;
+	break;
 	case 	G_ZOMB_AI_ST_DEAD: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
 		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_DEAD];
 	}
-							break;
+	break;
 	case 	G_ZOMB_AI_ST_FOLLOW: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_FLW);
 		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_ZOMB_AI_ST_FOLLOW];
 	}
-							  break;
+	break;
 	}
 
 	iNum->Set(pChar0,
@@ -144,7 +144,15 @@ bool	GNewZombie::Init()
 bool	GNewZombie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 {
 	GZombie::Frame();
-	
+
+	if (m_State == G_AI_DIE)
+		m_bDead = true;
+	else
+		m_bDead = false;
+
+	//if( true == m_bDead)
+	//	iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
+
 	m_pCurrentSeq->Frame(iMyIndex, matHeroWorld);
 
 	return true;

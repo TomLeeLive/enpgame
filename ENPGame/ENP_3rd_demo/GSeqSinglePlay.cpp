@@ -241,7 +241,22 @@ bool GSeqSinglePlay::FrameGun() {
 		m_Ray.fExtent = 50.0f;
 
 #ifdef G_MACRO_AI_ADD
+		list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();
+		list<shared_ptr<GNewZombie>>::iterator _L = m_GAIZombMgr.m_Zomb.end();
+		for (; _F != _L; ++_F)
+		{
 
+			if ((*_F)->m_bDead == false) {
+				if (ChkOBBToRay(&(*_F)->m_OBB, &m_Ray))
+				{
+					m_iScore += G_DEFINE_SCORE_BASIC;
+
+					//To-Do 아래 변수를 이용해서 이펙트를 터뜨려야함.
+					//m_Select.m_vIntersection
+					(*_F)->ChangeZombState((*_F).get(), G_DEFINE_ANI_ZOMB_DIE);
+				}
+			}	
+		}
 #else
 		for (int i = 0; i < m_CharZombie.size();i++) {
 			if (m_CharZombie[i].get()->m_bDead == false) {
@@ -300,6 +315,38 @@ bool GSeqSinglePlay::FrameGun() {
 bool GSeqSinglePlay::Frame()
 {
 #ifdef G_MACRO_AI_ADD
+
+	int  iZombieAliveCnt = 0;
+
+	list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_GAIZombMgr.m_Zomb.end();
+	for (; _F != _L; ++_F)
+	{
+		if ((*_F)->m_bDead == false)
+			iZombieAliveCnt++;
+	}
+
+	if (iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
+		AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
+
+
+	_F = m_GAIZombMgr.m_Zomb.begin();
+	_L = m_GAIZombMgr.m_Zomb.end();
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		
+		for (; _F != _L; ++_F)
+		{
+			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &(*_F)->m_OBB)) {
+				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
+
+				m_CharHero[i].get()->m_iHP -= 1;
+			}
+			else {
+			}
+		}
+
+	}
 #else
 	int  iZombieAliveCnt = 0;
 	for (int i = 0; i < m_CharZombie.size(); i++) {
@@ -1375,9 +1422,6 @@ bool		GSeqSinglePlay::RenderChar() {
 		{
 			(*_F)->m_OBB.Render(&(*_F)->m_matZombWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
-		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
-			m_CharHero[iChar].get()->m_OBB.Render(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-		}
 	}
 #else
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
@@ -1391,11 +1435,14 @@ bool		GSeqSinglePlay::RenderChar() {
 		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++) {
 			m_CharZombie[iChar].get()->m_OBB.Render(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
+	}
+#endif
+
+	if (m_bDebugMode) {
 		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
 			m_CharHero[iChar].get()->m_OBB.Render(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 	}
-#endif
 	
 
 #endif
@@ -1563,6 +1610,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 #ifdef G_MACRO_AI_ADD
 	m_GAIZombMgr.Init(iNum);
 #else
+
 	for (int i = 0; i < iNum; i++) {
 		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
@@ -1653,12 +1701,16 @@ bool GSeqSinglePlay::Load()
 		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
 	}
 #else
+
+#ifdef G_MACRO_AI_ADD
+#else
 	//좀비 로드
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci") /*_T("data/CharTable.gci")*/))
 	{
 		return false;
 	}
-
+#endif
+	//좀비 로드
 	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
 
 
