@@ -11,6 +11,8 @@ public:
 public:
 	G_AI m_State;
 public:
+
+	int m_iNum;
 	G_AI getState() { return m_State; }
 	void setState(G_AI state) { m_State = state; }
 	
@@ -28,6 +30,7 @@ public:
 	
 public:
 	GNewZombie();
+	GNewZombie(int iNum);
 	~GNewZombie();
 };
 

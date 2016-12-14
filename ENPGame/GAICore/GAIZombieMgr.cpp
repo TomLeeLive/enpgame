@@ -3,7 +3,7 @@
 
 
 
-bool GAIZombieMgr::Load()
+bool GAIZombieMgr::Load(int iNum)
 {
 
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci")))
@@ -11,7 +11,7 @@ bool GAIZombieMgr::Load()
 		return false;
 	}
 
-	for (int i = 0; i < G_DEFINE_MAX_AI_ZOMBIE; i++) {
+	for (int i = 0; i < iNum; i++) {
 		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 
 		shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
@@ -19,6 +19,10 @@ bool GAIZombieMgr::Load()
 
 		pObjA->m_matZombWld._41 = (rand() * 3) % 303;
 		pObjA->m_matZombWld._43 = (rand() * 3) % 303;
+
+		TCHAR buf[256];
+		_stprintf_s(buf, _countof(buf), _T("x:%f, z:%f\n"), pObjA->m_matZombWld._41, pObjA->m_matZombWld._43);
+		OutputDebugString(buf);
 
 		//pObjA->m_vZombPos.x = pObjA->m_matZombWld._41;
 		//pObjA->m_vZombPos.y = 0.0f;
@@ -31,29 +35,46 @@ bool GAIZombieMgr::Load()
 		m_Zomb.push_back(pObjA);
 	}
 
+	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
+
+	for (; _F != _L; ++_F)
+	{
+		(*_F)->Init();
+		for (int j = 0; j < G_AI_CNT; j++)
+		{
+			(*_F)->m_GameSeq[j]->Init((*_F).get());
+		}
+	}
+
 	return true;
 }
-bool		GAIZombieMgr::Init() { 
+bool		GAIZombieMgr::Init(int iNum) { 
+
 	srand((unsigned)time(NULL));
 
 	I_CharMgr.Init();
-	Load();
+	Load(iNum);
 
 #ifdef G_MACRO_TESTCODE_ADD
-	auto a = m_Zomb.begin();
 
-	std::advance(a, 1);
-	(*a)->Init();
-	//(*a)->
-
-	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
+	/*for (int i = 0; i < iNum; i++)
 	{
-		(*a)->Init();
+		auto pZomb = make_shared<GNewZombie>(i);
+		m_Zomb.push_back(pZomb);
+
+	}
+	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
+
+	for (; _F != _L; ++_F)
+	{
+		(*_F)->Init();
 		for (int j = 0; j < G_AI_CNT; j++)
 		{
-			(*a)->m_GameSeq[j]->Init((*a).get());
+			(*_F)->m_GameSeq[j]->Init((*_F).get());
 		}
-	}
+	}*/
 #else
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
@@ -64,18 +85,26 @@ bool		GAIZombieMgr::Init() {
 	}
 
 	}
+
+
+	
 #endif
 	
 	
 
 	
 	return true; };
+
 bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
 
 #ifdef G_MACRO_TESTCODE_ADD
-	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
+
+
+	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
+	for (; _F != _L; ++_F)
 	{
-		(*a)->Frame((*a).get(), matHeroWorld);
+		(*_F)->Frame((*_F).get(), matHeroWorld);
 	}
 #else
 	for (int i = 0; i < m_Zomb.size(); i++)
@@ -84,17 +113,17 @@ bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
 	}
 #endif
 
-	
-
-
-
 	return true; };
+
 bool		GAIZombieMgr::Render(GCamera* camera) {
 	
 #ifdef G_MACRO_TESTCODE_ADD
-	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
+	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
+	for (; _F != _L; ++_F)
 	{
-		(*a)->SetMatrix(&(*a)->m_matZombWld, &camera->m_matView, &camera->m_matProj);
+		(*_F)->SetMatrix(&(*_F)->m_matZombWld, &camera->m_matView, &camera->m_matProj);
+		(*_F)->Render();
 	}
 #else
 	for (int i = 0; i < m_Zomb.size(); i++)
@@ -122,9 +151,12 @@ HRESULT		GAIZombieMgr::CreateResource() {
 	
 
 #ifdef G_MACRO_TESTCODE_ADD
-	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
+
+	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
+	for (; _F != _L; ++_F)
 	{
-		(*a)->CreateResource();
+		(*_F)->CreateResource();
 	}
 #else
 	for (int i = 0; i < m_Zomb.size(); i++)

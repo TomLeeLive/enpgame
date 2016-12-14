@@ -1,6 +1,6 @@
 #pragma once
 
-//#define G_MACRO_TESTCODE_ADD 1
+#define G_MACRO_TESTCODE_ADD 1
 
 
 class GAIZombieMgr
@@ -10,14 +10,14 @@ public:
 #ifdef G_MACRO_TESTCODE_ADD
 	list<shared_ptr<GNewZombie>> m_Zomb;
 #else
-	vector<shared_ptr<GNewZombie>> m_Zomb;
+	list<shared_ptr<GNewZombie>> m_Zomb;
 #endif
 	
-	bool Load();
+	bool Load(int iNum);
 
 
 public:
-	bool		Init();
+	bool		Init(int iNum);
 	bool		Frame(D3DXMATRIX matHeroWorld);
 	bool		Render(GCamera* camera);
 	bool		Release();

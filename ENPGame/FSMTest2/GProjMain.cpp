@@ -5,7 +5,7 @@ GProjMain* g_pMain;
 bool GProjMain::Init()
 {
 
-	m_GAIZombMgr.Init();
+	m_GAIZombMgr.Init(4);
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -17,7 +17,7 @@ bool GProjMain::Init()
 	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 	SAFE_NEW(m_Box, GBoxShape);
-	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/flagstone.bmp");
+	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data_test/flagstone.bmp");
 	D3DXMatrixIdentity(&m_matBoxWorld);
 	D3DXMatrixScaling(&m_matBoxWorld, 10.0f, 10.0f, 10.0f);
 

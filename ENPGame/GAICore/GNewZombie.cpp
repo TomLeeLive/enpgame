@@ -161,10 +161,17 @@ bool	GNewZombie::Release()
 
 
 	
-	
+GNewZombie::GNewZombie(int iNum) {
+	m_iNum = iNum;
+	D3DXMatrixIdentity(&m_matZombWld);
+
+	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+	m_State = G_AI_MOVE;
+	D3DXMatrixIdentity(&m_matZombWld);
+}
 GNewZombie::GNewZombie()
 {
-
+	m_iNum = 0;
 	D3DXMatrixIdentity(&m_matZombWld);
 	
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);

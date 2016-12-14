@@ -15,7 +15,7 @@ public:
 	//	if (pInstance_ == 0) pInstance_ = new GAIFollow;
 	//	return pInstance_;
 	//}
-	shared_ptr<GCamera > m_pMainCamera;
+	//shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
 	bool Init(GNewZombie* iMyIndex);
