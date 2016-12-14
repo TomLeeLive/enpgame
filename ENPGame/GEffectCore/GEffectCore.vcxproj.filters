@@ -24,10 +24,10 @@
     <ClInclude Include="GSpriteMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EffManager.h">
+    <ClInclude Include="KEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="KEffect.h">
+    <ClInclude Include="KEffManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClCompile Include="GSpriteMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EffManager.cpp">
+    <ClCompile Include="KEffect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="KEffect.cpp">
+    <ClCompile Include="KEffManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

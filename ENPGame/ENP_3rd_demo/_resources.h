@@ -16,6 +16,7 @@ enum SNDRESOURCES {
 #define G_OBJ_LOC_LAB _T("data/object/lab/lab.GBS")
 #define G_OBJ_LOC_DROPSHIP_LAND _T("data/object/dropship/dropship_land.GBS")
 #define G_OBJ_LOC_CAR _T("data/object/car/car.GBS")
+#define G_OBJ_LOC_FPS_SHOTGUN _T("data/object/fps_shotgun/shotgun3.GBS")
 
 //오브젝트 매니저 등록 이름.
 #define G_OBJ_NAME_LAB L"lab.GBS"

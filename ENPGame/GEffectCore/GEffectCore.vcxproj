@@ -160,16 +160,16 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EffManager.h" />
     <ClInclude Include="GSprite.h" />
     <ClInclude Include="GSpriteMgr.h" />
     <ClInclude Include="KEffect.h" />
+    <ClInclude Include="KEffManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EffManager.cpp" />
     <ClCompile Include="GSprite.cpp" />
     <ClCompile Include="GSpriteMgr.cpp" />
     <ClCompile Include="KEffect.cpp" />
+    <ClCompile Include="KEffManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,7 +8,7 @@
 #include "GTimer.h"
 #include "GCamera.h"
 #include "KEffect.h"
-#include "EffManager.h"
+#include "KEffManager.h"
 
 
 
