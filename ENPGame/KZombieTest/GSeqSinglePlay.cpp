@@ -2,6 +2,94 @@
 
 GSeqSinglePlay * GSeqSinglePlay::pInstance_ = 0;
 
+//그림자 [Start]
+#ifdef G_DEFINE_SHADOW
+const float g_fMaxSize = 1024;
+void GSeqSinglePlay::RenderObject(D3DXMATRIX* matView, D3DXMATRIX* matProj)
+{
+	D3DXMATRIX matInvView;
+	ApplySS(g_pMain->GetContext(), GDxState::g_pSSClampLinear, 1);
+	ApplySS(g_pMain->GetContext(), GDxState::g_pSSShadowMap, 2);
+	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
+
+	/*
+	m_pBoxShape->PreRender(g_pMain->GetContext());
+	for (int iObj = 0; iObj < MAX_OBJECT_CNT; iObj++)
+	{
+		D3DXMatrixInverse(&matInvView, 0, matView);
+		D3DXMATRIX matWVPT1 = m_matWorld[iObj] * m_matShadowView * m_matShadowProj * m_matTexture;
+		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+		m_cbShadow.g_ShadowID = m_fObjID[iObj];
+		m_cbShadow.g_iNumKernel = 3;
+		g_pMain->GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		g_pMain->GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		g_pMain->GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		g_pMain->GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
+		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);
+		m_pBoxShape->PostRender(g_pMain->GetContext());
+	}
+	*/
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		D3DXMatrixInverse(&matInvView, 0, matView);
+		D3DXMATRIX matWVPT1 = m_matObjWld[i] * m_matShadowView * m_matShadowProj * m_matTexture;
+		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+		m_cbShadow.g_ShadowID = m_fObjID[i];
+		m_cbShadow.g_iNumKernel = 3;
+		g_pMain->GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		g_pMain->GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		g_pMain->GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		g_pMain->GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
+		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_Obj[i]->PostRender(g_pImmediateContext);
+	}
+}
+void GSeqSinglePlay::RenderShadow(D3DXMATRIX* matShadow,
+	D3DXMATRIX* matView, D3DXMATRIX* matProj)
+{
+	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthEnable);
+	//ApplyRS(GetContext(), TDxState::g_pRSBackCullSolid);
+	ApplyBS(g_pMain->GetContext(), GDxState::g_pAlphaBlend);
+	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSSlopeScaledDepthBias);
+
+	m_CustomMap.SetMatrix(NULL, matView, matProj);
+	m_CustomMap.PreRender(g_pMain->GetContext());
+	g_pMain->GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+	//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
+	// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
+	// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
+	g_pMain->GetContext()->PSSetShader(NULL, NULL, 0);
+	m_CustomMap.PostRender(g_pMain->GetContext());
+
+	/*
+	for (int iObj = 0; iObj < MAX_OBJECT_CNT; iObj++)
+	{
+		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);
+		m_pBoxShape->PreRender(g_pMain->GetContext());
+		g_pMain->GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+		//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
+		// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
+		// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
+		g_pMain->GetContext()->PSSetShader(NULL, NULL, 0);
+		m_pBoxShape->PostRender(g_pMain->GetContext());
+	}
+	*/
+	for (int i = 0; i < G_OBJ_CNT; i++)
+	{
+		m_Obj[i]->SetMatrix(&m_matObjWld[i], matView, matProj);
+		m_Obj[i]->PreRender(g_pMain->GetContext());
+		g_pMain->GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+		//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
+		// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
+		// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
+		g_pMain->GetContext()->PSSetShader(NULL, NULL, 0);
+		m_Obj[i]->PostRender(g_pMain->GetContext());
+	}
+}
+//그림자 [End]
+#endif
 
 bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
 {
@@ -70,6 +158,49 @@ bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
 
 bool GSeqSinglePlay::Init()
 {
+#ifdef G_DEFINE_SHADOW
+	//그림자 [Start]
+	SAFE_NEW(m_pQuad, GPlaneShape);
+	m_pQuad->SetScreenVertex(15, 15, 300, 300,
+		D3DXVECTOR2(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight));
+	if (FAILED(m_pQuad->Create(g_pd3dDevice, L"data/shader/plane.hlsl", L"data/castle.jpg")))
+	{
+		MessageBox(0, _T("m_pLIne 실패"), _T("Fatal error"), MB_OK);
+		return false;
+	}
+	ComPtr<ID3DBlob> pVSBlob;
+	m_pShadowVS.Attach(DX::LoadVertexShaderFile(g_pd3dDevice, L"data/shader_shadow/CustomizeMap_shadow.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
+	m_pShadowPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader_shadow/CustomizeMap_shadow.hlsl", "SHADOW_PS"));
+
+	// Create Source and Dest textures
+	m_RT.m_DSFormat = DXGI_FORMAT_R32_TYPELESS;
+	m_RT.Create(g_pd3dDevice, g_fMaxSize, g_fMaxSize);// m_bColorTexRender );
+
+													  //m_ShaderEditer.Create( L"CustomizeMap.fx", m_hWnd );
+	m_matTexture = D3DXMATRIX(0.5f, 0.0f, 0.0f, 0.0f
+		, 0.0f, -0.5f, 0.0f, 0.0f
+		, 0.0f, 0.0f, 1.0f, 0.0f
+		, 0.5f, 0.5f, 0.0f, 1.0f);
+	m_pShadowConstantBuffer.Attach(DX::CreateConstantBuffer(g_pd3dDevice, &m_cbShadow, 1, sizeof(SHADOW_CONSTANT_BUFFER)));
+
+
+	m_vLightPos = D3DXVECTOR3(15, 40, -35);
+
+	float fWidthLength = m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols*
+		m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols;
+	float fHeightLength = m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumRows*
+		m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumRows;
+
+	// 지형의 대각선의 길이, 텍스처에 적합하게 배치하려고 작업한다.
+	float fMaxViewDistance = sqrt(fWidthLength + fHeightLength);
+	//D3DXMatrixPerspectiveFovLH( &m_matShadowProj, D3DX_PI*0.25f, 1.0f, 20.0f, 200.0f );
+	//D3DXMatrixOrthoLH( &m_matShadowProj, fMaxViewDistance, fMaxViewDistance, 0.0f, 100.0f );
+	D3DXMatrixOrthoOffCenterLH(&m_matShadowProj,
+		-fMaxViewDistance / 2, fMaxViewDistance / 2, -fMaxViewDistance / 2, fMaxViewDistance / 2, 0.0f, 100.0f);
+	//그림자 [End]
+#endif
+
+
 	T_STR strFile;
 	m_UIManager.Init();
 	strFile = L"data/ui_singleplay.gui";
@@ -123,7 +254,7 @@ bool GSeqSinglePlay::FrameGun() {
 			}
 		}
 
-		for (int i = 0; i < G_HERO_CNT; i++) {
+		for (int i = 0; i < m_CharHero.size(); i++) {
 
 			if (i == m_CurrentHero)
 				continue;
@@ -201,10 +332,11 @@ bool GSeqSinglePlay::Frame()
 
 
 	FrameGame();
+	FrameChar();
 	FrameMap();
 	FrameObj();
 	FrameEffect();
-	FrameChar();
+
 
 	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
 
@@ -220,16 +352,68 @@ bool GSeqSinglePlay::Frame()
 
 bool GSeqSinglePlay::Render()
 {
-
-
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
 
+#ifdef G_DEFINE_SHADOW
+	//그림자 [Start]
+	ID3D11ShaderResourceView* pSRVs[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+	g_pMain->GetContext()->PSSetShaderResources(0, 16, pSRVs);
 
+	D3DXVECTOR4 vClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	D3DXVECTOR3 vLookat = D3DXVECTOR3(0, 0, 0);
+	D3DXVECTOR3 vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	//-----------------------------------------------------
+	// 지형 및 오브젝트의 그림자맵 생성
+	//-----------------------------------------------------		
+	if (m_RT.Begin(g_pImmediateContext, vClearColor))
+	{
+		D3DXMatrixLookAtLH(&m_matShadowView, &m_vLightPos, &vLookat, &vUp);
+		RenderShadow(NULL, &m_matShadowView, &m_matShadowProj);
+		m_RT.End(g_pImmediateContext);
+	}
+	////-----------------------------------------------------
+	//// 오브젝트 + 쉐도우 랜더링
+	////-----------------------------------------------------	
+	RenderObject(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	////-----------------------------------------------------
+	//// 1패스: 지형 + 쉐도우 랜더링
+	////-----------------------------------------------------		
+	ApplySS(g_pMain->GetContext(), GDxState::g_pSSClampLinear, 1);
+	ApplySS(g_pMain->GetContext(), GDxState::g_pSSShadowMap, 2);
+	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
 
+	m_CustomMap.SetMatrix(NULL, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	D3DXMATRIX matWVPT = m_matShadowView * m_matShadowProj * m_matTexture;
+	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT);
+	m_cbShadow.g_ShadowID = 0;
+	m_cbShadow.g_iNumKernel = 3;
+	g_pMain->GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+	g_pMain->GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	g_pMain->GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+
+	m_CustomMap.PreRender(g_pMain->GetContext());
+	g_pMain->GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+	m_CustomMap.PostRender(g_pMain->GetContext());
+
+	/////////////////////////////////////////
+	// 디버깅
+	/////////////////////////////////////////
+	if (m_bColorTexRender)
+	{
+		m_pQuad->SetMatrix(NULL, NULL, NULL);
+		m_pQuad->PreRender(g_pMain->GetContext());
+		//GetContext()->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
+		g_pMain->GetContext()->PSSetShaderResources(0, 1, m_RT.m_pDsvSRV.GetAddressOf());
+		m_pQuad->PostRender(g_pMain->GetContext());
+	}
+	//그림자 [End]
+#else
 	RenderMap();
 	RenderObj();
 	RenderChar();
+#endif
+
 	RenderGame();
 	
 	//render UI
@@ -237,12 +421,16 @@ bool GSeqSinglePlay::Render()
 
 	RenderEffect();
 
-
-
 	return true;
 }
 bool GSeqSinglePlay::Release()
 {
+#ifdef G_DEFINE_SHADOW
+	//그림자 [Start]
+	SAFE_DEL(m_pQuad);
+	//그림자 [End]
+#endif
+
 	ReleaseGame();
 	ReleaseMap();
 	ReleaseObj();
@@ -354,12 +542,24 @@ bool        GSeqSinglePlay::InitMap() {
 	}
 
 	m_HeightMap.m_bStaticLight = true;
+
+#ifdef G_DEFINE_SHADOW
 	TMapDesc MapDesc = {
 		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
 		//5,5,
 		30.0f, 1.0f,
 		L"data/Sand.jpg",
-		L"data/shader/CustomizeMap.hlsl" };
+		L"data/shader/CustomizeMap_shadow.hlsl" };
+#else
+	TMapDesc MapDesc = {
+		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
+		//5,5,
+		30.0f, 1.0f,
+		L"data/Sand.jpg",
+		L"data/shader/CustomizeMap_Light.hlsl" };
+#endif
+
+
 
 	if (!m_HeightMap.Load(MapDesc))
 	{
@@ -405,10 +605,19 @@ bool		GSeqSinglePlay::InitObj() {
 	//	m_Obj[i].Init();
 	//}
 
+#ifdef G_DEFINE_SHADOW
 	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_BOX);				if (iIndex < 0) return false;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_BOX);	if (iIndex < 0) return false;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_BOX);				if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_OBJ_SHADOW);			if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SHADOW);	if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_OBJ_SHADOW);				if (iIndex < 0) return false;
+#else
+	int iIndex = -1;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_OBJ_DIFFUSE_REVERSE);			if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);	if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
+#endif
+
+
 
 	//연구소 로드
 	m_Obj[G_OBJ_LAB] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
@@ -640,6 +849,24 @@ void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
 bool		GSeqSinglePlay::FrameChar() {
 #ifdef G_MACRO_CHAR_ADD
 
+	D3DXMATRIX matHeroWld[G_HERO_CNT];
+	D3DXMATRIX matHeroScl[G_HERO_CNT];
+	D3DXMATRIX matHeroRot[G_HERO_CNT];
+	D3DXMATRIX matHeroTrans[G_HERO_CNT];
+
+	for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
+		D3DXMatrixIdentity(&matHeroWld[iChar]);
+		D3DXMatrixIdentity(&matHeroScl[iChar]);
+		D3DXMatrixIdentity(&matHeroRot[iChar]);
+		D3DXMatrixIdentity(&matHeroTrans[iChar]);
+		D3DXMatrixTranslation(&matHeroTrans[iChar], m_pFPSCamera[iChar].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[iChar].get()->m_vCameraPos.z);
+		matHeroRot[iChar] = m_pFPSCamera[iChar].get()->GetRotMatY();
+
+		matHeroWld[iChar] = matHeroScl[iChar] * matHeroRot[iChar] * matHeroTrans[iChar];
+
+		m_CharHero[iChar]->m_matWorld = matHeroWld[iChar];
+	}
+
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
 		m_CharHero[iChar]->Frame();
@@ -715,9 +942,15 @@ bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	m_Objbit.reset();
 
-
 	for (int i = 0; i < G_OBJ_CNT; i++)
 	{
+		if(m_Obj[i]->m_LightType == G_LIGHT_TYPE_SPECULAR)
+		{
+			//스페큘러 값 업데이트를 위해..
+			m_Obj[i]->m_cbLight.g_vEyeDir.x = m_pCamera->m_vLookVector.x;
+			m_Obj[i]->m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
+			m_Obj[i]->m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
+		}
 		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
 
@@ -828,27 +1061,14 @@ bool		GSeqSinglePlay::RenderChar() {
 	//matCharWld = m_matWorld;
 	//matCharWld._42 = G_DEFINE_CHAR_Y_POS_OFFSET;
 
-	D3DXMATRIX matHeroWld[G_HERO_CNT];
-	D3DXMATRIX matHeroScl[G_HERO_CNT];
-	D3DXMATRIX matHeroRot[G_HERO_CNT];
-	D3DXMATRIX matHeroTrans[G_HERO_CNT];
 
-	for (int i = 0; i < G_HERO_CNT; i++){
-		D3DXMatrixIdentity(&matHeroWld[i]);
-		D3DXMatrixIdentity(&matHeroScl[i]);
-
-		D3DXMatrixIdentity(&matHeroTrans[i]);
-		D3DXMatrixTranslation(&matHeroTrans[i], m_pFPSCamera[i].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[i].get()->m_vCameraPos.z);
-		matHeroRot[i] = m_pFPSCamera[i].get()->GetRotMatY();
-
-		matHeroWld[i] = matHeroScl[i] * matHeroRot[i] * matHeroTrans[i];
-	}
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
 		if (iChar == m_CurrentHero && m_bDebugMode==false)
 			continue;
-		m_CharHero[iChar].get()->SetMatrix(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+
+		m_CharHero[iChar].get()->SetMatrix(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharHero[iChar].get()->Render(g_pImmediateContext);
 	}
 
@@ -864,7 +1084,7 @@ bool		GSeqSinglePlay::RenderChar() {
 			m_CharZombie[iChar].get()->m_OBB.Render(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
-			m_CharHero[iChar].get()->m_OBB.Render(&matHeroWld[iChar], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_CharHero[iChar].get()->m_OBB.Render(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 	}
 
@@ -901,7 +1121,8 @@ bool		GSeqSinglePlay::RenderEffect() {
 	m_pSprite.get()->m_cbData.Color = m_vMaterial;
 	ApplyBS(g_pImmediateContext, GDxState::g_pBSAlphaOne, fFactor, 0xffffffff);
 
-
+	//if (m_RT.Begin(g_pImmediateContext, vColor))
+	//	{
 	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
 	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthEnable);
 
@@ -926,6 +1147,9 @@ bool		GSeqSinglePlay::RenderEffect() {
 	m_pSprite.get()->SetMatrix(&matEffectWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Render(g_pImmediateContext);
 
+	//	m_RT.Apply(g_pImmediateContext, GetRenderTargetView(), GetDepthStencilView());
+	//	m_RT.End(g_pImmediateContext);
+	//	}
 
 	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthDisable);
 	D3DXMATRIX matIdentity;
@@ -937,6 +1161,9 @@ bool		GSeqSinglePlay::RenderEffect() {
 	g_pImmediateContext->PSSetShader(m_pPS.Get(), NULL, 0);
 	g_pImmediateContext->PSSetConstantBuffers(0, 1, m_pSprite.get()->m_dxobj.g_pConstantBuffer.GetAddressOf());
 	m_pScreen->PostRender(g_pImmediateContext);
+
+
+
 
 	ApplyDSS(g_pImmediateContext, GDxState::g_pDSSDepthDisable);
 	ApplyBS(g_pImmediateContext, GDxState::g_pBSOneZero);
@@ -1054,6 +1281,62 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 }
 bool GSeqSinglePlay::Load()
 {
+#ifdef G_DEFINE_SHADOW
+	//좀비 로드
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie_shadow.gci") /*_T("data/CharTable.gci")*/))
+	{
+		return false;
+	}
+
+	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
+
+
+	//주인공1 로드
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero1_shadow.gci") /*_T("data/CharTable.gci")*/))
+	{
+		return false;
+	}
+
+	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_IDLE");
+
+
+	shared_ptr<GHero> pObjB = make_shared<GHero>();
+	pObjB->Set(pChar1,
+		pChar1->m_pBoneObject,
+		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar1->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjB->Init();
+
+	m_CharHero.push_back(pObjB);
+
+	//주인공2 로드
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero2_shadow.gci") /*_T("data/CharTable.gci")*/))
+	{
+		return false;
+	}
+
+	GCharacter* pChar2 = I_CharMgr.GetPtr(L"HERO2_IDLE");
+
+
+	shared_ptr<GHero> pObjC = make_shared<GHero>();
+	pObjC->Set(pChar2,
+		pChar2->m_pBoneObject,
+		pChar2->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar2->m_pBoneObject->m_Scene.iLastFrame);
+
+	pObjC->Init();
+
+	pObjC.get()->m_HeroType = G_HERO_JAKE;
+	m_CharHero.push_back(pObjC);
+
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		m_CharHero[i].get()->m_iBullet = 100;
+		m_CharHero[i].get()->m_iHP = 100;
+		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
+	}
+#else
 	//좀비 로드
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie.gci") /*_T("data/CharTable.gci")*/))
 	{
@@ -1108,6 +1391,8 @@ bool GSeqSinglePlay::Load()
 		m_CharHero[i].get()->m_iHP = 100;
 		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
 	}
+#endif
+	
 	return true;
 }
 #endif 
@@ -1203,6 +1488,12 @@ HRESULT GSeqSinglePlay::DeleteResource()
 }
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
+#ifdef G_DEFINE_SHADOW
+	//그림자 [Start]
+	SAFE_ZERO(m_pQuad);
+	m_bColorTexRender = true;
+	//그림자 [End]
+#endif
 	memset(m_pTextOutBuffer, 0, sizeof(TCHAR) * 256);
 
 	m_iScore = 0;
