@@ -10,7 +10,7 @@ public:
 #ifdef G_MACRO_TESTCODE_ADD
 	list<shared_ptr<GNewZombie>> m_Zomb;
 #else
-	list<shared_ptr<GNewZombie>> m_Zomb;
+	vector<shared_ptr<GNewZombie>> m_Zomb;
 #endif
 	
 	bool Load(int iNum);
