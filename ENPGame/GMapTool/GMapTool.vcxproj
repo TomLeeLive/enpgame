@@ -125,7 +125,8 @@
       <ShaderModel>4.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>copy "*.hlsl" "..\\..\\Output"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -214,7 +215,9 @@
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="GCreateMapDlg.h" />
-    <ClInclude Include="GMapTileRender.h" />
+    <ClInclude Include="GCreateMapForm.h" />
+    <ClInclude Include="GObjectControl.h" />
+    <ClInclude Include="GObjectForm.h" />
     <ClInclude Include="GSaveMapDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapTool.h" />
@@ -231,7 +234,9 @@
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="GCreateMapDlg.cpp" />
-    <ClCompile Include="GMapTileRender.cpp" />
+    <ClCompile Include="GCreateMapForm.cpp" />
+    <ClCompile Include="GObjectControl.cpp" />
+    <ClCompile Include="GObjectForm.cpp" />
     <ClCompile Include="GSaveMapDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapTool.cpp" />

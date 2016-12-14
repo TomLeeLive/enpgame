@@ -1,7 +1,45 @@
 #include "GGbsObj.h"
 #include "GTimer.h"
+
+bool GGbsObj::Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName,const TCHAR* pLoadShaderFile, G_LIGHT_TYPE type)
+{
+	bool bThread = false;
+
+	m_dxobj.m_iVertexSize = sizeof(PNCT_VERTEX);
+	m_dxobj.m_iIndexSize = sizeof(DWORD);
+
+	if (LoadScene(szLoadName))
+	{
+		if (!LoadMaterial()) return false;
+		if (!LoadObject()) return false;
+
+		CStopwatch stopwatch;
+		if (!Convert(pd3dDevice))
+		{
+			return false;
+		}
+		m_dxobj.m_iNumVertex = m_iMaxVertex;
+		m_dxobj.m_iNumIndex = m_iMaxIndex;
+
+		if (!bThread && !Create(pd3dDevice, pLoadShaderFile, type))
+		{
+			m_Parser.CloseStream();
+			return false;
+		}
+		m_Parser.CloseStream();
+		stopwatch.Output(L"GGbsObj::Load After");
+
+		m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+
+		return true;
+	}
+	return false;
+}
+
 bool GGbsObj::Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, bool bThread )
 {
+
+
 	m_dxobj.m_iVertexSize = sizeof(PNCT_VERTEX);
 	m_dxobj.m_iIndexSize = sizeof(DWORD);
 
@@ -512,6 +550,42 @@ bool GGbsObj::Frame()
 
 	m_OBB.Frame(&m_matWorld);
 
+	//조명 [Start]
+	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
+		//float t = m_Timer.GetElapsedTime() * D3DX_PI;
+		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+		//D3DXMatrixRotationY(&mRotation, t*0.1f);
+		D3DXMatrixIdentity(&mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+
+		m_vLightVector.x = mLightWorld._41;
+		m_vLightVector.y = mLightWorld._42;
+		m_vLightVector.z = mLightWorld._43;
+
+		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+		m_vLightVector *= -1.0f;
+
+	}
+	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
+		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+		//D3DXMatrixRotationY(&mRotation, t * 0);
+		D3DXMatrixIdentity(&mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+
+		m_vLightVector.x = mLightWorld._41;
+		m_vLightVector.y = mLightWorld._42;
+		m_vLightVector.z = mLightWorld._43;
+
+		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+		m_vLightVector *= -1.0f;
+	}
+	//조명 [End]
+
+	
+
+
 	return true;
 }
 
@@ -762,6 +836,7 @@ bool GGbsObj::CombineBuffer(ID3D11Buffer* pVB, ID3D11Buffer* pIB)
 }
 bool GGbsObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 {
+
 	//CStopwatch stopwatch;
 	for (DWORD dwObject = 0; dwObject < m_pData.size(); dwObject++)
 	{
@@ -769,7 +844,44 @@ bool GGbsObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 		D3DXMATRIX matWorld = pMesh->m_matCalculation * pParent->m_matWorld;
 		D3DXMatrixTranspose(&m_cbData.matWorld, &matWorld);
 		UpdateConstantBuffer(pContext, pParent);
-		
+
+		//조명 [Start]
+		if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
+			m_cbLight.g_vLightDir.x = m_vLightVector.x;
+			m_cbLight.g_vLightDir.y = m_vLightVector.y;
+			m_cbLight.g_vLightDir.z = m_vLightVector.z;
+			m_cbLight.g_vLightDir.w = 1;
+			D3DXMATRIX matInvWorld;
+			D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
+			D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+			D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+			g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+			g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+			g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+		}
+		else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
+
+			m_cbLight.g_vLightDir.x = m_vLightVector.x;
+			m_cbLight.g_vLightDir.y = m_vLightVector.y;
+			m_cbLight.g_vLightDir.z = m_vLightVector.z;
+			m_cbLight.g_vLightDir.w = 1.0f;
+			D3DXMATRIX matInvWorld;
+			D3DXMatrixInverse(&matInvWorld, NULL, &m_matWorld);
+			D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+			D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+			//m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
+			//m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
+			//m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
+			m_cbLight.g_vEyeDir.w = 10.0f; // 강도
+			m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1);
+			g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+			g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+			g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+		}
+		//조명 [End]
+
 		if (pMesh->m_pSubMesh.size() > 0)
 		{
 			for (DWORD dwSub = 0; dwSub < pMesh->m_pSubMesh.size(); dwSub++)

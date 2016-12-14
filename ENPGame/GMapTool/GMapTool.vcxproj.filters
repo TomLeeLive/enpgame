@@ -16,6 +16,12 @@
     <Filter Include="소스 파일\Dlg">
       <UniqueIdentifier>{0de35490-1f4e-43b5-a92f-a673b0067cb7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Form">
+      <UniqueIdentifier>{cc585df7-814f-4cf6-887a-b492b04b14ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Common">
+      <UniqueIdentifier>{47113b3d-3b39-4dde-b58f-cbde52c60a23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -57,14 +63,20 @@
     <ClInclude Include="PropertiesWnd.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GMapTileRender.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GCreateMapDlg.h">
       <Filter>소스 파일\Dlg</Filter>
     </ClInclude>
     <ClInclude Include="GSaveMapDlg.h">
       <Filter>소스 파일\Dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="GCreateMapForm.h">
+      <Filter>소스 파일\Form</Filter>
+    </ClInclude>
+    <ClInclude Include="GObjectForm.h">
+      <Filter>소스 파일\Form</Filter>
+    </ClInclude>
+    <ClInclude Include="GObjectControl.h">
+      <Filter>소스 파일\Form</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,14 +110,20 @@
     <ClCompile Include="PropertiesWnd.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GMapTileRender.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GCreateMapDlg.cpp">
       <Filter>소스 파일\Dlg</Filter>
     </ClCompile>
     <ClCompile Include="GSaveMapDlg.cpp">
       <Filter>소스 파일\Dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="GCreateMapForm.cpp">
+      <Filter>소스 파일\Form</Filter>
+    </ClCompile>
+    <ClCompile Include="GObjectForm.cpp">
+      <Filter>소스 파일\Form</Filter>
+    </ClCompile>
+    <ClCompile Include="GObjectControl.cpp">
+      <Filter>소스 파일\Form</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

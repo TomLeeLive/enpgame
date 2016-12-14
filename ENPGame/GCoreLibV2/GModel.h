@@ -1,5 +1,6 @@
 #pragma once
 #include "GObjStd.h"
+#include "GLight.h"
 #include <tchar.h>
 class GMesh;
 class GModel;
@@ -31,9 +32,19 @@ struct TObjWM
 		}
 	}
 };
+
+
+
 class GModel
 {
 public:
+	G_LIGHT_TYPE	m_LightType;
+	//조명 [Start]
+	D3DXVECTOR3		m_vLightVector;
+	LIGHT_CONSTANT_BUFFER m_cbLight;
+	ComPtr<ID3D11Buffer>	m_pConstantBufferLight;
+	//조명 [End]
+
 	vector<shared_ptr<GMesh>>	m_pMesh;
 	ID3D11Device*				m_pd3dDevice;
 	ID3D11DeviceContext*		m_pContext;
@@ -68,6 +79,7 @@ public:
 	virtual void				SetAmbientColor(float fR, float fG, float fB, float fA);
 	virtual bool				Convert(ID3D11Device* pDevice);
 	virtual bool				Load(ID3D11Device* pDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, bool bThread = false);
+	virtual bool				Load(ID3D11Device* pDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, G_LIGHT_TYPE type);
 	virtual HRESULT				LoadShaderFile(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile);
 	virtual HRESULT				SetInputLayout();
 	virtual bool				CreateVertexData();
@@ -81,7 +93,8 @@ public:
 	virtual bool				UpdateBuffer();
 	virtual void				ObjectFrame(TObjFrame* pObjFrame, float fTickFrame) {};
 	virtual void				ObjectRender(ID3D11DeviceContext*    pContext, TObjFrame* pObjFrame) {};
-	virtual bool				Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile, const TCHAR* pLoadTextureString = 0);
+	virtual bool				Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile, G_LIGHT_TYPE type, const TCHAR* pLoadTextureString = 0);
+	virtual bool				Create(ID3D11Device* pDevice, const TCHAR* pLoadShaderFile,const TCHAR* pLoadTextureString = 0);
 	virtual bool				Init();
 	virtual bool				Frame();
 	virtual bool				PreRender(ID3D11DeviceContext* pContext);
