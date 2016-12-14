@@ -18,6 +18,7 @@
 #define G_MACRO_MAP_ADD		1	//맵
 #define G_MACRO_EFFECT_ADD   1	//이펙트
 #define G_MACRO_CHAR_ADD     1	//캐릭터
+#define G_MACRO_AI_ADD		 1  //AI
 
 //설정값 define
 #include "_values.h"
@@ -33,6 +34,17 @@
 #include "GDirectWrite.h"
 //#include <process.h> //beginthreadex() 함수 사용시 필요 헤더파일
 
+#ifdef G_MACRO_AI_ADD
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GAICore32d.lib" )	
+#else
+#pragma comment( lib, "GAICore32.lib" )
+#endif
+#include "_ai_std.h"
+#else
+#include "GZombie.h"
+#include "GN2Zombie.h"
+#endif
 
 //캐릭터
 #ifdef G_MACRO_CHAR_ADD
@@ -50,8 +62,6 @@
 #include "GCharacter.h"
 #include "GCharMgr.h"
 //#include "GHeroObj.h"
-#include "GZombie.h"
-#include "GN2Zombie.h"
 #include "GHero.h"
 
 #endif

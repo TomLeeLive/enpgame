@@ -1,4 +1,7 @@
 #pragma once
+#ifdef G_MACRO_AI_ADD
+#else
+
 class GN2Zombie : public GZombie
 {
 public:
@@ -22,3 +25,4 @@ public:
 	virtual ~GN2Zombie();
 };
 
+#endif

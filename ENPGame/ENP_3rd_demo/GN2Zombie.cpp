@@ -1,5 +1,7 @@
 #include "_stdafx.h"
 
+#ifdef G_MACRO_AI_ADD
+#else
 
 bool		GN2Zombie::Frame() {
 	GZombie::Frame();
@@ -66,3 +68,4 @@ GN2Zombie::GN2Zombie()
 GN2Zombie::~GN2Zombie()
 {
 }
+#endif
