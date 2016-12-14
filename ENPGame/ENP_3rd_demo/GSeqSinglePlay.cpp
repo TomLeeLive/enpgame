@@ -459,7 +459,7 @@ bool        GSeqSinglePlay::InitGame() {
 	m_ObjGun.m_bAniLoop = false;
 
 	
-	if (!m_ObjGun.Load(g_pd3dDevice, _T("data/object/fps_shotgun/shotgun3.GBS"), L"data/shader/box.hlsl"))
+	if (!m_ObjGun.Load(g_pd3dDevice, G_OBJ_LOC_FPS_SHOTGUN, G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR))
 	{
 		return false;
 	}
