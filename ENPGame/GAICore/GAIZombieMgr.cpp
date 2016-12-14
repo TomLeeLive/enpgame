@@ -18,7 +18,7 @@ bool GAIZombieMgr::Load(int iNum)
 		pObjA->setState(G_AI_IDLE);
 
 		pObjA->m_matZombWld._41 = (rand() * 3) % 303;
-		pObjA->m_matZombWld._42 = 0.0f;
+		pObjA->m_matZombWld._42 = 40.0f;
 		pObjA->m_matZombWld._43 = (rand() * 3) % 303;
 
 		TCHAR buf[256];
