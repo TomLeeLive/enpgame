@@ -1366,6 +1366,19 @@ bool		GSeqSinglePlay::RenderChar() {
 
 #ifdef G_MACRO_AI_ADD
 	m_GAIZombMgr.Render(m_pCamera);
+
+	if (m_bDebugMode) {
+
+		list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();
+		list<shared_ptr<GNewZombie>>::iterator _L = m_GAIZombMgr.m_Zomb.end();
+		for (; _F != _L; ++_F)
+		{
+			(*_F)->m_OBB.Render(&(*_F)->m_matZombWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		}
+		for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
+			m_CharHero[iChar].get()->m_OBB.Render(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		}
+	}
 #else
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
@@ -1548,7 +1561,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Init(G_DEFINE_MAX_AI_ZOMBIE);
+	m_GAIZombMgr.Init(iNum);
 #else
 	for (int i = 0; i < iNum; i++) {
 		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");

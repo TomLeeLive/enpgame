@@ -29,6 +29,7 @@ bool GAIZombieMgr::Load(int iNum)
 			pChar0->m_pBoneObject,
 			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 			pChar0->m_pBoneObject->m_Scene.iLastFrame);
+
 		m_Zomb.push_back(pObjA);
 	}
 
@@ -42,6 +43,9 @@ bool GAIZombieMgr::Load(int iNum)
 		{
 			(*_F)->m_GameSeq[j]->Init((*_F).get());
 		}
+
+		//OBB ¹Ú½º Init.
+		(*_F)->m_OBB.Init((*_F)->m_pChar->m_vMin, (*_F)->m_pChar->m_vMax);
 	}
 
 	return true;
