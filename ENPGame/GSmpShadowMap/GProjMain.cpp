@@ -131,8 +131,8 @@ bool GProjMain::Render()
 	m_cbShadow.g_ShadowID = 0;
 	m_cbShadow.g_iNumKernel = 3;
 	GetContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-	GetContext()->VSSetConstantBuffers(1, 1, m_pConstantBuffer.GetAddressOf());
-	GetContext()->PSSetConstantBuffers(1, 1, m_pConstantBuffer.GetAddressOf());
+	GetContext()->VSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
+	GetContext()->PSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
 
 	m_CustomMap.PreRender(GetContext());
 		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
@@ -167,8 +167,8 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		m_cbShadow.g_ShadowID = m_fObjID[iObj];
 		m_cbShadow.g_iNumKernel = 3;
 		GetContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-		GetContext()->VSSetConstantBuffers(1, 1, m_pConstantBuffer.GetAddressOf());
-		GetContext()->PSSetConstantBuffers(1, 1, m_pConstantBuffer.GetAddressOf());
+		GetContext()->VSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
+		GetContext()->PSSetConstantBuffers(2, 1, m_pConstantBuffer.GetAddressOf());
 		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf() );
 
 		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);		

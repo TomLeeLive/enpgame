@@ -1,5 +1,48 @@
 #include "GObjMgr.h"
 
+int		GObjMgr::Load(ID3D11Device* pd3dDevice, const TCHAR* strFileName,
+	const TCHAR* strShaderName, G_LIGHT_TYPE type)
+{
+	bool bThread = false;
+
+	TCHAR szFileName[256];
+	TCHAR Drive[MAX_PATH];
+	TCHAR Dir[MAX_PATH];
+	TCHAR FName[MAX_PATH];
+	TCHAR Ext[MAX_PATH];
+
+	// 종복 방지 
+	if (strFileName)
+	{
+
+		_tsplitpath_s(strFileName, Drive, Dir, FName, Ext);
+		Ext[4] = 0;
+		_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
+
+		for (TemplateMapItor itor = TMap.begin(); itor != TMap.end(); itor++)
+		{
+			GModel *pPoint = (GModel *)(*itor).second;
+			if (!_tcsicmp(pPoint->m_szName.c_str(), szFileName))
+			{
+				return (*itor).first;
+			}
+		}
+	}
+
+	if (GetFileTypeID(strFileName) == NULLFILE || m_pModelObj == NULL)
+	{
+		return -1;
+	}
+
+	m_pModelObj->Init();
+	m_pModelObj->m_szName = szFileName;
+	if (m_pModelObj->Load(pd3dDevice, strFileName, strShaderName, type))
+	{
+		TMap.insert(make_pair(m_iCurIndex++, m_pModelObj));
+		return m_iCurIndex - 1;
+	}
+	return -1;
+};
 int		GObjMgr::Load(ID3D11Device* pd3dDevice,	const TCHAR* strFileName,
 	const TCHAR* strShaderName, bool bThread)
 {

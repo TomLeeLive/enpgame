@@ -167,6 +167,7 @@ copy "*.h" "..\\..\\include\\Inc_map"
     <ClInclude Include="GFrustum.h" />
     <ClInclude Include="GImeUI.h" />
     <ClInclude Include="GInput.h" />
+    <ClInclude Include="GLight.h" />
     <ClInclude Include="GLightObj.h" />
     <ClInclude Include="GMatrix.h" />
     <ClInclude Include="GMiniMap.h" />

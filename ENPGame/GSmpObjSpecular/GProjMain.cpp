@@ -48,7 +48,7 @@ bool GProjMain::Init()
 	SAFE_NEW(m_pMainCamera, GCamera);
 	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pMainCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 342.0f, -375.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 
@@ -59,7 +59,9 @@ bool GProjMain::Init()
 	D3DXMatrixIdentity(&m_matObjOBB);
 
 	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR);				if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
+
+	//iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_DIFFUSE, G_LIGHT_TYPE_DIFFUSE);				if (iIndex < 0) return false;
 
 	//연구소 로드
 	m_Obj = I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
@@ -70,18 +72,20 @@ bool GProjMain::Init()
 	//연구소 OBB 사이즈
 	((GGbsObj*)m_Obj)->m_OBB.Init(D3DXVECTOR3(-95.0f, 0.0f, -85.0f), D3DXVECTOR3(93.0f, 100.0f, 125.0f));
 
-
+	/*
 	m_Obj->m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1);
 	m_Obj->m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
 	m_Obj->m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(1, 1, 1, 1);
 	m_Obj->m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
 	m_Obj->m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
 	m_Obj->m_cbLight.g_cSpecularLightColor = D3DXVECTOR4(1, 1, 1, 1);
+	*/
 	return true;
 }
 
 bool GProjMain::Render()
 {	
+	/*
 	m_Obj->m_cbLight.g_vLightDir.x = m_Obj->m_vLightVector.x;
 	m_Obj->m_cbLight.g_vLightDir.y = m_Obj->m_vLightVector.y;
 	m_Obj->m_cbLight.g_vLightDir.z = m_Obj->m_vLightVector.z;
@@ -92,6 +96,11 @@ bool GProjMain::Render()
 	m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
 	m_Obj->m_cbLight.g_vEyeDir.w = 10.0f; // 강도
 	m_Obj->m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1);
+	*/
+
+	m_Obj->m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
+	m_Obj->m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
+	m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
 
 	m_Obj->SetMatrix(&m_matObjWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_Obj->Render(g_pImmediateContext);

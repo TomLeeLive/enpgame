@@ -27,3 +27,6 @@ enum SNDRESOURCES {
 #define G_SHA_LINE L"data/shader/line.hlsl"
 #define G_SHA_BOX L"data/shader/box.hlsl"
 #define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
+#define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
+#define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
+#define G_SHA_OBJ_SPECULAR_REVERSE L"data/shader/Obj_Specular_Rev.hlsl"

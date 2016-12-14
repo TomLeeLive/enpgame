@@ -2,6 +2,7 @@
 #include "GMesh.h"
 #include "GParser.h"
 #include "GBBox.h"
+#include "GLight.h"
 
 typedef GData<PNCT_VERTEX>				tTbsData;
 typedef vector<shared_ptr<tTbsData>>	tTbsMeshData;
@@ -32,6 +33,7 @@ public:
 	////////////////////////////////////////////////
 	int			GetMeshCounter() { return m_pData.size(); }
 	bool		Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, bool bThread = false);
+	bool		Load(ID3D11Device* pDevice, const TCHAR* szLoadName, const TCHAR* pLoadShaderFile, G_LIGHT_TYPE type);
 	//  씬 정보 로드
 	bool		LoadScene( const TCHAR* strFileName );
 	//  메터리얼 정보 로드

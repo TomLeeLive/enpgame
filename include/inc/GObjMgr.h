@@ -4,6 +4,7 @@
 #include "GGbsObj.h"
 #include "GSkinObj.h"
 #include "GBoneObj.h"
+#include "GLight.h"
 
 class GObjMgr : public GTemplateMap< GModel >, public GSingleton<GObjMgr>
 {
@@ -14,6 +15,10 @@ public:
 	int			Load(ID3D11Device* pd3dDevice,
 		const TCHAR* strFileName,
 		const TCHAR* strShaderName, bool bThread = false);
+
+	int			Load(ID3D11Device* pd3dDevice,
+		const TCHAR* strFileName,
+		const TCHAR* strShaderName,G_LIGHT_TYPE type);
 	
 	FILETYPE	GetFileTypeID(const TCHAR* pszFileName);
 	void		SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
