@@ -110,7 +110,12 @@ public:
 #endif
 #ifdef G_MACRO_CHAR_ADD	
 public:
+#ifdef G_MACRO_AI_ADD
+	GAIZombieMgr		m_GAIZombMgr;
+#else
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
+#endif
+
 	vector<shared_ptr<GHero>>	m_CharHero;
 	bool		Load();
 #endif

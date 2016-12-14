@@ -240,7 +240,10 @@ bool GSeqSinglePlay::FrameGun() {
 		m_Ray.vDirection = m_pCamera->m_vLookVector;
 		m_Ray.fExtent = 50.0f;
 
-		for (int i = 0; i < m_CharZombie.size();i++){
+#ifdef G_MACRO_AI_ADD
+
+#else
+		for (int i = 0; i < m_CharZombie.size();i++) {
 			if (m_CharZombie[i].get()->m_bDead == false) {
 				if (ChkOBBToRay(&m_CharZombie[i].get()->m_OBB, &m_Ray))
 				{
@@ -253,6 +256,8 @@ bool GSeqSinglePlay::FrameGun() {
 				}
 			}
 		}
+#endif
+
 
 		for (int i = 0; i < m_CharHero.size(); i++) {
 
@@ -294,13 +299,15 @@ bool GSeqSinglePlay::FrameGun() {
 }
 bool GSeqSinglePlay::Frame()
 {
+#ifdef G_MACRO_AI_ADD
+#else
 	int  iZombieAliveCnt = 0;
 	for (int i = 0; i < m_CharZombie.size(); i++) {
 		if (m_CharZombie[i].get()->m_bDead == false)
 			iZombieAliveCnt++;
 	}
 
-	if(iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
+	if (iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
 		AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
 
 
@@ -316,7 +323,7 @@ bool GSeqSinglePlay::Frame()
 			//		ChangeZombState(j, G_DEFINE_ANI_ZOMB_WLK);
 			//	}
 			//}
-			
+
 			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &m_CharZombie[j].get()->m_OBB)) {
 				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
 
@@ -327,6 +334,8 @@ bool GSeqSinglePlay::Frame()
 		}
 
 	}
+#endif
+
 
 
 
@@ -784,29 +793,31 @@ bool        GSeqSinglePlay::FrameMap() {
 };
 void		GSeqSinglePlay::ChangeZombState(int iNum, G_ZOMB_ST state) {
 
+#ifdef G_MACRO_AI_ADD
+#else
 	m_CharZombie[iNum]->setState(state);
 
 	int iState = state;
-	
+
 	GCharacter* pChar0;
 
 	switch (iState) {
 	case 	G_ZOMB_ST_WALK: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_IDL);
 	}
-		break;
+							break;
 	case 	G_ZOMB_ST_IDLE: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_WLK);
 	}
-		break;
+							break;
 	case 	G_ZOMB_ST_ATTACK: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_ATT);
 	}
-		break;
+							  break;
 	case 	G_ZOMB_ST_DEAD: {
 		pChar0 = I_CharMgr.GetPtr(G_DEFINE_ANI_ZOMB_DIE);
 	}
-		break;
+							break;
 	}
 
 	m_CharZombie[iNum]->Set(pChar0,
@@ -840,6 +851,8 @@ void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
 	else {
 		m_CharZombie[iNum]->setState(G_ZOMB_ST_IDLE);
 	}
+#endif
+	
 
 
 
@@ -874,14 +887,17 @@ bool		GSeqSinglePlay::FrameChar() {
 
 	int iChange = 0;
 
+#ifdef G_MACRO_AI_ADD
+	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld);
+#else
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
-		for (int i = 0; i < m_CharZombie.size(); i++){
+		for (int i = 0; i < m_CharZombie.size(); i++) {
 			iChange = m_CharZombie[i]->getState();
 
 			//if (m_CharZombie[i]->m_bDead == true)
 			//	m_CharZombie[i]->setState(G_ZOMB_ST_WALK);
-			
+
 			if (m_CharZombie[i]->m_bDead == true)
 				continue;
 
@@ -931,6 +947,8 @@ bool		GSeqSinglePlay::FrameChar() {
 		}
 	}
 
+#endif
+	
 	//if (I_Input.KeyCheck(DIK_F9) == KEY_UP)
 	//{
 	//	Load();
@@ -1072,6 +1090,9 @@ bool		GSeqSinglePlay::RenderChar() {
 		m_CharHero[iChar].get()->Render(g_pImmediateContext);
 	}
 
+#ifdef G_MACRO_AI_ADD
+	m_GAIZombMgr.Render(m_pCamera);
+#else
 	for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 	{
 		//m_matWorld._41 = -50.0f + iChar * 25.0f;
@@ -1079,7 +1100,7 @@ bool		GSeqSinglePlay::RenderChar() {
 		m_CharZombie[iChar]->Render(g_pImmediateContext);
 	}
 
-	if(m_bDebugMode){
+	if (m_bDebugMode) {
 		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++) {
 			m_CharZombie[iChar].get()->m_OBB.Render(&m_CharZombie[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
@@ -1087,6 +1108,8 @@ bool		GSeqSinglePlay::RenderChar() {
 			m_CharHero[iChar].get()->m_OBB.Render(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		}
 	}
+#endif
+	
 
 #endif
 	return true;
@@ -1190,7 +1213,7 @@ bool        GSeqSinglePlay::ReleaseMap() {
 };
 bool		GSeqSinglePlay::ReleaseChar() {
 #ifdef G_MACRO_CHAR_ADD
-
+	m_GAIZombMgr.Release();
 	I_CharMgr.Release();
 
 #endif
@@ -1249,6 +1272,10 @@ bool GSeqSinglePlay::UpdateGunPosition() {
 void GSeqSinglePlay::AddZomb(int iNum) {
 	srand(time(NULL));
 
+
+#ifdef G_MACRO_AI_ADD
+	m_GAIZombMgr.Init();
+#else
 	for (int i = 0; i < iNum; i++) {
 		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
@@ -1259,7 +1286,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 			pChar0->m_pBoneObject,
 			pChar0->m_pBoneObject->m_Scene.iFirstFrame,
 			pChar0->m_pBoneObject->m_Scene.iLastFrame);
-	
+
 		int iX = (rand() % 1000) - 100;
 		int iZ = (rand() % 1000) - 100;
 
@@ -1278,6 +1305,8 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 
 		m_CharZombie.push_back(pObjA);
 	}
+#endif
+
 }
 bool GSeqSinglePlay::Load()
 {
@@ -1475,6 +1504,8 @@ HRESULT GSeqSinglePlay::CreateResource()
 			(float)g_pMain->m_SwapChainDesc.BufferDesc.Height;
 		m_pCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	}
+	m_GAIZombMgr.CreateResource();
+
 	return S_OK;
 }
 //--------------------------------------------------------------------------------------

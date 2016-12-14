@@ -1,10 +1,18 @@
 #pragma once
+
+//#define G_MACRO_TESTCODE_ADD 1
+
+
 class GAIZombieMgr
 {
 public:
 
-
+#ifdef G_MACRO_TESTCODE_ADD
 	list<shared_ptr<GNewZombie>> m_Zomb;
+#else
+	vector<shared_ptr<GNewZombie>> m_Zomb;
+#endif
+	
 	bool Load();
 
 
