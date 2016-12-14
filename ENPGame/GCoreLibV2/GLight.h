@@ -20,6 +20,16 @@ struct LIGHT_CONSTANT_BUFFER
 };
 //조명 [End]
 
+//그림자 [Start]
+struct SHADOW_CONSTANT_BUFFER
+{
+	D3DXMATRIX			g_matShadow;
+	float				g_ShadowID;
+	float				g_iNumKernel;
+	float				fZ, fW;
+};
+//그림자 [End]
+
 enum G_LIGHT_TYPE {
 	G_LIGHT_TYPE_DIFFUSE = 0,
 	G_LIGHT_TYPE_SPECULAR = 1,

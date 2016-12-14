@@ -18,13 +18,13 @@
 #include "GCamera.h"
 
 const int MAX_OBJECT_CNT = 3;
-struct SHADOW_CONSTANT_BUFFER
-{
-	D3DXMATRIX			g_matShadow;
-	float				g_ShadowID;
-	float				g_iNumKernel;
-	float				fZ, fW;
-};
+//struct SHADOW_CONSTANT_BUFFER
+//{
+//	D3DXMATRIX			g_matShadow;
+//	float				g_ShadowID;
+//	float				g_iNumKernel;
+//	float				fZ, fW;
+//};
 
 class GProjMain : public GCoreLibV2
 {
@@ -46,7 +46,7 @@ public:
 	GDxRT							m_RT;
 	GPlaneShape*					m_pQuad;
 	SHADOW_CONSTANT_BUFFER			m_cbShadow;
-	ComPtr<ID3D11Buffer>			m_pConstantBuffer;
+	ComPtr<ID3D11Buffer>			m_pShadowConstantBuffer;
 	ComPtr<ID3D11VertexShader>		m_pShadowVS;
 	ComPtr<ID3D11PixelShader>		m_pShadowPS;
 public:	
