@@ -48,6 +48,9 @@
     <ClCompile Include="GSeqLoading.cpp">
       <Filter>GameSequence</Filter>
     </ClCompile>
+    <ClCompile Include="GTileMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GSeq.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="GSeqLoading.h">
       <Filter>GameSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="GTileMap.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
