@@ -157,7 +157,6 @@
     <ClCompile Include="GProjMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GProjMain.h" />
     <ClInclude Include="_stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

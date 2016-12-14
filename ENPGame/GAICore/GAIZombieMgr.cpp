@@ -39,35 +39,74 @@ bool		GAIZombieMgr::Init() {
 	I_CharMgr.Init();
 	Load();
 
-	for (int i = 0; i < m_Zomb.size(); i++)
+#ifdef G_MACRO_TESTCODE_ADD
+	auto a = m_Zomb.begin();
+
+	std::advance(a, 1);
+	(*a)->Init();
+	//(*a)->
+
+	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
 	{
-		m_Zomb[i]->Init();
+		(*a)->Init();
 		for (int j = 0; j < G_AI_CNT; j++)
 		{
-			m_Zomb[i]->m_GameSeq[j]->Init(m_Zomb[i].get());
+			(*a)->m_GameSeq[j]->Init((*a).get());
 		}
+	}
+#else
+	for (int i = 0; i < m_Zomb.size(); i++)
+	{
+	m_Zomb[i]->Init();
+	for (int j = 0; j < G_AI_CNT; j++)
+	{
+	m_Zomb[i]->m_GameSeq[j]->Init(m_Zomb[i].get());
+	}
 
 	}
+#endif
+	
+	
+
 	
 	return true; };
 bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
+
+#ifdef G_MACRO_TESTCODE_ADD
+	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
+	{
+		(*a)->Frame((*a).get(), matHeroWorld);
+	}
+#else
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		m_Zomb[i]->Frame(m_Zomb[i].get(), matHeroWorld);
+	m_Zomb[i]->Frame(m_Zomb[i].get(), matHeroWorld);
 	}
+#endif
+
+	
+
 
 
 	return true; };
 bool		GAIZombieMgr::Render(GCamera* camera) {
-	if (m_Zomb[0]->m_State == G_AI_MOVE)
+	
+#ifdef G_MACRO_TESTCODE_ADD
+	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
 	{
-		int i;
+		(*a)->SetMatrix(&(*a)->m_matZombWld, &camera->m_matView, &camera->m_matProj);
 	}
+#else
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
-		m_Zomb[i]->SetMatrix(&m_Zomb[i]->m_matZombWld, &camera->m_matView, &camera->m_matProj);
-		m_Zomb[i]->Render();
+	m_Zomb[i]->SetMatrix(&m_Zomb[i]->m_matZombWld, &camera->m_matView, &camera->m_matProj);
+	m_Zomb[i]->Render();
 	}
+#endif
+
+
+
+
 
 	return true; };
 bool		GAIZombieMgr::Release() { 
@@ -80,10 +119,22 @@ int		GAIZombieMgr::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { 
 // 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 //----------------------------------------------------
 HRESULT		GAIZombieMgr::CreateResource() {
+	
+
+#ifdef G_MACRO_TESTCODE_ADD
+	for (auto a = m_Zomb.begin();a != m_Zomb.end;std::advance(a, 1))
+	{
+		(*a)->CreateResource();
+	}
+#else
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
 		m_Zomb[i]->CreateResource();
 	}
+#endif
+
+
+
 
 	return S_OK; };
 HRESULT		GAIZombieMgr::DeleteResource() { return S_OK; };
