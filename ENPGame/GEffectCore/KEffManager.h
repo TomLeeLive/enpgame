@@ -34,7 +34,7 @@ public:
 	ID3D11BlendState*			m_pAlphaBlend;
 	void ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext);
 
-	list<KEffect*> m_List;
+	list<shared_ptr<KEffectObj>> m_List;
 	virtual int				Load(T_STR* strFile, const TCHAR* strShaderName);
 	virtual void		Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strShaderName,
 		//D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f, int Width, int WidthSize, int Height, int HeightSize

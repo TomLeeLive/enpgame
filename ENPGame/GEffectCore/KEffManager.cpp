@@ -16,14 +16,16 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strSh
 	switch (iType) {
 	case G_EFFECT_BULLET:
 	{
-		auto Effect = new KEffect;
+		KEffect* eff = I_EffMgr.GetPtr(L"fire.eff");
+		auto Effect = make_shared<KEffectObj>();
+		Effect->Set(eff, 0.0f, 100.0f);
 		Effect->Init();
-	
+		Effect->m_pEffect->m_pSprite->m_bLoop = false;
+		m_List.push_back(Effect);
 
 		//play 버튼시 init() 부분
-		//EnterCriticalSection(&g_CSd3dDevice);
-		Effect->m_pSprite->Create(g_pd3dDevice, strShaderName, strFile->c_str());
-		//LeaveCriticalSection(&g_CSd3dDevice);
+		//Effect->m_pSprite->Create(g_pd3dDevice, strShaderName, strFile->c_str());
+
 
 		//이미지 이름을 저장해 놓는다. 나중에 save 할때 쓴다.
 		//TCHAR  *tchr = (TCHAR*)(LPCTSTR)strFile;
@@ -31,7 +33,7 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strSh
 		//m_ImageList.push_back(strFile->c_str());
 
 		// 애니메이션 관련, 가로4x4
-		Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
+		//Effect->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
 		/*
 		// 애니메이션 관련, Width x Height
 		if (Width <= 0 || WidthSize <= 0 || Height <= 0 || HeightSize <= 0)
@@ -44,10 +46,10 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strSh
 		}
 		*/
 
-		Effect->m_bCheck = true;
+		//Effect->m_bCheck = true;
 
 
-		m_List.push_back(Effect);
+		//m_List.push_back(Effect);
 		m_ImageList.push_back((*strFile).c_str());
 	}
 	break;
@@ -273,8 +275,34 @@ bool		KEffManager::Init() {
 	return true;
 };
 bool		KEffManager::Frame(GCamera* camera, GTimer* timer) { 
-	list<KEffect*>::iterator _F = m_List.begin();
-	list<KEffect*>::iterator _L = m_List.end();
+
+
+	list<shared_ptr<KEffectObj>>::iterator _F = I_EffMgr.m_List.begin();
+	list<shared_ptr<KEffectObj>>::iterator _L = I_EffMgr.m_List.end();
+
+	for (; _F != _L; ++_F)
+	{
+		if ((*_F)->m_bEnd == true) {
+			_F->reset();//delete (*_F);
+			*_F = 0;
+		}
+	}
+
+	_F = I_EffMgr.m_List.begin();
+	while (_F != I_EffMgr.m_List.end())
+	{
+		if (*_F == 0) {
+
+			_F = I_EffMgr.m_List.erase(_F);
+		}
+		else {
+			_F++;
+		}
+	}
+
+
+	_F = m_List.begin();
+	_L = m_List.end();
 
 	for (; _F != _L; ++_F)
 	{
@@ -286,8 +314,8 @@ bool		KEffManager::Frame(GCamera* camera, GTimer* timer) {
 };
 bool		KEffManager::Render() { 
 	
-	list<KEffect*>::iterator _F = m_List.begin();
-	list<KEffect*>::iterator _L = m_List.end();
+	list<shared_ptr<KEffectObj>>::iterator _F = m_List.begin();
+	list<shared_ptr<KEffectObj>>::iterator _L = m_List.end();
 
 	for (; _F != _L; ++_F)
 	{

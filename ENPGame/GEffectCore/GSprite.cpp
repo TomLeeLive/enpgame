@@ -82,7 +82,7 @@ HRESULT GSprite::Load(ID3D11Device* pd3dDevice,
 }
 bool GSprite::Frame(ID3D11DeviceContext*    pContext, float fGlobalTime, float fElapsedTime)
 {
-	Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
+	//Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
 	return true;
 }
 bool GSprite::PreDraw(ID3D11DeviceContext* pContext)
@@ -244,13 +244,19 @@ void GSprite::Updata(ID3D11DeviceContext*    pContext,
 	// 에니메이션 교체 주기 누적 시간
 	pfCurrentTimer += fElapsedTime;
 
-	if (pfCurrentTimer >= m_fSecPerRender)
-	{
-		if (++iApplyIndex >= m_iNumTexture)
-			iApplyIndex = 0;
+	//if (pfCurrentTimer >= m_fSecPerRender)
+	//{
 
-		pfCurrentTimer = 0.0f;
-	}
+	//	if (++iApplyIndex >= m_iNumTexture) {
+	//		if (true == m_bLoop)
+	//			iApplyIndex = 0;
+	//		else
+	//			iApplyIndex--;
+	//	}
+	//		
+	//	if (true == m_bLoop)
+	//		pfCurrentTimer = 0.0f;
+	//}
 	// 텍스처 에니메이션
 	if (m_TextureIndex.size())
 	{
@@ -300,6 +306,7 @@ void GSprite::Updata(ID3D11DeviceContext*    pContext,
 
 GSprite::GSprite(void)
 {
+	m_bLoop = true;
 	m_fAnimTime = 0.0f;
 	m_fLifeTime = 0.0f;
 	m_fElapseTime = 0.0f;

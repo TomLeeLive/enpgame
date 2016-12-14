@@ -30,10 +30,18 @@ bool GProjMain::Frame()
 	I_EffMgr.Frame(m_pMainCamera,&m_Timer);
 
 	if (I_Input.KeyCheck(DIK_F) == KEY_PUSH) {
-		//m_pBoneObject = (GBoneObj*)I_ObjMgr.GetPtr(iMatrixIndex);
+
 		KEffect* eff = I_EffMgr.GetPtr(L"fire.eff");
-		I_EffMgr.m_List.push_back(eff);
+		auto Effect = make_shared<KEffectObj>();
+		Effect->Set(eff, 0.0f, 100.0f);
+		Effect->Init();
+		//Effect->m_pEffect->m_pSprite->m_bLoop = false;
+		I_EffMgr.m_List.push_back(Effect);
 	}
+
+
+
+
 	return true;
 }
 bool GProjMain::Render()

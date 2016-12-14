@@ -61,3 +61,108 @@ public:
 	virtual ~KEffect();
 };
 
+class KEffectObj {
+public:
+	bool	m_bEnd;
+	bool	m_bLoop;
+	KEffect* m_pEffect;
+	float	m_fStartTime;
+	float   m_fElapsedTime;
+	int		 m_iStartFrame;
+	int		 m_iLastFrame;
+	//int		 m_iCurrentFrame;
+	//float	 m_fFrame;
+	//float	 m_fLerpTime;
+	float	 m_fSpeed;
+
+	int		m_iApplyIndex;
+	float	m_fTime;
+
+	virtual bool		Init() { return true; };
+	virtual bool		PreFrame(GCamera* camera, GTimer* timer) { 
+		m_pEffect->PreFrame(camera, timer);
+		return true; 
+	};
+	virtual bool		Frame() {
+		
+
+		//시작시간.
+		m_fStartTime = m_pEffect->m_pTimer->GetElapsedTime();
+
+		//경과시간.
+		m_fElapsedTime = m_pEffect->m_pTimer->GetElapsedTime() - m_fStartTime;
+
+		/*
+		if (m_pChar->m_iAniLoop != 0 || m_fFrame < m_iLastFrame - 1)
+		{
+			if (m_pBoneObject->AniFrame(m_fFrame,
+				m_fLerpTime,
+				m_iStartFrame,
+				m_iLastFrame,
+				m_pMatrix))
+			{
+				m_iCurrentFrame = m_iStartFrame;
+				m_fFrame = (float)m_iStartFrame + m_fLerpTime;
+			}
+		}
+		*/
+
+		if (m_pEffect->m_pTimer->GetElapsedTime() >= m_pEffect->m_pSprite->m_fSecPerRender)
+		{
+
+			if (++m_iApplyIndex >= m_pEffect->m_pSprite->m_iNumTexture) {
+				if (true == m_bLoop)
+					m_iApplyIndex = 0;
+				else{
+					m_iApplyIndex--;
+					m_bEnd = true;
+					return false;
+				}
+			}
+
+			if (true == m_bLoop)
+				m_fElapsedTime = 0.0f;
+		}
+		m_pEffect->m_pSprite->m_fElapseTime = m_fElapsedTime;
+		m_pEffect->m_pSprite->Updata(g_pImmediateContext, m_fElapsedTime, m_iApplyIndex, m_pEffect->m_pTimer->GetElapsedTime(), m_fElapsedTime);
+		//Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
+
+		m_pEffect->m_pSprite->Frame(g_pImmediateContext, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame);
+		m_pEffect->Frame();
+		return true; 
+	};
+	virtual bool		Render(ID3D11DeviceContext*		pContext) {
+		if(!m_bEnd)
+			m_pEffect->Render(pContext);
+		return true; 
+	};
+	virtual bool		Release() { return true; };
+	virtual bool		Set(KEffect* pEffect, float fStart, float fEnd) {
+		m_pEffect = pEffect;
+		m_iStartFrame = fStart;
+		m_iLastFrame = fEnd;
+		return true;
+	}
+	//--------------------------------------------------------------------------------------
+	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
+	//--------------------------------------------------------------------------------------
+	virtual HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) { return S_OK; };
+	virtual HRESULT		DeleteResource() { return S_OK; };
+public:
+	KEffectObj() {
+		m_bEnd = false;
+		m_bLoop = false;
+		m_fTime = 0.0f;
+		m_iApplyIndex = 0;
+
+		m_iStartFrame = 0;
+		m_iLastFrame = 0;
+
+		m_fSpeed = 1.0f;
+
+		m_fStartTime = 0.0f;
+		m_fElapsedTime = 0.0f;
+
+	};
+	virtual ~KEffectObj() {};
+};

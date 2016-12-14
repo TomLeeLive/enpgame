@@ -59,14 +59,14 @@ bool		KEffect::Frame() {
 	m_pSprite->SetMatrix(&m_matBillboard, &matView, &matProj);
 
 	//EnterCriticalSection(&g_CSImmediateContext);
-	m_pSprite->Frame(g_pImmediateContext, m_pTimer->GetElapsedTime(), g_fSecPerFrame);
+	//m_pSprite->Frame(g_pImmediateContext, m_pTimer->GetElapsedTime(), g_fSecPerFrame);
 	//LeaveCriticalSection(&g_CSImmediateContext);
 
 
 
 
 	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
-	float fValue = cosf(m_pTimer->GetElapsedTime())*0.5f + 0.5f;
+	float fValue = 1.0f;// cosf(m_pTimer->GetElapsedTime())*0.5f + 0.5f;
 	FLOAT fFactor[4] = { 0 , };
 	m_vMaterial.x = 1.0f;
 	m_vMaterial.y = 1.0f;

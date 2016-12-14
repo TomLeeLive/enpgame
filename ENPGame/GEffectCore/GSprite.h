@@ -15,6 +15,8 @@ struct GInstatnce
 class GSprite : public GPlaneShape
 {
 public:
+	bool					m_bLoop;
+
 	T_STR					m_szName;
 	T_STR					m_szPath;
 	UINT					m_iIndex;
