@@ -1,8 +1,8 @@
 //#include "stdafx.h"
 //#include "_stdafx.h"
-#include "EffManager.h"
+#include "KEffManager.h"
 
-void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
+void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 	D3DXVECTOR3 vScl, float fTime) {
 	//D3DXVECTOR3 vScl, float fTime, int Width, int WidthSize, int Height, int HeightSize) {
 	int iType = type;
@@ -64,7 +64,7 @@ void		EffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 
 }
 
-BOOL EffManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
+BOOL KEffManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
 	int iSubString, TCHAR chSep)
 {
 	if (lpszFullString == NULL)
@@ -88,7 +88,7 @@ BOOL EffManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
 	return TRUE;
 }
 
-void EffManager::Load(T_STR* strFile) {
+void KEffManager::Load(T_STR* strFile) {
 	vector<CString> vecStr;
 
 	FILE *pFile = NULL;
@@ -189,7 +189,7 @@ void EffManager::Load(T_STR* strFile) {
 		//}
 	}
 }
-void EffManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
+void KEffManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 
 	vector<TCHAR*> vString;
 
@@ -208,16 +208,16 @@ void EffManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 	_tcscpy((TCHAR*)pOutStr, strDir);
 }
 
-bool		EffManager::Init() {
+bool		KEffManager::Init() {
 
 	return true;
 };
-bool		EffManager::Frame(GCamera* camera, GTimer* timer) { 
+bool		KEffManager::Frame(GCamera* camera, GTimer* timer) { 
 	for (int i = 0;i < m_List.size();i++)
 		m_List[i]->Frame(camera, timer);
 	return true;
 };
-bool		EffManager::Render() { 
+bool		KEffManager::Render() { 
 	
 	for (int i = 0;i < m_List.size();i++)
 		m_List[i]->Render();
@@ -229,15 +229,15 @@ bool		EffManager::Render() {
 	return true; 
 
 };
-bool		EffManager::Release() { return true; };
+bool		KEffManager::Release() { return true; };
 
 //창이 사이즈가 변경이되면 호출이 됨.
-HRESULT		EffManager::CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) { return S_OK; }
+HRESULT		KEffManager::CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) { return S_OK; }
 
-HRESULT		EffManager::DeleteResource() { return S_OK; }
+HRESULT		KEffManager::DeleteResource() { return S_OK; }
 
 
-HRESULT EffManager::SetBlendState()
+HRESULT KEffManager::SetBlendState()
 {
 	HRESULT hr = S_OK;
 	D3D11_BLEND_DESC BlendState;
@@ -292,7 +292,7 @@ HRESULT EffManager::SetBlendState()
 }
 
 
-void EffManager::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext)
+void KEffManager::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext)
 {
 	// Unbind all objects from the immediate context
 	if (pd3dDeviceContext == NULL) return;
@@ -347,11 +347,11 @@ void EffManager::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext)
 	pd3dDeviceContext->RSSetState(NULL);
 }
 
-EffManager::EffManager()
+KEffManager::KEffManager()
 {
 }
 
 
-EffManager::~EffManager()
+KEffManager::~KEffManager()
 {
 }

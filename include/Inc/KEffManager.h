@@ -16,7 +16,7 @@ enum G_EFF_TOOL_EXT {
 
 using namespace std;
 
-class EffManager
+class KEffManager
 {
 public:
 	BOOL ExtractSubString(CString& rString, LPCTSTR lpszFullString,
@@ -45,7 +45,7 @@ public:
 	virtual HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual HRESULT		DeleteResource();
 public:
-	EffManager();
-	virtual ~EffManager();
+	KEffManager();
+	virtual ~KEffManager();
 };
 

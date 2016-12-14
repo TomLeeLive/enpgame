@@ -29,7 +29,7 @@
 class CKEffectToolApp : public CWinApp,public GCoreLibV2
 {
 public:
-	EffManager m_EffMgr;
+	KEffManager m_EffMgr;
 
 	CKEffectToolApp();
 	shared_ptr<GCamera > m_pMainCamera;
