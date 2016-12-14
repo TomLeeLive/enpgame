@@ -5,7 +5,7 @@ class GProjMain : public GCoreLibV2
 {
 public:
 	GCamera*	m_pMainCamera;
-	KEffManager	m_EffManager;
+	//KEffManager	m_EffManager;
 public:	
 	bool		Init();
 	bool		Frame();

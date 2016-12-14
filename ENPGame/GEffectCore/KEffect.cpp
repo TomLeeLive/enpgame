@@ -32,8 +32,13 @@ bool		KEffect::Init() {
 	D3DXMatrixIdentity(&m_matPlaneWorld);
 	
 	
-	return true; };;;;;;;;;;;;;;;;;;;;;;;;;
-bool		KEffect::Frame(GCamera* camera, GTimer* timer) {
+	return true; }
+bool		KEffect::PreFrame(GCamera* camera, GTimer* timer) {
+	m_pCamera = camera;
+	m_pTimer = timer;
+	return true;
+}
+bool		KEffect::Frame() {
 	if (m_pSprite == NULL)
 		return false;
 
@@ -43,25 +48,25 @@ bool		KEffect::Frame(GCamera* camera, GTimer* timer) {
 	//-----------------------------------------------------------------------------------
 	FLOAT fDeterminant;
 	//m_matBillboard;
-	D3DXMatrixInverse(&m_matBillboard, &fDeterminant, camera->GetViewMatrix());
+	D3DXMatrixInverse(&m_matBillboard, &fDeterminant, m_pCamera->GetViewMatrix());
 	m_matBillboard._41 = 0.0f;
 	m_matBillboard._42 = 0.0f;
 	m_matBillboard._43 = 0.0f;
 	m_matBillboard._44 = 1.0f;
 
-	D3DXMATRIX matView = *(camera->GetViewMatrix());
-	D3DXMATRIX matProj = *(camera->GetProjMatrix());
+	D3DXMATRIX matView = *(m_pCamera->GetViewMatrix());
+	D3DXMATRIX matProj = *(m_pCamera->GetProjMatrix());
 	m_pSprite->SetMatrix(&m_matBillboard, &matView, &matProj);
 
 	//EnterCriticalSection(&g_CSImmediateContext);
-	m_pSprite->Frame(g_pImmediateContext, timer->GetElapsedTime(), g_fSecPerFrame);
+	m_pSprite->Frame(g_pImmediateContext, m_pTimer->GetElapsedTime(), g_fSecPerFrame);
 	//LeaveCriticalSection(&g_CSImmediateContext);
 
 
 
 
 	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
-	float fValue = cosf(timer->GetElapsedTime())*0.5f + 0.5f;
+	float fValue = cosf(m_pTimer->GetElapsedTime())*0.5f + 0.5f;
 	FLOAT fFactor[4] = { 0 , };
 	m_vMaterial.x = 1.0f;
 	m_vMaterial.y = 1.0f;
@@ -74,7 +79,7 @@ bool		KEffect::Frame(GCamera* camera, GTimer* timer) {
 	//LeaveCriticalSection(&g_CSImmediateContext);
 
 	return true; };
-bool		KEffect::Render() {
+bool		KEffect::Render(ID3D11DeviceContext*		pContext) {
 
 	if (m_pSprite == NULL)
 		return false;
@@ -130,10 +135,35 @@ bool KEffect::RenderPlane()
 
 	return true;
 }
-
+void KEffect::SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
+{
+	if (pWorld != NULL)
+	{
+		m_matWorld = *pWorld;
+		m_vCenter.x = pWorld->_41;
+		m_vCenter.y = pWorld->_42;
+		m_vCenter.z = pWorld->_43;
+	}
+	if (pView != NULL)
+	{
+		m_matView = *pView;
+	}
+	if (pProj != NULL)
+	{
+		m_matProj = *pProj;
+	}
+	//D3DXMatrixTranspose(&m_cbData.matWorld, &m_matWorld);
+	//D3DXMatrixTranspose(&m_cbData.matView, &m_matView);
+	//D3DXMatrixTranspose(&m_cbData.matProj, &m_matProj);
+}
 
 KEffect::KEffect()
 {
+	m_vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXMatrixIdentity(&m_matWorld);
+	D3DXMatrixIdentity(&m_matView);
+	D3DXMatrixIdentity(&m_matProj);
+
 	D3DXMatrixIdentity(&m_matBillboard);
 	m_type = G_EFFECT_BULLET;
 	m_fPlayTime = 0.0f;

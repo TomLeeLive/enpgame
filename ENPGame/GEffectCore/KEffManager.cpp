@@ -2,7 +2,7 @@
 //#include "_stdafx.h"
 #include "KEffManager.h"
 
-void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
+void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strShaderName,
 	D3DXVECTOR3 vScl, float fTime) {
 	//D3DXVECTOR3 vScl, float fTime, int Width, int WidthSize, int Height, int HeightSize) {
 	int iType = type;
@@ -16,13 +16,13 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile,
 	switch (iType) {
 	case G_EFFECT_BULLET:
 	{
-		auto Effect = make_shared<KEffect>();
+		auto Effect = new KEffect;
 		Effect->Init();
-		
+	
 
 		//play 버튼시 init() 부분
 		//EnterCriticalSection(&g_CSd3dDevice);
-		Effect->m_pSprite->Create(g_pd3dDevice, L"data/shader/plane.hlsl", strFile->c_str());
+		Effect->m_pSprite->Create(g_pd3dDevice, strShaderName, strFile->c_str());
 		//LeaveCriticalSection(&g_CSd3dDevice);
 
 		//이미지 이름을 저장해 놓는다. 나중에 save 할때 쓴다.
@@ -89,7 +89,9 @@ BOOL KEffManager::ExtractSubString(CString& rString, LPCTSTR lpszFullString,
 	return TRUE;
 }
 
-void KEffManager::Load(T_STR* strFile) {
+int KEffManager::Load(T_STR* strFile, const TCHAR* strShaderName) {
+	T_STR imgFile;
+
 	vector<CString> vecStr;
 
 	FILE *pFile = NULL;
@@ -164,7 +166,7 @@ void KEffManager::Load(T_STR* strFile) {
 
 
 
-		T_STR imgFile = pOutStr;
+		imgFile = pOutStr;
 
 		float fSclX, fSclY, fSclZ;
 
@@ -174,7 +176,7 @@ void KEffManager::Load(T_STR* strFile) {
 
 		/*
 		int  iWidth, iWidthSize, iHeight, iHeightSize;
-		
+
 		iWidth = _wtoi(strWid);
 		iWidthSize = _wtoi(strWidSize);
 		iHeight= _wtoi(strHeight);
@@ -183,7 +185,8 @@ void KEffManager::Load(T_STR* strFile) {
 
 		if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BULLET")) {
 			//Create(G_EFFECT_BULLET, &imgFile,  D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime, iWidth, iWidthSize, iHeight, iHeightSize);
-			Create(G_EFFECT_BULLET, &imgFile, D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime);
+
+			//Create(G_EFFECT_BULLET, &imgFile, strShaderName, D3DXVECTOR3(fSclX, fSclY, fSclZ), fTime);
 		}
 		//else if (!_tcscmp(vecStr[iItem + 0], L"#KEFFECT_BLOOD")) {
 		//	UICreate(GUI_TYPE_BUTTON, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
@@ -192,6 +195,59 @@ void KEffManager::Load(T_STR* strFile) {
 		//	UICreate(GUI_TYPE_BUTTONHALF, &imgFile, SwapChainDesc, D3DXVECTOR3(fSclX, fSclY, fSclZ), D3DXVECTOR3(fTransX, fTransY, fTransZ), iAutoRescale);
 		//}
 	}
+
+
+
+
+
+
+	bool bThread = false;
+
+	TCHAR szFileName[256];
+	TCHAR Drive[MAX_PATH];
+	TCHAR Dir[MAX_PATH];
+	TCHAR FName[MAX_PATH];
+	TCHAR Ext[MAX_PATH];
+
+	// 종복 방지 
+	if (strFile)
+	{
+
+		_tsplitpath_s(strFile->c_str(), Drive, Dir, FName, Ext);
+		Ext[4] = 0;
+		_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
+
+		for (TemplateMapItor itor = TMap.begin(); itor != TMap.end(); itor++)
+		{
+			GModel *pPoint = (GModel *)(*itor).second;
+			if (!_tcsicmp(pPoint->m_szName.c_str(), szFileName))
+			{
+				return (*itor).first;
+			}
+		}
+	}
+
+	if (GetFileTypeID(strFile->c_str()) == NULLFILE || m_pEffObj == NULL)
+	{
+		return -1;
+	}
+
+	m_pEffObj->Init();
+	m_pEffObj->m_szName = szFileName;
+	if (m_pEffObj->m_pSprite->Create(g_pd3dDevice, strShaderName, imgFile.c_str())) {
+		m_pEffObj->m_pSprite->SetRectAnimation(1.0f, 4, 128, 4, 128);
+		m_pEffObj->m_bCheck = true;
+
+		TMap.insert(make_pair(m_iCurIndex++, m_pEffObj));
+		return m_iCurIndex - 1;
+	}
+
+	return -1;
+
+
+
+
+	
 }
 void KEffManager::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 
@@ -217,14 +273,26 @@ bool		KEffManager::Init() {
 	return true;
 };
 bool		KEffManager::Frame(GCamera* camera, GTimer* timer) { 
-	for (int i = 0;i < m_List.size();i++)
-		m_List[i]->Frame(camera, timer);
+	list<KEffect*>::iterator _F = m_List.begin();
+	list<KEffect*>::iterator _L = m_List.end();
+
+	for (; _F != _L; ++_F)
+	{
+		(*_F)->PreFrame(camera, timer);
+		(*_F)->Frame();
+	}
+
 	return true;
 };
 bool		KEffManager::Render() { 
 	
-	for (int i = 0;i < m_List.size();i++)
-		m_List[i]->Render();
+	list<KEffect*>::iterator _F = m_List.begin();
+	list<KEffect*>::iterator _L = m_List.end();
+
+	for (; _F != _L; ++_F)
+	{
+		(*_F)->Render(g_pImmediateContext);
+	}
 
 	//EnterCriticalSection(&g_CSImmediateContext);
 	ClearD3D11DeviceContext(g_pImmediateContext);
@@ -233,7 +301,32 @@ bool		KEffManager::Render() {
 	return true; 
 
 };
-bool		KEffManager::Release() { return true; };
+bool		KEffManager::Release() { 
+
+	//list<KEffect*>::iterator _F = m_List.begin();
+	//list<KEffect*>::iterator _L = m_List.end();
+
+	//for (; _F != _L; ++_F)
+	//{
+	//	delete (*_F);
+	//	*_F = 0;
+	//}
+
+	//_F = m_List.begin();
+	//while (_F != m_List.end())
+	//{
+	//	if (*_F == 0) {
+
+	//		_F = m_List.erase(_F);
+	//	}
+	//	else {
+	//		_F++;
+	//	}
+	//}
+	//m_List.clear();
+
+	return true; 
+};
 
 //창이 사이즈가 변경이되면 호출이 됨.
 HRESULT		KEffManager::CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) { return S_OK; }
@@ -351,6 +444,43 @@ void KEffManager::ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext
 	pd3dDeviceContext->RSSetState(NULL);
 }
 
+
+FILETYPE KEffManager::GetFileTypeID(const TCHAR* pszFileName)
+{
+	TCHAR szFileName[256];
+	TCHAR Drive[MAX_PATH];
+	TCHAR Dir[MAX_PATH];
+	TCHAR FName[MAX_PATH];
+	TCHAR Ext[MAX_PATH];
+	_tsplitpath(pszFileName, Drive, Dir, FName, Ext);
+	Ext[4] = 0;
+	_stprintf_s(szFileName, _T("%s%s"), FName, Ext);
+
+	if (!_tcsicmp(Ext, _T(".EFF")))
+	{
+		KEffect* pEffObj = NULL;
+		SAFE_NEW(pEffObj, KEffect);
+		_ASSERT(pEffObj);
+		m_pEffObj = pEffObj;
+		pEffObj->m_type = G_EFFECT_BULLET;
+		return EFFFILE;
+	}
+
+	return NULLFILE;
+}
+
+void KEffManager::SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj)
+{
+	GTemplateMap< KEffect >::TemplateMapItor itor;
+	for (itor = TMap.begin(); itor != TMap.end(); itor++)
+	{
+		KEffect *pPoint = (KEffect *)(*itor).second;
+		if (pPoint)
+		{
+			pPoint->SetMatrix(pWorld, pView, pProj);
+		}
+	}
+}
 KEffManager::KEffManager()
 {
 }
@@ -358,4 +488,6 @@ KEffManager::KEffManager()
 
 KEffManager::~KEffManager()
 {
+	m_List.clear();
 }
+

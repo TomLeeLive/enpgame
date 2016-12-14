@@ -34,7 +34,8 @@ const enum FILETYPE {
 	GMTFILE,
 	TBSFILE,
 	SKMFILE,
-	MATFILE
+	MATFILE,
+	EFFFILE
 };
 
 

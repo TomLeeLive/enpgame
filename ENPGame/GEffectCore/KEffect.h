@@ -19,6 +19,16 @@ enum G_EFFECT_TYPE {
 class KEffect
 {
 public:
+	D3DXVECTOR3					m_vCenter;
+	D3DXMATRIX					m_matWorld;
+	D3DXMATRIX					m_matView;
+	D3DXMATRIX					m_matProj;
+
+	GCamera*					m_pCamera;
+	GTimer*						m_pTimer;
+	T_STR						m_szDirName;
+	T_STR						m_szName;
+
 	G_EFFECT_TYPE				m_type;
 	float						m_fPlayTime;
 	bool						m_bCheck;
@@ -33,10 +43,13 @@ public:
 	shared_ptr<GPlaneShape>		m_pPlane;
 	shared_ptr<GPlaneShape>		m_pScreen;
 	bool RenderPlane();
+
+	virtual void				SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
 public:
 	virtual bool		Init();
-	virtual bool		Frame(GCamera* camera, GTimer* timer);
-	virtual bool		Render();
+	virtual bool		PreFrame(GCamera* camera, GTimer* timer);
+	virtual bool		Frame();
+	virtual bool		Render(ID3D11DeviceContext*		pContext);
 	virtual bool		Release();
 	//--------------------------------------------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성

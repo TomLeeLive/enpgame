@@ -17,7 +17,7 @@ bool GProjMain::Init()
 
 	
 	T_STR strFile = L"fire.eff";
-	m_EffManager.Load(&strFile);
+	I_EffMgr.Load(&strFile, L"data/shader/plane.hlsl");
 	return true;
 }
 bool GProjMain::Frame()
@@ -27,7 +27,13 @@ bool GProjMain::Frame()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
-	m_EffManager.Frame(m_pMainCamera,&m_Timer);
+	I_EffMgr.Frame(m_pMainCamera,&m_Timer);
+
+	if (I_Input.KeyCheck(DIK_F) == KEY_PUSH) {
+		//m_pBoneObject = (GBoneObj*)I_ObjMgr.GetPtr(iMatrixIndex);
+		KEffect* eff = I_EffMgr.GetPtr(L"fire.eff");
+		I_EffMgr.m_List.push_back(eff);
+	}
 	return true;
 }
 bool GProjMain::Render()
@@ -38,7 +44,7 @@ bool GProjMain::Render()
 	//float t = m_Timer.GetElapsedTime() * D3DX_PI;
 
 
-	m_EffManager.Render();
+	I_EffMgr.Render();
 
 
 	return true;
@@ -47,7 +53,7 @@ bool GProjMain::Release()
 {
 	SAFE_ZERO(m_pMainCamera);
 
-	m_EffManager.Release();
+	I_EffMgr.Release();
 
 	return true;
 }
@@ -59,7 +65,7 @@ HRESULT GProjMain::CreateResource()
 {
 	HRESULT hr;
 
-	m_EffManager.CreateResource(&m_SwapChainDesc);
+	I_EffMgr.CreateResource(&m_SwapChainDesc);
 
 	return S_OK;
 }

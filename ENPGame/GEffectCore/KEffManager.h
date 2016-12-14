@@ -16,9 +16,16 @@ enum G_EFF_TOOL_EXT {
 
 using namespace std;
 
-class KEffManager
+class KEffManager : public GTemplateMap< KEffect >, public GSingleton<KEffManager>
 {
+private:
+	friend class GSingleton<KEffManager>;
+	KEffect*		m_pEffObj;
 public:
+	FILETYPE	GetFileTypeID(const TCHAR* pszFileName);
+	void		SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
+
+
 	BOOL ExtractSubString(CString& rString, LPCTSTR lpszFullString,
 		int iSubString, TCHAR chSep);
 	T_STR_VECTOR				m_ImageList;
@@ -27,9 +34,9 @@ public:
 	ID3D11BlendState*			m_pAlphaBlend;
 	void ClearD3D11DeviceContext(ID3D11DeviceContext* pd3dDeviceContext);
 
-	vector<shared_ptr<KEffect>> m_List;
-	virtual void				Load(T_STR* strFile);
-	virtual void		Create(G_EFFECT_TYPE type, T_STR* strFile,
+	list<KEffect*> m_List;
+	virtual int				Load(T_STR* strFile, const TCHAR* strShaderName);
+	virtual void		Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strShaderName,
 		//D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f, int Width, int WidthSize, int Height, int HeightSize
 		D3DXVECTOR3 vScl = D3DXVECTOR3(1.0f, 1.0f, 1.0f), float fTime = 0.0f
 		);
@@ -44,8 +51,9 @@ public:
 	//--------------------------------------------------------------------------------------
 	virtual HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual HRESULT		DeleteResource();
-public:
+private:
 	KEffManager();
 	virtual ~KEffManager();
 };
 
+#define I_EffMgr KEffManager::GetInstance()
