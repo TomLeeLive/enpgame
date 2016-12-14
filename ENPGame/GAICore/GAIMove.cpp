@@ -15,7 +15,7 @@ D3DXVECTOR3 GAIMove::RandomMove( )
 //									랜덤 목적지 만들기
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 	RandomPoint.x = rand() % 200 - 100;
-	RandomPoint.y = 0.0f;
+	RandomPoint.y = 40.0f;
 	RandomPoint.z = rand() % 200 - 100;
 	return RandomPoint;
 }

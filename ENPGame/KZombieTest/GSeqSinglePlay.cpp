@@ -241,7 +241,19 @@ bool GSeqSinglePlay::FrameGun() {
 		m_Ray.fExtent = 50.0f;
 
 #ifdef G_MACRO_AI_ADD
+		shared_ptr<GAIZombieMgr>pZomb = make_shared<GAIZombieMgr>();
 
+		list<shared_ptr<GNewZombie>>::iterator _F = pZomb->m_Zomb.begin();
+		list<shared_ptr<GNewZombie>>::iterator _L = pZomb->m_Zomb.end();
+
+		for (; _F != _L; ++_F)
+		{
+			if ((*_F).get()->m_bDead == false)
+			{
+				if (ChkOBBToRay(&(*_F).get()->m_OBB, &m_Ray))
+					m_iScore += G_DEFINE_SCORE_BASIC;
+			}
+		}
 #else
 		for (int i = 0; i < m_CharZombie.size();i++) {
 			if (m_CharZombie[i].get()->m_bDead == false) {
@@ -1274,7 +1286,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Init();
+	m_GAIZombMgr.Init(G_DEFINE_MAX_AI_ZOMBIE);
 #else
 	for (int i = 0; i < iNum; i++) {
 		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");

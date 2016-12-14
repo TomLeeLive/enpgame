@@ -5,7 +5,7 @@ GProjMain* g_pMain;
 bool GProjMain::Init()
 {
 
-	m_GAIZombMgr.Init();
+	m_GAIZombMgr.Init(G_DEFINE_MAX_AI_ZOMBIE);
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
@@ -17,9 +17,11 @@ bool GProjMain::Init()
 	m_pMainCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
 
 	SAFE_NEW(m_Box, GBoxShape);
-	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data/flagstone.bmp");
+	m_Box->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data_test/flagstone.bmp");
 	D3DXMatrixIdentity(&m_matBoxWorld);
 	D3DXMatrixScaling(&m_matBoxWorld, 10.0f, 10.0f, 10.0f);
+	m_matBoxWorld._42 = 40.0f;
+	
 
 	
 	
@@ -33,25 +35,25 @@ bool GProjMain::Frame()
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		Logic._43 = g_pMain->m_matBoxWorld._43;
+		//Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._43 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		Logic._43 = g_pMain->m_matBoxWorld._43;
+		//Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._41 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		Logic._41 = g_pMain->m_matBoxWorld._41;
+		//Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 
 	if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		Logic._41 = g_pMain->m_matBoxWorld._41;
+		//Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 
 

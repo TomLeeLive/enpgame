@@ -4,8 +4,6 @@ bool GAIFollow::Init(GNewZombie* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
-
-	
 	return true;
 }
 
@@ -68,10 +66,10 @@ GAIFollow::~GAIFollow()
 }
 int GAIFollow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pMainCamera != nullptr)
-	{
-		m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
-	}
+	//if (m_pMainCamera != nullptr)
+	//{
+	//	m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
+	//}
 	return -1;
 }
 

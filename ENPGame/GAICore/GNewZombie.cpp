@@ -87,7 +87,7 @@ bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 
 
 	//반환받은 방향으로 회전을 하기 위해서..
-	D3DXVECTOR3 vPos = D3DXVECTOR3(m_matZombWld._41, 0.0f, m_matZombWld._43);
+	D3DXVECTOR3 vPos = D3DXVECTOR3(m_matZombWld._41, m_matZombWld._42, m_matZombWld._43);
 	vLook_toPos = vPos - pos;
 
 	if (abs(vPos.x - pos.x) < G_DEFINE_AI_ALMOST_ZERO && abs(vPos.z - pos.z) < G_DEFINE_AI_ALMOST_ZERO)
@@ -120,6 +120,7 @@ bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 
 	m_matZombWld = matZombie;
 
+	m_matZombWld._42 = G_DEFINE_CHAR_Y_POS;
 
 	return true;
 }
@@ -161,10 +162,17 @@ bool	GNewZombie::Release()
 
 
 	
-	
+GNewZombie::GNewZombie(int iNum) {
+	m_iNum = iNum;
+	D3DXMatrixIdentity(&m_matZombWld);
+
+	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+	m_State = G_AI_MOVE;
+	D3DXMatrixIdentity(&m_matZombWld);
+}
 GNewZombie::GNewZombie()
 {
-
+	m_iNum = 0;
 	D3DXMatrixIdentity(&m_matZombWld);
 	
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);

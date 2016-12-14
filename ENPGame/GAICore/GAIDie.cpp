@@ -46,10 +46,10 @@ GAIDie::~GAIDie()
 }
 int GAIDie::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pMainCamera != nullptr)
-	{
-		m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
-	}
+	//if (m_pMainCamera != nullptr)
+	//{
+	//	m_pMainCamera->WndProc(hWnd, msg, wParam, lParam);
+	//}
 	return -1;
 }
 
