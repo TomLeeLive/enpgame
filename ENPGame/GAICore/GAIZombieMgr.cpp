@@ -18,15 +18,12 @@ bool GAIZombieMgr::Load(int iNum)
 		pObjA->setState(G_AI_IDLE);
 
 		pObjA->m_matZombWld._41 = (rand() * 3) % 303;
+		pObjA->m_matZombWld._42 = 0.0f;
 		pObjA->m_matZombWld._43 = (rand() * 3) % 303;
 
 		TCHAR buf[256];
 		_stprintf_s(buf, _countof(buf), _T("x:%f, z:%f\n"), pObjA->m_matZombWld._41, pObjA->m_matZombWld._43);
 		OutputDebugString(buf);
-
-		//pObjA->m_vZombPos.x = pObjA->m_matZombWld._41;
-		//pObjA->m_vZombPos.y = 0.0f;
-		//pObjA->m_vZombPos.z = pObjA->m_matZombWld._43;
 
 		pObjA->Set(pChar0,
 			pChar0->m_pBoneObject,

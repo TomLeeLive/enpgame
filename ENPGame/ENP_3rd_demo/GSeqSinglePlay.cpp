@@ -1274,7 +1274,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Init();
+	m_GAIZombMgr.Init(G_DEFINE_MAX_AI_ZOMBIE);
 #else
 	for (int i = 0; i < iNum; i++) {
 		auto pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");

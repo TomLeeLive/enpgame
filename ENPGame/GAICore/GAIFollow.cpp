@@ -4,8 +4,6 @@ bool GAIFollow::Init(GNewZombie* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
 
-
-	
 	return true;
 }
 
