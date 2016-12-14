@@ -63,6 +63,7 @@ public:
 
 class KEffectObj {
 public:
+	bool    m_bStart;
 	bool	m_bEnd;
 	bool	m_bLoop;
 	KEffect* m_pEffect;
@@ -79,15 +80,39 @@ public:
 	float	m_fTime;
 
 	virtual bool		Init() { return true; };
-	virtual bool		PreFrame(GCamera* camera, GTimer* timer) { 
+	virtual bool		PreFrame(GCamera* camera, GTimer* timer) {
 		m_pEffect->PreFrame(camera, timer);
-		return true; 
+		return true;
 	};
 	virtual bool		Frame() {
-		
+
 
 		//시작시간.
-		m_fStartTime = m_pEffect->m_pTimer->GetElapsedTime();
+		if (m_bStart) {
+			m_fStartTime = m_pEffect->m_pTimer->GetElapsedTime();
+			m_bStart = false;
+
+			m_pEffect->m_pSprite->m_fTime = 0.0f;
+			m_pEffect->m_pSprite->m_iApplyIndex = 0;
+			m_pEffect->m_pSprite->m_fAnimTime = 0.0f;
+			m_pEffect->m_pSprite->m_fLifeTime = 0.0f;
+			m_pEffect->m_pSprite->m_fElapseTime = 0.0f;
+
+			m_pEffect->m_pSprite->m_fAnimTime = 0.0f;
+			m_pEffect->m_pSprite->m_fLifeTime = 0.0f;
+			m_pEffect->m_pSprite->m_fElapseTime = 0.0f;
+			m_pEffect->m_pSprite->m_bInstancing = false;
+			m_pEffect->m_pSprite->m_BlendType = 0;
+			m_pEffect->m_pSprite->m_fTime = 0.0f;
+			m_pEffect->m_pSprite->m_iApplyIndex = 0;
+			m_pEffect->m_pSprite->m_fSecPerRender = 0.2f;
+			//m_pEffect->m_pSprite->m_iNumTexture = 0;
+			m_pEffect->m_pSprite->m_RectSet.left = 4;
+			m_pEffect->m_pSprite->m_RectSet.right = 64; // 텍스쳐 가로 셋 갯수 및 크기	
+			m_pEffect->m_pSprite->m_RectSet.top = 4;
+			m_pEffect->m_pSprite->m_RectSet.bottom = 64; // 텍스쳐 세로 셋 갯수 및 크기
+		}
+
 
 		//경과시간.
 		m_fElapsedTime = m_pEffect->m_pTimer->GetElapsedTime() - m_fStartTime;
@@ -95,15 +120,15 @@ public:
 		/*
 		if (m_pChar->m_iAniLoop != 0 || m_fFrame < m_iLastFrame - 1)
 		{
-			if (m_pBoneObject->AniFrame(m_fFrame,
-				m_fLerpTime,
-				m_iStartFrame,
-				m_iLastFrame,
-				m_pMatrix))
-			{
-				m_iCurrentFrame = m_iStartFrame;
-				m_fFrame = (float)m_iStartFrame + m_fLerpTime;
-			}
+		if (m_pBoneObject->AniFrame(m_fFrame,
+		m_fLerpTime,
+		m_iStartFrame,
+		m_iLastFrame,
+		m_pMatrix))
+		{
+		m_iCurrentFrame = m_iStartFrame;
+		m_fFrame = (float)m_iStartFrame + m_fLerpTime;
+		}
 		}
 		*/
 
@@ -113,7 +138,7 @@ public:
 			if (++m_iApplyIndex >= m_pEffect->m_pSprite->m_iNumTexture) {
 				if (true == m_bLoop)
 					m_iApplyIndex = 0;
-				else{
+				else {
 					m_iApplyIndex--;
 					m_bEnd = true;
 					return false;
@@ -123,18 +148,18 @@ public:
 			if (true == m_bLoop)
 				m_fElapsedTime = 0.0f;
 		}
-		m_pEffect->m_pSprite->m_fElapseTime = m_fElapsedTime;
-		m_pEffect->m_pSprite->Updata(g_pImmediateContext, m_fElapsedTime, m_iApplyIndex, m_pEffect->m_pTimer->GetElapsedTime(), m_fElapsedTime);
+		//m_pEffect->m_pSprite->m_fElapseTime = m_fElapsedTime;
+		m_pEffect->m_pSprite->Updata(g_pImmediateContext, m_fElapsedTime, m_iApplyIndex, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame);
 		//Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
 
 		m_pEffect->m_pSprite->Frame(g_pImmediateContext, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame);
 		m_pEffect->Frame();
-		return true; 
+		return true;
 	};
 	virtual bool		Render(ID3D11DeviceContext*		pContext) {
-		if(!m_bEnd)
+		if (!m_bEnd)
 			m_pEffect->Render(pContext);
-		return true; 
+		return true;
 	};
 	virtual bool		Release() { return true; };
 	virtual bool		Set(KEffect* pEffect, float fStart, float fEnd) {
@@ -150,6 +175,7 @@ public:
 	virtual HRESULT		DeleteResource() { return S_OK; };
 public:
 	KEffectObj() {
+		m_bStart = true;
 		m_bEnd = false;
 		m_bLoop = false;
 		m_fTime = 0.0f;
