@@ -102,6 +102,9 @@
 
 #endif
 
+//게임 이벤트 데이터 저장용
+#include "GEventData.h"
+
 //UI
 #include "GUIManager.h"
 

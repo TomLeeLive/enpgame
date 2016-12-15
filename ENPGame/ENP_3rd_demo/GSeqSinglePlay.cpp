@@ -206,6 +206,7 @@ bool GSeqSinglePlay::Init()
 	strFile = L"data/ui_singleplay.gui";
 	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
 
+	I_GameEvent.init();
 
 	m_ObjGun.Init();
 
