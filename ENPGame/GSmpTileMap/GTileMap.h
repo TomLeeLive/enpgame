@@ -1,4 +1,6 @@
 #pragma once
+
+#define UVNum 20
 #include "map/GHeightMap.h"
 class GTileMap : public GHeightMap
 {

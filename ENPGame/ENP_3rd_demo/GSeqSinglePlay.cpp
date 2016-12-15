@@ -653,6 +653,23 @@ bool		GSeqSinglePlay::InitChar() {
 bool		GSeqSinglePlay::InitObj() {
 #ifdef G_MACRO_MAP_ADD
 
+
+	//---------------------------------------------------------------------------
+	// Map Boudery
+	//---------------------------------------------------------------------------
+	//╬у
+	m_Wall[G_BB_WALL1].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, -4500.0f));
+	//╣з
+	m_Wall[G_BB_WALL2].Init(D3DXVECTOR3(-4500.0f, 0.0f, 4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
+	//аб
+	m_Wall[G_BB_WALL3].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(-4500.0f, 1000.0f, 4500.0f));
+	//©Л
+	m_Wall[G_BB_WALL4].Init(D3DXVECTOR3(4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
+	for (int i = 0; i < G_BB_CNT; i++)
+	{
+		D3DXMatrixIdentity(&m_matWallBB[i]);
+	}
+
 	for (int i = 0; i < G_OBJ_CNT; i++) {
 		D3DXMatrixIdentity(&m_matObjWld[i]);
 		D3DXMatrixIdentity(&m_matObjScl[i]);
@@ -1291,8 +1308,6 @@ bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	m_Objbit.reset();
 
-
-
 	for (int i = 0; i < G_OBJ_CNT; i++)
 	{		
 		if(m_Obj[i]->m_LightType == G_LIGHT_TYPE_SPECULAR)
@@ -1310,6 +1325,16 @@ bool		GSeqSinglePlay::FrameObj() {
 			m_Objbit.set(i);
 		}
 	}
+
+	for (int i = 0; i < G_BB_CNT; i++)
+	{
+		m_Wall[i].Frame(&m_matWallBB[i]);
+		if (m_pCamera->CheckOBBInPlane(&m_Wall[i]))
+		{
+			m_Wallbit.set(i);
+		}
+	}
+
 #endif
 	return true;
 };
@@ -1479,6 +1504,14 @@ bool		GSeqSinglePlay::RenderObj() {
 		if(m_bDebugMode)
 			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
+
+	//BOUD
+	for (int i = 0; i < G_BB_CNT; i++)
+	{
+		if(m_bDebugMode)
+		m_Wall[i].Render(&m_matWallBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	}
+
 #endif
 	return true;
 };

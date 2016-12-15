@@ -67,7 +67,14 @@ enum G_OBJECT {
 	G_OBJ_CNT
 };
 
-
+enum G_WALL
+{
+	G_BB_WALL1 = 0,
+	G_BB_WALL2,
+	G_BB_WALL3,
+	G_BB_WALL4,
+	G_BB_CNT
+};
 
 enum G_ZOMB_ST {
 	G_ZOMB_ST_WALK =0,

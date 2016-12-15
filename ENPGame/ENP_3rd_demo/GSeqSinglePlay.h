@@ -93,6 +93,10 @@ public:
 	D3DXMATRIX	m_matObjWld[G_OBJ_CNT];
 	D3DXMATRIX  m_matObjScl[G_OBJ_CNT], m_matObjRot[G_OBJ_CNT], m_matObjTrans[G_OBJ_CNT];
 	bitset<G_OBJ_CNT> m_Objbit;
+
+	GBBox m_Wall[G_BB_CNT];
+	D3DXMATRIX m_matWallBB[G_BB_CNT];
+	bitset<G_BB_CNT> m_Wallbit;
 	//--------------------------------------------------------------------------------------
 	// ÄõµåÆ®¸®
 	//--------------------------------------------------------------------------------------
