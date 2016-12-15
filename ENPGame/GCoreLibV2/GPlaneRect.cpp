@@ -149,6 +149,8 @@ bool		GControlUI::End(ID3D11DeviceContext* pContext) {
 	return m_pShape->PostRender(pContext);
 }
 bool		GControlUI::Render(ID3D11DeviceContext* pContext) {	
+	if (!m_bRender)
+		return false;
 	// Store the old render targets
 	ID3D11RenderTargetView* pOldRTV;
 	ID3D11DepthStencilView* pOldDSV;
@@ -283,6 +285,8 @@ GControlUI::GControlUI()
 	m_iHeightAfter = NULL;
 	m_bAutoRescale = true;
 	m_bAutoRetrans = false;
+
+	m_bRender = true;
 	//m_bRelTrans = false;	// relativity(상대) 좌표 저장
 	//m_bRelScale = false;
 	//m_vRelTrans = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

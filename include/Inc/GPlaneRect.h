@@ -22,6 +22,7 @@ public:
 	HRESULT						SetBlendState();
 	ID3D11BlendState*			m_pAlphaBlend;
 public:
+	bool			m_bRender;
 	int				m_iWidthBefore;
 	int				m_iWidthAfter;
 	int				m_iHeightBefore;

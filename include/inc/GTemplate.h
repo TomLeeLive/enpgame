@@ -105,7 +105,6 @@ namespace GCORESTD {
 	{
 		return (int)TMap.size();
 	}
-
 	template < class Child >
 	bool GTemplateMap< Child >::Frame()
 	{

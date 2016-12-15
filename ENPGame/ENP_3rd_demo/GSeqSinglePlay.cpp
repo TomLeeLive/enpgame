@@ -206,6 +206,10 @@ bool GSeqSinglePlay::Init()
 	strFile = L"data/ui_singleplay.gui";
 	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
 
+
+	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
+	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
+
 	InitGame();
 	InitChar();
 	InitEffect();
@@ -408,7 +412,16 @@ bool GSeqSinglePlay::Frame()
 	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_BULLET])->SetXSize(m_CharHero[0].get()->m_iBullet);
 	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_BULLET])->SetXSize(m_CharHero[1].get()->m_iBullet);
 
-	FrameGun();
+	m_UIManager.m_pUIList[G_DEFINE_UI_CROSSHAIR]->m_bRender = !m_bGameOver;
+	m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER]->m_bRender = m_bGameOver;
+
+	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING]->m_bRender = m_bChatting;
+	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_SPACE]->m_bRender = m_bChatting;
+
+	if (!m_bGameOver) {
+		FrameGun();
+	}
+
 	return true;
 }
 
@@ -1367,8 +1380,9 @@ bool        GSeqSinglePlay::RenderGame() {
 	m_ObjGun.SetMatrix(NULL, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 
 	//if(!m_bDebugCamera)
-	m_ObjGun.Render(g_pImmediateContext);
-
+	if (!m_bGameOver) {
+		m_ObjGun.Render(g_pImmediateContext);
+	}
 
 	if(g_pMain->m_bDebugInfoPrint){
 		RECT rc;
@@ -1961,6 +1975,8 @@ GSeqSinglePlay::GSeqSinglePlay(void)
 	m_bColorTexRender = true;
 	//±×¸²ÀÚ [End]
 #endif
+	m_bGameOver = false;
+	m_bChatting = false;
 	memset(m_pTextOutBuffer, 0, sizeof(TCHAR) * 256);
 
 	m_iScore = 0;
