@@ -207,11 +207,46 @@ bool GSeqSinglePlay::Init()
 	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
 
 
-	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
-	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
+	m_ObjGun.Init();
 
-	InitGame();
+	m_ObjGun.m_bAniLoop = false;
+
+
+	if (!m_ObjGun.Load(g_pd3dDevice, G_OBJ_LOC_FPS_SHOTGUN, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR))
+	{
+		return false;
+	}
+
+	//--------------------------------------------------------------------------------------
+	// 카메라  행렬 
+	//--------------------------------------------------------------------------------------	
+	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
+	//디버그 카메라.
+	m_pDebugCamera = make_shared<GCamera>();
+	m_pDebugCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+	m_pDebugCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+	//이벤트용 카메라.
+	m_pEventCamera = make_shared<GCamera>();
+	m_pEventCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+	m_pEventCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+
+
+
+	for (int i = 0; i < G_HERO_CNT; i++) {
+		auto FPSCamera = make_shared<GFPSCamera>();
+		fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
+		FPSCamera.get()->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+		FPSCamera.get()->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+		m_pFPSCamera.push_back(FPSCamera);
+	}
+
+
+	
+
+
+
 	InitChar();
+	InitGame();
 	InitEffect();
 	InitMap();
 	InitObj();
@@ -296,7 +331,7 @@ bool GSeqSinglePlay::FrameGun() {
 			{
 				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
 
-				if (m_CharHero[i].get()->m_iHP <= 0)
+				if (m_CharHero[i].get()->m_iHP <= 0 /* && false == m_CharHero[i].get()->m_bDead */)
 					m_CharHero[i].get()->m_bDead = true;
 
 				if (i == G_HERO_TOM && m_CharHero[i].get()->m_bDead == true)
@@ -393,9 +428,11 @@ bool GSeqSinglePlay::Frame()
 	}
 #endif
 
+	m_pCamera->Frame();
 
-
-
+	if (!m_bGameOver) {
+		FrameGun();
+	}
 
 	FrameGame();
 	FrameChar();
@@ -418,9 +455,7 @@ bool GSeqSinglePlay::Frame()
 	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING]->m_bRender = m_bChatting;
 	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_SPACE]->m_bRender = m_bChatting;
 
-	if (!m_bGameOver) {
-		FrameGun();
-	}
+
 
 	return true;
 }
@@ -516,51 +551,23 @@ bool GSeqSinglePlay::Release()
 
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
-	//EnterCriticalSection(&g_CSd3dDevice);
+
+	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
+	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
+	m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_YELLOW_BTN]->m_bRender = false;
+	m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_SPACE]->m_bRender = false;
+	m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_TO_MENU_TEXT]->m_bRender = false;
 
 	D3DXMatrixIdentity(&m_matWorld);
 
-	m_ObjGun.Init();
-
-	m_ObjGun.m_bAniLoop = false;
-
-	
-	if (!m_ObjGun.Load(g_pd3dDevice, G_OBJ_LOC_FPS_SHOTGUN, G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR))
-	{
-		return false;
-	}
-	
-	//--------------------------------------------------------------------------------------
-	// 카메라  행렬 
-	//--------------------------------------------------------------------------------------	
-	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
-	//디버그 카메라.
-	m_pDebugCamera = make_shared<GCamera>();
 	m_pDebugCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
-	m_pDebugCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pDebugCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
-	//이벤트용 카메라.
-	m_pEventCamera = make_shared<GCamera>();
 	m_pEventCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
-	m_pEventCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-	m_pEventCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+	
+	for (int i = 0; i < m_pFPSCamera.size(); i++) {
 
-
-
-	for (int i = 0; i < G_HERO_CNT; i++) {
-		auto FPSCamera = make_shared<GFPSCamera>();
-
-		FPSCamera.get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*50.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
-			,D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
-
-		fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
-		FPSCamera.get()->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
-		FPSCamera.get()->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
-
-		m_pFPSCamera.push_back(FPSCamera);
+		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*50.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
+			, D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 	}
-
-
 
 	if (!m_bDebugMode) {
 		m_pCamera = m_pFPSCamera[m_CurrentHero].get();
@@ -574,7 +581,34 @@ bool        GSeqSinglePlay::InitGame() {
 		g_pMain->m_bDebugFpsPrint = true;
 	}
 
-	//LeaveCriticalSection(&g_CSd3dDevice);
+	GCharacter* pChar[2];
+	pChar[0] = I_CharMgr.GetPtr(L"HERO1_IDLE");
+	pChar[1] = I_CharMgr.GetPtr(L"HERO2_IDLE");
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		m_CharHero[i]->Set(pChar[i], 
+			pChar[i]->m_pBoneObject,
+			pChar[i]->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar[i]->m_pBoneObject->m_Scene.iLastFrame);
+		
+		m_CharHero[i]->m_pChar->Init();
+
+		m_CharHero[i].get()->m_bDead = false;
+		m_CharHero[i].get()->m_iBullet = 100;
+		m_CharHero[i].get()->m_iHP = 100;
+		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
+	}
+
+
+
+
+
+	//좀비 로드
+	m_GAIZombMgr.m_Zomb.clear();
+
+	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
+
+
 #endif
 	return true;
 };
@@ -1065,36 +1099,6 @@ bool		GSeqSinglePlay::InitEffect() {
 
 bool        GSeqSinglePlay::FrameGame() {
 #ifdef G_MACRO_GAME_ADD
-	
-	if (m_CharHero[0]->m_iHP < 0)
-		m_bGameOver = true;
-
-	if (m_bGameOver) {
-		//D3DXVECTOR3 vEventCamPos;
-		m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[0]->m_matWorld._41;
-		m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[0]->m_matWorld._43;
-		m_vEventCamPos.y = 100.f;
-
-		m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_CharHero[0]->m_matWorld._41, m_CharHero[0]->m_matWorld._42, m_CharHero[0]->m_matWorld._43));
-		m_pCamera = m_pEventCamera.get();
-	}
-	
-
-
-	m_fPlayTime = (int)g_fDurationTime;
-
-	if (!m_bDebugMode)
-		ShowCursor(false); // 커서를 화면에서 감추기
-	else {
-		ShowCursor(true);
-	}
-
-	//1인칭 샷것 스페큘러 값 업데이트를 위해..
-	if (m_ObjGun.m_LightType == G_LIGHT_TYPE_SPECULAR) {
-		m_ObjGun.m_cbLight.g_vEyeDir.x = m_pCamera->m_vLookVector.x;
-		m_ObjGun.m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
-		m_ObjGun.m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
-	}
 
 	//디버그 모드 토글
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
@@ -1115,6 +1119,93 @@ bool        GSeqSinglePlay::FrameGame() {
 		}
 	}
 
+	if (!m_bDebugMode)
+		ShowCursor(false); // 커서를 화면에서 감추기
+	else {
+		ShowCursor(true);
+	}
+
+	//게임 오버 처리 [Start]
+	static float fSpaceKeyShadeTime = 0.0f;
+	static bool	 fSpaceKeyShade = false;
+
+	for (int i = 0; i < m_CharHero.size(); i++) {
+		if (m_CharHero[i]->m_bDead == true && false == m_bGameOver) {
+			fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
+			m_bGameOver = true;
+			m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_YELLOW_BTN]->m_bRender = true;
+			m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_SPACE]->m_bRender = true;
+			m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_TO_MENU_TEXT]->m_bRender = true;
+		}
+	}
+
+	
+	if (m_bGameOver) {
+		//경과시간.
+		float fElapsedTime = g_pMain->m_Timer.GetElapsedTime() - fSpaceKeyShadeTime;
+
+		if (fElapsedTime > 1.0f) {
+			fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
+ 			fSpaceKeyShade = !fSpaceKeyShade;
+		}
+
+		if (fSpaceKeyShade)
+			((GButtonCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_SPACE])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
+		else
+			((GButtonCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_SPACE])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		
+		//죽은 캐릭터 중심으로 카메라 회전 처리.
+		for (int i = 0; i < m_CharHero.size(); i++) {
+			if (m_CharHero[i]->m_bDead == true)
+			{
+				m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[i]->m_matWorld._41;
+				m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[i]->m_matWorld._43;
+				m_vEventCamPos.y = 100.f;
+
+				m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_CharHero[i]->m_matWorld._41, m_CharHero[i]->m_matWorld._42, m_CharHero[i]->m_matWorld._43));
+
+				break;
+			}
+		}
+
+
+		m_pCamera = m_pEventCamera.get();
+
+		if (g_InputData.bSpace) {
+			
+			//싱글 플레이 관련 데이터를 초기화한다.
+			InitValues();
+			InitGame();
+
+			//카메라를 바꾼다.
+			m_pCamera = m_pFPSCamera[0].get();
+
+			//마우스를 화면에 보이게 한다.
+			ShowCursor(true);
+
+			//메뉴로 돌아간다.
+			g_pMain->ChangeSeq(G_SEQ_MENU);
+			return true;
+		}
+	}
+	//게임 오버 처리 [End]
+	
+
+
+	m_fPlayTime = (int)g_fDurationTime;
+
+
+
+	//1인칭 샷것 스페큘러 값 업데이트를 위해..
+	if (m_ObjGun.m_LightType == G_LIGHT_TYPE_SPECULAR) {
+		m_ObjGun.m_cbLight.g_vEyeDir.x = m_pCamera->m_vLookVector.x;
+		m_ObjGun.m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
+		m_ObjGun.m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
+	}
+
+	
+
 	if (I_Input.KeyCheck(DIK_TAB) == KEY_PUSH) {
 
 		if (G_HERO_TOM == m_CurrentHero) {
@@ -1131,9 +1222,9 @@ bool        GSeqSinglePlay::FrameGame() {
 	}
 
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
-	float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;
+	//float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;
 
-	m_pCamera->Frame();
+
 
 	//for (int i = 0; i < m_pFPSCamera.size(); i++) {
 	//	
@@ -1836,9 +1927,6 @@ bool GSeqSinglePlay::Load()
 		return false;
 	}
 #endif
-	//좀비 로드
-	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
-
 
 	//주인공1 로드
 	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero1.gci") /*_T("data/CharTable.gci")*/))
@@ -1880,11 +1968,7 @@ bool GSeqSinglePlay::Load()
 	m_CharHero.push_back(pObjC);
 
 
-	for (int i = 0; i < m_CharHero.size(); i++) {
-		m_CharHero[i].get()->m_iBullet = 100;
-		m_CharHero[i].get()->m_iHP = 100;
-		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
-	}
+
 #endif
 	
 	return true;
@@ -1988,14 +2072,7 @@ HRESULT GSeqSinglePlay::DeleteResource()
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();
 	return S_OK;
 }
-GSeqSinglePlay::GSeqSinglePlay(void)
-{
-#ifdef G_DEFINE_SHADOW
-	//그림자 [Start]
-	SAFE_ZERO(m_pQuad);
-	m_bColorTexRender = true;
-	//그림자 [End]
-#endif
+bool GSeqSinglePlay::InitValues(){
 	m_vEventCamPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bGameOver = false;
 	m_bChatting = false;
@@ -2005,6 +2082,18 @@ GSeqSinglePlay::GSeqSinglePlay(void)
 	m_fPlayTime = 0.0f;
 	m_CurrentHero = G_HERO_TOM;
 	m_bDebugMode = false;
+	return true;
+};
+
+GSeqSinglePlay::GSeqSinglePlay(void)
+{
+#ifdef G_DEFINE_SHADOW
+	//그림자 [Start]
+	SAFE_ZERO(m_pQuad);
+	m_bColorTexRender = true;
+	//그림자 [End]
+#endif
+	InitValues();
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD
 #ifdef G_MACRO_EFFECT_TEST_ADD

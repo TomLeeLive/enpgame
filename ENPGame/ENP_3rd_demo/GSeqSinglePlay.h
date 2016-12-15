@@ -138,7 +138,7 @@ public:
 	bool		Load();
 #endif
 public:
-
+	bool		InitValues();
 	bool        InitGame();
 	bool        InitMap();
 	bool		InitChar();
