@@ -577,6 +577,9 @@ bool GSeqSinglePlay::Release()
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
 
+	((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_IMG])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+	((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_IMG])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
+
 	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
 	m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
 	m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_YELLOW_BTN]->m_bRender = false;
@@ -1189,7 +1192,7 @@ bool        GSeqSinglePlay::FrameGame() {
 		//경과시간.
 		float fElapsedTime = g_pMain->m_Timer.GetElapsedTime() - fSpaceKeyShadeTime;
 
-		if (fElapsedTime > 1.0f) {
+		if (fElapsedTime > G_DEFINE_TIME_SPACEKEY_SHADE) {
 			fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
  			fSpaceKeyShade = !fSpaceKeyShade;
 		}
@@ -1258,10 +1261,16 @@ bool        GSeqSinglePlay::FrameGame() {
 			if (G_HERO_TOM == m_CurrentHero) {
 				m_CurrentHero = G_HERO_JAKE;
 				m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+
+				((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_IMG])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
+				((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_IMG])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 			else {
 				m_CurrentHero = G_HERO_TOM;
 				m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+
+				((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_IMG])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+				((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_IMG])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
 			}
 			m_bDebugMode = false;
 			g_pMain->m_bDebugInfoPrint = false;
