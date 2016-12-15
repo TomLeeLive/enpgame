@@ -306,7 +306,7 @@ bool		KEffManager::Frame(GCamera* camera, GTimer* timer) {
 
 	for (; _F != _L; ++_F)
 	{
-		(*_F)->PreFrame(camera, timer);
+		(*_F)->PreFrame(camera, timer, true);
 		(*_F)->Frame();
 	}
 

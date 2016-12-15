@@ -19,6 +19,8 @@ enum G_EFFECT_TYPE {
 class KEffect
 {
 public:
+	bool						m_bTest;
+	D3DXVECTOR3					m_vPos;
 	D3DXVECTOR3					m_vCenter;
 	D3DXMATRIX					m_matWorld;
 	D3DXMATRIX					m_matView;
@@ -47,7 +49,7 @@ public:
 	virtual void				SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj);
 public:
 	virtual bool		Init();
-	virtual bool		PreFrame(GCamera* camera, GTimer* timer);
+	virtual bool		PreFrame(GCamera* camera, GTimer* timer, bool bTest = false);
 	virtual bool		Frame();
 	virtual bool		Render(ID3D11DeviceContext*		pContext);
 	virtual bool		Release();
@@ -63,27 +65,24 @@ public:
 
 class KEffectObj {
 public:
-	bool    m_bStart;
-	bool	m_bEnd;
-	bool	m_bLoop;
-	KEffect* m_pEffect;
-	float	m_fStartTime;
-	float   m_fElapsedTime;
-	int		 m_iStartFrame;
-	int		 m_iLastFrame;
-	//int		 m_iCurrentFrame;
-	//float	 m_fFrame;
-	//float	 m_fLerpTime;
-	float	 m_fSpeed;
+	bool		m_bStart;
+	bool		m_bEnd;
+	bool		m_bLoop;
+	KEffect*	m_pEffect;
+	float		m_fStartTime;
+	float		m_fElapsedTime;
+	int			m_iStartFrame;
+	int			m_iLastFrame;
+	float		m_fSpeed;
 
-	int		m_iApplyIndex;
-	float	m_fTime;
+	int			m_iApplyIndex;
+	float		m_fTime;
 
 	virtual bool		Init() { return true; };
-	virtual bool		PreFrame(GCamera* camera, GTimer* timer) {
-		m_pEffect->PreFrame(camera, timer);
+	virtual bool		PreFrame(GCamera* camera, GTimer* timer, bool bTest = false) {
+		m_pEffect->PreFrame(camera, timer, bTest);
 		return true;
-	};
+	}
 	virtual bool		Frame() {
 
 
@@ -117,21 +116,6 @@ public:
 		//경과시간.
 		m_fElapsedTime = m_pEffect->m_pTimer->GetElapsedTime() - m_fStartTime;
 
-		/*
-		if (m_pChar->m_iAniLoop != 0 || m_fFrame < m_iLastFrame - 1)
-		{
-		if (m_pBoneObject->AniFrame(m_fFrame,
-		m_fLerpTime,
-		m_iStartFrame,
-		m_iLastFrame,
-		m_pMatrix))
-		{
-		m_iCurrentFrame = m_iStartFrame;
-		m_fFrame = (float)m_iStartFrame + m_fLerpTime;
-		}
-		}
-		*/
-
 		if (m_pEffect->m_pTimer->GetElapsedTime() >= m_pEffect->m_pSprite->m_fSecPerRender)
 		{
 
@@ -148,31 +132,34 @@ public:
 			if (true == m_bLoop)
 				m_fElapsedTime = 0.0f;
 		}
-		//m_pEffect->m_pSprite->m_fElapseTime = m_fElapsedTime;
-		m_pEffect->m_pSprite->Updata(g_pImmediateContext, m_fElapsedTime, m_iApplyIndex, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame);
-		//Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
+		m_pEffect->m_pSprite->Updata(g_pImmediateContext, m_fElapsedTime, m_iApplyIndex, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame, true);
 
-		m_pEffect->m_pSprite->Frame(g_pImmediateContext, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame);
+		m_pEffect->m_pSprite->Frame(g_pImmediateContext, m_pEffect->m_pTimer->GetElapsedTime(), g_fSecPerFrame, true);
 		m_pEffect->Frame();
 		return true;
-	};
+	}
 	virtual bool		Render(ID3D11DeviceContext*		pContext) {
 		if (!m_bEnd)
 			m_pEffect->Render(pContext);
 		return true;
-	};
+	}
 	virtual bool		Release() { return true; };
-	virtual bool		Set(KEffect* pEffect, float fStart, float fEnd) {
+	virtual bool		Set(KEffect* pEffect, float fStart, float fEnd, D3DXVECTOR3 vPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f)) {
+		if (pEffect == NULL)
+			return false;
+
 		m_pEffect = pEffect;
 		m_iStartFrame = fStart;
 		m_iLastFrame = fEnd;
+
+		m_pEffect->m_vPos = vPos;
 		return true;
 	}
 	//--------------------------------------------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//--------------------------------------------------------------------------------------
-	virtual HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) { return S_OK; };
-	virtual HRESULT		DeleteResource() { return S_OK; };
+	virtual HRESULT		CreateResource(DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) { return S_OK; }
+	virtual HRESULT		DeleteResource() { return S_OK; }
 public:
 	KEffectObj() {
 		m_bStart = true;
@@ -189,6 +176,6 @@ public:
 		m_fStartTime = 0.0f;
 		m_fElapsedTime = 0.0f;
 
-	};
-	virtual ~KEffectObj() {};
+	}
+	virtual ~KEffectObj() {}
 };

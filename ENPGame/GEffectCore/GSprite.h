@@ -48,8 +48,8 @@ public:
 						TCHAR* pLoadShaderString,
 						bool   bInstancing = false,
 						ID3D11BlendState* pBlendState = nullptr);
-	bool		Frame(ID3D11DeviceContext*    pContext, float fGlobalTime, float fElapsedTime);
-	void		Updata(ID3D11DeviceContext*    pContext, float& pfCurrentTimer, int& iApplyIndex, float fGlobalTime, float fElapsedTime);
+	bool		Frame(ID3D11DeviceContext*    pContext, float fGlobalTime, float fElapsedTime, bool bTest = false);
+	void		Updata(ID3D11DeviceContext*    pContext, float& pfCurrentTimer, int& iApplyIndex, float fGlobalTime, float fElapsedTime, bool bTest = false);
 	bool		PreDraw(ID3D11DeviceContext* pContext);
 	bool		Render(ID3D11DeviceContext* pContext);
 	bool		PostDraw(ID3D11DeviceContext* pContext);
