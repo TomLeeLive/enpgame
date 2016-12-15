@@ -35,6 +35,9 @@ public:
 	//±×¸²ÀÚ [End]
 #endif
 public:
+	int m_iEventNum;
+		int m_iScriptNum;
+	void							SetEventCamera(G_HERO hero);
 	void							CheckHeroDead(int iChar);
 //	bool							m_bGameOver;
 	bool							m_bChatting;

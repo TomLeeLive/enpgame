@@ -190,7 +190,7 @@ bool GFPSCamera::Frame()
 	float fValue = g_InputData.iMouseValue[2];
 	float fDistance =  m_fSpeed * fValue * g_fSecPerFrame;
 	
-	if( g_InputData.bSpace )	m_fSpeed += g_fSecPerFrame * 10.0f;
+	if(g_InputData.bSpace)	m_fSpeed += g_fSecPerFrame * 10.0f;
 	else						m_fSpeed -= g_fSecPerFrame * 10.0f;
 	// 최소값으로 고정
 	if( m_fSpeed < 1.0f ) m_fSpeed = 1.0f;

@@ -555,6 +555,21 @@ bool GSeqSinglePlay::Render()
 	//render UI
 	m_UIManager.Render();
 
+
+	if (m_bChatting) {
+		//글자 출력한다.
+		RECT rc;
+		rc.top = g_pMain->m_DefaultRT.m_vp.Height / 3 * 2;
+		rc.bottom = g_pMain->m_DefaultRT.m_vp.Height;
+		rc.left = 0;
+		rc.right = g_pMain->m_DefaultRT.m_vp.Width;
+
+
+		_stprintf_s(m_pTextOutBuffer, L"%s", I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Str.c_str());
+		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, DWRITE_TEXT_ALIGNMENT_CENTER, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	}
+
+
 	RenderEffect();
 
 	return true;
@@ -577,6 +592,9 @@ bool GSeqSinglePlay::Release()
 
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
+
+	for (int iEvent = 0; iEvent < I_GameEvent.m_vecEvent.size(); iEvent++)
+		I_GameEvent.m_vecEvent[iEvent]->m_bDone = false;
 
 	((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_IMG])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
 	((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_IMG])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
@@ -1126,6 +1144,14 @@ bool		GSeqSinglePlay::InitEffect() {
 	return true;
 };
 
+void	GSeqSinglePlay::SetEventCamera(G_HERO hero) {
+	//말하는 캐릭터 중심으로 카메라 회전 처리.
+	m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[hero]->m_matWorld._41;
+	m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[hero]->m_matWorld._43;
+	m_vEventCamPos.y = 100.f;
+	m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_CharHero[hero]->m_matWorld._41, m_CharHero[hero]->m_matWorld._42, m_CharHero[hero]->m_matWorld._43));
+}
+
 bool        GSeqSinglePlay::FrameGame() {
 #ifdef G_MACRO_GAME_ADD
 
@@ -1173,9 +1199,101 @@ bool        GSeqSinglePlay::FrameGame() {
 		ShowCursor(true);
 	}
 
-	//게임 오버 처리 [Start]
+	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(m_CharHero[m_CurrentHero]->m_matWorld._41, m_CharHero[m_CurrentHero]->m_matWorld._42, m_CharHero[m_CurrentHero]->m_matWorld._43 );
+
 	static float fSpaceKeyShadeTime = 0.0f;
 	static bool	 fSpaceKeyShade = false;
+
+	//게임 이벤트 처리[Start]
+	{
+
+		for (int iEvent = 0; iEvent < I_GameEvent.m_vecEvent.size(); iEvent++) {
+	
+			if (m_bChatting == true)
+				break;
+
+			if (I_GameEvent.m_vecEvent[iEvent]->m_bDone == true)
+				continue;
+
+			if (D3DXVec3Length(&(I_GameEvent.m_vecEvent[iEvent]->m_vEventPos - vHeroPos)) < G_DEFINE_LENGTH_EVENT_RADIUS) {
+				m_bChatting = true;
+				m_iEventNum = iEvent;
+				m_iScriptNum = 0;
+
+				fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
+				m_pCamera = m_pEventCamera.get();
+
+				break;
+			}
+		}
+
+		if (m_bChatting) {
+
+			SetEventCamera(I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Hero);
+
+			//채팅 창을 보여준다.
+			if (I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Hero == G_HERO_TOM) {
+				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = true;
+				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
+			}
+			else {
+				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
+				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = true;
+			}
+
+
+
+
+			//스페이스 키를 눌렀을때..
+			if (I_Input.KeyCheck(DIK_SPACE) == KEY_PUSH) {
+
+				if (m_iScriptNum < I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript.size()-1) {
+					m_iScriptNum++;
+				}
+				else {
+					I_GameEvent.m_vecEvent[m_iEventNum]->m_bDone = true;
+					m_iEventNum = -1;
+					m_iScriptNum = -1;
+					m_bChatting = false;
+
+					fSpaceKeyShadeTime = 0.0f;
+					fSpaceKeyShade = false;
+
+					//카메라를 바꾼다.
+					m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+
+					//채팅 UI를 안보이게 한다.
+					m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
+					m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
+				}
+				//클릭 사운드
+				g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
+			}
+
+			//경과시간.
+			float fElapsedTime = g_pMain->m_Timer.GetElapsedTime() - fSpaceKeyShadeTime;
+
+			if (fElapsedTime > G_DEFINE_TIME_SPACEKEY_SHADE) {
+				fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
+				fSpaceKeyShade = !fSpaceKeyShade;
+			}
+
+			if (fSpaceKeyShade)
+				((GButtonCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_SPACE])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
+			else
+				((GButtonCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_SPACE])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+
+
+
+			
+			
+		}
+	}
+	//게임 이벤트 처리[End]
+
+
+	//게임 오버 처리 [Start]
+
 
 	for (int i = 0; i < m_CharHero.size(); i++) {
 		if (m_CharHero[i]->m_bDead == true && false == m_bGameOver) {
@@ -1221,7 +1339,7 @@ bool        GSeqSinglePlay::FrameGame() {
 
 
 
-		if (g_InputData.bSpace) {
+		if (I_Input.KeyCheck(DIK_SPACE) == KEY_PUSH) {
 			//클릭 사운드
 			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
 
@@ -1549,9 +1667,10 @@ bool        GSeqSinglePlay::RenderGame() {
 	m_ObjGun.SetMatrix(NULL, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 
 	//if(!m_bDebugCamera)
-	if (!m_bGameOver) {
+	if (!m_bGameOver && m_bChatting == false) {
 		m_ObjGun.Render(g_pImmediateContext);
 	}
+
 
 	if(g_pMain->m_bDebugInfoPrint){
 		RECT rc;
@@ -1628,7 +1747,8 @@ bool		GSeqSinglePlay::RenderChar() {
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
-		if (iChar == m_CurrentHero && m_bDebugMode==false && m_CharHero[iChar]->m_bDead == false)
+		if (iChar == m_CurrentHero && m_bDebugMode==false 
+			&& m_CharHero[iChar]->m_bDead == false && m_bChatting == false)
 			continue;
 
 		m_CharHero[iChar].get()->SetMatrix(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
@@ -2130,6 +2250,9 @@ HRESULT GSeqSinglePlay::DeleteResource()
 	return S_OK;
 }
 bool GSeqSinglePlay::InitValues(){
+	m_iEventNum = -1;
+	m_iScriptNum = -1;
+
 	m_vEventCamPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bGameOver = false;
 	m_bChatting = false;
@@ -2150,6 +2273,7 @@ GSeqSinglePlay::GSeqSinglePlay(void)
 	m_bColorTexRender = true;
 	//그림자 [End]
 #endif
+
 	InitValues();
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD

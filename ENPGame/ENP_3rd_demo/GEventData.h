@@ -17,6 +17,7 @@ public:
 class GEventData
 {
 public:
+	bool		m_bDone;
 	D3DXVECTOR3 m_vEventPos;
 	vector<shared_ptr<GScriptData>> m_vecScript;
 
@@ -34,6 +35,7 @@ private:
 public:
 	vector<shared_ptr<GEventData>>  m_vecEvent;
 	virtual bool init();
+
 
 	GEvent();
 	virtual ~GEvent() {};
