@@ -33,7 +33,8 @@ bool		KEffect::Init() {
 	
 	
 	return true; }
-bool		KEffect::PreFrame(GCamera* camera, GTimer* timer) {
+bool		KEffect::PreFrame(GCamera* camera, GTimer* timer, bool bTest) {
+	m_bTest = bTest;
 	m_pCamera = camera;
 	m_pTimer = timer;
 	return true;
@@ -49,9 +50,9 @@ bool		KEffect::Frame() {
 	FLOAT fDeterminant;
 	//m_matBillboard;
 	D3DXMatrixInverse(&m_matBillboard, &fDeterminant, m_pCamera->GetViewMatrix());
-	m_matBillboard._41 = 0.0f;
-	m_matBillboard._42 = 0.0f;
-	m_matBillboard._43 = 0.0f;
+	m_matBillboard._41 = m_vPos.x;
+	m_matBillboard._42 = m_vPos.y;
+	m_matBillboard._43 = m_vPos.z;
 	m_matBillboard._44 = 1.0f;
 
 	D3DXMATRIX matView = *(m_pCamera->GetViewMatrix());
@@ -59,7 +60,9 @@ bool		KEffect::Frame() {
 	m_pSprite->SetMatrix(&m_matBillboard, &matView, &matProj);
 
 	//EnterCriticalSection(&g_CSImmediateContext);
-	//m_pSprite->Frame(g_pImmediateContext, m_pTimer->GetElapsedTime(), g_fSecPerFrame);
+	if (!m_bTest) {
+		m_pSprite->Frame(g_pImmediateContext, m_pTimer->GetElapsedTime(), g_fSecPerFrame);
+	}
 	//LeaveCriticalSection(&g_CSImmediateContext);
 
 
@@ -159,6 +162,9 @@ void KEffect::SetMatrix(D3DXMATRIX* pWorld, D3DXMATRIX* pView, D3DXMATRIX* pProj
 
 KEffect::KEffect()
 {
+	m_bTest = false;
+	m_vPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 	m_vCenter = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXMatrixIdentity(&m_matWorld);
 	D3DXMatrixIdentity(&m_matView);

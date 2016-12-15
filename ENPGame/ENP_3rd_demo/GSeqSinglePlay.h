@@ -43,6 +43,7 @@ public:
 	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
+
 	bool							FrameGun();
 	GSelect							m_Select;
 	G_RAY							m_Ray;
@@ -57,7 +58,11 @@ public:
 	vector<shared_ptr<GFPSCamera >> m_pFPSCamera;
 #endif
 #ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	bool							UpdateGunEffectPosition();
+#else
 public:
+	
 	GPlaneShape						m_BigPlane;
 	shared_ptr<GSprite>				m_pSprite;
 	ComPtr<ID3D11PixelShader>		m_pPS;
@@ -68,10 +73,12 @@ public:
 
 	shared_ptr<GPlaneShape>			m_pPlane;
 	shared_ptr<GPlaneShape>			m_pScreen;
+	
 	//public:
 	//	bool check; // play button check
 	//	ComPtr<ID3D11BlendState>		m_pAlphaBlendFactor;
 	//	ComPtr<ID3D11BlendState>		m_pAlphaBlend;
+#endif
 #endif
 #ifdef G_MACRO_MAP_ADD
 	//--------------------------------------------------------------------------------------

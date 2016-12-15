@@ -80,9 +80,11 @@ HRESULT GSprite::Load(ID3D11Device* pd3dDevice,
 	m_pBlendState = pBlendState;
 	return S_OK;
 }
-bool GSprite::Frame(ID3D11DeviceContext*    pContext, float fGlobalTime, float fElapsedTime)
+bool GSprite::Frame(ID3D11DeviceContext*    pContext, float fGlobalTime, float fElapsedTime, bool bTest)
 {
-	//Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
+	if (!bTest) {
+		Updata(pContext, m_fTime, m_iApplyIndex, fGlobalTime, fElapsedTime);
+	}
 	return true;
 }
 bool GSprite::PreDraw(ID3D11DeviceContext* pContext)
@@ -237,26 +239,29 @@ void GSprite::Updata(ID3D11DeviceContext*    pContext,
 	float& pfCurrentTimer,
 	int& iApplyIndex,
 	float fGlobalTime,
-	float fElapsedTime)
+	float fElapsedTime, bool bTest)
 {
 	// 스프라이트 발생 경과 시간
 	m_fElapseTime += fElapsedTime;
 	// 에니메이션 교체 주기 누적 시간
 	pfCurrentTimer += fElapsedTime;
 
-	//if (pfCurrentTimer >= m_fSecPerRender)
-	//{
+	if (!bTest) {
+		if (pfCurrentTimer >= m_fSecPerRender)
+		{
 
-	//	if (++iApplyIndex >= m_iNumTexture) {
-	//		if (true == m_bLoop)
-	//			iApplyIndex = 0;
-	//		else
-	//			iApplyIndex--;
-	//	}
-	//		
-	//	if (true == m_bLoop)
-	//		pfCurrentTimer = 0.0f;
-	//}
+			if (++iApplyIndex >= m_iNumTexture) {
+				if (true == m_bLoop)
+					iApplyIndex = 0;
+				else
+					iApplyIndex--;
+			}
+				
+			if (true == m_bLoop)
+				pfCurrentTimer = 0.0f;
+		}
+	}
+
 	// 텍스처 에니메이션
 	if (m_TextureIndex.size())
 	{

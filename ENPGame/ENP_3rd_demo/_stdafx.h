@@ -19,7 +19,7 @@
 #define G_MACRO_EFFECT_ADD   1	//이펙트
 #define G_MACRO_CHAR_ADD     1	//캐릭터
 #define G_MACRO_AI_ADD		 1  //AI
-
+//#define G_MACRO_EFFECT_TEST_ADD 1//AI 테스트용 코드
 //설정값 define
 #include "_values.h"
 
@@ -94,7 +94,12 @@
 #pragma comment( lib, "GEffectCore32.lib" )
 #endif
 
+#ifdef G_MACRO_EFFECT_TEST_ADD
+#include "KEffManager.h"
+#else
 #include "GSprite.h"
+#endif
+
 #endif
 
 //UI

@@ -233,6 +233,12 @@ bool GSeqSinglePlay::FrameGun() {
 		//To-Do 총구 이펙트가 나와야함..아래 변수 이용하면 될듯?
 		//m_ObjGun.m_matWorld._41, m_ObjGun.m_matWorld._42, m_ObjGun.m_matWorld._43
 
+#ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+		UpdateGunEffectPosition();
+#endif
+#endif
+
 		if(m_bDebugMode == false)
 			m_CharHero[m_CurrentHero].get()->m_iBullet -= 1;
 
@@ -984,6 +990,10 @@ bool		GSeqSinglePlay::InitObj() {
 };
 bool		GSeqSinglePlay::InitEffect() {
 #ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	T_STR strFile = L"fire.eff";
+	I_EffMgr.Load(&strFile, L"data/shader/plane.hlsl");
+#else
 	m_pPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice,
 		L"data/shader/Blend.hlsl", "PS_MATERIAL"));
 	//--------------------------------------------------------------------------------------
@@ -1011,6 +1021,7 @@ bool		GSeqSinglePlay::InitEffect() {
 	m_pSprite.get()->Create(g_pd3dDevice, G_SHA_PLANE, L"data/effect/ds1.dds");
 	// 애니메이션 관련, 가로4x4
 	m_pSprite.get()->SetRectAnimation(1.0f, 4, 128, 4, 128);
+#endif
 #endif
 	return true;
 };
@@ -1303,6 +1314,9 @@ bool		GSeqSinglePlay::FrameObj() {
 };
 bool		GSeqSinglePlay::FrameEffect() {
 #ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	I_EffMgr.Frame(m_pCamera, &g_pMain->m_Timer);
+#else
 	//--------------------------------------------------------------------------------------
 	// 빌보드 행렬
 	//-----------------------------------------------------------------------------------
@@ -1317,6 +1331,7 @@ bool		GSeqSinglePlay::FrameEffect() {
 
 	m_pSprite.get()->SetMatrix(&matBillboard, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	m_pSprite.get()->Frame(g_pImmediateContext, g_pMain->m_Timer.GetElapsedTime(), g_fSecPerFrame);
+#endif
 #endif
 	return true;
 };
@@ -1468,6 +1483,10 @@ bool		GSeqSinglePlay::RenderObj() {
 };
 bool		GSeqSinglePlay::RenderEffect() {
 #ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	I_EffMgr.Render();
+#else
+	
 	D3DXVECTOR4 vColor = D3DXVECTOR4(0, 0, 0, 0);
 	float fValue = cosf(g_pMain->m_Timer.GetElapsedTime())*0.5f + 0.5f;
 	FLOAT fFactor[4] = { 0 , };
@@ -1527,6 +1546,7 @@ bool		GSeqSinglePlay::RenderEffect() {
 
 	ClearD3D11DeviceContext(g_pImmediateContext);
 #endif
+#endif
 	return true;
 };
 
@@ -1564,7 +1584,9 @@ bool		GSeqSinglePlay::ReleaseObj() {
 };
 bool		GSeqSinglePlay::ReleaseEffect() {
 #ifdef G_MACRO_EFFECT_ADD
-
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	I_EffMgr.Release();
+#endif
 #endif
 	return true;
 };
@@ -1599,7 +1621,42 @@ bool GSeqSinglePlay::UpdateGunPosition() {
 
 	return true;
 }
+#ifdef G_MACRO_EFFECT_TEST_ADD
+bool GSeqSinglePlay::UpdateGunEffectPosition() {
 
+	if (!m_pCamera)
+		return false;
+
+	D3DXMATRIX matWorld, matScl, matRot, matTrans, matViewInv;
+
+	D3DXVECTOR3 vScl, vTrans;
+	D3DXQUATERNION qRot;
+
+	D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
+	D3DXMatrixIdentity(&matViewInv);
+
+	D3DXMatrixInverse(&matViewInv, NULL, m_pCamera->GetViewMatrix());
+
+
+	D3DXMatrixTranslation(&matTrans, 5.0f, -5.0f, 100.0f);
+
+	D3DXMatrixRotationY(&matRot, D3DXToRadian(180.0f));
+
+	matWorld = matScl * matRot * matTrans * matViewInv;// *matTrans;
+
+	KEffect* eff = I_EffMgr.GetPtr(L"fire.eff");
+	auto Effect = make_shared<KEffectObj>();
+	Effect->Set(eff, 0.0f, 100.0f, D3DXVECTOR3(matWorld._41, matWorld._42, matWorld._43));
+	Effect->Init();
+	//Effect->m_pEffect->m_pSprite->m_bLoop = false;
+	I_EffMgr.m_List.push_back(Effect);
+
+	return true;
+}
+#endif
 
 #ifdef G_MACRO_CHAR_ADD
 
@@ -1843,8 +1900,14 @@ HRESULT GSeqSinglePlay::CreateResource()
 			(float)g_pMain->m_SwapChainDesc.BufferDesc.Height;
 		m_pCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	}
+#ifdef G_MACRO_AI_ADD
 	m_GAIZombMgr.CreateResource();
-
+#endif
+#ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	I_EffMgr.CreateResource(&g_pMain->m_SwapChainDesc);
+#endif
+#endif
 	return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -1872,7 +1935,10 @@ GSeqSinglePlay::GSeqSinglePlay(void)
 	m_bDebugMode = false;
 	m_pCamera = nullptr;
 #ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+#else
 	m_pSprite = nullptr;
+#endif
 #endif
 }
 
