@@ -325,6 +325,7 @@ bool GSeqSinglePlay::FrameGun() {
 
 					//To-Do 아래 변수를 이용해서 이펙트를 터뜨려야함.
 					//m_Select.m_vIntersection
+					g_pMain->m_pSound.Play(SND_DEAD_ZOMBIE, true, false);
 					(*_F)->ChangeZombState((*_F).get(), G_DEFINE_ANI_ZOMB_DIE);
 				}
 			}	
@@ -407,6 +408,8 @@ bool GSeqSinglePlay::Frame()
 			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &(*_F)->m_OBB) && (*_F)->m_pChar->m_bAttack == true) {
 
 				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
+
+				g_pMain->m_pSound.Play(SND_HIT_BY_ZOMBIE, true, false);
 
 				//좀비 애니메이션 리셋
 				{
