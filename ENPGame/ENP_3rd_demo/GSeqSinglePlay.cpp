@@ -533,12 +533,18 @@ bool        GSeqSinglePlay::InitGame() {
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
+	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
+	//디버그 카메라.
 	m_pDebugCamera = make_shared<GCamera>();
 	m_pDebugCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
-
-	float fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 	m_pDebugCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
 	m_pDebugCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+	//이벤트용 카메라.
+	m_pEventCamera = make_shared<GCamera>();
+	m_pEventCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 2500.0f, -2500.0f), D3DXVECTOR3(0.0f, 10.0f, 0.0f));
+	m_pEventCamera->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
+	m_pEventCamera->SetWindow(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight);
+
 
 
 	for (int i = 0; i < G_HERO_CNT; i++) {
@@ -1060,6 +1066,21 @@ bool		GSeqSinglePlay::InitEffect() {
 bool        GSeqSinglePlay::FrameGame() {
 #ifdef G_MACRO_GAME_ADD
 	
+	if (m_CharHero[0]->m_iHP < 0)
+		m_bGameOver = true;
+
+	if (m_bGameOver) {
+		//D3DXVECTOR3 vEventCamPos;
+		m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[0]->m_matWorld._41;
+		m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[0]->m_matWorld._43;
+		m_vEventCamPos.y = 100.f;
+
+		m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_CharHero[0]->m_matWorld._41, m_CharHero[0]->m_matWorld._42, m_CharHero[0]->m_matWorld._43));
+		m_pCamera = m_pEventCamera.get();
+	}
+	
+
+
 	m_fPlayTime = (int)g_fDurationTime;
 
 	if (!m_bDebugMode)
@@ -1975,6 +1996,7 @@ GSeqSinglePlay::GSeqSinglePlay(void)
 	m_bColorTexRender = true;
 	//그림자 [End]
 #endif
+	m_vEventCamPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bGameOver = false;
 	m_bChatting = false;
 	memset(m_pTextOutBuffer, 0, sizeof(TCHAR) * 256);

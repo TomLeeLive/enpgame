@@ -59,6 +59,8 @@ public:
 	G_HERO							m_CurrentHero;
 	GCamera*						m_pCamera;
 	shared_ptr<GCamera >			m_pDebugCamera;
+	shared_ptr<GCamera >			m_pEventCamera;
+	D3DXVECTOR3						m_vEventCamPos;
 	vector<shared_ptr<GFPSCamera >> m_pFPSCamera;
 #endif
 #ifdef G_MACRO_EFFECT_ADD
@@ -132,7 +134,7 @@ public:
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif
 
-	vector<shared_ptr<GHero>>	m_CharHero;
+	vector<shared_ptr<GHero>>		m_CharHero;
 	bool		Load();
 #endif
 public:
