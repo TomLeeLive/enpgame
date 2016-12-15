@@ -32,12 +32,12 @@ public:
 		D3DXVECTOR3 vScl = D3DXVECTOR3(100 - 1.0f, 50 - 1.0f, 1 - 1.0f), D3DXVECTOR3 vTrans = D3DXVECTOR3(0, 0, 0),
 		int iAutoRescale = 1
 		);
-#if defined(_DEBUG) || defined(DEBUG)
+
 	virtual GControlUI* AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual GControlUI* AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc);
 	virtual GControlUI* SelectRect();
 	virtual int			SelectRect(GControlUI** pSelectedRect);
-#endif
+
 public:
 	GUIManager();
 	virtual ~GUIManager();

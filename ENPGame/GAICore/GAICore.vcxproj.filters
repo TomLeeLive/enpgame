@@ -66,5 +66,14 @@
     <ClCompile Include="GAISeq.cpp">
       <Filter>AISeq</Filter>
     </ClCompile>
+    <ClCompile Include="GAIAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIDie.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIFollow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

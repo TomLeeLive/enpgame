@@ -355,7 +355,7 @@ HRESULT		GUIManager::DeleteResource() {
 	HRESULT hr;
 	return S_OK;
 };
-#if defined(_DEBUG) || defined(DEBUG)
+
 GControlUI* GUIManager::AddRect(GUI_TYPE type, TCHAR* strImage, DXGI_SWAP_CHAIN_DESC*	SwapChainDesc) {
 	GControlUI* pUIControl = NULL;
 	switch (type)
@@ -403,7 +403,7 @@ GControlUI* GUIManager::AddRect(GUI_TYPE type, DXGI_SWAP_CHAIN_DESC*	SwapChainDe
 	m_pUIList.push_back(pUIControl);
 	return pUIControl;
 };
-#endif
+
 
 GControlUI* GUIManager::SelectRect() {
 	POINT mouse;
