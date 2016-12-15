@@ -531,7 +531,8 @@ bool        GSeqSinglePlay::InitGame() {
 	for (int i = 0; i < G_HERO_CNT; i++) {
 		auto FPSCamera = make_shared<GFPSCamera>();
 
-		FPSCamera.get()->SetViewMatrix(D3DXVECTOR3(120.0f + i*20.0f, 60.0f, -1400.0f), D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
+		FPSCamera.get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*50.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
+			,D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 
 		fAspectRatio = g_pMain->m_iWindowWidth / (FLOAT)g_pMain->m_iWindowHeight;
 		FPSCamera.get()->SetProjMatrix(D3DX_PI / 4, fAspectRatio, 0.1f, 10000.0f);
