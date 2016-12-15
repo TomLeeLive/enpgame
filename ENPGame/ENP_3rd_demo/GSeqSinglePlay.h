@@ -36,7 +36,7 @@ public:
 #endif
 public:
 	void							CheckHeroDead(int iChar);
-	bool							m_bGameOver;
+//	bool							m_bGameOver;
 	bool							m_bChatting;
 
 	void							AddZomb(int iNum);

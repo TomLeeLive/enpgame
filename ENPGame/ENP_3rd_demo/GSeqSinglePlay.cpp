@@ -1115,20 +1115,39 @@ bool        GSeqSinglePlay::FrameGame() {
 	//디버그 모드 토글
 	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_UP) {
 
-		if (m_bDebugMode) {
-			m_bDebugMode = false;
-			g_pMain->ClipMouse(true);
-			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
-			g_pMain->m_bDebugInfoPrint = false;
-			g_pMain->m_bDebugFpsPrint = false;
-		}
+		if (m_bGameOver) {
+			if (m_bDebugMode) {
+				m_bDebugMode = false;
+				g_pMain->ClipMouse(true);
+				m_pCamera = m_pEventCamera.get();
+				g_pMain->m_bDebugInfoPrint = false;
+				g_pMain->m_bDebugFpsPrint = false;
+			}
+			else {
+				m_bDebugMode = true;
+				g_pMain->ClipMouse(false);
+				m_pCamera = m_pDebugCamera.get();
+				g_pMain->m_bDebugInfoPrint = true;
+				g_pMain->m_bDebugFpsPrint = true;
+			}
+		} 
 		else {
-			m_bDebugMode = true;
-			g_pMain->ClipMouse(false);
-			m_pCamera = m_pDebugCamera.get();
-			g_pMain->m_bDebugInfoPrint = true;
-			g_pMain->m_bDebugFpsPrint = true;
+			if (m_bDebugMode) {
+				m_bDebugMode = false;
+				g_pMain->ClipMouse(true);
+				m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+				g_pMain->m_bDebugInfoPrint = false;
+				g_pMain->m_bDebugFpsPrint = false;
+			}
+			else {
+				m_bDebugMode = true;
+				g_pMain->ClipMouse(false);
+				m_pCamera = m_pDebugCamera.get();
+				g_pMain->m_bDebugInfoPrint = true;
+				g_pMain->m_bDebugFpsPrint = true;
+			}
 		}
+		
 	}
 
 	if (!m_bDebugMode)
@@ -1145,6 +1164,7 @@ bool        GSeqSinglePlay::FrameGame() {
 		if (m_CharHero[i]->m_bDead == true && false == m_bGameOver) {
 			fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
 			m_bGameOver = true;
+			m_pCamera = m_pEventCamera.get();
 			m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_YELLOW_BTN]->m_bRender = true;
 			m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_SPACE]->m_bRender = true;
 			m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER_TO_MENU_TEXT]->m_bRender = true;
@@ -1182,7 +1202,7 @@ bool        GSeqSinglePlay::FrameGame() {
 		}
 
 
-		m_pCamera = m_pEventCamera.get();
+
 
 		if (g_InputData.bSpace) {
 			
@@ -1217,22 +1237,22 @@ bool        GSeqSinglePlay::FrameGame() {
 	}
 
 	
+	if (!m_bGameOver) {
+		if (I_Input.KeyCheck(DIK_TAB) == KEY_PUSH) {
 
-	if (I_Input.KeyCheck(DIK_TAB) == KEY_PUSH) {
-
-		if (G_HERO_TOM == m_CurrentHero) {
-			m_CurrentHero = G_HERO_JAKE;
-			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+			if (G_HERO_TOM == m_CurrentHero) {
+				m_CurrentHero = G_HERO_JAKE;
+				m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+			}
+			else {
+				m_CurrentHero = G_HERO_TOM;
+				m_pCamera = m_pFPSCamera[m_CurrentHero].get();
+			}
+			m_bDebugMode = false;
+			g_pMain->m_bDebugInfoPrint = false;
+			g_pMain->m_bDebugFpsPrint = false;
 		}
-		else {
-			m_CurrentHero = G_HERO_TOM;
-			m_pCamera = m_pFPSCamera[m_CurrentHero].get();
-		}
-		m_bDebugMode = false;
-		g_pMain->m_bDebugInfoPrint = false;
-		g_pMain->m_bDebugFpsPrint = false;
 	}
-
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	//float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;
 
