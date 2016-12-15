@@ -1213,7 +1213,9 @@ bool        GSeqSinglePlay::FrameGame() {
 
 
 		if (g_InputData.bSpace) {
-			
+			//클릭 사운드
+			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
+
 			//싱글 플레이 관련 데이터를 초기화한다.
 			InitValues();
 			InitGame();

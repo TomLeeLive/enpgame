@@ -36,25 +36,28 @@ bool GSeqMenu::Render() {
 	*/
 
 	switch (iClickedButton) {
+
 		case 1: 
 		{
 			//g_pMain->m_pGameSeq[G_SEQ_SINGLE]->Init();
 			g_pMain->ChangeSeq(G_SEQ_SINGLE);
+			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
+
 		}
 		break;
 		case 2:
 		{
-
+			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
 		}
 		break;
 		case 3:
 		{
-
+			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
 		}
 		break;
 		case 4:
 		{
-
+			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
 		}
 		break;
 	}

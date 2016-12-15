@@ -34,6 +34,7 @@ bool GProjMain::SoundLoad() {
 	iIndex = m_pSound.Load("data/sound/radio_static.wav"); //라디오 무전 소리
 	iIndex = m_pSound.Load("data/sound/player/pain6.wav"); //좀비에게 맞을때 나는 소리
 	iIndex = m_pSound.Load("data/sound/zombie/zo_attack1.wav"); //좀비 죽을때 나는 소리
+	iIndex = m_pSound.Load("data/sound/switch3.ogg"); //좀비 죽을때 나는 소리
 
 	return true;
 }
