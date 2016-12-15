@@ -9,7 +9,7 @@ bool GTileMap::CreateVertexData()
 	float ftxOffsetU = 1.0f / (m_iNumCols - 1);
 	float ftxOffsetV = 1.0f / (m_iNumRows - 1);
 
-	int uvNum = 5;
+	
 	for (int iRow = 0; iRow < m_iNumRows; iRow++)
 	{
 		for (int iCol = 0; iCol < m_iNumCols; iCol++)
@@ -20,12 +20,11 @@ bool GTileMap::CreateVertexData()
 			m_VertexList[iVertexIndex].p.y = GetHeightOfVertex(iVertexIndex);
 			m_VertexList[iVertexIndex].n = GetNormalOfVertex(iVertexIndex);
 			m_VertexList[iVertexIndex].c = GetColorOfVertex(iVertexIndex);
-			m_VertexList[iVertexIndex].t.x = ((iCol % uvNum) == 0) ? 0.0f : (iCol% uvNum) / (1.0f*uvNum);//ftxOffsetU *iCol;
-			m_VertexList[iVertexIndex].t.y = ((iRow % uvNum) == 0) ? 0.0f : (iRow % uvNum) / (1.0f*uvNum);// ftxOffsetV *iRow;
+			m_VertexList[iVertexIndex].t.x = ((iCol % UVNum) == 0) ? 0.0f : (iCol% UVNum) / (1.0f*UVNum);//ftxOffsetU *iCol;
+			m_VertexList[iVertexIndex].t.y = ((iRow % UVNum) == 0) ? 0.0f : (iRow % UVNum) / (1.0f*UVNum);// ftxOffsetV *iRow;
 
 		}
 	}
-	return true;
 	return true;
 }
 
