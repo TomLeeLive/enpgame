@@ -31,10 +31,12 @@ bool GProjMain::SoundLoad() {
 	iIndex = m_pSound.Load("data/sound/player/boots4.wav");			
 	iIndex = m_pSound.Load("data/sound/weapon/shot1.wav");			
 	iIndex = m_pSound.Load("data/sound/weapon/shot2.wav");
-	iIndex = m_pSound.Load("data/sound/radio_static.wav"); //라디오 무전 소리
-	iIndex = m_pSound.Load("data/sound/player/pain6.wav"); //좀비에게 맞을때 나는 소리
+	iIndex = m_pSound.Load("data/sound/radio_static.wav");		//라디오 무전 소리
+	iIndex = m_pSound.Load("data/sound/player/pain6.wav");		//좀비에게 맞을때 나는 소리
 	iIndex = m_pSound.Load("data/sound/zombie/zo_attack1.wav"); //좀비 죽을때 나는 소리
-	iIndex = m_pSound.Load("data/sound/switch3.ogg"); //좀비 죽을때 나는 소리
+	iIndex = m_pSound.Load("data/sound/switch3.ogg");			//좀비 죽을때 나는 소리
+	iIndex = m_pSound.Load("data/sound/player/dead.mp3");		//플레이어1 Dead
+	iIndex = m_pSound.Load("data/sound/player/dead_2.mp3");		//플레이어2 Dead
 
 	return true;
 }

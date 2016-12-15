@@ -260,6 +260,11 @@ void GSeqSinglePlay::CheckHeroDead(int iChar){
 
 		m_CharHero[iChar].get()->m_bDead = true;
 
+		if (iChar == 1)
+			g_pMain->m_pSound.Play(SND_DEAD_PLAYER_1, true, false);
+		else
+			g_pMain->m_pSound.Play(SND_DEAD_PLAYER_2, true, false);
+
 		if (iChar == G_HERO_TOM /*&& m_CharHero[iChar].get()->m_bDead == true*/)
 		{
 			GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
