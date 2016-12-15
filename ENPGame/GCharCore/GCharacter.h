@@ -4,6 +4,7 @@
 class GCharacter : public GObject
 {
 public:
+	bool			m_bAttack;//공격 모션의 마지막에 true 된다.
 	D3DXVECTOR3		m_vMin;
 	D3DXVECTOR3		m_vMax;
 	bool			m_iAniLoop;

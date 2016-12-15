@@ -104,6 +104,15 @@ bool		GZombie::Frame()
 	// 1프레임 사이 간격
 	m_fLerpTime = m_fFrame - m_iCurrentFrame;
 
+
+	if (!_tcsicmp(m_pChar->m_szName.c_str(), L"ZOMBIE_ATTACK"))
+	{
+		if ((int)m_fFrame < m_iLastFrame - 1)
+			m_pChar->m_bAttack = false;
+		else 
+			m_pChar->m_bAttack = true;
+	}
+
 	if (m_pChar->m_iAniLoop != 0 || m_fFrame < m_iLastFrame -1)
 	{
 		if (m_pBoneObject->AniFrame(m_fFrame,

@@ -404,10 +404,15 @@ bool GSeqSinglePlay::Frame()
 
 		for (; _F != _L; ++_F)
 		{
-			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &(*_F)->m_OBB)) {
-				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
+			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &(*_F)->m_OBB) && (*_F)->m_pChar->m_bAttack == true) {
 
 				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
+
+				//좀비 애니메이션 리셋
+				{
+					(*_F)->m_pChar->m_iCurrentFrame = (*_F)->m_pChar->m_iStartFrame;
+					(*_F)->m_pChar->m_fFrame = (float)(*_F)->m_pChar->m_iStartFrame + (*_F)->m_pChar->m_fLerpTime;
+				}
 
 				//hero dead 체크.
 				CheckHeroDead(i);

@@ -111,6 +111,7 @@ GCharacter::GCharacter(void)
 	m_vMin = D3DXVECTOR3(-1.5f, -1.5f, -1.5f);
 	m_vMax = D3DXVECTOR3(1.5f, 1.5f, 1.5f);
 
+	m_bAttack = false;
 	m_iAniLoop = 1;
 	m_iMatrixIndex = -1;
 }

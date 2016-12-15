@@ -13,6 +13,12 @@ bool GSeqMenu::Init() {
 
 bool GSeqMenu::Frame() { 
 	m_UIManager.Frame(&g_pMain->m_SwapChainDesc,&g_pMain->m_Timer);
+
+	
+	if (I_Input.KeyCheck(DIK_LCONTROL) == KEY_HOLD) {
+
+		ShowCursor(true);
+	}
 	return true; 
 };
 bool GSeqMenu::Render() { 
