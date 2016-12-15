@@ -253,6 +253,33 @@ bool GSeqSinglePlay::Init()
 
 	return true;
 }
+
+void GSeqSinglePlay::CheckHeroDead(int iChar){
+
+	if (m_CharHero[iChar].get()->m_iHP <= 0 && false == m_CharHero[iChar].get()->m_bDead ){
+
+		m_CharHero[iChar].get()->m_bDead = true;
+
+		if (iChar == G_HERO_TOM /*&& m_CharHero[iChar].get()->m_bDead == true*/)
+		{
+			GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
+
+			m_CharHero[iChar]->Set(pChar1,
+				pChar1->m_pBoneObject,
+				pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar1->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		else if (iChar == G_HERO_JAKE /*&& m_CharHero[iChar].get()->m_bDead == true*/)
+		{
+			GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_DIE");
+
+			m_CharHero[iChar]->Set(pChar1,
+				pChar1->m_pBoneObject,
+				pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar1->m_pBoneObject->m_Scene.iLastFrame);
+		}
+	}
+}
 bool GSeqSinglePlay::FrameGun() {
 
 	//총 위치 업데이트
@@ -330,28 +357,8 @@ bool GSeqSinglePlay::FrameGun() {
 			if (ChkOBBToRay(&m_CharHero[i].get()->m_OBB, &m_Ray))
 			{
 				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
-
-				if (m_CharHero[i].get()->m_iHP <= 0 /* && false == m_CharHero[i].get()->m_bDead */)
-					m_CharHero[i].get()->m_bDead = true;
-
-				if (i == G_HERO_TOM && m_CharHero[i].get()->m_bDead == true)
-				{
-					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_DIE");
-
-					m_CharHero[i]->Set(pChar1,
-						pChar1->m_pBoneObject,
-						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-						pChar1->m_pBoneObject->m_Scene.iLastFrame);
-				}
-				else if (i == G_HERO_JAKE && m_CharHero[i].get()->m_bDead == true)
-				{
-					GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_DIE");
-
-					m_CharHero[i]->Set(pChar1,
-						pChar1->m_pBoneObject,
-						pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-						pChar1->m_pBoneObject->m_Scene.iLastFrame);
-				}
+				//hero dead 체크.
+				CheckHeroDead(i);
 			}
 		}
 	}
@@ -359,6 +366,21 @@ bool GSeqSinglePlay::FrameGun() {
 }
 bool GSeqSinglePlay::Frame()
 {
+
+
+	m_pCamera->Frame();
+
+	if (!m_bGameOver) {
+		FrameGun();
+	}
+
+	FrameGame();
+	FrameChar();
+	FrameMap();
+	FrameObj();
+	FrameEffect();
+
+
 #ifdef G_MACRO_AI_ADD
 
 	int  iZombieAliveCnt = 0;
@@ -379,13 +401,16 @@ bool GSeqSinglePlay::Frame()
 	_L = m_GAIZombMgr.m_Zomb.end();
 
 	for (int i = 0; i < m_CharHero.size(); i++) {
-		
+
 		for (; _F != _L; ++_F)
 		{
 			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &(*_F)->m_OBB)) {
 				//ChangeZombState(j, G_DEFINE_ANI_ZOMB_ATT);
 
-				m_CharHero[i].get()->m_iHP -= 1;
+				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
+
+				//hero dead 체크.
+				CheckHeroDead(i);
 			}
 			else {
 			}
@@ -427,19 +452,6 @@ bool GSeqSinglePlay::Frame()
 
 	}
 #endif
-
-	m_pCamera->Frame();
-
-	if (!m_bGameOver) {
-		FrameGun();
-	}
-
-	FrameGame();
-	FrameChar();
-	FrameMap();
-	FrameObj();
-	FrameEffect();
-
 
 	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
 
@@ -565,7 +577,7 @@ bool        GSeqSinglePlay::InitGame() {
 	
 	for (int i = 0; i < m_pFPSCamera.size(); i++) {
 
-		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*50.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
+		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*100.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
 			, D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 	}
 
@@ -1571,7 +1583,7 @@ bool		GSeqSinglePlay::RenderChar() {
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
-		if (iChar == m_CurrentHero && m_bDebugMode==false)
+		if (iChar == m_CurrentHero && m_bDebugMode==false && m_CharHero[iChar]->m_bDead == false)
 			continue;
 
 		m_CharHero[iChar].get()->SetMatrix(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());

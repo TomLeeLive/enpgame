@@ -35,6 +35,7 @@ public:
 	//±×¸²ÀÚ [End]
 #endif
 public:
+	void							CheckHeroDead(int iChar);
 	bool							m_bGameOver;
 	bool							m_bChatting;
 
