@@ -180,7 +180,7 @@ bool		GInput::Frame()
 	g_InputData.bUpKey = KeyCheck(DIK_UP);
 	g_InputData.bDownKey = KeyCheck(DIK_DOWN);
 	g_InputData.bExit = KeyCheck(DIK_ESCAPE);
-	g_InputData.bSpace = KeyCheck(DIK_SPACE);
+	//g_InputData.bSpace = KeyCheck(DIK_SPACE);
 	g_InputData.bExit = KeyCheck(DIK_ESCAPE);
 
 	g_InputData.iMouseValue[0] = m_DIMouseState.lX;

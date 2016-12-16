@@ -109,27 +109,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Output\data\shader\SkyBox.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Character.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="MatrixViewer.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CharTable.gci" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="GEventData.cpp" />
     <ClCompile Include="GFPSCamera.cpp" />
     <ClCompile Include="GN2Zombie.cpp" />
     <ClCompile Include="GProjMain.cpp" />
@@ -147,6 +127,7 @@
     <ClCompile Include="GTileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GEventData.h" />
     <ClInclude Include="GFPSCamera.h" />
     <ClInclude Include="GN2Zombie.h" />
     <ClInclude Include="GProjMain.h" />
