@@ -105,6 +105,9 @@ bool GProjMain::Frame()
 		G_ZOMB_IDLE = 0,
 		G_ZOMB_ATTACK,
 		G_ZOMB_WALK,
+		G_ZOMB_WALK2,
+		G_ZOMB_RUN,
+		G_ZOMB_IDLE2,
 		G_ZOMB_DIE,
 		G_ZOMB_CNT
 	};
@@ -125,6 +128,36 @@ bool GProjMain::Frame()
 		case G_ZOMB_DIE:
 		{
 			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_DIE");
+
+			m_HeroObj[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		case G_ZOMB_RUN:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_RUN");
+
+			m_HeroObj[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		case G_ZOMB_WALK2:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK2");
+
+			m_HeroObj[0]->Set(pChar0,
+				pChar0->m_pBoneObject,
+				pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+				pChar0->m_pBoneObject->m_Scene.iLastFrame);
+		}
+		break;
+		case G_ZOMB_IDLE2:
+		{
+			GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE2");
 
 			m_HeroObj[0]->Set(pChar0,
 				pChar0->m_pBoneObject,

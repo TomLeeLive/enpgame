@@ -187,10 +187,10 @@ bool GCamera::Frame()
 	float fValue = g_InputData.iMouseValue[2];
 	float fDistance =  m_fSpeed * fValue * g_fSecPerFrame;
 	
-	if(g_InputData.bSpace)	m_fSpeed += g_fSecPerFrame * 40.0f;
+	if(g_InputData.bLeftShift)	m_fSpeed += g_fSecPerFrame * 40.0f;
 	else						m_fSpeed -= g_fSecPerFrame * 40.0f;
 	// 최소값으로 고정
-	//if( m_fSpeed < 1.0f ) m_fSpeed = 1.0f;
+	if( m_fSpeed < 1.0f ) m_fSpeed = 1.0f;
 
 	if( g_InputData.bWKey ) 	MoveLook(g_fSecPerFrame * 5.0f * m_fSpeed);
 	if( g_InputData.bSKey )		MoveLook(-g_fSecPerFrame * 5.0f* m_fSpeed);
@@ -245,7 +245,7 @@ GCamera::GCamera()
 	m_fCameraPitchAngle		= 0.0f;
 	m_fCameraRollAngle		= 0.0f;
 
-	m_fSpeed				= 1000.0f;
+	m_fSpeed				= 0.0f;
 
 	// 추가
 	m_nMouseWheelDelta		= 0;

@@ -2,9 +2,13 @@
 class GSeq
 {
 public:
+	bool		m_bGameOver;
+	GUIManager	m_UIManager;
+
 	static GSeq* CreateInstance() { return 0;  }
 	virtual bool Init() = 0;
 	virtual bool Frame() = 0;
+	virtual bool RenderManually(void* arg1 = NULL, void* arg2 = NULL) { return true; };
 	virtual bool Render() = 0;
 	virtual bool Release() = 0;
 
