@@ -17,6 +17,12 @@ bool GAIFollow::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	float fDistance = D3DXVec3Length(&Temp);
+	
+	if (fDistance > G_DEFINE_AI_FOLLOW_CHECK)
+	{
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_MOVE);
+	}
+
 
 	if (fDistance < G_DEFINE_AI_ATTACK_CHECK) 
 	{

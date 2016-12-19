@@ -26,7 +26,7 @@ bool GProjMain::Init()
 	m_Box2->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data_test/flagstone.bmp");
 	D3DXMatrixIdentity(&m_matBoxWorld2);
 	D3DXMatrixScaling(&m_matBoxWorld2, 10.0f, 10.0f, 10.0f);
-	m_matBoxWorld2._42 = 40.0f;
+	m_matBoxWorld._42 = 40.0f;
 
 
 
@@ -92,7 +92,7 @@ bool GProjMain::Render()
 	m_Box->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box->Render(m_pImmediateContext);
 
-	m_Box2->SetMatrix(&m_matBoxWorld2, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	m_Box2->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box2->Render(m_pImmediateContext);
 
 	m_GAIZombMgr.Render(m_pMainCamera.get());

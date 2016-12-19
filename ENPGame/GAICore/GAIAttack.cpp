@@ -42,10 +42,6 @@ bool GAIAttack::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 	{
 		iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
 	}
-	
-
-	iMyIndex->RotationAndTrans(vHeroPos);
-
 	return true;
 }
 bool GAIAttack::Render()

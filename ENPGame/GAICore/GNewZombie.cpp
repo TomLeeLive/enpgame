@@ -79,10 +79,10 @@ void		GNewZombie::ChangeZombState(GNewZombie* iNum, TCHAR* str) {
 bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 
 	D3DXVECTOR3 vLook_toPos;
-	D3DXMATRIX matZombie, matRot, matTrans;
+	D3DXMATRIX matZombie, matRot, matTrans ;
 	D3DXMatrixIdentity(&matRot);
 	D3DXMatrixIdentity(&matTrans);
-	
+
 	matZombie = m_matZombWld;
 
 
@@ -114,10 +114,22 @@ bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 	vNewPos = vMove - G_DEFINE_AI_MOVE_SPEED * g_fSecPerFrame * vLook_toPos;
 	D3DXMatrixTranslation(&matTrans, vNewPos.x, vNewPos.y, vNewPos.z);
 
+	//주인공과 좀비사이의 거리 판정
+	//D3DXVECTOR3 vLength = vMove - pos;
+	//float fLength = D3DXVec3Length(&vLength);
 
+	//if (fLength > G_DEFINE_AI_ATTACK_CHECK)
+	//{
+	//	matZombie = matRot * matTrans;
+	//	m_matZombWld = matZombie;
+	//}
+	//else
+	//{
+	//	matZombie =  matRot * matTransAtk;
+	//	m_matZombWld = matZombie;
+	//}
 
 	matZombie = matRot * matTrans;
-
 	m_matZombWld = matZombie;
 
 	m_matZombWld._42 = G_DEFINE_CHAR_Y_POS;
