@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>ENPGame</ProjectName>
-    <ProjectGuid>{A925E2E1-94AC-466D-9B61-A8F955EE9C35}</ProjectGuid>
+    <ProjectGuid>{331D41AE-D11B-49E9-B41A-E8E7AC378983}</ProjectGuid>
     <RootNamespace>SampleBindPoseAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -44,18 +44,19 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>../../output/</OutDir>
-    <IntDir>../../output/ENPGame\</IntDir>
+    <IntDir>../../output/$(ProjectName)_d\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../../output/SampleBindPoseAnimation\</OutDir>
-    <IntDir>../../output/SampleBindPoseAnimation\</IntDir>
+    <OutDir>../../output/</OutDir>
+    <IntDir>../../output/$(ProjectName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../include/dx;../../include/Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/FMOD;../../include/dx;../../include/Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX2016;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -66,7 +67,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../lib/FMOD;../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -82,8 +83,8 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../include/Inc_4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../include/FMOD;../../include/dx;../../include/Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_G_RELEASE;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
@@ -91,44 +92,60 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>TBasisLib_4R.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../lib/FMOD;../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>4.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="Character.hlsl" />
-    <FxCompile Include="MatrixViewer.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CharTable.gci" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="GEventData.cpp" />
+    <ClCompile Include="GFPSCamera.cpp" />
+    <ClCompile Include="GN2Zombie.cpp" />
     <ClCompile Include="GProjMain.cpp" />
     <ClCompile Include="GSeq.cpp" />
     <ClCompile Include="GSeqGameEnd.cpp" />
     <ClCompile Include="GSeqGameOver.cpp" />
     <ClCompile Include="GSeqHowTo.cpp" />
     <ClCompile Include="GSeqIntro.cpp" />
+    <ClCompile Include="GSeqLoading.cpp" />
     <ClCompile Include="GSeqMenu.cpp" />
     <ClCompile Include="GSeqSinglePlay.cpp" />
     <ClCompile Include="GSeqSurvivalMode.cpp" />
+    <ClCompile Include="GN2Skybox.cpp" />
+    <ClCompile Include="GSound.cpp" />
+    <ClCompile Include="GTileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GEventData.h" />
+    <ClInclude Include="GFPSCamera.h" />
+    <ClInclude Include="GN2Zombie.h" />
     <ClInclude Include="GProjMain.h" />
     <ClInclude Include="GSeq.h" />
     <ClInclude Include="GSeqGameEnd.h" />
     <ClInclude Include="GSeqGameOver.h" />
     <ClInclude Include="GSeqHowTo.h" />
     <ClInclude Include="GSeqIntro.h" />
+    <ClInclude Include="GSeqLoading.h" />
     <ClInclude Include="GSeqMenu.h" />
     <ClInclude Include="GSeqSinglePlay.h" />
     <ClInclude Include="GSeqSurvivalMode.h" />
+    <ClInclude Include="GN2Skybox.h" />
+    <ClInclude Include="GSound.h" />
+    <ClInclude Include="GTileMap.h" />
+    <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
+    <ClInclude Include="_values.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
