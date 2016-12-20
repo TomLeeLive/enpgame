@@ -389,35 +389,7 @@ bool GSkinObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 
 
 				//조명 [Start]
-				if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
-					m_cbLight.g_vLightDir.x = m_vLightVector.x;
-					m_cbLight.g_vLightDir.y = m_vLightVector.y;
-					m_cbLight.g_vLightDir.z = m_vLightVector.z;
-					m_cbLight.g_vLightDir.w = 1;
-					D3DXMATRIX matInvWorld;
-					D3DXMatrixInverse(&matInvWorld, NULL, &pSubMesh->m_matWorld);
-					D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-					D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
-
-					g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
-					g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-					g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-				}
-				else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
-					D3DXMATRIX matInvWorld;
-					D3DXMatrixInverse(&matInvWorld, NULL, &pSubMesh->m_matWorld);
-					D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-					D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
-
-					//m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
-					//m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
-					//m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
-					m_cbLight.g_vEyeDir.w = 10.0f; // 강도
-					m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1);
-					g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
-					g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-					g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-				}
+				UpdateLightConstantBuffer(pSubMesh->m_matWorld);
 				//조명 [End]
 
 
@@ -433,35 +405,7 @@ bool GSkinObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 
 
 			//조명 [Start]
-			if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
-				m_cbLight.g_vLightDir.x = m_vLightVector.x;
-				m_cbLight.g_vLightDir.y = m_vLightVector.y;
-				m_cbLight.g_vLightDir.z = m_vLightVector.z;
-				m_cbLight.g_vLightDir.w = 1;
-				D3DXMATRIX matInvWorld;
-				D3DXMatrixInverse(&matInvWorld, NULL, &pMesh->m_matWorld);
-				D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-				D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
-
-				g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
-				g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-				g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-			}
-			else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
-				D3DXMATRIX matInvWorld;
-				D3DXMatrixInverse(&matInvWorld, NULL, &pMesh->m_matWorld);
-				D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-				D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
-
-				//m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
-				//m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
-				//m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
-				m_cbLight.g_vEyeDir.w = 10.0f; // 강도
-				m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1);
-				g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
-				g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-				g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-			}
+			UpdateLightConstantBuffer(pMesh->m_matWorld);
 			//조명 [End]
 
 

@@ -1,5 +1,111 @@
 #include "GModel.h"
 
+//조명 [Start]
+
+void GModel::FrameLight() {
+	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
+		//float t = m_Timer.GetElapsedTime() * D3DX_PI;
+		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+		//D3DXMatrixRotationY(&mRotation, t*0.1f);
+		D3DXMatrixIdentity(&mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+
+		m_vLightVector.x = mLightWorld._41;
+		m_vLightVector.y = mLightWorld._42;
+		m_vLightVector.z = mLightWorld._43;
+
+		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+		m_vLightVector *= -1.0f;
+
+	}
+	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
+		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+		//D3DXMatrixRotationY(&mRotation, t * 0);
+		D3DXMatrixIdentity(&mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+
+		m_vLightVector.x = mLightWorld._41;
+		m_vLightVector.y = mLightWorld._42;
+		m_vLightVector.z = mLightWorld._43;
+
+		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+		m_vLightVector *= -1.0f;
+	}
+}
+void GModel::SetLight(G_LIGHT_TYPE type) {
+	m_LightType = type;
+
+	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
+		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, -100.0f);
+		D3DXMatrixIdentity(&mRotation);
+		//D3DXMatrixRotationY(&mRotation, D3DXToRadian(90.0f));
+		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+		m_vLightVector.x = mLightWorld._41;
+		m_vLightVector.y = mLightWorld._42;
+		m_vLightVector.z = mLightWorld._43;
+		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
+		m_vLightVector *= -1.0f;
+
+		m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
+		m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
+		m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
+		m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
+	}
+	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
+		m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1);
+		m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
+		m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(1, 1, 1, 1);
+
+		m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
+		m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
+		m_cbLight.g_cSpecularLightColor = D3DXVECTOR4(1, 1, 1, 1);
+	}
+	m_pConstantBufferLight.Attach(DX::CreateConstantBuffer(
+		m_pd3dDevice, &m_cbLight, 1, sizeof(LIGHT_CONSTANT_BUFFER)));
+}
+void GModel::UpdateLightConstantBuffer( D3DXMATRIX matWorld)
+{
+	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
+		m_cbLight.g_vLightDir.x = m_vLightVector.x;
+		m_cbLight.g_vLightDir.y = m_vLightVector.y;
+		m_cbLight.g_vLightDir.z = m_vLightVector.z;
+		m_cbLight.g_vLightDir.w = 1;
+		D3DXMATRIX matInvWorld;
+		D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
+		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+		g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+		g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+		g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+	}
+	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
+		m_cbLight.g_vLightDir.x = m_vLightVector.x;
+		m_cbLight.g_vLightDir.y = m_vLightVector.y;
+		m_cbLight.g_vLightDir.z = m_vLightVector.z;
+		m_cbLight.g_vLightDir.w = 1.0f;
+
+		D3DXMATRIX matInvWorld;
+		D3DXMatrixInverse(&matInvWorld, NULL, &matWorld);
+		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
+		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
+
+		//m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
+		//m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
+		//m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
+		m_cbLight.g_vEyeDir.w = 10.0f; // 강도
+		m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1);
+		g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
+		g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+		g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
+	}
+}
+//조명 [End]
+
+
 bool GModel::Convert(ID3D11Device* pDevice) {
 	return true;
 };
@@ -21,7 +127,7 @@ bool GModel::Create(ID3D11Device* pDevice,
 {
 
 	m_pd3dDevice = pDevice;
-	m_LightType = type;
+
 
 	if (FAILED(LoadShaderFile(pDevice, pLoadShaderFile)))
 	{
@@ -74,34 +180,7 @@ bool GModel::Create(ID3D11Device* pDevice,
 		return 0;
 	}
 	//조명 [Start]
-	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
-		D3DXMATRIX mLightWorld, mTranslate, mRotation;
-		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, -100.0f);
-		D3DXMatrixIdentity(&mRotation);
-		//D3DXMatrixRotationY(&mRotation, D3DXToRadian(90.0f));
-		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
-		m_vLightVector.x = mLightWorld._41;
-		m_vLightVector.y = mLightWorld._42;
-		m_vLightVector.z = mLightWorld._43;
-		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
-		m_vLightVector *= -1.0f;
-
-		m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
-		m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
-	}
-	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
-		m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1);
-		m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(1, 1, 1, 1);
-
-		m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cSpecularLightColor = D3DXVECTOR4(1, 1, 1, 1);
-	}
-	m_pConstantBufferLight.Attach(DX::CreateConstantBuffer(
-		m_pd3dDevice, &m_cbLight, 1, sizeof(LIGHT_CONSTANT_BUFFER)));
+	SetLight(type);
 	//조명 [End]
 
 	return Init();
@@ -164,34 +243,7 @@ bool GModel::Create(ID3D11Device* pDevice,
 	}
 
 	//조명 [Start]
-	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
-		D3DXMATRIX mLightWorld, mTranslate, mRotation;
-		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, -100.0f);
-		D3DXMatrixIdentity(&mRotation);
-		//D3DXMatrixRotationY(&mRotation, D3DXToRadian(90.0f));
-		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
-		m_vLightVector.x = mLightWorld._41;
-		m_vLightVector.y = mLightWorld._42;
-		m_vLightVector.z = mLightWorld._43;
-		D3DXVec3Normalize(&m_vLightVector, &m_vLightVector);
-		m_vLightVector *= -1.0f;
-
-		m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1);
-		m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
-	}
-	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
-		m_cbLight.g_cAmbientMaterial = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1);
-		m_cbLight.g_cDiffuseMaterial = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(1, 1, 1, 1);
-
-		m_cbLight.g_cAmbientLightColor = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cDiffuseLightColor = D3DXVECTOR4(1, 1, 1, 1);
-		m_cbLight.g_cSpecularLightColor = D3DXVECTOR4(1, 1, 1, 1);
-	}
-	m_pConstantBufferLight.Attach(DX::CreateConstantBuffer(
-		m_pd3dDevice, &m_cbLight, 1, sizeof(LIGHT_CONSTANT_BUFFER)));
+	SetLight(G_LIGHT_TYPE_DIFFUSE);
 	//조명 [End]
 
 	
@@ -303,35 +355,7 @@ void GModel::UpdateConstantBuffer(ID3D11DeviceContext* pContext, GModel* pParent
 bool GModel::PostRender(ID3D11DeviceContext* pContext)
 {
 	//조명 [Start]
-	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
-		m_cbLight.g_vLightDir.x = m_vLightVector.x;
-		m_cbLight.g_vLightDir.y = m_vLightVector.y;
-		m_cbLight.g_vLightDir.z = m_vLightVector.z;
-		m_cbLight.g_vLightDir.w = 1;
-		D3DXMATRIX matInvWorld;
-		D3DXMatrixInverse(&matInvWorld, NULL, &m_matWorld);
-		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
-
-		g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
-		g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-		g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-	}
-	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
-		D3DXMATRIX matInvWorld;
-		D3DXMatrixInverse(&matInvWorld, NULL, &m_matWorld);
-		D3DXMatrixTranspose(&matInvWorld, &matInvWorld);
-		D3DXMatrixTranspose(&m_cbLight.g_matInvWorld, &matInvWorld);
-
-		//m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
-		//m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
-		//m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
-		m_cbLight.g_vEyeDir.w = 10.0f; // 강도
-		m_cbLight.g_cSpecularMaterial = D3DXVECTOR4(3.0f, 1.0f, 1.0f, 1);
-		g_pImmediateContext->UpdateSubresource(m_pConstantBufferLight.Get(), 0, NULL, &m_cbLight, 0, 0);
-		g_pImmediateContext->VSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-		g_pImmediateContext->PSSetConstantBuffers(1, 1, m_pConstantBufferLight.GetAddressOf());
-	}
+	UpdateLightConstantBuffer(m_matWorld);
 	//조명 [End]
 
 	UpdateConstantBuffer(pContext);
