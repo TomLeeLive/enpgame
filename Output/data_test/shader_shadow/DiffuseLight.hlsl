@@ -71,9 +71,10 @@ VS_OUTPUT VS(VS_INPUT vIn)
 //--------------------------------------------------------------------------------------
 float4 Diffuse( float3 vNormal)
 {
+	float Attenuation = 1.0f;
 	float fIntensity = max(0, dot(vNormal, normalize(-g_vLightDir)));
 	float4 diffuse = g_AmbientMaterial * g_AmbientLightColor +
-		(g_DiffuseMaterial * g_DiffuseLightColor * fIntensity);
+		(g_DiffuseMaterial * g_DiffuseLightColor * fIntensity)*Attenuation;
 	return diffuse;
 }
 float4 PS(VS_OUTPUT vIn) : SV_Target

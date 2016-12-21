@@ -20,8 +20,8 @@ bool GTileMap::CreateVertexData()
 			m_VertexList[iVertexIndex].p.y = GetHeightOfVertex(iVertexIndex);
 			m_VertexList[iVertexIndex].n = GetNormalOfVertex(iVertexIndex);
 			m_VertexList[iVertexIndex].c = GetColorOfVertex(iVertexIndex);
-			m_VertexList[iVertexIndex].t.x = ((iCol % UVNum) == 0) ? 0.0f : (iCol% UVNum) / (1.0f*UVNum);//ftxOffsetU *iCol;
-			m_VertexList[iVertexIndex].t.y = ((iRow % UVNum) == 0) ? 0.0f : (iRow % UVNum) / (1.0f*UVNum);// ftxOffsetV *iRow;
+			m_VertexList[iVertexIndex].t.x = ((iCol % UVNum) != 0) ? ((iCol% UVNum) / (1.0f*UVNum)) : 1.0f;//ftxOffsetU *iCol;
+			m_VertexList[iVertexIndex].t.y = ((iRow % UVNum) != 0) ? ((iRow % UVNum) / (1.0f*UVNum)) : 1.0f;// ftxOffsetV *iRow;
 
 		}
 	}
