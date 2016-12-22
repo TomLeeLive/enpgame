@@ -182,6 +182,9 @@ D3DXMATRIX GFPSCamera::Update( D3DXVECTOR4 vDirValue )
 }
 bool GFPSCamera::Frame()
 {
+	if (g_pMain->m_pGameSeq[G_SEQ_SINGLE]->m_bGameOver)
+		return false;
+
 	//if( g_InputData.bRightHold )
 	//{
 		m_fCameraYawAngle	+=	D3DXToRadian(g_InputData.iMouseValue[0] *0.1f);
@@ -200,6 +203,7 @@ bool GFPSCamera::Frame()
 	if( g_InputData.bSKey )		MoveLook(-g_fSecPerFrame * 5.0f* m_fSpeed);
 	if( g_InputData.bDKey )		MoveSide(g_fSecPerFrame * 5.0f* m_fSpeed);
 	if( g_InputData.bAKey )		MoveSide(-g_fSecPerFrame * 5.0f* m_fSpeed);
+	
 	//if( g_InputData.bQKey )		MoveUp(g_fSecPerFrame * 5.0f* m_fSpeed);
 	//if( g_InputData.bEKey )		MoveUp(-g_fSecPerFrame * 5.0f* m_fSpeed);
 

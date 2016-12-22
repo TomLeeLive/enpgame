@@ -10,12 +10,19 @@ enum SNDRESOURCES {
 	SND_BOOTS4 = 6,
 	SND_SHOT1 = 7,
 	SND_SHOT2 = 8,
+	SND_RADIO = 9,
+	SND_HIT_BY_ZOMBIE = 10,
+	SND_DEAD_ZOMBIE = 11,
+	SND_CLICK_BUTTON = 12,
+	SND_DEAD_PLAYER_1 = 13,
+	SND_DEAD_PLAYER_2 = 14,
 	SND_RESOURCES_LAST
 };
 //오브젝트 위치
 #define G_OBJ_LOC_LAB _T("data/object/lab/lab.GBS")
 #define G_OBJ_LOC_DROPSHIP_LAND _T("data/object/dropship/dropship_land.GBS")
 #define G_OBJ_LOC_CAR _T("data/object/car/car.GBS")
+#define G_OBJ_LOC_FPS_SHOTGUN _T("data/object/fps_shotgun/shotgun3.GBS")
 
 //오브젝트 매니저 등록 이름.
 #define G_OBJ_NAME_LAB L"lab.GBS"

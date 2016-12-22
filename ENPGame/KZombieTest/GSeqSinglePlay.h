@@ -35,14 +35,23 @@ public:
 	//그림자 [End]
 #endif
 public:
-	void		AddZomb(int iNum);
-	void		ChangeZombState(int iNum, G_ZOMB_ST state);
-	void		ChangeZombState(int iNum, TCHAR* str);
+	int m_iEventNum;
+		int m_iScriptNum;
+	void							SetEventCamera(G_HERO hero);
+	void							CheckHeroDead(int iChar);
+//	bool							m_bGameOver;
+	bool							m_bChatting;
+
+	void							AddZomb(int iNum);
+	void							ChangeZombState(int iNum, G_ZOMB_ST state);
+	void							ChangeZombState(int iNum, TCHAR* str);
+
 	TCHAR							m_pTextOutBuffer[256];
 	int								m_iScore;					//점수 계산용
 	int								m_fPlayTime;				//플레이 타임(생존시간) 출력용
 	D3DXMATRIX						m_matWorld;
 	bool							UpdateGunPosition();
+
 	bool							FrameGun();
 	GSelect							m_Select;
 	G_RAY							m_Ray;
@@ -54,10 +63,16 @@ public:
 	G_HERO							m_CurrentHero;
 	GCamera*						m_pCamera;
 	shared_ptr<GCamera >			m_pDebugCamera;
+	shared_ptr<GCamera >			m_pEventCamera;
+	D3DXVECTOR3						m_vEventCamPos;
 	vector<shared_ptr<GFPSCamera >> m_pFPSCamera;
 #endif
 #ifdef G_MACRO_EFFECT_ADD
+#ifdef G_MACRO_EFFECT_TEST_ADD
+	bool							UpdateGunEffectPosition();
+#else
 public:
+	
 	GPlaneShape						m_BigPlane;
 	shared_ptr<GSprite>				m_pSprite;
 	ComPtr<ID3D11PixelShader>		m_pPS;
@@ -68,10 +83,12 @@ public:
 
 	shared_ptr<GPlaneShape>			m_pPlane;
 	shared_ptr<GPlaneShape>			m_pScreen;
+	
 	//public:
 	//	bool check; // play button check
 	//	ComPtr<ID3D11BlendState>		m_pAlphaBlendFactor;
 	//	ComPtr<ID3D11BlendState>		m_pAlphaBlend;
+#endif
 #endif
 #ifdef G_MACRO_MAP_ADD
 	//--------------------------------------------------------------------------------------
@@ -86,11 +103,16 @@ public:
 	D3DXMATRIX	m_matObjWld[G_OBJ_CNT];
 	D3DXMATRIX  m_matObjScl[G_OBJ_CNT], m_matObjRot[G_OBJ_CNT], m_matObjTrans[G_OBJ_CNT];
 	bitset<G_OBJ_CNT> m_Objbit;
+
+	GBBox m_Wall[G_BB_CNT];
+	D3DXMATRIX m_matWallBB[G_BB_CNT];
+	bitset<G_BB_CNT> m_Wallbit;
 	//--------------------------------------------------------------------------------------
 	// 쿼드트리
 	//--------------------------------------------------------------------------------------
 	GMap m_CustomMap;
-	GHeightMap		m_HeightMap;
+	//GHeightMap		m_HeightMap;
+	GTileMap		m_HeightMap;
 	//--------------------------------------------------------------------------------------
 	// 쿼드트리
 	//--------------------------------------------------------------------------------------
@@ -116,11 +138,11 @@ public:
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif
 
-	vector<shared_ptr<GHero>>	m_CharHero;
+	vector<shared_ptr<GHero>>		m_CharHero;
 	bool		Load();
 #endif
 public:
-
+	bool		InitValues();
 	bool        InitGame();
 	bool        InitMap();
 	bool		InitChar();

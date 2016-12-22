@@ -30,10 +30,7 @@ bool GAIFollow::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 	}
 	iMyIndex->RotationAndTrans(vHeroPos);
 	
-	/*if (fDistance > G_DEFINE_AI_ATTACK_CHECK)
-	{
-		g_pMain->ChangeZombState(iMyIndex, G_AI_MOVE);
-	}*/
+
 
 	return true;
 }

@@ -41,32 +41,28 @@ bool GAIMove::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 		m_bTime = true;
 
 	}
-
-	if (fDistance < G_DEFINE_AI_FOLLOW_CHECK) {
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
-	}
-	/*else
+	if (fDistance > G_DEFINE_AI_IDLE_CHECK)
 	{
-		if (rand() % 5 == 0)
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_IDLE);
+	}
+	else
+	{
+		if (fDistance < G_DEFINE_AI_FOLLOW_CHECK) {
+			iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+		}
+
+		if (g_fDurationTime - fTime > fCoolTime) {
+			m_bTime = false;
+		}
+		else
 		{
-			iMyIndex->ChangeZombState(iMyIndex, G_AI_IDLE);
+			if (iMyIndex->RotationAndTrans(m_vPos) == false)
+			{
+				m_vPos = RandomMove();
+				m_bTime = true;
+			}
 		}
 	}
-*/
-	//현재시간에서 - 처음셋팅된 시간 > 쿨타임보다 크면...
-
-	if (g_fDurationTime - fTime > fCoolTime) {  
-		m_bTime = false;
-	}
-	else 
-	{
-		if (iMyIndex->RotationAndTrans(m_vPos) == false)
-		{
-			m_vPos = RandomMove();
-			m_bTime = true;
-		}
-	}
-
 
 	return true;
 }

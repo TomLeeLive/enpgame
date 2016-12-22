@@ -2,6 +2,7 @@
 class GSeq
 {
 public:
+	bool		m_bGameOver;
 	GUIManager	m_UIManager;
 
 	static GSeq* CreateInstance() { return 0;  }
