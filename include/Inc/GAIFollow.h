@@ -8,14 +8,9 @@ public:
 	D3DXVECTOR3 m_vBUp;
 
 	bool Init(GNewZombie* iMyIndex);
-	bool Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld);
+	bool Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool Render();
 	bool Release();
-
-	int hp;
-
-	D3DXVECTOR3 B_Look;
-	D3DXMATRIX B_Trans;
 
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

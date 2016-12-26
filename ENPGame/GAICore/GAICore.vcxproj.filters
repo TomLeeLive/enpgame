@@ -50,13 +50,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GAIZombieMgr.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GNewZombie.cpp">
-      <Filter>소스 파일</Filter>
-      <Filter>AISeq</Filter>
-    </ClCompile>
     <ClCompile Include="GAIIdle.cpp">
       <Filter>AISeq</Filter>
     </ClCompile>
@@ -66,13 +59,19 @@
     <ClCompile Include="GAISeq.cpp">
       <Filter>AISeq</Filter>
     </ClCompile>
-    <ClCompile Include="GAIAttack.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GAIFollow.cpp">
+      <Filter>AISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIDie.cpp">
+      <Filter>AISeq</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIAttack.cpp">
+      <Filter>AISeq</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIZombieMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GAIFollow.cpp">
+    <ClCompile Include="GNewZombie.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

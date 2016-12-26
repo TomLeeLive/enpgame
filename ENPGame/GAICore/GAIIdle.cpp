@@ -6,27 +6,8 @@ bool GAIIdle::Init(GNewZombie* iMyIndex)
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
 	return true;
 }
-bool GAIIdle::Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld)
+bool GAIIdle::Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
-	////처음 셋팅된 시간을 저장
-	//float fTime = 0.0f;
-
-	////7초 후를 체크하기 위한 변수
-	//float fCoolTime = 3.0f;
-
-	//if (!m_bTime) 
-	//{
-	//	fTime = g_fDurationTime;
-	//	m_bTime = true;
-	//}
-	////현재시간에서 - 처음셋팅된 시간 > 쿨타임보다 크면...
-	//if (g_fDurationTime - fTime > fCoolTime && !m_bDebug)
-	//{
-	//	iMyIndex->ChangeZombState(iMyIndex, G_AI_MOVE);
-	//	m_bDebug = true;
-	//}
-
-
 	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
 
 	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,

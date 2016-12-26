@@ -153,7 +153,7 @@ bool	GNewZombie::Init()
 	
 	return true;
 };
-bool	GNewZombie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
+bool	GNewZombie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
 	GZombie::Frame();
 
@@ -162,10 +162,7 @@ bool	GNewZombie::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
 	else
 		m_bDead = false;
 
-	//if( true == m_bDead)
-	//	iMyIndex->ChangeZombState(iMyIndex, G_AI_DIE);
-
-	m_pCurrentSeq->Frame(iMyIndex, matHeroWorld);
+	m_pCurrentSeq->Frame(iMyIndex, matHeroWorld, matHeroWorld2);
 
 	return true;
 };

@@ -12,13 +12,9 @@ public:
 	static D3DXVECTOR3 RandomMove();
 
 	bool Init(GNewZombie* iMyIndex);
-	bool Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld);
+	bool Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool Render();
 	bool Release();
-
-public:
-	int hp;
-	//bool ZombieMove(int i, D3DXVECTOR3 look, D3DXVECTOR3 Right, D3DXVECTOR3 Up);
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//----------------------------------------------------
