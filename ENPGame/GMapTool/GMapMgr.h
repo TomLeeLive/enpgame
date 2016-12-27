@@ -5,6 +5,7 @@
 #include "GMapMgr.h"
 #include "GInput.h"
 #include "map/GTileMap.h"
+#include "GModel.h"
 
 #define G_DEFINE_MAP_DIR L"data/map/"
 #define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap.hlsl"
@@ -12,6 +13,8 @@
 class GMapMgr
 {
 public:
+	vector<GModel*>	m_vecObj;
+
 	GTileMap		m_HeightMap;
 
 

@@ -851,6 +851,12 @@ bool GGbsObj::Draw(ID3D11DeviceContext*    pContext, GModel* pParent)
 }
 GGbsObj::GGbsObj(void)
 {
+	D3DXMatrixIdentity(&m_matObjOBB);
+	D3DXMatrixIdentity(&m_matObjWld);
+	D3DXMatrixIdentity(&m_matObjScl);
+	D3DXMatrixIdentity(&m_matObjRot);
+	D3DXMatrixIdentity(&m_matObjTrans);
+
 	m_bAniLoop = true;
 }
 

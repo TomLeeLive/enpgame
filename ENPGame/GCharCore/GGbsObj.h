@@ -12,7 +12,11 @@ typedef vector<shared_ptr<tTbsData>>	tTbsMeshData;
 class GGbsObj : public GModel
 {
 public:
-
+	D3DXMATRIX	m_matObjOBB;
+	D3DXMATRIX	m_matObjWld;
+	D3DXMATRIX  m_matObjScl;
+	D3DXMATRIX  m_matObjRot;
+	D3DXMATRIX  m_matObjTrans;
 
 	GBBox			m_OBB;
 	bool			m_bAniLoop;

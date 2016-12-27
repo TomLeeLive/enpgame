@@ -48,7 +48,7 @@ G_OBJ_CNT
 };
 
 //오브젝트 위치
-#define G_OBJ_LOC_LAB _T("data/object/lab/lab.GBS")
+#define G_OBJ_LOC_LAB _T("data/object/building/lab.GBS")
 #define G_OBJ_LOC_DROPSHIP_LAND _T("data/object/dropship/dropship_land.GBS")
 #define G_OBJ_LOC_CAR _T("data/object/car/car.GBS")
 
