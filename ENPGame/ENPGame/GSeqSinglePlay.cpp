@@ -699,7 +699,7 @@ bool        GSeqSinglePlay::InitMap() {
 	//--------------------------------------------------------------------------------------
 	//HeightMap
 	m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
-	if (FAILED(m_HeightMap.CreateHeightMap(L"data/HeightTest.bmp")))
+	if (FAILED(m_HeightMap.CreateHeightMap(L"data/map/HeightTest.bmp")))
 	{
 		return false;
 	}
@@ -711,14 +711,14 @@ bool        GSeqSinglePlay::InitMap() {
 		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
 		//5,5,
 		30.0f, 1.0f,
-		L"data/Sand.jpg",
+		L"data/map/Sand.jpg",
 		L"data/shader/CustomizeMap_shadow.hlsl" };
 #else
 	TMapDesc MapDesc = {
 		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
 		//5,5,
 		20.0f, 1.0f,
-		L"data/Sand.jpg",
+		L"data/map/Sand.jpg",
 		L"data/shader/CustomizeMap_Light.hlsl" };
 #endif
 
@@ -1536,7 +1536,7 @@ bool		GSeqSinglePlay::FrameChar() {
 	int iChange = 0;
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld);
+	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld, m_CharHero[1]->m_matWorld);
 #else
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{

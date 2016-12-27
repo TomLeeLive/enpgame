@@ -15,6 +15,7 @@ GCreateMapDlg::GCreateMapDlg(CWnd* pParent /*=NULL*/)
 	, m_iTileHeight(0)
 	, m_fCellDistance(0)
 	, m_strCharName(_T(""))
+	, m_strHeight(_T(""))
 {
 
 }
@@ -31,6 +32,7 @@ void GCreateMapDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO2, m_cbCellCount);
 	DDX_Text(pDX, IDC_EDIT3, m_fCellDistance);
 	DDX_Text(pDX, IDC_EDIT7, m_strCharName);
+	DDX_Text(pDX, IDC_EDIT8, m_strHeight);
 }
 
 
@@ -38,6 +40,7 @@ BEGIN_MESSAGE_MAP(GCreateMapDlg, CDialogEx)
 	
 	ON_BN_CLICKED(IDC_BUTTON1, &GCreateMapDlg::OnBnClickedButton1)
 	ON_EN_CHANGE(IDC_EDIT7, &GCreateMapDlg::OnEnChangeEdit7)
+	ON_BN_CLICKED(IDC_BUTTON4, &GCreateMapDlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +103,40 @@ void GCreateMapDlg::OnBnClickedButton1()
 }
 
 
+//HeightMap
+void GCreateMapDlg::OnBnClickedButton4()
+{
+	CFileDialog dlg(TRUE);
+	if (dlg.DoModal() == IDOK)
+	{
+		m_strHeight = dlg.GetFileName();
+		//m_strCharName = dlg.GetPathName();
+
+		UpdateData(FALSE);
+		//MessageBox(dlg.GetPathName());
+	}
+
+	TCHAR * TChr = NULL;
+	//CString -> TCHAR
+	TChr = (TCHAR*)(LPCTSTR)m_strHeight;
+	
+	TCHAR strFile[MAX_PATH] = L"data\\map\\";
+
+	_tcsncat(strFile, (TCHAR*)TChr, _tcsclen((TCHAR*)TChr));
+
+	//HeightMap
+	theApp.m_MapMgr.m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
+	if (FAILED(theApp.m_MapMgr.m_HeightMap.CreateHeightMap(strFile)))
+	{
+		return;
+	}
+
+	theApp.m_MapMgr.m_HeightMap.m_bStaticLight = true;
+
+	return;
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
 void GCreateMapDlg::OnEnChangeEdit7()
 {
 	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
@@ -109,3 +146,6 @@ void GCreateMapDlg::OnEnChangeEdit7()
 
 	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
+
+
+

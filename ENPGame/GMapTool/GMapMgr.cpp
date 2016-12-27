@@ -124,7 +124,7 @@ bool GMapMgr::CreateInit(int Width, int Height, float Distance, CString strTex, 
 	//  ¸Ê »ý¼º
 	//--------------------------------------------------------------------------------------
 
-	wchar_t szCharPath[MAX_PATH] = L"data/";
+	wchar_t szCharPath[MAX_PATH] = G_DEFINE_MAP_DIR;
 	wchar_t szChar[MAX_PATH];
 	//CString strString;
 	//strString = "test";
@@ -133,9 +133,18 @@ bool GMapMgr::CreateInit(int Width, int Height, float Distance, CString strTex, 
 	//theApp.m_MapDesc.strTextureFile = m_strCharName;
 
 	//m_MapDesc = { Width, Height, Distance, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
-	m_MapDesc = { Width, Height, Distance, 0.1f,szCharPath, L"data/shader/CustomizeMap.hlsl" };
-	m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
-	if (FAILED(m_CustomMap.Load(m_MapDesc))) { return false; }
+	m_MapDesc = {
+		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,		
+		Distance, 0.1f,
+		szCharPath, 
+		G_DEFINE_MAP_SHADER };
+
+	if (!m_HeightMap.Load(m_MapDesc))
+	{
+		return false;
+	}
+	//m_CustomMap.Init(g_pd3dDevice, g_pImmediateContext);
+	//if (FAILED(m_CustomMap.Load(m_MapDesc))) { return false; }
 	//--------------------------------------------------------------------------------------
 	//  Äõµå Æ®¸®
 	//--------------------------------------------------------------------------------------
@@ -160,10 +169,10 @@ bool			GMapMgr::Frame(GInput* pInput)
 	//--------------------------------------------------------------------------------------
 	if (m_MapDesc.iNumCols > 0 || m_MapDesc.iNumRows > 0)
 	{
-		g_pImmediateContext->UpdateSubresource(
-			m_CustomMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_CustomMap.m_VertexList.at(0), 0, 0);
+		//g_pImmediateContext->UpdateSubresource(
+		//	m_CustomMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_CustomMap.m_VertexList.at(0), 0, 0);
 
-		m_CustomMap.Frame();
+		//m_CustomMap.Frame();
 
 		// ÄõµåÆ®¸®
 		if (pInput != NULL &&  pInput->KeyCheck(DIK_F4) == KEY_UP)
@@ -172,6 +181,11 @@ bool			GMapMgr::Frame(GInput* pInput)
 			m_QuadTree.SetRenderDepth(m_iDrawDepth);
 		}
 		m_QuadTree.Frame();
+
+
+		m_HeightMap.Frame();
+		g_pImmediateContext->UpdateSubresource(
+			m_HeightMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_HeightMap.m_VertexList.at(0), 0, 0);
 	}
 
 	return true;
@@ -185,9 +199,12 @@ bool			GMapMgr::Render(GCamera* pCamera)
 	if (m_MapDesc.iNumCols > 0 || m_MapDesc.iNumRows > 0)
 	{
 
-		m_CustomMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(),
-			pCamera->GetProjMatrix());
-		m_CustomMap.Render(g_pImmediateContext);
+		m_HeightMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+		m_HeightMap.Render(g_pImmediateContext);
+
+		//m_CustomMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(),
+		//	pCamera->GetProjMatrix());
+		//m_CustomMap.Render(g_pImmediateContext);
 
 		//DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
@@ -196,7 +213,8 @@ bool			GMapMgr::Render(GCamera* pCamera)
 }
 bool			GMapMgr::Release()
 {
-	m_CustomMap.Release();
+	m_HeightMap.Release();
+	//m_CustomMap.Release();
 	m_QuadTree.Release();
 	return true;
 }

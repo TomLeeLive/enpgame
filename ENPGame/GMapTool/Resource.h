@@ -102,6 +102,8 @@
 #define IDC_COMBO2                      1015
 #define IDC_EDIT7                       1016
 #define IDC_TAB1                        1017
+#define IDC_BUTTON4                     1017
+#define IDC_EDIT8                       1018
 #define IDC_LISTOBJ                     1022
 #define IDC_BUTTON2                     1023
 #define IDC_BUTTONLOAD                  1023

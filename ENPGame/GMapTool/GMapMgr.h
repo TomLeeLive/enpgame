@@ -4,10 +4,17 @@
 #include "map/GQuadTree.h"
 #include "GMapMgr.h"
 #include "GInput.h"
+#include "map/GTileMap.h"
+
+#define G_DEFINE_MAP_DIR L"data/map/"
+#define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap.hlsl"
 
 class GMapMgr
 {
 public:
+	GTileMap		m_HeightMap;
+
+
 	bool			DrawQuadLine(GNode* pNode,GCamera* pCamera);
 	bool			DrawDebug(GCamera* pCamera);
 
@@ -22,7 +29,7 @@ public:
 	//--------------------------------------------------------------------------------------
 	// ¸Ê
 	//--------------------------------------------------------------------------------------
-	GMap	 m_CustomMap;
+	//GMap	 m_CustomMap;
 	TMapDesc m_MapDesc;
 	//--------------------------------------------------------------------------------------
 	// ÄõµåÆ®¸®

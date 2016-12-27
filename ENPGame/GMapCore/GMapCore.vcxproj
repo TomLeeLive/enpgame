@@ -176,6 +176,7 @@ copy "*.h" "..\\..\\include\\Inc\\map"</Command>
     <ClCompile Include="GQuadTree.cpp" />
     <ClCompile Include="GQuadTreeIndex.cpp" />
     <ClCompile Include="GSpaceDivision.cpp" />
+    <ClCompile Include="GTileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GBspParser.h" />
@@ -192,6 +193,7 @@ copy "*.h" "..\\..\\include\\Inc\\map"</Command>
     <ClInclude Include="GQuadTree.h" />
     <ClInclude Include="GQuadTreeIndex.h" />
     <ClInclude Include="GSpaceDivision.h" />
+    <ClInclude Include="GTileMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

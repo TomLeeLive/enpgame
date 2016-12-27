@@ -33,5 +33,7 @@ public:
 	afx_msg void OnBnClickedButton1();
 	CString m_strCharName;
 	afx_msg void OnEnChangeEdit7();
+	CString m_strHeight;
+	afx_msg void OnBnClickedButton4();
 };
 //extern GCreateMapDlg GCreateDlg;
