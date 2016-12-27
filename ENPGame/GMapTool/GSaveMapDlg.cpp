@@ -11,8 +11,7 @@
 IMPLEMENT_DYNAMIC(GSaveMapDlg, CDialogEx)
 
 GSaveMapDlg::GSaveMapDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_SAVEMAP, pParent)
-	, m_strCharName(_T(""))
+	: m_strCharName(_T(""))
 {
 
 }

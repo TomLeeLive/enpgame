@@ -28,6 +28,78 @@ BEGIN_MESSAGE_MAP(CMapToolApp, CWinAppEx)
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
+bool CMapToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
+{
+	//OPENFILENAME    ofn;
+	//TCHAR           szFile[MAX_PATH] = { 0, };
+	//TCHAR			szFileTitle[MAX_PATH] = { 0, };
+	//static TCHAR    *szFilter;
+
+	//TCHAR lpCurBuffer[256] = { 0, };
+	//GetCurrentDirectory(256, lpCurBuffer);
+
+	//ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	//_tcscpy_s(szFile, _T("*."));
+	//_tcscat_s(szFile, szExt);
+	//_tcscat_s(szFile, _T("\0"));
+
+	//ofn.lStructSize = sizeof(OPENFILENAME);
+	//ofn.hwndOwner = GetActiveWindow();
+	//ofn.lpstrFilter = szFilter;
+	//ofn.lpstrCustomFilter = NULL;
+	//ofn.nMaxCustFilter = 0L;
+	//ofn.nFilterIndex = 1;
+	//ofn.lpstrFile = szFile;
+	//ofn.nMaxFile = MAX_PATH;
+	//ofn.lpstrFileTitle = szFileTitle;
+	//ofn.nMaxFileTitle = MAX_PATH;
+	//ofn.lpstrInitialDir = _T("../../data/Character/");
+	//ofn.lpstrTitle = szTitle;
+	//ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+	//ofn.nFileOffset = 0;
+	//ofn.nFileExtension = 0;
+	//ofn.lpstrDefExt = szExt;
+
+	//if (!GetOpenFileName(&ofn))
+	//{
+	//	return false;
+	//}
+	//TCHAR* load = _tcstok(szFile, _T("\n"));
+	//T_STR dir = szFile;
+	//load = &load[_tcslen(load) + 1];
+	//if (*load == 0)
+	//{
+	//	m_LoadFiles.push_back(dir);
+	//}
+
+	//while (*load != 0)
+	//{
+	//	T_STR dir = szFile;
+	//	load = _tcstok(load, _T("\n"));
+	//	dir += _T("\\");
+	//	dir += load;
+	//	m_LoadFiles.push_back(dir);
+	//	load = &load[_tcslen(load) + 1];
+	//}
+	//SetCurrentDirectory(lpCurBuffer);
+
+
+	////확장자를 검출하기 위해 추가한 코드
+	//string extension = getExt(TCHARToString(dir.c_str()));
+
+	//if (0 == extension.compare("GUI") || extension.compare("gui") == 0)
+	//{
+	//	m_FileExt = G_TOOL_EXT_GUI;
+	//	return true;
+	//}
+	//if (0 == extension.compare("GBS") || extension.compare("gbs") == 0) {
+	//	m_FileExt = G_TOOL_EXT_GBS;
+	//	return true;
+	//}
+
+	return true;
+}
+
 
 bool CMapToolApp::CreateInit(int Width, int Height, float Distance, CString strTex)
 {

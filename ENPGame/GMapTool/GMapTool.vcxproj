@@ -215,9 +215,10 @@
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="GCreateMapDlg.h" />
-    <ClInclude Include="GCreateMapForm.h" />
-    <ClInclude Include="GObjectControl.h" />
-    <ClInclude Include="GObjectForm.h" />
+    <ClInclude Include="GObjControl.h" />
+    <ClInclude Include="GObjForm.h" />
+    <ClInclude Include="GSampleControl.h" />
+    <ClInclude Include="GSampleForm.h" />
     <ClInclude Include="GSaveMapDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapTool.h" />
@@ -234,9 +235,10 @@
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="GCreateMapDlg.cpp" />
-    <ClCompile Include="GCreateMapForm.cpp" />
-    <ClCompile Include="GObjectControl.cpp" />
-    <ClCompile Include="GObjectForm.cpp" />
+    <ClCompile Include="GObjControl.cpp" />
+    <ClCompile Include="GObjForm.cpp" />
+    <ClCompile Include="GSampleControl.cpp" />
+    <ClCompile Include="GSampleForm.cpp" />
     <ClCompile Include="GSaveMapDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapTool.cpp" />

@@ -29,7 +29,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SETTINGCHANGE()
 	ON_COMMAND(ID_CREATEMAP, &CMainFrame::OnCreatemap)
 	ON_COMMAND(ID_SAVEMAP, &CMainFrame::OnSavemap)
-	ON_COMMAND(IDS_OBJECTFORMVIEW, &CMainFrame::OnObjectformview)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -103,6 +102,26 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
+
+	if (TRUE == m_wndSampleCtrl.CreateEx(
+		NULL, _T("GSampleCtrl"), this, CRect(0,0,300,300	),
+		TRUE,1234,
+		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
+		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI))
+	{
+		m_wndSampleCtrl.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndSampleCtrl);
+	}
+
+	if (TRUE == m_wndObjCtrl.CreateEx(
+		NULL, _T("GObjCtrl"), this, CRect(0, 0, 300, 300),
+		TRUE, 5678,
+		WS_CHILD | WS_VISIBLE | CBRS_LEFT | WS_CLIPSIBLINGS
+		| WS_CLIPCHILDREN | CBRS_FLOAT_MULTI))
+	{
+		m_wndObjCtrl.EnableDocking(CBRS_ALIGN_ANY);
+		DockPane(&m_wndObjCtrl);
+	}
 
 
 	// Visual Studio 2005 스타일 도킹 창 동작을 활성화합니다.

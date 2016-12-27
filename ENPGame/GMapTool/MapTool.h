@@ -73,6 +73,9 @@ public:
 	//--------------------------------------------------------------------------------------
 	HRESULT			CreateResource();
 	HRESULT			DeleteResource();
+
+	T_STR_VECTOR m_LoadFiles;
+	bool  LoadFileDlg(TCHAR* szExt, TCHAR* szTitle);
 	
 public:
 	CMapToolApp();

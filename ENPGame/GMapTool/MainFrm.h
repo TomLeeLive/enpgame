@@ -12,8 +12,9 @@
 //추가
 #include "GCreateMapDlg.h"
 #include "GSaveMapDlg.h"
-#include "GObjectControl.h"
 
+#include "GSampleControl.h"
+#include "GObjControl.h"
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -24,9 +25,10 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	CString m_strSaveFileName;
-	GObjectControl m_wndDockObject;
 // 작업입니다.
 public:
+	GSampleControl m_wndSampleCtrl;
+	GObjControl m_wndObjCtrl;
 
 // 재정의입니다.
 public:
