@@ -53,23 +53,6 @@ bool		GAIZombieMgr::Init(int iNum) {
 
 #ifdef G_MACRO_TESTCODE_ADD
 
-	/*for (int i = 0; i < iNum; i++)
-	{
-		auto pZomb = make_shared<GNewZombie>(i);
-		m_Zomb.push_back(pZomb);
-
-	}
-	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
-	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
-
-	for (; _F != _L; ++_F)
-	{
-		(*_F)->Init();
-		for (int j = 0; j < G_AI_CNT; j++)
-		{
-			(*_F)->m_GameSeq[j]->Init((*_F).get());
-		}
-	}*/
 #else
 	for (int i = 0; i < m_Zomb.size(); i++)
 	{
@@ -90,7 +73,7 @@ bool		GAIZombieMgr::Init(int iNum) {
 	
 	return true; };
 
-bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
+bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2) {
 
 #ifdef G_MACRO_TESTCODE_ADD
 
@@ -99,7 +82,7 @@ bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld) {
 	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
 	for (; _F != _L; ++_F)
 	{
-		(*_F)->Frame((*_F).get(), matHeroWorld);
+		(*_F)->Frame((*_F).get(), matHeroWorld, matHeroWorld2);
 	}
 #else
 	for (int i = 0; i < m_Zomb.size(); i++)

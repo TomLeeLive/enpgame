@@ -13,6 +13,7 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strSh
 	G_EFFECT_DUST,
 	G_EFFECT_SMOG,
 	*/
+
 	switch (iType) {
 	case G_EFFECT_BULLET:
 	{
@@ -25,7 +26,6 @@ void		KEffManager::Create(G_EFFECT_TYPE type, T_STR* strFile, const TCHAR* strSh
 
 		//play 버튼시 init() 부분
 		//Effect->m_pSprite->Create(g_pd3dDevice, strShaderName, strFile->c_str());
-
 
 		//이미지 이름을 저장해 놓는다. 나중에 save 할때 쓴다.
 		//TCHAR  *tchr = (TCHAR*)(LPCTSTR)strFile;

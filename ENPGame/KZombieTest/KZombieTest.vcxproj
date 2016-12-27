@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>KZombieTest</ProjectName>
-    <ProjectGuid>{5D0E726B-9DDF-45F0-9DEA-AD54CBC5FC7A}</ProjectGuid>
+    <ProjectGuid>{AA4941EC-AE88-4C2C-9C99-E459E80BD34D}</ProjectGuid>
     <RootNamespace>SampleBindPoseAnimation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -109,27 +109,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Output\data\shader\SkyBox.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Character.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="MatrixViewer.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CharTable.gci" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="GEventData.cpp" />
     <ClCompile Include="GFPSCamera.cpp" />
     <ClCompile Include="GN2Zombie.cpp" />
     <ClCompile Include="GProjMain.cpp" />
@@ -144,8 +124,10 @@
     <ClCompile Include="GSeqSurvivalMode.cpp" />
     <ClCompile Include="GN2Skybox.cpp" />
     <ClCompile Include="GSound.cpp" />
+    <ClCompile Include="GTileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GEventData.h" />
     <ClInclude Include="GFPSCamera.h" />
     <ClInclude Include="GN2Zombie.h" />
     <ClInclude Include="GProjMain.h" />
@@ -160,6 +142,7 @@
     <ClInclude Include="GSeqSurvivalMode.h" />
     <ClInclude Include="GN2Skybox.h" />
     <ClInclude Include="GSound.h" />
+    <ClInclude Include="GTileMap.h" />
     <ClInclude Include="_resources.h" />
     <ClInclude Include="_stdafx.h" />
     <ClInclude Include="_values.h" />

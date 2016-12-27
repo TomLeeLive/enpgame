@@ -1,26 +1,5 @@
 #include "_ai_std.h"
 
-//GAIAttack * GAIAttack::pInstance_ = 0;
-
-void GAIAttack::AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition)
-{
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	m_vADestLook = vZombiePosition - vBoxPosition; // 정규화 할 박스로의 목적지 벡터
-	D3DXVec3Normalize(&m_vADestLook, &m_vADestLook);
-	m_vARight = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_vAUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	D3DXVec3Cross(&m_vARight, &m_vAUp, &m_vADestLook);
-	D3DXVec3Cross(&m_vAUp, &m_vADestLook, &m_vARight);
-
-	//m_vLook = m_vADestLook;
-	//m_vZRight = m_vARight;
-	//m_vZUp = m_vAUp;
-
-}
-
 bool GAIAttack::Init(GNewZombie* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
@@ -28,24 +7,24 @@ bool GAIAttack::Init(GNewZombie* iMyIndex)
 	return true;
 }
 
-bool GAIAttack::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld)
+bool GAIAttack::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
 	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
+	D3DXVECTOR3 vHeroPos2 = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);
 
 	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,
 		iMyIndex->m_matZombWld._42, iMyIndex->m_matZombWld._43);
 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
-	float fDistance = D3DXVec3Length(&Temp);
+	D3DXVECTOR3 Temp2 = vHeroPos2 - vPos;
 
-	if (fDistance > G_DEFINE_AI_ATTACK_CHECK)
+	float fDistance = D3DXVec3Length(&Temp);
+	float fDistance2 = D3DXVec3Length(&Temp2);
+
+	if (fDistance > G_DEFINE_AI_ATTACK_CHECK && fDistance2 > G_DEFINE_AI_ATTACK_CHECK)
 	{
 		iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
 	}
-	
-
-	iMyIndex->RotationAndTrans(vHeroPos);
-
 	return true;
 }
 bool GAIAttack::Render()

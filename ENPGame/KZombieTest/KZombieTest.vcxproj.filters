@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="..\..\Output\data\shader\SkyBox.hlsl" />
-    <FxCompile Include="Character.hlsl" />
-    <FxCompile Include="MatrixViewer.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="GSeq.cpp">
       <Filter>GameSequence</Filter>
     </ClCompile>
@@ -30,23 +25,29 @@
     <ClCompile Include="GSeqSurvivalMode.cpp">
       <Filter>GameSequence</Filter>
     </ClCompile>
-    <ClCompile Include="GFPSCamera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GN2Skybox.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GProjMain.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GSound.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GN2Zombie.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GSeqLoading.cpp">
       <Filter>GameSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="GFPSCamera.cpp">
+      <Filter>GameCode</Filter>
+    </ClCompile>
+    <ClCompile Include="GN2Skybox.cpp">
+      <Filter>GameCode</Filter>
+    </ClCompile>
+    <ClCompile Include="GN2Zombie.cpp">
+      <Filter>GameCode</Filter>
+    </ClCompile>
+    <ClCompile Include="GSound.cpp">
+      <Filter>GameCode</Filter>
+    </ClCompile>
+    <ClCompile Include="GTileMap.cpp">
+      <Filter>GameCode</Filter>
+    </ClCompile>
+    <ClCompile Include="GEventData.cpp">
+      <Filter>GameCode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,30 +81,33 @@
     <ClInclude Include="_resources.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GFPSCamera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GN2Skybox.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GProjMain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="_values.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GSound.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GN2Zombie.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GSeqLoading.h">
       <Filter>GameSequence</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CharTable.gci" />
+    <ClInclude Include="GFPSCamera.h">
+      <Filter>GameCode</Filter>
+    </ClInclude>
+    <ClInclude Include="GN2Skybox.h">
+      <Filter>GameCode</Filter>
+    </ClInclude>
+    <ClInclude Include="GN2Zombie.h">
+      <Filter>GameCode</Filter>
+    </ClInclude>
+    <ClInclude Include="GSound.h">
+      <Filter>GameCode</Filter>
+    </ClInclude>
+    <ClInclude Include="GTileMap.h">
+      <Filter>GameCode</Filter>
+    </ClInclude>
+    <ClInclude Include="GEventData.h">
+      <Filter>GameCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameSequence">
@@ -114,6 +118,9 @@
     </Filter>
     <Filter Include="헤더 파일">
       <UniqueIdentifier>{5e22dd3e-d130-433e-b68b-89ac438f44dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameCode">
+      <UniqueIdentifier>{a967059e-219d-4909-9cf8-a0d1da788135}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

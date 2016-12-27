@@ -21,46 +21,69 @@ bool GProjMain::Init()
 	D3DXMatrixIdentity(&m_matBoxWorld);
 	D3DXMatrixScaling(&m_matBoxWorld, 10.0f, 10.0f, 10.0f);
 	m_matBoxWorld._42 = 40.0f;
-	
 
-	
-	
+	SAFE_NEW(m_Box2, GBoxShape);
+	m_Box2->Create(m_pd3dDevice, L"data/shader/box.hlsl", L"data_test/flagstone.bmp");
+	D3DXMatrixIdentity(&m_matBoxWorld2);
+	D3DXMatrixScaling(&m_matBoxWorld2, 10.0f, 10.0f, 10.0f);
+	m_matBoxWorld2._42 = 40.0f;
+
+
+
+
 
 	return true;
 }
 bool GProjMain::Frame()
 {
-
-	D3DXMATRIX Logic;
+	//박스  움직임
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		//Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._43 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		//Logic._43 = g_pMain->m_matBoxWorld._43;
 	}
 
 	if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._41 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		//Logic._41 = g_pMain->m_matBoxWorld._41;
 	}
 
 	if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-		//Logic._41 = g_pMain->m_matBoxWorld._41;
+	}
+
+
+	//박스 2 움직임
+	if (I_Input.KeyCheck(DIK_Y) == KEY_HOLD)
+	{
+		g_pMain->m_matBoxWorld2._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
+	}
+
+	if (I_Input.KeyCheck(DIK_H) == KEY_HOLD)
+	{
+		g_pMain->m_matBoxWorld2._43 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
+	}
+
+	if (I_Input.KeyCheck(DIK_G) == KEY_HOLD)
+	{
+		g_pMain->m_matBoxWorld2._41 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
+	}
+
+	if (I_Input.KeyCheck(DIK_J) == KEY_HOLD)
+	{
+		g_pMain->m_matBoxWorld2._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 	}
 
 
 	m_pMainCamera->Frame();
 
 
-	m_GAIZombMgr.Frame(m_Box->m_matWorld);
+	m_GAIZombMgr.Frame(m_matBoxWorld, m_matBoxWorld2);
 
 	return true;
 }
@@ -69,12 +92,14 @@ bool GProjMain::Render()
 	m_Box->SetMatrix(&m_matBoxWorld, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_Box->Render(m_pImmediateContext);
 
+	m_Box2->SetMatrix(&m_matBoxWorld2, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
+	m_Box2->Render(m_pImmediateContext);
+
 	m_GAIZombMgr.Render(m_pMainCamera.get());
 	return true;
 }
 bool GProjMain::Release()
 {
-
 	m_GAIZombMgr.Release();
 	return true;
 }
@@ -83,7 +108,7 @@ HRESULT GProjMain::CreateResource()
 	HRESULT hr;
 	if (m_pMainCamera != nullptr)
 		m_pMainCamera->SetProjMatrix((float)D3DX_PI * 0.25f,
-		m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 10000.0f);
+			m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 10000.0f);
 
 	m_GAIZombMgr.CreateResource();
 

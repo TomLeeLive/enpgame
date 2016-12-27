@@ -109,11 +109,8 @@ bool GProjMain::Render()
 	m_pBoxEnemy.Render(m_pImmediateContext);
 	m_pBBoxEnemy.Render(&m_matWorldEnemy, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 #endif
-
 	m_pPlane.SetMatrix(&m_matWorldPlaneBase, &m_pMainCamera->m_matView, &m_pMainCamera->m_matProj);
 	m_pPlane.Render(m_pImmediateContext);
-
-
 
 	return true;
 }

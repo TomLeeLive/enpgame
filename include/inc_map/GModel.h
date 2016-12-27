@@ -38,8 +38,11 @@ struct TObjWM
 class GModel
 {
 public:
-	G_LIGHT_TYPE	m_LightType;
 	//Α¶Έν [Start]
+	void			FrameLight();
+	void			SetLight(G_LIGHT_TYPE type);
+	void			UpdateLightConstantBuffer(D3DXMATRIX matWorld);
+	G_LIGHT_TYPE	m_LightType;
 	D3DXVECTOR3		m_vLightVector;
 	LIGHT_CONSTANT_BUFFER m_cbLight;
 	ComPtr<ID3D11Buffer>	m_pConstantBufferLight;

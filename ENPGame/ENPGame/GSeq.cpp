@@ -4,6 +4,7 @@
 
 GSeq::GSeq()
 {
+	m_bGameOver = false;
 }
 
 

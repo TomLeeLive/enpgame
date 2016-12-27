@@ -24,7 +24,7 @@ public:
 	
 	D3DXMATRIX  m_matZombWld;
 	bool		Init();
-	bool		Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld);
+	bool		Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool		Render();
 	bool		Release();
 	

@@ -46,11 +46,6 @@ bool GProjMain::Frame()
 }
 bool GProjMain::Render()
 {
-	//D3DXMATRIX matTrans, matRotation, matZ;
-
-	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
-	//float t = m_Timer.GetElapsedTime() * D3DX_PI;
-
 
 	I_EffMgr.Render();
 

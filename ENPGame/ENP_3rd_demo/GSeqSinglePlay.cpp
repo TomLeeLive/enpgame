@@ -1536,7 +1536,7 @@ bool		GSeqSinglePlay::FrameChar() {
 	int iChange = 0;
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld);
+	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld,m_CharHero[1]->m_matWorld);
 #else
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
