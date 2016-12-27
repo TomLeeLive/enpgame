@@ -24,50 +24,33 @@
 #include "map/GQuadTree.h"
 #include "GCamera.h"
 
+
+
 #include "GCreateMapDlg.h"
 #include "GSaveMapDlg.h"
 
 
+#include "GMapMgr.h"
 // CMapToolApp:
 // 이 클래스의 구현에 대해서는 MapTool.cpp을 참조하십시오.
 //
 
+
+
 class CMapToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	GMapMgr					m_MapMgr;
 	shared_ptr<GCamera >	m_pMainCamera;
-	//--------------------------------------------------------------------------------------
-	// 툴
-	//--------------------------------------------------------------------------------------
-	//GCreateMapDlg GCreateDlg;
-	//GSaveMapDlg GSaveDlg;
-	//--------------------------------------------------------------------------------------
-	// 맵
-	//--------------------------------------------------------------------------------------
-	GMap	 m_CustomMap;
-	TMapDesc m_MapDesc;
-	//--------------------------------------------------------------------------------------
-	// 쿼드트리
-	//--------------------------------------------------------------------------------------
-	GQuadTree m_QuadTree;
-	
-	//--------------------------------------------------------------------------------------
-	// 디버깅 용도
-	//--------------------------------------------------------------------------------------
-	GLineShape		m_DrawLine;
-	bool			m_bDebugRender;
-	int				m_iDrawDepth;
 	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
-public:
-	bool			CreateInit(int Width, int Height, float Distance, CString strTex);
+
 public:
 	bool			Init();
 	bool			Frame();
 	bool			Render();
 	bool			Release();
 	
-	bool			DrawQuadLine(GNode* pNode);
-	bool			DrawDebug();
+
 	//--------------------------------------------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
 	//--------------------------------------------------------------------------------------

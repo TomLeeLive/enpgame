@@ -76,7 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../output/</OutDir>
-    <IntDir>../../output/GMapTool\</IntDir>
+    <IntDir>../../output/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -215,6 +215,7 @@
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="GCreateMapDlg.h" />
+    <ClInclude Include="GMapMgr.h" />
     <ClInclude Include="GObjControl.h" />
     <ClInclude Include="GObjForm.h" />
     <ClInclude Include="GSampleControl.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="GCreateMapDlg.cpp" />
+    <ClCompile Include="GMapMgr.cpp" />
     <ClCompile Include="GObjControl.cpp" />
     <ClCompile Include="GObjForm.cpp" />
     <ClCompile Include="GSampleControl.cpp" />

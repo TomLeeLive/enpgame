@@ -77,7 +77,8 @@ void GCreateMapDlg::OnOK()
 
 	CDialogEx::OnOK();
 
-	theApp.CreateInit(m_iTileWidth, m_iTileHeight, m_fCellDistance, m_strCharName);
+	theApp.m_MapMgr.CreateInit(m_iTileWidth, m_iTileHeight, m_fCellDistance, m_strCharName,theApp.m_pMainCamera.get());
+	//theApp.CreateInit(m_iTileWidth, m_iTileHeight, m_fCellDistance, m_strCharName);
 
 }
 
