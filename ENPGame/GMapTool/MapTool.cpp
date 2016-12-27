@@ -108,7 +108,23 @@ bool CMapToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
 // CMapToolApp 생성
 bool CMapToolApp::Init()
 {
-	
+	//--------------------------------------------------------------------------------------
+	// 카메라  행렬 
+	//--------------------------------------------------------------------------------------	
+	m_pMainCamera = make_shared<GCamera>();
+	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -50.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f,
+		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
+
+
+	//--------------------------------------------------------------------------------------
+	// 카메라 프로스텀 랜더링용 박스 오브젝트 생성
+	//--------------------------------------------------------------------------------------
+	m_pMainCamera->CreateRenderBox(g_pd3dDevice, g_pImmediateContext);
+	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/box.hlsl", "PS_Color"));
+
+
+	m_MapMgr.Init();
 	
 	return true;
 }
@@ -297,23 +313,7 @@ BOOL CMapToolApp::InitInstance()
 
 
 
-	//--------------------------------------------------------------------------------------
-	// 카메라  행렬 
-	//--------------------------------------------------------------------------------------	
-	m_pMainCamera = make_shared<GCamera>();
-	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -50.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
-	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f,
-		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
 
-
-	//--------------------------------------------------------------------------------------
-	// 카메라 프로스텀 랜더링용 박스 오브젝트 생성
-	//--------------------------------------------------------------------------------------
-	m_pMainCamera->CreateRenderBox(g_pd3dDevice, g_pImmediateContext);
-	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/box.hlsl", "PS_Color"));
-
-
-	m_MapMgr.Init();
 
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
