@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="AISeq">
+    <Filter Include="ZombieAISeq">
       <UniqueIdentifier>{0f155667-23b4-4ab7-a876-7b3aec810f51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -31,42 +31,42 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GAIAttack.h">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClInclude>
     <ClInclude Include="GAIDie.h">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClInclude>
     <ClInclude Include="GAIFollow.h">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClInclude>
     <ClInclude Include="GAIIdle.h">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClInclude>
     <ClInclude Include="GAIMove.h">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClInclude>
     <ClInclude Include="GAISeq.h">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GAIIdle.cpp">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIMove.cpp">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAISeq.cpp">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIFollow.cpp">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIDie.cpp">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIAttack.cpp">
-      <Filter>AISeq</Filter>
+      <Filter>ZombieAISeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIZombieMgr.cpp">
       <Filter>소스 파일</Filter>

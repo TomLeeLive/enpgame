@@ -28,16 +28,16 @@ bool GAIFollow::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX 
 	}
 
 
-	if (fDistance < G_DEFINE_AI_ATTACK_CHECK || fDistance2 > G_DEFINE_AI_ATTACK_CHECK)
+	if (fDistance < G_DEFINE_AI_ATTACK_CHECK || fDistance2 < G_DEFINE_AI_ATTACK_CHECK)
 	{
 		iMyIndex->ChangeZombState(iMyIndex, G_AI_ATTACK);
 	}
 
-	if (fDistance >= fDistance2)
+	if (fDistance>= G_DEFINE_AI_ATTACK_CHECK && fDistance <= G_DEFINE_AI_FOLLOW_CHECK && fDistance >fDistance2)
 	{
 		iMyIndex->RotationAndTrans(vHeroPos);
 	}
-	else
+	if (fDistance2 >= G_DEFINE_AI_ATTACK_CHECK && fDistance2 <= G_DEFINE_AI_FOLLOW_CHECK && fDistance2 >fDistance)
 	{
 		iMyIndex->RotationAndTrans(vHeroPos2);
 	}

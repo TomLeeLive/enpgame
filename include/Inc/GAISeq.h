@@ -38,7 +38,5 @@ public:
 
 	virtual ~GAISeq();
 	GAISeq();
-protected:
-
 };
 

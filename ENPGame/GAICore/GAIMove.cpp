@@ -53,10 +53,7 @@ bool GAIMove::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX ma
 
 	else
 	{
-		if (fDistance < G_DEFINE_AI_FOLLOW_CHECK) {
-			iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
-		}
-		if (fDistance2 < G_DEFINE_AI_FOLLOW_CHECK) {
+		if (fDistance < G_DEFINE_AI_FOLLOW_CHECK|| fDistance2 < G_DEFINE_AI_FOLLOW_CHECK) {
 			iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
 		}
 		if (g_fDurationTime - fTime > fCoolTime) {
