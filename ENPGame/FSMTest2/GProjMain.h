@@ -18,6 +18,7 @@ public:
  bool		Frame();
  bool		Render();
  bool		Release();
+ bool		FollowTom(D3DXVECTOR3 vHeroTom, D3DXVECTOR3 vHeroJake);
  int		WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
