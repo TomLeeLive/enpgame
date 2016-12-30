@@ -8,6 +8,8 @@ class GMapGroup;
 class GMapMgr
 {
 public:
+	GObjData* m_pObjSelected;
+
 	vector<shared_ptr<GMapGroup>>	m_vecMapGroup;
 
 	//vector<GGbsObj*>	m_vecObj;

@@ -104,7 +104,6 @@
 #define IDC_TAB1                        1017
 #define IDC_BUTTON4                     1017
 #define IDC_EDIT8                       1018
-#define IDC_LIST1                       1019
 #define IDC_LISTMAP                     1019
 #define IDC_LISTOBJ                     1022
 #define IDC_BUTTON2                     1023

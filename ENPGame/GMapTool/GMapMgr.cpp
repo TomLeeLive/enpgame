@@ -103,7 +103,7 @@ HRESULT			GMapMgr::DeleteResource()
 
 GMapMgr::GMapMgr()
 {
-
+	m_pObjSelected = NULL;
 	m_bDebugRender = false;
 }
 
