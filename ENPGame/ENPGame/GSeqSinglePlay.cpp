@@ -1098,10 +1098,10 @@ bool		GSeqSinglePlay::InitObj() {
 	//((GGbsObj*)m_Obj[G_OBJ_LAB28])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
 
-	for (int i = 0; i < G_OBJ_CNT; i++) {
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
 
-		m_Obj[i]->m_matObjOBB = m_Obj[i]->m_matObjScl[i] * m_Obj[i]->m_matObjRot * m_Obj[i]->m_matObjTrans;
-	}
+	//	m_Obj[i]->m_matObjOBB = m_Obj[i]->m_matObjScl[i] * m_Obj[i]->m_matObjRot * m_Obj[i]->m_matObjTrans;
+	//}
 
 #endif
 	return true;
@@ -1805,7 +1805,7 @@ bool		GSeqSinglePlay::RenderObj() {
 		}
 
 		if(m_bDebugMode)
-			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_Obj[i]->m_matObjOBB, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_Obj[i]->m_matObjWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 
 	//BOUD
