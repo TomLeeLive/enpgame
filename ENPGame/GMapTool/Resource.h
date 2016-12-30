@@ -104,6 +104,8 @@
 #define IDC_TAB1                        1017
 #define IDC_BUTTON4                     1017
 #define IDC_EDIT8                       1018
+#define IDC_LIST1                       1019
+#define IDC_LISTMAP                     1019
 #define IDC_LISTOBJ                     1022
 #define IDC_BUTTON2                     1023
 #define IDC_BUTTONLOAD                  1023
@@ -148,7 +150,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        335
 #define _APS_NEXT_COMMAND_VALUE         32802
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -111,7 +111,7 @@ bool CMapToolApp::Init()
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
-	m_pMainCamera = make_shared<GCamera>();
+	m_pMainCamera = make_shared<GMapCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -50.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f,
 		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
