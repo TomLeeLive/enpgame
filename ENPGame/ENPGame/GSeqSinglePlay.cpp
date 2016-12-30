@@ -806,7 +806,7 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_Obj[G_OBJ_LAB]->m_matObjTrans, -4000.0f, 0.0f, -4000.0f);
 	m_Obj[G_OBJ_LAB]->m_matObjWld = m_Obj[G_OBJ_LAB]->m_matObjScl * m_Obj[G_OBJ_LAB]->m_matObjRot * m_Obj[G_OBJ_LAB]->m_matObjTrans;
 	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//((GGbsObj*)m_Obj[G_OBJ_LAB])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
 	//드롭십 로드
 	m_Obj[G_OBJ_DROPSHIP] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
@@ -815,7 +815,7 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_Obj[G_OBJ_DROPSHIP]->m_matObjTrans, 4000.0f, 0.0f, 4000.0f);
 	m_Obj[G_OBJ_DROPSHIP]->m_matObjWld = m_Obj[G_OBJ_DROPSHIP]->m_matObjScl * m_Obj[G_OBJ_DROPSHIP]->m_matObjRot * m_Obj[G_OBJ_DROPSHIP]->m_matObjTrans;
 	//드롭십 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(G_DEFINE_OBB_DROPSHIP_LAND);
+	//((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(G_DEFINE_OBB_DROPSHIP_LAND);
 
 	//차량1 로드
 	m_Obj[G_OBJ_CAR1] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
@@ -823,7 +823,7 @@ bool		GSeqSinglePlay::InitObj() {
 	D3DXMatrixTranslation(&m_Obj[G_OBJ_CAR1]->m_matObjTrans, 500.0f, 0.0f, -700.0f);
 	m_Obj[G_OBJ_CAR1]->m_matObjWld = m_Obj[G_OBJ_CAR1]->m_matObjScl * m_Obj[G_OBJ_CAR1]->m_matObjRot * m_Obj[G_OBJ_CAR1]->m_matObjTrans;
 	//드롭십 차량1 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_CAR1])->m_OBB.Init(G_DEFINE_OBB_CAR);
+	//((GGbsObj*)m_Obj[G_OBJ_CAR1])->m_OBB.Init(G_DEFINE_OBB_CAR);
 
 	////차량2 로드
 	//m_Obj[G_OBJ_CAR2] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);

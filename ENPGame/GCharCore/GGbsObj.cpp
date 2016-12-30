@@ -29,7 +29,7 @@ bool GGbsObj::Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName,const TCHAR
 		m_Parser.CloseStream();
 		stopwatch.Output(L"GGbsObj::Load After");
 
-		m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+		//m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
 
 		return true;
 	}
@@ -64,7 +64,7 @@ bool GGbsObj::Load(ID3D11Device* pd3dDevice, const TCHAR* szLoadName, const TCHA
 		m_Parser.CloseStream();
 		stopwatch.Output(L"GGbsObj::Load After");
 
-		m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+		//m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
 
 		return true;
 	}	
@@ -85,7 +85,7 @@ bool GGbsObj::LoadScene(const TCHAR* strFileName)
 	TCHAR strDate[256] = {0,};
 	if( m_Parser.OpenStream( strFileName ) )
 	{
-		if( !m_Parser.GetDataFromFileLoop( _T("#TBF_FILE_EXPORT"), strDate, STRING_DATA ) )
+		if( !m_Parser.GetDataFromFileLoop( _T("#GBS_FILE_EXPORT"), strDate, STRING_DATA ) )
 		{
 			return m_Parser.ErrorCloseStream( _T(" NOT FIND! [ #SME_FILE_EXPORT ]."));		
 		}		
@@ -93,6 +93,26 @@ bool GGbsObj::LoadScene(const TCHAR* strFileName)
 	else{
 		return false;
 	}
+
+	if (!m_Parser.GetDataFromFileLoop(_T("#OBB_MIN_MAX")))
+	{
+		return m_Parser.ErrorCloseStream(_T(" NO FIND! [ #OBB_MIN_MAX ]."));
+	}
+	// #OBB_MIN_MAX
+	float fMinX, fMinY, fMinZ;
+	float fMaxX, fMaxY, fMaxZ;
+
+	_fgetts(m_Parser.m_pBuffer, 256, m_Parser.m_pStream);
+	_stscanf(m_Parser.m_pBuffer, _T("%f%f%f%f%f%f"),
+		&fMinX,
+		&fMinY,
+		&fMinZ,
+		&fMaxX,
+		&fMaxY,
+		&fMaxZ);
+
+	m_OBB.Init(D3DXVECTOR3(fMinX, fMinY, fMinZ), D3DXVECTOR3(fMaxX, fMaxY, fMaxZ));
+
 	if( !m_Parser.GetDataFromFileLoop( _T("#SCENE" )) )
 	{
 		return m_Parser.ErrorCloseStream( _T(" NO FIND! [ #SCENE ]."));
