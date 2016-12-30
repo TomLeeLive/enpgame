@@ -6,7 +6,7 @@
 
 #include "MapTool.h"
 #include "GObjForm.h"
-
+#include "GMapMgr.h"
 
 // GObjForm
 
@@ -59,7 +59,7 @@ void GObjForm::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(GObjForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTONLOAD, &GObjForm::OnBnClickedButtonload)
-	ON_BN_CLICKED(IDC_BUTTONLOAD2, &GObjForm::OnBnClickedButtonload2)
+	ON_BN_CLICKED(IDC_BUTTON1, &GObjForm::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -116,11 +116,32 @@ void GObjForm::OnBnClickedButtonload()
 
 	_tcsncat(strFile, (TCHAR*)TChr, _tcsclen((TCHAR*)TChr));
 
+	I_ObjMgr.Load(g_pd3dDevice, strFile, G_SHA_OBJ_DIFFUSE_REVERSE);
 
+	
+
+	auto objData = make_shared<GObjData>();
+	objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(TChr);
+
+	//s, r, t 설정.
+	D3DXMatrixScaling(&objData->m_matObjScl, 2, 2, 2);
+	D3DXMatrixRotationY(&objData->m_matObjRot, D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&objData->m_matObjTrans, 0.0f, 0.0f, 0.0f);
+	objData->m_matObjWld = objData->m_matObjScl * objData->m_matObjRot * objData->m_matObjTrans;
+
+
+
+
+	theApp.m_MapMgr.m_vecMapGroup[0]->m_vecObj.push_back(objData);
+
+	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), theApp.m_MapMgr.m_vecMapGroup[0]->m_vecObj.size() - 1, TChr/*L" GBS"*/);
+	m_listObj.AddString(szRet);
 }
 
 
-void GObjForm::OnBnClickedButtonload2()
+
+void GObjForm::OnBnClickedButton1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

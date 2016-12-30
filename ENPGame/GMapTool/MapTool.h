@@ -16,6 +16,12 @@
 #pragma comment( lib, "GMapCore32.lib" )
 #endif
 
+#if defined(DEBUG) || defined(_DEBUG)
+#pragma comment( lib, "GCharCore32d.lib" )
+#else
+#pragma comment( lib, "GCharCore32.lib" )
+#endif
+
 
 //#include "map/GNoiseMap.h"
 //#include "map/GQuadTreeIndex.h"

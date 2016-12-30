@@ -80,7 +80,7 @@ void GCreateMapDlg::OnOK()
 
 	CDialogEx::OnOK();
 
-	theApp.m_MapMgr.CreateInit(m_iTileWidth, m_iTileHeight, m_fCellDistance, m_strCharName,theApp.m_pMainCamera.get());
+	theApp.m_MapMgr.m_vecMapGroup[0]->CreateInit(m_iTileWidth, m_iTileHeight, m_fCellDistance, m_strCharName,theApp.m_pMainCamera.get());
 	//theApp.CreateInit(m_iTileWidth, m_iTileHeight, m_fCellDistance, m_strCharName);
 
 }
@@ -125,13 +125,17 @@ void GCreateMapDlg::OnBnClickedButton4()
 	_tcsncat(strFile, (TCHAR*)TChr, _tcsclen((TCHAR*)TChr));
 
 	//HeightMap
-	theApp.m_MapMgr.m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
-	if (FAILED(theApp.m_MapMgr.m_HeightMap.CreateHeightMap(strFile)))
+	auto pMap = make_shared<GMapGroup>();
+
+	pMap->m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
+	if (FAILED(pMap->m_HeightMap.CreateHeightMap(strFile)))
 	{
 		return;
 	}
 
-	theApp.m_MapMgr.m_HeightMap.m_bStaticLight = true;
+	pMap->m_HeightMap.m_bStaticLight = true;
+
+	theApp.m_MapMgr.m_vecMapGroup.push_back(pMap);
 
 	return;
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.

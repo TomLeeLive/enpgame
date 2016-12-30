@@ -135,7 +135,7 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
-	m_MapMgr.Frame(&I_Input.GetInstance());
+	m_MapMgr.Frame(&I_Input.GetInstance(), m_pMainCamera.get());
 
 	return true; 
 }

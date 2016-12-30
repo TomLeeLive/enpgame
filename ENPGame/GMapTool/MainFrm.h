@@ -69,6 +69,7 @@ public:
 	afx_msg void OnCreatemap();
 	afx_msg void OnSavemap();
 	afx_msg void OnObjectformview();
+	afx_msg void OnLoadmap();
 };
 
 

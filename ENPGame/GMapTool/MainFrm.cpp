@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SETTINGCHANGE()
 	ON_COMMAND(ID_CREATEMAP, &CMainFrame::OnCreatemap)
 	ON_COMMAND(ID_SAVEMAP, &CMainFrame::OnSavemap)
+	ON_COMMAND(ID_LOADMAP, &CMainFrame::OnLoadmap)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -465,7 +466,7 @@ void CMainFrame::OnSavemap()
 	memset(str, 0, sizeof(char) * 256);
 
 	//theApp.m_MapDesc.iNumCols;
-	int tempValue = theApp.m_MapMgr.m_MapDesc.iNumCols;
+	int tempValue = theApp.m_MapMgr.m_vecMapGroup[0]->m_MapDesc.iNumCols;
 	_itoa(tempValue, str, 10);
 	data_size = strlen(str);
 	file.Write(str, data_size);
@@ -478,7 +479,7 @@ void CMainFrame::OnSavemap()
 	memset(str, 0, sizeof(char) * 256);
 
 	// theApp.m_MapDesc.iNumRows;
-	tempValue = theApp.m_MapMgr.m_MapDesc.iNumRows;
+	tempValue = theApp.m_MapMgr.m_vecMapGroup[0]->m_MapDesc.iNumRows;
 	_itoa(tempValue, str, 10);
 	data_size = strlen(str);
 	file.Write(str, data_size);
@@ -527,4 +528,11 @@ void CMainFrame::OnObjectformview()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 
 
+}
+
+
+void CMainFrame::OnLoadmap()
+{
+	int a = 10;
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }

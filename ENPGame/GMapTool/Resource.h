@@ -108,7 +108,6 @@
 #define IDC_BUTTON2                     1023
 #define IDC_BUTTONLOAD                  1023
 #define IDC_BUTTON3                     1024
-#define IDC_BUTTONLOAD2                 1024
 #define IDC_GUAGE_VALUE                 1027
 #define IDC_ObjSacleX                   1027
 #define IDC_GUAGE_VALUE2                1028

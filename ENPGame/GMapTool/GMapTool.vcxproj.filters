@@ -84,6 +84,9 @@
     <ClInclude Include="GMapMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GMapGroup.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapTool.cpp">
@@ -135,6 +138,9 @@
       <Filter>소스 파일\Form</Filter>
     </ClCompile>
     <ClCompile Include="GMapMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GMapGroup.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
