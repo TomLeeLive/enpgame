@@ -1,7 +1,32 @@
 #include "_stdafx.h"
 GProjMain* g_pMain;
 
+bool GProjMain:: FollowTom(D3DXVECTOR3 vHeroTom, D3DXVECTOR3 vHeroJake)
+{
+	D3DXVECTOR3 vLook_toTom, vTRans_toTom;
+	D3DXMATRIX matRot, matTrans;
+	D3DXMatrixIdentity(&matRot);
+	D3DXMatrixIdentity(&matTrans);
 
+	vLook_toTom = vHeroJake - vHeroTom;
+
+	D3DXVec3Normalize(&vLook_toTom, &vLook_toTom);
+	D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	D3DXVec3Cross(&vRight, &vUp, &vLook_toTom);
+	D3DXVec3Cross(&vUp, &vLook_toTom, &vRight);
+
+	matRot._11 = vRight.x;		    matRot._12 = vRight.y;			matRot._13 = vRight.z;
+	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
+	matRot._31 = vLook_toTom.x;		matRot._32 = vLook_toTom.y;		matRot._33 = vLook_toTom.z;
+
+	
+	vTRans_toTom = vHeroJake - G_DEFINE_AI_MOVE_SPEED* g_fSecPerFrame *vLook_toTom;
+	D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
+
+	m_matBoxWorld2 = matRot * matTrans;
+	m_matBoxWorld2._42 = G_DEFINE_CHAR_Y_POS;
+	return true;
+}
 bool GProjMain::Init()
 {
 
@@ -36,7 +61,17 @@ bool GProjMain::Init()
 }
 bool GProjMain::Frame()
 {
-	//박스  움직임
+	D3DXVECTOR3 vHeroTom = D3DXVECTOR3(m_matBoxWorld._41, m_matBoxWorld._42, m_matBoxWorld._43);
+	D3DXVECTOR3 vHeroJake = D3DXVECTOR3(m_matBoxWorld2._41, m_matBoxWorld2._42, m_matBoxWorld2._43);
+
+	D3DXVECTOR3 Temp = vHeroTom - vHeroJake;
+	
+	float fDistance = D3DXVec3Length(&Temp);
+
+	if ( fDistance > 60.0f)
+	{
+		FollowTom(vHeroTom, vHeroJake);
+	}
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
@@ -56,28 +91,7 @@ bool GProjMain::Frame()
 	{
 		g_pMain->m_matBoxWorld._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 	}
-
-
-	//박스 2 움직임
-	if (I_Input.KeyCheck(DIK_Y) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
-
-	if (I_Input.KeyCheck(DIK_H) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._43 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
-
-	if (I_Input.KeyCheck(DIK_G) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._41 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
-
-	if (I_Input.KeyCheck(DIK_J) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
+	
 
 
 	m_pMainCamera->Frame();
@@ -123,7 +137,6 @@ HRESULT GProjMain::DeleteResource()
 
 GProjMain::GProjMain(void)
 {
-
 
 }
 

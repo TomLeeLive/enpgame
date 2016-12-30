@@ -90,15 +90,6 @@ bool GNewZombie::RotationAndTrans(D3DXVECTOR3 pos) {
 	D3DXVECTOR3 vPos = D3DXVECTOR3(m_matZombWld._41, m_matZombWld._42, m_matZombWld._43);
 	vLook_toPos = vPos - pos;
 
-	if (abs(vPos.x - pos.x) < G_DEFINE_AI_ALMOST_ZERO && abs(vPos.z - pos.z) < G_DEFINE_AI_ALMOST_ZERO)
-	{
-		TCHAR buf[256];
-		_stprintf_s(buf, _countof(buf), _T("ALMOST_ZERO\n"));
-		OutputDebugString(buf);
-
-		return false;
-	}
-
 	D3DXVec3Normalize(&vLook_toPos, &vLook_toPos);
 	D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	D3DXVec3Cross(&vRight, &vUp, &vLook_toPos);
@@ -171,7 +162,6 @@ GNewZombie::GNewZombie(int iNum) {
 
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	m_State = G_AI_MOVE;
-	D3DXMatrixIdentity(&m_matZombWld);
 }
 GNewZombie::GNewZombie()
 {
@@ -180,7 +170,6 @@ GNewZombie::GNewZombie()
 	
 	m_vLook = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	m_State = G_AI_MOVE;
-	D3DXMatrixIdentity(&m_matZombWld);
 	
 }
 
