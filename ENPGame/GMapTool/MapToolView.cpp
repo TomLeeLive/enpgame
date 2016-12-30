@@ -99,7 +99,9 @@ void CMapToolView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 void CMapToolView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
 #ifndef SHARED_HANDLERS
-	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
+	//마우스 오른쪽 클릭 (팝업 메뉴 ) 주석 처리함 [S]
+	//theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
+	//마우스 오른쪽 클릭 (팝업 메뉴 ) 주석 처리함 [E]
 #endif
 }
 
