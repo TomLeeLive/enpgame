@@ -36,7 +36,6 @@ bool GProjMain::Init()
 }
 bool GProjMain::Frame()
 {
-	//박스  움직임
 	if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 	{
 		g_pMain->m_matBoxWorld._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
@@ -56,28 +55,7 @@ bool GProjMain::Frame()
 	{
 		g_pMain->m_matBoxWorld._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
 	}
-
-
-	//박스 2 움직임
-	if (I_Input.KeyCheck(DIK_Y) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._43 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
-
-	if (I_Input.KeyCheck(DIK_H) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._43 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
-
-	if (I_Input.KeyCheck(DIK_G) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._41 -= G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
-
-	if (I_Input.KeyCheck(DIK_J) == KEY_HOLD)
-	{
-		g_pMain->m_matBoxWorld2._41 += G_DEFINE_AI_TEST_HERO_SPEED * g_fSecPerFrame;
-	}
+	
 
 
 	m_pMainCamera->Frame();
@@ -123,7 +101,6 @@ HRESULT GProjMain::DeleteResource()
 
 GProjMain::GProjMain(void)
 {
-
 
 }
 

@@ -11,7 +11,8 @@ public:
 	D3DXMATRIX  m_matBoxWorld2;
 	GShape*	m_Box;
 	GShape*	m_Box2;
-
+	
+	bool SelectCharacter;
 public:
  bool		Init();
  bool		Frame();
