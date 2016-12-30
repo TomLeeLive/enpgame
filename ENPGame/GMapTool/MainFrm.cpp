@@ -67,6 +67,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
 
+	//추가된 메뉴가 축소되서 보이지 않아서 추가함[S]
+	m_wndMenuBar.SetRecentlyUsedMenus(FALSE);
+	//추가된 메뉴가 축소되서 보이지 않아서 추가함[E]
+
+
 	// 메뉴 모음을 활성화해도 포커스가 이동하지 않게 합니다.
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
@@ -76,6 +81,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("도구 모음을 만들지 못했습니다.\n");
 		return -1;      // 만들지 못했습니다.
 	}
+
+
+
 
 	CString strToolBarName;
 	bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
@@ -104,6 +112,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
 
+	/*
 	if (TRUE == m_wndSampleCtrl.CreateEx(
 		NULL, _T("GSampleCtrl"), this, CRect(0,0,300,300	),
 		TRUE,1234,
@@ -113,6 +122,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_wndSampleCtrl.EnableDocking(CBRS_ALIGN_ANY);
 		DockPane(&m_wndSampleCtrl);
 	}
+	*/
 
 	if (TRUE == m_wndObjCtrl.CreateEx(
 		NULL, _T("GObjCtrl"), this, CRect(0, 0, 300, 300),
@@ -140,15 +150,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndClassView.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndFileView);
+	//m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
+	//m_wndClassView.EnableDocking(CBRS_ALIGN_ANY);
+	//DockPane(&m_wndFileView);
 	CDockablePane* pTabbedBar = NULL;
-	m_wndClassView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
-	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndOutput);
-	m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndProperties);
+	//m_wndClassView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
+	//m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
+	//DockPane(&m_wndOutput);
+	//m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
+	//DockPane(&m_wndProperties);
 
 	// 보관된 값에 따라 비주얼 관리자 및 스타일을 설정합니다.
 	OnApplicationLook(theApp.m_nAppLook);
@@ -215,6 +225,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	BOOL bNameValid;
 
 	// 클래스 뷰를 만듭니다.
+	/*
 	CString strClassView;
 	bNameValid = strClassView.LoadString(IDS_CLASS_VIEW);
 	ASSERT(bNameValid);
@@ -223,8 +234,10 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("클래스 뷰 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	// 파일 뷰를 만듭니다.
+	/*
 	CString strFileView;
 	bNameValid = strFileView.LoadString(IDS_FILE_VIEW);
 	ASSERT(bNameValid);
@@ -233,8 +246,10 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("파일 뷰 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	// 출력 창을 만듭니다.
+	/*
 	CString strOutputWnd;
 	bNameValid = strOutputWnd.LoadString(IDS_OUTPUT_WND);
 	ASSERT(bNameValid);
@@ -243,8 +258,10 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("출력 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	// 속성 창을 만듭니다.
+	/*
 	CString strPropertiesWnd;
 	bNameValid = strPropertiesWnd.LoadString(IDS_PROPERTIES_WND);
 	ASSERT(bNameValid);
@@ -253,6 +270,7 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("속성 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	SetDockingWindowIcons(theApp.m_bHiColorIcons);
 	return TRUE;
@@ -261,16 +279,16 @@ BOOL CMainFrame::CreateDockingWindows()
 void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 {
 	HICON hFileViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_FILE_VIEW_HC : IDI_FILE_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndFileView.SetIcon(hFileViewIcon, FALSE);
+	//m_wndFileView.SetIcon(hFileViewIcon, FALSE);
 
-	HICON hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndClassView.SetIcon(hClassViewIcon, FALSE);
+	//HICON hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	//m_wndClassView.SetIcon(hClassViewIcon, FALSE);
 
 	HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
+	//m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
 
 	HICON hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
+	//m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
 
 }
 
@@ -383,7 +401,7 @@ void CMainFrame::OnApplicationLook(UINT id)
 		CDockingManager::SetDockingMode(DT_SMART);
 	}
 
-	m_wndOutput.UpdateFonts();
+	//m_wndOutput.UpdateFonts();
 	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME | RDW_ERASE);
 
 	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
@@ -427,7 +445,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
-	m_wndOutput.UpdateFonts();
+	//m_wndOutput.UpdateFonts();
 }
 
 // 지형생성 다이얼로그 호출

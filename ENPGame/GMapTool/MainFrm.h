@@ -27,7 +27,7 @@ public:
 	CString m_strSaveFileName;
 // 작업입니다.
 public:
-	GSampleControl m_wndSampleCtrl;
+	//GSampleControl m_wndSampleCtrl;
 	GObjControl m_wndObjCtrl;
 
 // 재정의입니다.
@@ -48,10 +48,10 @@ protected:  // 컨트롤 모음이 포함된 멤버입니다.
 	CMFCToolBar       m_wndToolBar;
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
-	CFileView         m_wndFileView;
-	CClassView        m_wndClassView;
-	COutputWnd        m_wndOutput;
-	CPropertiesWnd    m_wndProperties;
+	//CFileView         m_wndFileView;
+	//CClassView        m_wndClassView;
+	//COutputWnd        m_wndOutput;
+	//CPropertiesWnd    m_wndProperties;
 
 // 생성된 메시지 맵 함수
 protected:

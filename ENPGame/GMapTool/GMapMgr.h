@@ -5,6 +5,8 @@
 
 class GMapGroup;
 
+class GObjData;
+
 class GMapMgr
 {
 public:

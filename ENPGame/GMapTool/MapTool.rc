@@ -73,15 +73,25 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\MapTool.ico"
+
 IDR_MapToolTYPE         ICON                    "res\\MapToolDoc.ico"
+
 IDI_FILE_VIEW           ICON                    "res\\file_view.ico"
+
 IDI_FILE_VIEW_HC        ICON                    "res\\file_view_hc.ico"
+
 IDI_CLASS_VIEW          ICON                    "res\\class_view.ico"
+
 IDI_CLASS_VIEW_HC       ICON                    "res\\class_view_hc.ico"
+
 IDI_OUTPUT_WND          ICON                    "res\\output_wnd.ico"
+
 IDI_OUTPUT_WND_HC       ICON                    "res\\output_wnd_hc.ico"
+
 IDI_PROPERTIES_WND      ICON                    "res\\properties_wnd.ico"
+
 IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -89,19 +99,33 @@ IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
 IDR_SORT                BITMAP                  "res\\sort.bmp"
+
 IDB_SORT_24             BITMAP                  "res\\sort_hc.bmp"
+
 IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
+
 IDB_FILE_VIEW_24        BITMAP                  "res\\fileview_hc.bmp"
+
 IDB_CLASS_VIEW          BITMAP                  "res\\classview.bmp"
+
 IDB_CLASS_VIEW_24       BITMAP                  "res\\classview_hc.bmp"
+
 IDR_EXPLORER            BITMAP                  "res\\explorer.bmp"
+
 IDB_EXPLORER_24         BITMAP                  "res\\explorer_hc.bmp"
+
 IDR_MENU_IMAGES         BITMAP                  "res\\menuimages.bmp"
+
 IDB_MENU_IMAGES_24      BITMAP                  "res\\menuimages_hc.bmp"
+
 IDR_PROPERTIES          BITMAP                  "res\\properties.bmp"
+
 IDB_PROPERTIES_HC       BITMAP                  "res\\properties_hc.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -223,15 +247,15 @@ BEGIN
             END
         END
     END
-    POPUP "도움말(&H)"
-    BEGIN
-        MENUITEM "MapTool 정보(&A)...",           ID_APP_ABOUT
-    END
     POPUP "지형생성"
     BEGIN
         MENUITEM "생성(&C)\tCtr+1",               ID_CREATEMAP
         MENUITEM "저장",                          ID_SAVEMAP
         MENUITEM "로드",                          ID_LOADMAP
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "MapTool 정보(&A)...",           ID_APP_ABOUT
     END
 END
 
@@ -628,14 +652,6 @@ BEGIN
     IDS_STATUS_PANE2        "창 2"
     IDS_TOOLBAR_STANDARD    "표준"
     IDS_TOOLBAR_CUSTOMIZE   "사용자 지정..."
-END
-
-STRINGTABLE
-BEGIN
-    IDS_FILE_VIEW           "파일 뷰"
-    IDS_CLASS_VIEW          "클래스 뷰"
-    IDS_OUTPUT_WND          "출력"
-    IDS_PROPERTIES_WND      "속성"
 END
 
 STRINGTABLE

@@ -40,10 +40,6 @@
 #define ID_PROPERTIES1                  152
 #define ID_PROPERTIES2                  153
 #define ID_EXPAND_ALL                   154
-#define IDS_FILE_VIEW                   155
-#define IDS_CLASS_VIEW                  156
-#define IDS_OUTPUT_WND                  157
-#define IDS_PROPERTIES_WND              158
 #define IDI_FILE_VIEW                   161
 #define IDI_FILE_VIEW_HC                162
 #define IDI_CLASS_VIEW                  163
