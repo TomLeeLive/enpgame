@@ -13,7 +13,7 @@
 #define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
 
 #define G_DEFINE_MAP_DIR L"data/map/"
-#define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap.hlsl"
+#define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap_light.hlsl"
 
 class GObjData {
 public:

@@ -108,6 +108,9 @@ void GObjForm::OnBnClickedButtonload()
 		strObjFile = dlg.GetFileName();
 
 	}
+	else {
+		return;
+	}
 
 
 

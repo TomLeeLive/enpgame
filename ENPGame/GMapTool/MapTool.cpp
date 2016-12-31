@@ -169,7 +169,7 @@ bool CMapToolApp::Render()
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		m_HeroObj[iChar]->m_matWorld._42 = 40.0f;
+		m_HeroObj[iChar]->m_matWorld._42 = 36.2f;
 		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}

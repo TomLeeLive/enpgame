@@ -26,10 +26,10 @@ public:
 public:
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	int m_iTileWidth;
-	int m_iTileHeight;
-	CComboBox m_cbCellCount;
-	float m_fCellDistance;
+	//int m_iTileWidth;
+	//int m_iTileHeight;
+	//CComboBox m_cbCellCount;
+	//float m_fCellDistance;
 	afx_msg void OnBnClickedButton1();
 	CString m_strCharName;
 	afx_msg void OnEnChangeEdit7();
