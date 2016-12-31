@@ -18,12 +18,20 @@
 class GObjData {
 public:
 	TCHAR			m_strName[MAX_PATH];
-	GGbsObj*   m_pObj;
-	D3DXMATRIX	m_matObjWld;
-	D3DXMATRIX  m_matObjScl;
-	D3DXMATRIX  m_matObjRot;
-	D3DXMATRIX  m_matObjTrans;
-	GObjData() {};
+	GGbsObj*		m_pObj;
+	D3DXMATRIX		m_matObjWld;
+	//D3DXMATRIX	m_matObjScl;
+	//D3DXMATRIX	m_matObjRot;
+	D3DXMATRIX		m_matObjTrans;
+	int				m_iScl;
+	int				m_fRotY;
+
+	GObjData() {
+		D3DXMatrixIdentity(&m_matObjWld);
+		D3DXMatrixIdentity(&m_matObjTrans);
+		m_iScl = 1;
+		m_fRotY = 0.0f;
+	};
 	~GObjData() {};
 };
 

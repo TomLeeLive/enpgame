@@ -70,8 +70,55 @@ bool			GMapMgr::Frame(GInput* pInput, GCamera* pCamera)
 		return false;
 	
 	//for(int i = 0; i < m_vecMapGroup.size(); i++)
-		m_vecMapGroup[m_iMapSelected]->Frame(pInput, pCamera);
+	m_vecMapGroup[m_iMapSelected]->Frame(pInput, pCamera);
 
+
+	if (m_pObjSelected !=NULL)
+	{
+		D3DXMATRIX matScl, matRot;
+		D3DXMatrixIdentity(&matScl);
+		D3DXMatrixIdentity(&matRot);
+
+		if (I_Input.KeyCheck(DIK_Y) == KEY_PUSH)
+		{
+			m_pObjSelected->m_iScl += 1;
+		}
+		if (I_Input.KeyCheck(DIK_U) == KEY_PUSH)
+		{
+			m_pObjSelected->m_iScl -= 1;
+
+			if (m_pObjSelected->m_iScl < 1)
+				m_pObjSelected->m_iScl = 1;
+		}
+		if (I_Input.KeyCheck(DIK_H) == KEY_PUSH)
+		{
+			m_pObjSelected->m_fRotY += 5;
+		}
+		if (I_Input.KeyCheck(DIK_J) == KEY_PUSH)
+		{
+			m_pObjSelected->m_fRotY -= 5;
+		}
+		if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._43 += 200 * g_fSecPerFrame;
+		}
+		if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._43 += -200 * g_fSecPerFrame;
+		}
+		if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._41 += -200 * g_fSecPerFrame;
+		}
+		if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._41 += 200 * g_fSecPerFrame;
+		}
+		D3DXMatrixScaling(&matScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl);
+		D3DXMatrixRotationY(&matRot, D3DXToRadian(m_pObjSelected->m_fRotY));
+
+		m_pObjSelected->m_matObjWld = matScl * matRot * m_pObjSelected->m_matObjTrans;
+	}
 	return true;
 }
 

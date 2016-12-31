@@ -134,10 +134,21 @@ void GObjForm::OnBnClickedButtonload()
 	objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(TChr);
 
 	//s, r, t 설정.
-	D3DXMatrixScaling(&objData->m_matObjScl, 1, 1, 1);
-	D3DXMatrixRotationY(&objData->m_matObjRot, D3DXToRadian(0.0f));
+
+	D3DXMATRIX matScl, matRot;
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+
+	objData->m_iScl = 1;
+	objData->m_fRotY = 0.0f;
+
+	D3DXMatrixScaling(&matScl, objData->m_iScl, objData->m_iScl, objData->m_iScl);
+	D3DXMatrixRotationY(&matRot, D3DXToRadian(objData->m_fRotY));
+
+
+
 	D3DXMatrixTranslation(&objData->m_matObjTrans, 0.0f, 0.0f, 0.0f);
-	objData->m_matObjWld = objData->m_matObjScl * objData->m_matObjRot * objData->m_matObjTrans;
+	objData->m_matObjWld = matScl * matRot * objData->m_matObjTrans;
 
 
 	if (theApp.m_MapMgr.m_iMapSelected == -1) {
@@ -167,12 +178,19 @@ void GObjForm::OnBnClickedButton1()
 void GObjForm::OnLbnSelchangeListobj()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	int iSelected = m_listMap.GetCurSel();
+	int iSelected = m_listObj.GetCurSel();
 	if (iSelected == -1)
 		return;
 
 	if (theApp.m_MapMgr.m_vecMapGroup.size() == 0)
 		return;
+
+	if (theApp.m_MapMgr.m_iMapSelected == -1) {
+		AfxMessageBox(
+			L"선택된 맵이 없습니다.\n"
+			L"맵을 우선 선택해주시겠습니까?", MB_OK);
+		return;
+	}
 
 	theApp.m_MapMgr.m_pObjSelected = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iSelected].get();
 }
@@ -189,6 +207,8 @@ void GObjForm::OnLbnSelchangeListmap()
 		return;
 
 	theApp.m_MapMgr.m_iMapSelected = iSelected;
+
+	theApp.m_MapMgr.m_pObjSelected = NULL;
 
 	m_listObj.ResetContent();
 
