@@ -17,11 +17,11 @@ IMPLEMENT_DYNCREATE(GObjForm, CFormView)
 GObjForm::GObjForm()
 	: CFormView(IDD_OBJFORM)
 	, m_fSclX(0)
-	, m_fSclY(0)
-	, m_fSclZ(0)
-	, m_fRotX(0)
+	//, m_fSclY(0)
+	//, m_fSclZ(0)
+	//, m_fRotX(0)
 	, m_fRotY(0)
-	, m_fRotZ(0)
+	//, m_fRotZ(0)
 	, m_fTransX(0)
 	, m_fTransY(0)
 	, m_fTransZ(0)
@@ -49,11 +49,11 @@ void GObjForm::DoDataExchange(CDataExchange* pDX)
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LISTOBJ, m_listObj);
 	DDX_Text(pDX, IDC_ObjSacleX, m_fSclX);
-	DDX_Text(pDX, IDC_ObjScaleY, m_fSclY);
-	DDX_Text(pDX, IDC_ObjScaleZ, m_fSclZ);
-	DDX_Text(pDX, IDC_ObjRotationX, m_fRotX);
+	//DDX_Text(pDX, IDC_ObjScaleY, m_fSclY);
+	//DDX_Text(pDX, IDC_ObjScaleZ, m_fSclZ);
+	//DDX_Text(pDX, IDC_ObjRotationX, m_fRotX);
 	DDX_Text(pDX, IDC_ObjRotationY, m_fRotY);
-	DDX_Text(pDX, IDC_ObjRotationZ, m_fRotZ);
+	//DDX_Text(pDX, IDC_ObjRotationZ, m_fRotZ);
 	DDX_Text(pDX, IDC_ObjTransX, m_fTransX);
 	DDX_Text(pDX, IDC_ObjTransY, m_fTransY);
 	DDX_Text(pDX, IDC_ObjTransZ, m_fTransZ);
