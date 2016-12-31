@@ -114,7 +114,7 @@ bool CMapToolApp::Init()
 	m_pMainCamera = make_shared<GMapCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -50.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f,
-		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
+		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 0.1f, 20000.0f);
 
 
 	//--------------------------------------------------------------------------------------
@@ -126,6 +126,25 @@ bool CMapToolApp::Init()
 
 	m_MapMgr.Init();
 	
+
+	//좀비 캐릭터 추가[S]
+	I_CharMgr.Init();
+
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharZombie.gci")))
+	{
+		return false;
+	}
+
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+
+	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
+	pObjA->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	m_HeroObj.push_back(pObjA);
+	//좀비 캐릭터 추가[E]
+
 	return true;
 }
 bool CMapToolApp::Frame()
@@ -137,17 +156,30 @@ bool CMapToolApp::Frame()
 
 	m_MapMgr.Frame(&I_Input.GetInstance(), m_pMainCamera.get());
 
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->Frame();
+	}
+
 	return true; 
 }
 bool CMapToolApp::Render()
 {	
 	m_MapMgr.Render(m_pMainCamera.get());
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->m_matWorld._42 = 40.0f;
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->Render(m_pImmediateContext);
+	}
 	return true;
 }
 bool CMapToolApp::Release()
 {
 	m_MapMgr.Release();
 	
+	I_CharMgr.Release();
 	return true;
 }
 
@@ -164,7 +196,7 @@ HRESULT CMapToolApp::CreateResource()
 	if (m_pMainCamera != nullptr)
 	{
 		m_pMainCamera->SetProjMatrix((float)D3DX_PI * 0.25f,
-			m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 3000.0f);
+			m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 0.1f, 20000.0f);
 	}
 
 	m_MapMgr.CreateResource();

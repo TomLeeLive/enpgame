@@ -32,7 +32,8 @@ bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex
 	//m_MapDesc = { Width, Height, Distance, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
 	m_MapDesc = {
 		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,		
-		Distance, 0.1f,
+		//Distance, 0.1f,
+		20.0f, 1.0f,
 		szCharPath, 
 		G_DEFINE_MAP_SHADER };
 

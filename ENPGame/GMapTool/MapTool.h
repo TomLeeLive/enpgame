@@ -38,6 +38,8 @@
 
 #include "GMapMgr.h"
 #include "GMapCamera.h"
+
+#include "GZombie.h"
 // CMapToolApp:
 // 이 클래스의 구현에 대해서는 MapTool.cpp을 참조하십시오.
 //
@@ -47,6 +49,8 @@
 class CMapToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+	vector<shared_ptr<GZombie>>	m_HeroObj;
+
 	GMapMgr					m_MapMgr;
 	shared_ptr<GMapCamera >	m_pMainCamera;
 	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더

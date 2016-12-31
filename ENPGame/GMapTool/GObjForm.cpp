@@ -55,6 +55,7 @@ void GObjForm::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_ObjTransX, m_fTransX);
 	DDX_Text(pDX, IDC_ObjTransY, m_fTransY);
 	DDX_Text(pDX, IDC_ObjTransZ, m_fTransZ);
+	DDX_Control(pDX, IDC_LISTMAP, m_listMap);
 }
 
 BEGIN_MESSAGE_MAP(GObjForm, CFormView)
@@ -126,8 +127,8 @@ void GObjForm::OnBnClickedButtonload()
 	objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(TChr);
 
 	//s, r, t ¼³Á¤.
-	D3DXMatrixScaling(&objData->m_matObjScl, 2, 2, 2);
-	D3DXMatrixRotationY(&objData->m_matObjRot, D3DXToRadian(180.0f));
+	D3DXMatrixScaling(&objData->m_matObjScl, 1, 1, 1);
+	D3DXMatrixRotationY(&objData->m_matObjRot, D3DXToRadian(0.0f));
 	D3DXMatrixTranslation(&objData->m_matObjTrans, 0.0f, 0.0f, 0.0f);
 	objData->m_matObjWld = objData->m_matObjScl * objData->m_matObjRot * objData->m_matObjTrans;
 

@@ -43,6 +43,7 @@ public:
 	float m_fTransY;
 	float m_fTransZ;
 	afx_msg void OnBnClickedButton1();
+	CListBox m_listMap;
 };
 
 
