@@ -8,6 +8,8 @@
 #include "GObjForm.h"
 #include "GMapMgr.h"
 
+#include "MainFrm.h"
+
 // GObjForm
 
 IMPLEMENT_DYNCREATE(GObjForm, CFormView)
@@ -61,6 +63,8 @@ void GObjForm::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(GObjForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTONLOAD, &GObjForm::OnBnClickedButtonload)
 	ON_BN_CLICKED(IDC_BUTTON1, &GObjForm::OnBnClickedButton1)
+	ON_LBN_SELCHANGE(IDC_LISTOBJ, &GObjForm::OnLbnSelchangeListobj)
+	ON_LBN_SELCHANGE(IDC_LISTMAP, &GObjForm::OnLbnSelchangeListmap)
 END_MESSAGE_MAP()
 
 
@@ -136,12 +140,19 @@ void GObjForm::OnBnClickedButtonload()
 	objData->m_matObjWld = objData->m_matObjScl * objData->m_matObjRot * objData->m_matObjTrans;
 
 
+	if (theApp.m_MapMgr.m_iMapSelected == -1) {
+		AfxMessageBox(
+			L"선택된 맵이 없습니다.\n"
+			L"맵을 우선 선택해주시겠습니까?", MB_OK);
+		return;
+	}
 
+	_tcsncpy_s(objData->m_strName, (TCHAR*)(LPCTSTR)strObjFile, strObjFile.GetLength());
 
-	theApp.m_MapMgr.m_vecMapGroup[0]->m_vecObj.push_back(objData);
+	theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.push_back(objData);
 
 	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
-	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), theApp.m_MapMgr.m_vecMapGroup[0]->m_vecObj.size() - 1, TChr/*L" GBS"*/);
+	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size() - 1, TChr/*L" GBS"*/);
 	m_listObj.AddString(szRet);
 }
 
@@ -150,4 +161,45 @@ void GObjForm::OnBnClickedButtonload()
 void GObjForm::OnBnClickedButton1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void GObjForm::OnLbnSelchangeListobj()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int iSelected = m_listMap.GetCurSel();
+	if (iSelected == -1)
+		return;
+
+	if (theApp.m_MapMgr.m_vecMapGroup.size() == 0)
+		return;
+
+	theApp.m_MapMgr.m_pObjSelected = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iSelected].get();
+}
+
+
+void GObjForm::OnLbnSelchangeListmap()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int iSelected = m_listMap.GetCurSel();
+	if (iSelected == -1)
+		return;
+
+	if (theApp.m_MapMgr.m_vecMapGroup.size() == 0)
+		return;
+
+	theApp.m_MapMgr.m_iMapSelected = iSelected;
+
+	m_listObj.ResetContent();
+
+	for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); i++) {
+
+		TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+		_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName);
+		m_listObj.AddString(szRet);
+
+	}
+	m_listObj.UpdateData(FALSE);
+
+
 }

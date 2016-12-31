@@ -459,6 +459,15 @@ void CMainFrame::OnCreatemap()
 // 지형 저장 다이얼로그 호출
 void CMainFrame::OnSavemap()
 {
+
+	if (theApp.m_MapMgr.m_iMapSelected == -1) {
+		AfxMessageBox(
+			L"선택된 맵이 없습니다.\n"
+			L"맵을 우선 선택해주시겠습니까?", MB_OK);
+		return;
+	}
+
+
 	// FALSE -> 저장대화상자
 	CFileDialog dlg(FALSE);
 	if (dlg.DoModal() == IDOK)
@@ -483,8 +492,10 @@ void CMainFrame::OnSavemap()
 	file.Write(str, data_size);
 	memset(str, 0, sizeof(char) * 256);
 
+
+
 	//theApp.m_MapDesc.iNumCols;
-	int tempValue = theApp.m_MapMgr.m_vecMapGroup[0]->m_MapDesc.iNumCols;
+	int tempValue = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_MapDesc.iNumCols;
 	_itoa(tempValue, str, 10);
 	data_size = strlen(str);
 	file.Write(str, data_size);
@@ -497,7 +508,7 @@ void CMainFrame::OnSavemap()
 	memset(str, 0, sizeof(char) * 256);
 
 	// theApp.m_MapDesc.iNumRows;
-	tempValue = theApp.m_MapMgr.m_vecMapGroup[0]->m_MapDesc.iNumRows;
+	tempValue = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_MapDesc.iNumRows;
 	_itoa(tempValue, str, 10);
 	data_size = strlen(str);
 	file.Write(str, data_size);

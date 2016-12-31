@@ -17,6 +17,7 @@
 
 class GObjData {
 public:
+	TCHAR			m_strName[MAX_PATH];
 	GGbsObj*   m_pObj;
 	D3DXMATRIX	m_matObjWld;
 	D3DXMATRIX  m_matObjScl;

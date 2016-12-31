@@ -44,6 +44,8 @@ public:
 	float m_fTransZ;
 	afx_msg void OnBnClickedButton1();
 	CListBox m_listMap;
+	afx_msg void OnLbnSelchangeListobj();
+	afx_msg void OnLbnSelchangeListmap();
 };
 
 
