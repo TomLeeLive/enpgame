@@ -10,7 +10,12 @@ class GObjData;
 class GMapMgr
 {
 public:
-	GObjData* m_pObjSelected;
+	TCHAR		m_strTex[MAX_PATH];
+	TCHAR		m_strHeight[MAX_PATH];
+
+
+	GObjData*	m_pObjSelected;
+	int			m_iMapSelected;
 
 	vector<shared_ptr<GMapGroup>>	m_vecMapGroup;
 

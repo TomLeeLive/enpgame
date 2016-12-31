@@ -27,6 +27,7 @@ bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex
 	//strString = "test";
 	_tcscpy_s(szChar, 16, strTex.GetBuffer());
 	_tcscat_s(szCharPath, szChar);
+
 	//theApp.m_MapDesc.strTextureFile = m_strCharName;
 
 	//m_MapDesc = { Width, Height, Distance, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
@@ -63,12 +64,13 @@ bool			GMapMgr::Frame(GInput* pInput, GCamera* pCamera)
 	//float t = cosf(m_Timer.GetElapsedTime()) * D3DX_PI;
 
 
-	if (m_vecMapGroup.size() == 0)
+	//if (m_vecMapGroup.size() == 0)
+	//	return false;
+	if (m_iMapSelected == -1)
 		return false;
-
 	
-	for(int i = 0; i < m_vecMapGroup.size(); i++)
-		m_vecMapGroup[i]->Frame(pInput, pCamera);
+	//for(int i = 0; i < m_vecMapGroup.size(); i++)
+		m_vecMapGroup[m_iMapSelected]->Frame(pInput, pCamera);
 
 	return true;
 }
@@ -76,11 +78,14 @@ bool			GMapMgr::Frame(GInput* pInput, GCamera* pCamera)
 bool			GMapMgr::Render(GCamera* pCamera)
 {
 
-	if (m_vecMapGroup.size() == 0)
+	//if (m_vecMapGroup.size() == 0)
+	//	return false;
+
+	if (m_iMapSelected == -1)
 		return false;
 
-	for (int i = 0; i < m_vecMapGroup.size(); i++)
-		m_vecMapGroup[i]->Render(pCamera);
+	//for (int i = 0; i < m_vecMapGroup.size(); i++)
+		m_vecMapGroup[m_iMapSelected]->Render(pCamera);
 
 	return true;
 }
@@ -104,6 +109,7 @@ HRESULT			GMapMgr::DeleteResource()
 
 GMapMgr::GMapMgr()
 {
+	m_iMapSelected = -1;
 	m_pObjSelected = NULL;
 	m_bDebugRender = false;
 }

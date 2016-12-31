@@ -28,6 +28,10 @@ public:
 
 class GMapGroup {
 public:
+	TCHAR			m_strTex[MAX_PATH];
+	TCHAR			m_strHeight[MAX_PATH];
+
+
 	int				m_iDrawDepth;
 	//--------------------------------------------------------------------------------------
 	// µð¹ö±ë ¿ëµµ
