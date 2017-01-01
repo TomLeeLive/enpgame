@@ -124,21 +124,27 @@ void GCreateMapDlg::OnOK()
 void GCreateMapDlg::OnBnClickedButton1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CString strFileName;
+
 	CFileDialog dlg(TRUE);
 	if (dlg.DoModal() == IDOK)
 	{
-		m_strCharName = dlg.GetFileName();
+		strFileName = dlg.GetFileName();
 		//m_strCharName = dlg.GetPathName();
 
-		UpdateData(FALSE);
+		
 		//MessageBox(dlg.GetPathName());
 	}
 	else {
 		return;
 	}
 
-	_tcsncpy(theApp.m_MapMgr.m_strTex, (TCHAR*)(LPCTSTR)m_strCharName, m_strCharName.GetLength());
 
+	_tcsnset_s(theApp.m_MapMgr.m_strTex, 0, MAX_PATH);
+	_tcsncpy_s(theApp.m_MapMgr.m_strTex, (TCHAR*)(LPCTSTR)strFileName, strFileName.GetLength());
+
+	m_strCharName = strFileName;
+	UpdateData(FALSE);
 }
 
 
@@ -146,11 +152,13 @@ void GCreateMapDlg::OnBnClickedButton1()
 void GCreateMapDlg::OnBnClickedButton4()
 {
 	CFileDialog dlg(TRUE);
+	CString strFileName;
+
 	if (dlg.DoModal() == IDOK)
 	{
-		m_strHeight = dlg.GetFileName();
+		strFileName = dlg.GetFileName();
 
-		UpdateData(FALSE);
+		
 	}
 	else {
 		return;
@@ -158,14 +166,17 @@ void GCreateMapDlg::OnBnClickedButton4()
 
 	TCHAR * TChr = NULL;
 	//CString -> TCHAR
-	TChr = (TCHAR*)(LPCTSTR)m_strHeight;
+	TChr = (TCHAR*)(LPCTSTR)strFileName;
 	
 	TCHAR strFile[MAX_PATH] = L"data\\map\\";
 
 	_tcsncat(strFile, (TCHAR*)TChr, _tcsclen((TCHAR*)TChr));
 
+	_tcsnset_s(theApp.m_MapMgr.m_strHeight, 0, MAX_PATH);
 	_tcsncpy_s(theApp.m_MapMgr.m_strHeight,strFile,MAX_PATH);
 
+	m_strHeight = strFileName;
+	UpdateData(FALSE);
 
 	return;
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.

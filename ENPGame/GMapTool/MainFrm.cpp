@@ -496,29 +496,43 @@ void CMainFrame::OnSavemap()
 
 			CString str;
 			CString strNum;
-			TCHAR strTex[MAX_PATH] = L"data\\map\\";
-			TCHAR strObj[MAX_PATH] = L"data\\object\\building\\";
+			TCHAR strTex[MAX_PATH];
+			TCHAR strHeight[MAX_PATH];
+
+			
+
+			_tcsncpy_s(strTex, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strTex, MAX_PATH);
+			_tcsncpy_s(strHeight, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strHeight, MAX_PATH);
 
 			//Texture 이름 출력
-			_tcsncat(strTex, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strTex, _tcsclen(theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strTex));
-
-			str = strTex;
+			str = (LPCTSTR)strTex;
 			str.Append(_T("\n"));
 			fprintf(fp, (CStringA)str);
 
 			//HeightMap 이름 출력
-			str = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strHeight;
+			str = (LPCTSTR)strHeight;
 			str.Append(_T("\n"));
 			fprintf(fp, (CStringA)str);
 
 			for (int iMapObj = 0; iMapObj<theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); iMapObj++)
 			{
+				TCHAR strObj[MAX_PATH] = L"data\\object\\building\\";
 				//오브젝트 gbs 이름 출력
 				_tcsncat(strObj, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName, _tcsclen(theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName));
 
 				str = strObj;
 				str.Append(_T("\n"));
 				fprintf(fp, (CStringA)str);
+
+				//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0
+				if (theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_bLightReverse == TRUE)
+					strNum.Format(_T("%d"), 1);
+				else
+					strNum.Format(_T("%d"), 0);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
 
 				//오브젝트 scl 값 출력
 				strNum.Format(_T("%d"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_iScl);
@@ -573,6 +587,47 @@ void CMainFrame::OnObjectformview()
 
 void CMainFrame::OnLoadmap()
 {
-	int a = 10;
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	if (!theApp.LoadFileDlg(_T("map"), _T("MAP Load")))
+	{
+		return;
+	}
+
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	pFrame->m_wndObjCtrl.m_wndForm->m_listObj.ResetContent();
+	pFrame->m_wndObjCtrl.m_wndForm->m_listObj.UpdateData(FALSE);
+	pFrame->m_wndObjCtrl.m_wndForm->m_listMap.ResetContent();
+	pFrame->m_wndObjCtrl.m_wndForm->m_listMap.UpdateData(FALSE);
+
+	int iLoad = theApp.m_LoadFiles.size() - 1;
+
+	//Map생성과 Obj 생성. 파일 이름을 넘겨서 함수에서 해당 파일 읽어서 처리한다.
+	if (theApp.m_MapMgr.LoadMap(&theApp.m_LoadFiles[iLoad], theApp.m_pMainCamera.get())) {
+		//로드가 끝난후 오브젝트 리스트 컨트롤과 맵 리스트 컨트롤을 업데이트 해준다.
+
+		theApp.m_MapMgr.m_iMapSelected = theApp.m_MapMgr.m_vecMapGroup.size() - 1;
+
+		for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup.size(); i++) {
+			TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+			_stprintf_s(szRet, _countof(szRet), _T("%d"), i);
+			pFrame->m_wndObjCtrl.m_wndForm->m_listMap.AddString(szRet);
+		}
+
+
+
+		pFrame->m_wndObjCtrl.m_wndForm->m_listObj.ResetContent();
+
+		for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); i++) {
+
+			TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName);
+			pFrame->m_wndObjCtrl.m_wndForm->m_listObj.AddString(szRet);
+
+		}
+		pFrame->m_wndObjCtrl.m_wndForm->m_listObj.UpdateData(FALSE);
+	}
+
+
+	
 }

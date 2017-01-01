@@ -3,6 +3,9 @@
 #include "GMapGroup.h"
 #include "GInput.h"
 
+#define MAP_OBJ_INFO_LINES 7
+#define MAP_TEX_INFO_LINES 2
+
 class GMapGroup;
 
 class GObjData;
@@ -22,9 +25,8 @@ public:
 	//vector<GGbsObj*>	m_vecObj;
 
 	//GTileMap		m_HeightMap;
-
-
-
+	void	GetStringWeNeed(VOID* pOutStr, VOID* pInStr);
+	bool	LoadMap(T_STR* strFile, GCamera* pCamera);
 
 
 public:
