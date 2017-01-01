@@ -112,7 +112,7 @@ bool			GMapGroup::Init() {
 	return true;
 };
 
-bool			GMapGroup::Frame(GInput* pInput, GCamera* pCamera) {
+bool			GMapGroup::Frame(GCamera* pCamera, GInput* pInput) {
 
 
 	//--------------------------------------------------------------------------------------

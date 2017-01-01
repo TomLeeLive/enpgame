@@ -52,7 +52,7 @@ bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex
 
 
 }
-bool			GMapMgr::Frame(GInput* pInput, GCamera* pCamera)
+bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 {
 
 
@@ -70,10 +70,10 @@ bool			GMapMgr::Frame(GInput* pInput, GCamera* pCamera)
 		return false;
 	
 	//for(int i = 0; i < m_vecMapGroup.size(); i++)
-	m_vecMapGroup[m_iMapSelected]->Frame(pInput, pCamera);
+	m_vecMapGroup[m_iMapSelected]->Frame(pCamera, pInput);
 
 
-	if (m_pObjSelected !=NULL)
+	if (m_pObjSelected !=NULL && pInput !=NULL)
 	{
 		D3DXMATRIX matScl, matRot;
 		D3DXMatrixIdentity(&matScl);

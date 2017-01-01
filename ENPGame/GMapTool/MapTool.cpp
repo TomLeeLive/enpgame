@@ -84,7 +84,7 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
-	m_MapMgr.Frame(&I_Input.GetInstance(), m_pMainCamera.get());
+	m_MapMgr.Frame(m_pMainCamera.get(),&I_Input.GetInstance() );
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
