@@ -468,86 +468,95 @@ void CMainFrame::OnSavemap()
 	}
 
 
-	// FALSE -> 저장대화상자
-	CFileDialog dlg(FALSE);
-	if (dlg.DoModal() == IDOK)
-	{
-		//dlg.GetPathName();
-		FILE *fp;
-		m_strSaveFileName = dlg.GetPathName();
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+
+
+	TCHAR current_path[MAX_PATH] = _T("");
+	GetCurrentDirectory(MAX_PATH, current_path); // 현재 경로 저장
+
+	CFileDialog dlg(false, _T("map"), _T("*.map"),
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		_T("MAP File(*.map)|*.map||"));
+
+	if (dlg.DoModal() == IDOK) { // OK 를 하는 순간 현재 경로가 변경된다.
+								 // 여기서 파일 저장 작업.
+								 // 여기서 얻는 dlg.GetFileName() 함수는 상대 경로로의 파일 이름을 반환해 준다.
+
+								 // 선택한 파일의 이름..
+								 // dlg.GetFileName();
+
+								 // 선택한 파일의 이름을 포함한 경로..
+		CString strFile = dlg.GetPathName();
+
+		{
+
+			FILE* fp = fopen((CStringA)strFile, "wt+");
+
+			CString str;
+			CString strNum;
+			TCHAR strTex[MAX_PATH] = L"data\\map\\";
+			TCHAR strObj[MAX_PATH] = L"data\\object\\building\\";
+
+			//Texture 이름 출력
+			_tcsncat(strTex, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strTex, _tcsclen(theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strTex));
+
+			str = strTex;
+			str.Append(_T("\n"));
+			fprintf(fp, (CStringA)str);
+
+			//HeightMap 이름 출력
+			str = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strHeight;
+			str.Append(_T("\n"));
+			fprintf(fp, (CStringA)str);
+
+			for (int iMapObj = 0; iMapObj<theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); iMapObj++)
+			{
+				//오브젝트 gbs 이름 출력
+				_tcsncat(strObj, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName, _tcsclen(theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName));
+
+				str = strObj;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 scl 값 출력
+				strNum.Format(_T("%d"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_iScl);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 rot 값 출력
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_fRotY);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 translation x,y,z 값 출력
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_matObjTrans._41);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_matObjTrans._42);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_matObjTrans._43);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+
+			}
+
+			fclose(fp);
+			strFile.Append(_T(" 저장완료"));
+
+			AfxMessageBox( strFile, MB_OK);
+		}
 
 	}
-
-	CFile file;
-	file.Open(m_strSaveFileName, CFile::modeCreate | CFile::modeWrite);
-
-	//TCHAR* str = new TCHAR[MAX_PATH];
-
-	char str[MAX_PATH] = { 0 };
-	float fstr[MAX_PATH] = { 0 };
-
-	//width 값
-	strcat(str,"Width");	strcat(str, "\t");
-	int data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-
-
-	//theApp.m_MapDesc.iNumCols;
-	int tempValue = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_MapDesc.iNumCols;
-	_itoa(tempValue, str, 10);
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	//height 값
-	strcat(str, "\r\n");	strcat(str, "Height");	strcat(str, "\t");
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	// theApp.m_MapDesc.iNumRows;
-	tempValue = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_MapDesc.iNumRows;
-	_itoa(tempValue, str, 10);
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	//fDistance 값
-	strcat(str, "\r\n");	strcat(str, "fDistance");	strcat(str, "\t");
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	// theApp.m_MapDesc.fSellDistance;
-	//_itoa(theApp.m_MapDesc.fSellDistance, fstr, 10);
-	//data_size = strlen(fstr);
-	//file.Write(fstr, data_size);
-	//memset(fstr, 0, sizeof(char) * 256);
-
-	file.Close();	
-#ifdef Test_save
-	//
-
-	char szChar[16];
-	CString strString;
-	strString = "test";
-	strcpy_s(szChar, 16, CW2A(strString));
-
-
-	FILE *f;	
-	char * str;
-	m_strSaveFileName;
-	f = fopen("StudentData.dat", "wt");
-
-
-	//fprintf(f, buffer);
-
-
-	fclose(f);
-
-#endif
+	SetCurrentDirectory(current_path); // 원래 경로로 돌아 간다.
 
 }
 

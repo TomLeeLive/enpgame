@@ -24,7 +24,7 @@ public:
 	//D3DXMATRIX	m_matObjRot;
 	D3DXMATRIX		m_matObjTrans;
 	int				m_iScl;
-	int				m_fRotY;
+	float			m_fRotY;
 	bool			m_bLightReverse;
 
 	GObjData() {
