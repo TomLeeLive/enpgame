@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(GObjForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON1, &GObjForm::OnBnClickedButton1)
 	ON_LBN_SELCHANGE(IDC_LISTOBJ, &GObjForm::OnLbnSelchangeListobj)
 	ON_LBN_SELCHANGE(IDC_LISTMAP, &GObjForm::OnLbnSelchangeListmap)
+	ON_BN_CLICKED(IDC_CHECK1, &GObjForm::OnBnClickedCheck1)
 END_MESSAGE_MAP()
 
 
@@ -238,6 +239,11 @@ void GObjForm::OnLbnSelchangeListobj()
 	m_fTransY= theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42;
 	m_fTransZ = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43;
 
+	if(theApp.m_MapMgr.m_pObjSelected->m_bLightReverse == TRUE)
+		CheckDlgButton(IDC_CHECK1, TRUE);
+	else
+		CheckDlgButton(IDC_CHECK1, FALSE);
+
 	UpdateData(FALSE);
 }
 
@@ -266,6 +272,30 @@ void GObjForm::OnLbnSelchangeListmap()
 
 	}
 	m_listObj.UpdateData(FALSE);
+
+
+}
+
+
+void GObjForm::OnBnClickedCheck1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	BOOL bCheck = IsDlgButtonChecked(IDC_CHECK1);
+
+	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
+		if (bCheck == TRUE) {
+			theApp.m_MapMgr.m_pObjSelected->m_bLightReverse = TRUE;
+		}
+		else {
+			theApp.m_MapMgr.m_pObjSelected->m_bLightReverse = FALSE;
+		}
+	}
+	else {
+		AfxMessageBox(
+			L"선택된 오브젝트가 없습니다.\n"
+			L"오브젝트를 우선 선택해주시겠습니까?", MB_OK);
+	}
 
 
 }

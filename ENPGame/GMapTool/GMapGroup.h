@@ -25,8 +25,10 @@ public:
 	D3DXMATRIX		m_matObjTrans;
 	int				m_iScl;
 	int				m_fRotY;
+	bool			m_bLightReverse;
 
 	GObjData() {
+		m_bLightReverse = true;
 		D3DXMatrixIdentity(&m_matObjWld);
 		D3DXMatrixIdentity(&m_matObjTrans);
 		m_iScl = 1;
