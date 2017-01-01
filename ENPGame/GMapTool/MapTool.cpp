@@ -161,6 +161,16 @@ bool CMapToolApp::Frame()
 		m_HeroObj[iChar]->Frame();
 	}
 
+	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
+		CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
+		pFrame->m_wndObjCtrl.m_wndForm->m_fScl = theApp.m_MapMgr.m_pObjSelected->m_iScl;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fRotY = theApp.m_MapMgr.m_pObjSelected->m_fRotY;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fTransX = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._41;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fTransY = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fTransZ = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43;
+
+		pFrame->m_wndObjCtrl.m_wndForm->UpdateData(FALSE);
+	}
 	return true; 
 }
 bool CMapToolApp::Render()

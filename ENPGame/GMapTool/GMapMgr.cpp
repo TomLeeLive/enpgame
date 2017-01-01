@@ -118,6 +118,7 @@ bool			GMapMgr::Frame(GInput* pInput, GCamera* pCamera)
 		D3DXMatrixRotationY(&matRot, D3DXToRadian(m_pObjSelected->m_fRotY));
 
 		m_pObjSelected->m_matObjWld = matScl * matRot * m_pObjSelected->m_matObjTrans;
+
 	}
 	return true;
 }

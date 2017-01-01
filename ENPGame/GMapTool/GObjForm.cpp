@@ -16,7 +16,7 @@ IMPLEMENT_DYNCREATE(GObjForm, CFormView)
 
 GObjForm::GObjForm()
 	: CFormView(IDD_OBJFORM)
-	, m_fSclX(0)
+	, m_fScl(0)
 	//, m_fSclY(0)
 	//, m_fSclZ(0)
 	//, m_fRotX(0)
@@ -48,7 +48,7 @@ void GObjForm::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LISTOBJ, m_listObj);
-	DDX_Text(pDX, IDC_ObjSacleX, m_fSclX);
+	DDX_Text(pDX, IDC_ObjSacleX, m_fScl);
 	//DDX_Text(pDX, IDC_ObjScaleY, m_fSclY);
 	//DDX_Text(pDX, IDC_ObjScaleZ, m_fSclZ);
 	//DDX_Text(pDX, IDC_ObjRotationX, m_fRotX);
@@ -172,6 +172,44 @@ void GObjForm::OnBnClickedButtonload()
 void GObjForm::OnBnClickedButton1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	//값셋팅.
+	D3DXMATRIX matScl, matRot;
+	D3DXMatrixIdentity(&matScl);
+	D3DXMatrixIdentity(&matRot);
+
+
+
+	CString strScl, strRot, strTransX, strTransY, strTransZ;
+
+	GetDlgItem(IDC_ObjSacleX)->GetWindowText(strScl);
+	GetDlgItem(IDC_ObjRotationY)->GetWindowText(strRot);
+	GetDlgItem(IDC_ObjTransX)->GetWindowText(strTransX);
+	GetDlgItem(IDC_ObjTransY)->GetWindowText(strTransY);
+	GetDlgItem(IDC_ObjTransZ)->GetWindowText(strTransZ);
+
+	m_fScl = _ttof(strScl);
+	m_fRotY = _ttof(strRot);
+	m_fTransX = _ttof(strTransX);
+	m_fTransY = _ttof(strTransY);
+	m_fTransZ = _ttof(strTransZ);
+
+	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
+		theApp.m_MapMgr.m_pObjSelected->m_iScl = m_fScl;
+		theApp.m_MapMgr.m_pObjSelected->m_fRotY = m_fRotY;
+		theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._41 = m_fTransX;
+		theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42 = m_fTransY;
+		theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43 = m_fTransZ;
+
+		D3DXMatrixScaling(&matScl, theApp.m_MapMgr.m_pObjSelected->m_iScl, theApp.m_MapMgr.m_pObjSelected->m_iScl, theApp.m_MapMgr.m_pObjSelected->m_iScl);
+		D3DXMatrixRotationY(&matRot, D3DXToRadian(theApp.m_MapMgr.m_pObjSelected->m_fRotY));
+		theApp.m_MapMgr.m_pObjSelected->m_matObjWld = matScl * matRot * theApp.m_MapMgr.m_pObjSelected->m_matObjTrans;
+	}
+	else {
+		AfxMessageBox(
+			L"선택된 오브젝트가 없습니다.\n"
+			L"오브젝트를 우선 선택해주시겠습니까?", MB_OK);
+	}
 }
 
 
@@ -193,6 +231,14 @@ void GObjForm::OnLbnSelchangeListobj()
 	}
 
 	theApp.m_MapMgr.m_pObjSelected = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iSelected].get();
+
+	m_fScl = theApp.m_MapMgr.m_pObjSelected->m_iScl;
+	m_fRotY = theApp.m_MapMgr.m_pObjSelected->m_fRotY;
+	m_fTransX = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._41;
+	m_fTransY= theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42;
+	m_fTransZ = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43;
+
+	UpdateData(FALSE);
 }
 
 

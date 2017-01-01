@@ -33,12 +33,12 @@ protected:
 public:
 	afx_msg void OnBnClickedButtonload();
 	CListBox m_listObj;
-	float m_fSclX;
 	//float m_fSclY;
 	//float m_fSclZ;
 	//float m_fRotX;
-	float m_fRotY;
 	//float m_fRotZ;
+	float m_fScl;
+	float m_fRotY;
 	float m_fTransX;
 	float m_fTransY;
 	float m_fTransZ;
