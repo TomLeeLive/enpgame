@@ -142,7 +142,7 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 	return false;
 }
 
-bool			GMapMgr::Render(GCamera* pCamera)
+bool			GMapMgr::Render(GCamera* pCamera, bool bDebug)
 {
 
 	//if (m_vecMapGroup.size() == 0)
@@ -152,7 +152,7 @@ bool			GMapMgr::Render(GCamera* pCamera)
 		return false;
 
 	//for (int i = 0; i < m_vecMapGroup.size(); i++)
-		m_vecMapGroup[m_iMapSelected]->Render(pCamera);
+		m_vecMapGroup[m_iMapSelected]->Render(pCamera, bDebug);
 
 	return true;
 }

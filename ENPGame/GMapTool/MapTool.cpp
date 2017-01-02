@@ -107,7 +107,7 @@ bool CMapToolApp::Frame()
 }
 bool CMapToolApp::Render()
 {	
-	m_MapMgr.Render(m_pMainCamera.get());
+	m_MapMgr.Render(m_pMainCamera.get(),true);
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{

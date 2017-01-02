@@ -72,8 +72,8 @@ public:
 
 
 	bool			Init();
-	bool			Frame(GCamera* pCamera, GInput* pInput = NULL);
-	bool			Render(GCamera* pCamera);
+	bool			Frame(GCamera* pCamera, bool bDebug,GInput* pInput = NULL);
+	bool			Render(GCamera* pCamera, bool bDebug);
 	bool			Release();
 	HRESULT			CreateResource();
 	HRESULT			DeleteResource();

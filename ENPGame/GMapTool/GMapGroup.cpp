@@ -112,7 +112,7 @@ bool			GMapGroup::Init() {
 	return true;
 };
 
-bool			GMapGroup::Frame(GCamera* pCamera, GInput* pInput) {
+bool			GMapGroup::Frame(GCamera* pCamera,bool bDebug, GInput* pInput) {
 
 
 	//--------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ bool			GMapGroup::Frame(GCamera* pCamera, GInput* pInput) {
 	return true;
 
 };
-bool			GMapGroup::Render(GCamera* pCamera) {
+bool			GMapGroup::Render(GCamera* pCamera, bool bDebug) {
 
 	//--------------------------------------------------------------------------------------
 	//  QuadTree Render
@@ -190,7 +190,7 @@ bool			GMapGroup::Render(GCamera* pCamera) {
 			m_vecObj[i]->m_pObj->SetMatrix(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 			m_vecObj[i]->m_pObj->Render(g_pImmediateContext);
 
-			//if (m_bDebugMode)
+			if (bDebug)
 			m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 		}
 	}
