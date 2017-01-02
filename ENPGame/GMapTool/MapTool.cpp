@@ -84,6 +84,11 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
+	CString strMsg;
+	strMsg.Format(_T("Camera Pos X: %f, Y:%f, Z:%f"), m_pMainCamera->m_vCameraPos.x, m_pMainCamera->m_vCameraPos.y, m_pMainCamera->m_vCameraPos.z);
+
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	pMainFrame->PrintToStatusbar(strMsg);
 	
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)

@@ -458,6 +458,11 @@ void CMainFrame::OnCreatemap()
 	dlg.DoModal();
 
 }
+void CMainFrame::PrintToStatusbar(CString strMsg)
+{
+	m_wndStatusBar.SetPaneText(0, strMsg);
+}
+
 // 지형 저장 다이얼로그 호출
 void CMainFrame::OnSavemap()
 {

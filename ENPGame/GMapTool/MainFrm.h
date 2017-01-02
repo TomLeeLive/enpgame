@@ -36,6 +36,7 @@ public:
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 
 // 구현입니다.
+	void PrintToStatusbar(CString strMsg);
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
