@@ -416,8 +416,9 @@ BEGIN
     GROUPBOX        "Camera 조작법",IDC_STATIC,24,355,91,44
     LTEXT           "W,A,S,D: 이동 ",IDC_STATIC,34,369,48,8
     LTEXT           "마우스 시선 변경",IDC_STATIC,34,383,54,8
-    CONTROL         "Reverse",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,180,40,21
+    CONTROL         "Reverse",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,176,40,21
     LTEXT           "Light",IDC_STATIC,91,173,16,8
+    CONTROL         "Specular",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,192,45,10
 END
 
 

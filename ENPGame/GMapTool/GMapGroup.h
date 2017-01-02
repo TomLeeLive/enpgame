@@ -26,9 +26,11 @@ public:
 	int				m_iScl;
 	float			m_fRotY;
 	bool			m_bLightReverse;
+	bool			m_bLightSpecular;
 
 	GObjData() {
 		m_bLightReverse = true;
+		m_bLightSpecular = false;
 		D3DXMatrixIdentity(&m_matObjWld);
 		D3DXMatrixIdentity(&m_matObjTrans);
 		m_iScl = 1;
