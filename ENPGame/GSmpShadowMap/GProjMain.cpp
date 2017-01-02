@@ -81,7 +81,8 @@ bool GProjMain::Init()
 	m_pShadowConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbShadow, 1, sizeof(SHADOW_CONSTANT_BUFFER)));
 
 
-	m_vLightPos = D3DXVECTOR3( 15, 40, -35 );
+	//m_vLightPos = D3DXVECTOR3( 15, 40, -35 );
+	m_vLightPos = D3DXVECTOR3(1000, 1000, 0);
 
 	float fWidthLength = m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols*
 		m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols;
@@ -92,8 +93,12 @@ bool GProjMain::Init()
 	float fMaxViewDistance = sqrt(fWidthLength + fHeightLength);
 	//D3DXMatrixPerspectiveFovLH( &m_matShadowProj, D3DX_PI*0.25f, 1.0f, 20.0f, 200.0f );
 	//D3DXMatrixOrthoLH( &m_matShadowProj, fMaxViewDistance, fMaxViewDistance, 0.0f, 100.0f );
+	
 	D3DXMatrixOrthoOffCenterLH( &m_matShadowProj,	
-		-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 100.0f );
+		-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 10000.0f );
+	//D3DXMatrixOrthoOffCenterLH(&m_matShadowProj,
+	//	-fMaxViewDistance, fMaxViewDistance, -fMaxViewDistance, fMaxViewDistance, 0.0f, 10000.0f);
+
 
 	D3DXMATRIX matScale, matRotation;
 	for( int iObj=0; iObj < MAX_OBJECT_CNT; iObj++ )
@@ -195,8 +200,20 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		D3DXMatrixInverse(&matInvView, 0, matView);
+		D3DXMATRIX matWVPT1 = m_HeroObj[iChar]->m_matWorld * m_matShadowView * m_matShadowProj * m_matTexture;
+		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+		//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+		m_cbShadow.g_iNumKernel = 3;
+		GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, matView, matProj);
+		
 		//m_HeroObj[iChar]->Render(GetContext());
+		
 		// 메쉬 랜더링
 		for (int iObj = 0; iObj < m_HeroObj[iChar]->m_pChar->m_pModelList.size(); iObj++)
 		{
@@ -209,6 +226,7 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 			pModel->PreRender(GetContext());
 			pModel->Draw(GetContext(), pModel);
 		}
+		
 	}
 }
 void GProjMain::RenderShadow( D3DXMATRIX* matShadow, 
@@ -242,15 +260,16 @@ void GProjMain::RenderShadow( D3DXMATRIX* matShadow,
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, matView, matProj);
 		
 		//m_HeroObj[iChar]->Render(GetContext());
+		
 		// 메쉬 랜더링
 		for (int iObj = 0; iObj < m_HeroObj[iChar]->m_pChar->m_pModelList.size(); iObj++)
 		{
 			GSkinObj* pModel = (GSkinObj*)m_HeroObj[iChar]->m_pChar->m_pModelList[iObj]->m_pModel;
 			_ASSERT(pModel);
-			pModel->SetMatrix(&m_HeroObj[iChar]->m_matWorld, &m_HeroObj[iChar]->m_matView, &m_HeroObj[iChar]->m_matProj);
+			pModel->SetMatrix(&m_HeroObj[iChar]->m_matWorld, matView, matProj);
 			ID3D11ShaderResourceView* aRViews[1] = { m_HeroObj[iChar]->m_pBoneBufferRV.Get() };
 			g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
 			//pModel->Render(GetContext());
@@ -261,6 +280,7 @@ void GProjMain::RenderShadow( D3DXMATRIX* matShadow,
 			
 			pModel->Draw(GetContext(), pModel);
 		}
+		
 	}
 }
 bool GProjMain::Release()
@@ -280,6 +300,9 @@ bool GProjMain::Frame()
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
+		m_HeroObj[iChar]->m_matWorld._41 = 30.0f;
+		m_HeroObj[iChar]->m_matWorld._42 = 36.0f;
+		m_HeroObj[iChar]->m_matWorld._43 = -10.0f;
 		m_HeroObj[iChar]->Frame();
 	}
 
