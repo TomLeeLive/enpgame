@@ -75,6 +75,7 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 
 	if (m_pObjSelected !=NULL && pInput !=NULL)
 	{
+		bool m_bChanged = false;
 		D3DXMATRIX matScl, matRot;
 		D3DXMatrixIdentity(&matScl);
 		D3DXMatrixIdentity(&matRot);
@@ -82,6 +83,8 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 		if (I_Input.KeyCheck(DIK_Y) == KEY_PUSH)
 		{
 			m_pObjSelected->m_iScl += 1;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_U) == KEY_PUSH)
 		{
@@ -89,38 +92,54 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 
 			if (m_pObjSelected->m_iScl < 1)
 				m_pObjSelected->m_iScl = 1;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_H) == KEY_PUSH)
 		{
 			m_pObjSelected->m_fRotY += 5;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_J) == KEY_PUSH)
 		{
 			m_pObjSelected->m_fRotY -= 5;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
 		{
 			m_pObjSelected->m_matObjTrans._43 += 200 * g_fSecPerFrame;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
 		{
 			m_pObjSelected->m_matObjTrans._43 += -200 * g_fSecPerFrame;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
 		{
 			m_pObjSelected->m_matObjTrans._41 += -200 * g_fSecPerFrame;
+
+			m_bChanged = true;
 		}
 		if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
 		{
 			m_pObjSelected->m_matObjTrans._41 += 200 * g_fSecPerFrame;
+
+			m_bChanged = true;
 		}
-		D3DXMatrixScaling(&matScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl);
-		D3DXMatrixRotationY(&matRot, D3DXToRadian(m_pObjSelected->m_fRotY));
+		if (m_bChanged) {
+			D3DXMatrixScaling(&matScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl);
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(m_pObjSelected->m_fRotY));
 
-		m_pObjSelected->m_matObjWld = matScl * matRot * m_pObjSelected->m_matObjTrans;
-
+			m_pObjSelected->m_matObjWld = matScl * matRot * m_pObjSelected->m_matObjTrans;
+			return true;
+		}
 	}
-	return true;
+	return false;
 }
 
 bool			GMapMgr::Render(GCamera* pCamera)
@@ -154,7 +173,7 @@ HRESULT			GMapMgr::DeleteResource()
 	return S_OK;
 }
 
-void GMapMgr::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
+void GMapMgr::GetStringFileName(VOID* pOutStr, VOID* pInStr) {
 
 	vector<TCHAR*> vString;
 
@@ -171,6 +190,31 @@ void GMapMgr::GetStringWeNeed(VOID* pOutStr, VOID* pInStr) {
 	//_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
 
 	//_tcscpy((TCHAR*)pOutStr, strDir);
+}
+void GMapMgr::GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr) {
+
+	vector<TCHAR*> vString;
+
+	TCHAR* token = NULL;
+	token = _tcstok((TCHAR*)pInStr, L"\\");
+	while (token != NULL)
+	{
+		token = _tcstok(NULL, L"\\");
+		vString.push_back(token);
+	}
+	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 3]);
+
+	TCHAR strDir[MAX_PATH] = L"data\\object\\";
+	TCHAR strSlash[MAX_PATH] = L"\\";
+
+	_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
+
+	_tcsncat(strDir, strSlash, _tcsclen(strSlash));
+
+	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 2]);
+	_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
+
+	_tcscpy((TCHAR*)pOutStr, strDir);
 }
 
 bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
@@ -267,9 +311,13 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 
 		_tcsncpy_s(objData->m_strName, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], vecStr[iItem + MAP_TEX_INFO_LINES + 0].GetLength());
 
-		GetStringWeNeed(objData->m_strName, objData->m_strName);
+		TCHAR strObjName[MAX_PATH];
 
-		objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(objData->m_strName);
+		_tcsncpy_s(strObjName, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], vecStr[iItem + MAP_TEX_INFO_LINES + 0].GetLength());
+
+		GetStringFileName(strObjName, strObjName);
+
+		objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(strObjName);
 
 		//s, r, t ¼³Á¤.
 		D3DXMATRIX matScl, matRot;

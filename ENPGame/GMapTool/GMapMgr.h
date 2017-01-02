@@ -25,7 +25,8 @@ public:
 	//vector<GGbsObj*>	m_vecObj;
 
 	//GTileMap		m_HeightMap;
-	void	GetStringWeNeed(VOID* pOutStr, VOID* pInStr);
+	void	GetStringFileName(VOID* pOutStr, VOID* pInStr);
+	void	GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr);
 	bool	LoadMap(T_STR* strFile, GCamera* pCamera);
 
 

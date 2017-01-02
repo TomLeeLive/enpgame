@@ -84,14 +84,13 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
-	m_MapMgr.Frame(m_pMainCamera.get(),&I_Input.GetInstance() );
+	
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		m_HeroObj[iChar]->Frame();
 	}
-
-	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
+	if (m_MapMgr.Frame(m_pMainCamera.get(), &I_Input.GetInstance())) {
 		CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
 		pFrame->m_wndObjCtrl.m_wndForm->m_fScl = theApp.m_MapMgr.m_pObjSelected->m_iScl;
 		pFrame->m_wndObjCtrl.m_wndForm->m_fRotY = theApp.m_MapMgr.m_pObjSelected->m_fRotY;
@@ -100,6 +99,9 @@ bool CMapToolApp::Frame()
 		pFrame->m_wndObjCtrl.m_wndForm->m_fTransZ = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43;
 
 		pFrame->m_wndObjCtrl.m_wndForm->UpdateData(FALSE);
+	}
+	else {
+
 	}
 	return true; 
 }

@@ -111,7 +111,8 @@ void GObjForm::OnBnClickedButtonload()
 	{
 		//dlg.GetPathName();
 		FILE *fp;
-		strObjFile = dlg.GetFileName();
+		//strObjFile = dlg.GetFileName();
+		strObjFile = dlg.GetPathName();
 
 	}
 	else {
@@ -124,16 +125,22 @@ void GObjForm::OnBnClickedButtonload()
 	//CString -> TCHAR
 	TChr = (TCHAR*)(LPCTSTR)strObjFile;
 
-	TCHAR strFile[MAX_PATH] = L"data\\object\\building\\";
+	TCHAR strFile[MAX_PATH] = L""; //= L"data\\object\\building\\";
 
 	_tcsncat(strFile, (TCHAR*)TChr, _tcsclen((TCHAR*)TChr));
 
+	theApp.m_MapMgr.GetStringFileNameWithPath(strFile, strFile);
+	
 	I_ObjMgr.Load(g_pd3dDevice, strFile, G_SHA_OBJ_DIFFUSE_REVERSE);
 
-	
+
 
 	auto objData = make_shared<GObjData>();
-	objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(TChr);
+	_tcsncpy_s(objData->m_strName, strFile, MAX_PATH);
+
+	theApp.m_MapMgr.GetStringFileName(strFile, strFile);
+
+	objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(strFile);
 
 	//s, r, t 설정.
 
@@ -160,12 +167,12 @@ void GObjForm::OnBnClickedButtonload()
 		return;
 	}
 
-	_tcsncpy_s(objData->m_strName, (TCHAR*)(LPCTSTR)strObjFile, strObjFile.GetLength());
+
 
 	theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.push_back(objData);
 
 	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
-	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size() - 1, TChr/*L" GBS"*/);
+	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size() - 1, strFile/*L" GBS"*/);
 	m_listObj.AddString(szRet);
 }
 
@@ -268,7 +275,14 @@ void GObjForm::OnLbnSelchangeListmap()
 	for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); i++) {
 
 		TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
-		_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName);
+
+		TCHAR strObjName[MAX_PATH];
+
+		_tcsncpy_s(strObjName, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName, MAX_PATH);
+
+		theApp.m_MapMgr.GetStringFileName(strObjName, strObjName);
+
+		_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, strObjName);
 		m_listObj.AddString(szRet);
 
 	}

@@ -516,7 +516,7 @@ void CMainFrame::OnSavemap()
 
 			for (int iMapObj = 0; iMapObj<theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); iMapObj++)
 			{
-				TCHAR strObj[MAX_PATH] = L"data\\object\\building\\";
+				TCHAR strObj[MAX_PATH] = L"";// = L"data\\object\\building\\";
 				//오브젝트 gbs 이름 출력
 				_tcsncat(strObj, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName, _tcsclen(theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName));
 
@@ -621,7 +621,14 @@ void CMainFrame::OnLoadmap()
 		for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); i++) {
 
 			TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
-			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName);
+
+			TCHAR strObjName[MAX_PATH];
+
+			_tcsncpy_s(strObjName, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName, MAX_PATH);
+
+			theApp.m_MapMgr.GetStringFileName(strObjName, strObjName);
+
+			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, strObjName);
 			pFrame->m_wndObjCtrl.m_wndForm->m_listObj.AddString(szRet);
 
 		}
