@@ -1415,12 +1415,13 @@ bool        GSeqSinglePlay::FrameGame() {
 
 bool        GSeqSinglePlay::FrameMap() {
 #ifdef G_MACRO_MAP_ADD
-
+	/*
 	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
 	{
 		if (++m_iDrawDepth > 7) m_iDrawDepth = -1;
 		m_QuadTree.SetRenderDepth(m_iDrawDepth);
 	}
+	*/
 	m_QuadTree.Update(g_pd3dDevice, m_pCamera);
 
 

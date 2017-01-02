@@ -125,11 +125,11 @@ bool GCoreLibV2::PreFrame()
 bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 {
 #if defined(_DEBUG) || defined(DEBUG)
-	if (I_Input.KeyCheck(DIK_1) == KEY_UP)
+	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
 	{
 		m_bWireFrameRender = !m_bWireFrameRender;
 	}
-	if (I_Input.KeyCheck(DIK_2) == KEY_UP)
+	if (I_Input.KeyCheck(DIK_F2) == KEY_UP)
 	{
 		++m_iPrimitiveType;
 		if (m_iPrimitiveType > 5)
@@ -138,7 +138,7 @@ bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 		}
 		m_iPrimitiveType = min(m_iPrimitiveType, 5);
 	}
-	if (I_Input.KeyCheck(DIK_3) == KEY_UP)
+	if (I_Input.KeyCheck(DIK_F3) == KEY_UP)
 	{
 		++m_iCullMode;
 		if (m_iCullMode > 3)
@@ -149,7 +149,7 @@ bool GCoreLibV2::Update(ID3D11DeviceContext*    pContext)
 		m_bWireFrameRender = false;
 	}
 
-	if (I_Input.KeyCheck(DIK_4) == KEY_UP)
+	if (I_Input.KeyCheck(DIK_F4) == KEY_UP)
 	{
 		++m_iSamplerMode;
 		if (m_iSamplerMode >= 6)
