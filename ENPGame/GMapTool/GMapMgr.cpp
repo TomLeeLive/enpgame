@@ -345,9 +345,10 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 		objData->m_bLightReverse = iLightReverse;
 		objData->m_bLightSpecular = iLightSpecular;
 
-
 		pMap->m_vecObj.push_back(objData);
+		pMap->m_vecObjRender.push_back(false);
 	}
+	
 	m_vecMapGroup.push_back(pMap);
 
 	return true;

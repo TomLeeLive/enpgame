@@ -170,6 +170,7 @@ void GObjForm::OnBnClickedButtonload()
 
 
 	theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.push_back(objData);
+	theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObjRender.push_back(false);
 
 	TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
 	_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size() - 1, strFile/*L" GBS"*/);

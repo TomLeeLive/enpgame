@@ -64,6 +64,7 @@ public:
 
 	GTileMap		m_HeightMap;
 	vector<shared_ptr<GObjData>>	m_vecObj;
+	vector<bool>	m_vecObjRender;//·»´õ ÆÇÁ¤ ÇØ¼­ 1ÀÌ¸é ·»´õ 0ÀÌ¸é ·»´õ ¾ÈÇÔ.
 
 	bool			DrawQuadLine(GNode* pNode, GCamera* pCamera);
 	bool			DrawDebug(GCamera* pCamera);

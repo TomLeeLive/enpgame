@@ -140,6 +140,9 @@ bool			GMapGroup::Frame(GCamera* pCamera, GInput* pInput) {
 
 	//m_Objbit.reset();
 
+	for (int i = 0; i < m_vecObjRender.size(); i++)
+		m_vecObjRender[i] = false;
+
 	for (int i = 0; i < m_vecObj.size(); i++)
 	{
 		if (m_vecObj[i]->m_pObj->m_LightType == G_LIGHT_TYPE_SPECULAR)
@@ -152,10 +155,11 @@ bool			GMapGroup::Frame(GCamera* pCamera, GInput* pInput) {
 		m_vecObj[i]->m_pObj->SetMatrix(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 		m_vecObj[i]->m_pObj->Frame();
 
-		//if (m_pCamera->CheckOBBInPlane(&(((GGbsObj*)m_Obj[i])->m_OBB)))
-		//{
-		//	m_Objbit.set(i);
-		//}
+		if (pCamera->CheckOBBInPlane(&(m_vecObj[i]->m_pObj->m_OBB)))
+		{
+			m_vecObjRender[i] = true;
+			//m_Objbit.set(i);
+		}
 	}
 
 	return true;
@@ -181,14 +185,14 @@ bool			GMapGroup::Render(GCamera* pCamera) {
 
 	for (int i = 0; i < m_vecObj.size(); i++)
 	{
-		//if (m_Objbit[i])
-		//{
-		m_vecObj[i]->m_pObj->SetMatrix(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
-		m_vecObj[i]->m_pObj->Render(g_pImmediateContext);
-		//}
+		if (true == m_vecObjRender[i])
+		{
+			m_vecObj[i]->m_pObj->SetMatrix(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+			m_vecObj[i]->m_pObj->Render(g_pImmediateContext);
 
-		//if (m_bDebugMode)
-		m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+			//if (m_bDebugMode)
+			m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+		}
 	}
 
 	return true;
