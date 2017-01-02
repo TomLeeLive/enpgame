@@ -384,7 +384,7 @@ bool GSeqSinglePlay::Frame()
 	FrameGame();
 	FrameChar();
 	FrameMap();
-	FrameObj();
+	//FrameObj();
 	FrameEffect();
 
 
@@ -546,7 +546,7 @@ bool GSeqSinglePlay::Render()
 	//그림자 [End]
 #else
 	RenderMap();
-	RenderObj();
+	//RenderObj();
 	RenderChar();
 #endif
 
@@ -798,7 +798,7 @@ bool		GSeqSinglePlay::InitObj() {
 #endif
 
 
-
+	/*
 	//연구소 로드
 	m_Obj[G_OBJ_LAB] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
 	D3DXMatrixScaling(&m_Obj[G_OBJ_LAB]->m_matObjScl, 2, 2, 2);
@@ -817,6 +817,7 @@ bool		GSeqSinglePlay::InitObj() {
 	//드롭십 OBB 사이즈
 	//((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(G_DEFINE_OBB_DROPSHIP_LAND);
 
+
 	//차량1 로드
 	m_Obj[G_OBJ_CAR1] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
 	D3DXMatrixScaling(&m_Obj[G_OBJ_CAR1]->m_matObjScl, 0.3, 0.3, 0.3);
@@ -824,6 +825,7 @@ bool		GSeqSinglePlay::InitObj() {
 	m_Obj[G_OBJ_CAR1]->m_matObjWld = m_Obj[G_OBJ_CAR1]->m_matObjScl * m_Obj[G_OBJ_CAR1]->m_matObjRot * m_Obj[G_OBJ_CAR1]->m_matObjTrans;
 	//드롭십 차량1 OBB 사이즈
 	//((GGbsObj*)m_Obj[G_OBJ_CAR1])->m_OBB.Init(G_DEFINE_OBB_CAR);
+	*/
 
 	////차량2 로드
 	//m_Obj[G_OBJ_CAR2] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
@@ -1617,7 +1619,7 @@ bool		GSeqSinglePlay::FrameObj() {
 			m_Obj[i]->m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
 			m_Obj[i]->m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
 		}
-		m_Obj[i]->SetMatrix(&m_Obj[i]->m_matObjWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_Obj[i]->SetMatrix(&m_Obj[i]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
 
 		if (m_pCamera->CheckOBBInPlane(&(((GGbsObj*)m_Obj[i])->m_OBB)))
@@ -1800,12 +1802,12 @@ bool		GSeqSinglePlay::RenderObj() {
 
 		if (m_Objbit[i])
 		{
-			m_Obj[i]->SetMatrix(&m_Obj[i]->m_matObjWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_Obj[i]->SetMatrix(&m_Obj[i]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 			m_Obj[i]->Render(g_pImmediateContext);
 		}
 
 		if(m_bDebugMode)
-			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_Obj[i]->m_matObjWld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_Obj[i]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 
 	//BOUD
