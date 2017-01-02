@@ -5,6 +5,24 @@ GProjMain* g_pMain;
 const float g_fMaxSize = 1024;
 bool GProjMain::Init()
 {
+	I_CharMgr.Init();
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharZombie_shadow.gci")))
+	{
+		return false;
+	}
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
+	pObjA->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	m_HeroObj.push_back(pObjA);
+
+
+
+
+
+
 	TMapDesc MapDesc = { 33, 33, 1.0f,1.0f, L"data_test/castle.jpg"/* L"data_test/write.png"*/, L"data_test/shader_shadow/CustomizeMap.hlsl" };
 	m_CustomMap.Init( GetDevice(), m_pImmediateContext );
 	if( FAILED( m_CustomMap.Load(MapDesc) ))
@@ -174,6 +192,24 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);		
 		m_pBoxShape->PostRender(GetContext());
 	}
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		//m_HeroObj[iChar]->Render(GetContext());
+		// 메쉬 랜더링
+		for (int iObj = 0; iObj < m_HeroObj[iChar]->m_pChar->m_pModelList.size(); iObj++)
+		{
+			GSkinObj* pModel = (GSkinObj*)m_HeroObj[iChar]->m_pChar->m_pModelList[iObj]->m_pModel;
+			_ASSERT(pModel);
+			pModel->SetMatrix(&m_HeroObj[iChar]->m_matWorld, &m_HeroObj[iChar]->m_matView, &m_HeroObj[iChar]->m_matProj);
+			ID3D11ShaderResourceView* aRViews[1] = { m_HeroObj[iChar]->m_pBoneBufferRV.Get() };
+			g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
+			//pModel->Render(GetContext());
+			pModel->PreRender(GetContext());
+			pModel->Draw(GetContext(), pModel);
+		}
+	}
 }
 void GProjMain::RenderShadow( D3DXMATRIX* matShadow, 
 						   D3DXMATRIX* matView, D3DXMATRIX* matProj )
@@ -203,11 +239,37 @@ void GProjMain::RenderShadow( D3DXMATRIX* matShadow,
 			GetContext()->PSSetShader( NULL, NULL, 0);
 		m_pBoxShape->PostRender(GetContext());
 	}
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		
+		//m_HeroObj[iChar]->Render(GetContext());
+		// 메쉬 랜더링
+		for (int iObj = 0; iObj < m_HeroObj[iChar]->m_pChar->m_pModelList.size(); iObj++)
+		{
+			GSkinObj* pModel = (GSkinObj*)m_HeroObj[iChar]->m_pChar->m_pModelList[iObj]->m_pModel;
+			_ASSERT(pModel);
+			pModel->SetMatrix(&m_HeroObj[iChar]->m_matWorld, &m_HeroObj[iChar]->m_matView, &m_HeroObj[iChar]->m_matProj);
+			ID3D11ShaderResourceView* aRViews[1] = { m_HeroObj[iChar]->m_pBoneBufferRV.Get() };
+			g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
+			//pModel->Render(GetContext());
+			pModel->PreRender(GetContext());
+			
+			GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+			GetContext()->PSSetShader(NULL, NULL, 0);
+			
+			pModel->Draw(GetContext(), pModel);
+		}
+	}
 }
 bool GProjMain::Release()
 {	
 	SAFE_DEL(m_pQuad);
 	SAFE_DEL(m_pBoxShape);
+	
+	I_CharMgr.Release();
+
 	return m_CustomMap.Release();
 }
 bool GProjMain::Frame()
@@ -215,6 +277,12 @@ bool GProjMain::Frame()
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;	
 	m_pMainCamera->Frame();
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->Frame();
+	}
+
 	return m_CustomMap.Frame();
 }
 
