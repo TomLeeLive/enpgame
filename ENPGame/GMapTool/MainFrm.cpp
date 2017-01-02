@@ -533,6 +533,15 @@ void CMainFrame::OnSavemap()
 				str.Append(_T("\n"));
 				fprintf(fp, (CStringA)str);
 
+				//오브젝트 Specular 여부 값 출력 true: 1, false: 0
+				if (theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_bLightSpecular == TRUE)
+					strNum.Format(_T("%d"), 1);
+				else
+					strNum.Format(_T("%d"), 0);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
 
 				//오브젝트 scl 값 출력
 				strNum.Format(_T("%d"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_iScl);

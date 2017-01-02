@@ -289,23 +289,34 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 		
 		//오브젝트 gbs 이름 출력								//vecStr[iItem +MAP_TEX_INFO_LINES + 0];
 		//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0  //vecStr[iItem +MAP_TEX_INFO_LINES + 1];
-		//오브젝트 scl 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 2];
-		//오브젝트 rot 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 3];
-		//오브젝트 translation x 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 4];
-		//오브젝트 translation y 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 5];
-		//오브젝트 translation z 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 6];
+		//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0  //vecStr[iItem +MAP_TEX_INFO_LINES + 2];
+		//오브젝트 scl 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 3];
+		//오브젝트 rot 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 4];
+		//오브젝트 translation x 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 5];
+		//오브젝트 translation y 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 6];
+		//오브젝트 translation z 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 7];
 
 		int iLightReverse	= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 1]);
-		int iScl			= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 2]);
-		float fRotY			= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
-		float fTransX		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 4]);
-		float fTransY		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 5]);
-		float fTransZ		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
+		int	iLightSpecular  = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 2]);
+		int iScl			= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
+		float fRotY			= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 4]);
+		float fTransX		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 5]);
+		float fTransY		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
+		float fTransZ		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 7]);
 
-		if(iScl == 1)
-			I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_REVERSE);
-		else
-			I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE);
+		if (iLightSpecular == 1) {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_REVERSE, G_LIGHT_TYPE_SPECULAR);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR);
+		}
+		else {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_REVERSE);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE);
+		}
+
 
 		auto objData = make_shared<GObjData>();
 
@@ -330,6 +341,9 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 		D3DXMatrixTranslation(&objData->m_matObjTrans, fTransX, fTransY, fTransZ);
 		objData->m_matObjWld = matScl * matRot * objData->m_matObjTrans;
 
+
+		objData->m_bLightReverse = iLightReverse;
+		objData->m_bLightSpecular = iLightSpecular;
 
 
 		pMap->m_vecObj.push_back(objData);

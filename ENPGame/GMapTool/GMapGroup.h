@@ -11,6 +11,8 @@
 
 #define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
 #define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
+#define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
+#define G_SHA_OBJ_SPECULAR_REVERSE L"data/shader/Obj_Specular_Rev.hlsl"
 
 #define G_DEFINE_MAP_DIR L"data/map/"
 #define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap_light.hlsl"

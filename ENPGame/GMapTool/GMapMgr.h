@@ -3,7 +3,7 @@
 #include "GMapGroup.h"
 #include "GInput.h"
 
-#define MAP_OBJ_INFO_LINES 7
+#define MAP_OBJ_INFO_LINES 8
 #define MAP_TEX_INFO_LINES 2
 
 class GMapGroup;

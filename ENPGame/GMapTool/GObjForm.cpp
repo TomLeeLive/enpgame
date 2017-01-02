@@ -252,6 +252,11 @@ void GObjForm::OnLbnSelchangeListobj()
 	else
 		CheckDlgButton(IDC_CHECK1, FALSE);
 
+	if (theApp.m_MapMgr.m_pObjSelected->m_bLightSpecular == TRUE)
+		CheckDlgButton(IDC_CHECK2, TRUE);
+	else
+		CheckDlgButton(IDC_CHECK2, FALSE);
+
 	UpdateData(FALSE);
 }
 
