@@ -9,7 +9,7 @@ void GModel::FrameLight() {
 		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
 		//D3DXMatrixRotationY(&mRotation, t*0.1f);
 		D3DXMatrixIdentity(&mRotation);
-		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mRotation, &mTranslate);
 
 		m_vLightVector.x = mLightWorld._41;
 		m_vLightVector.y = mLightWorld._42;
@@ -24,7 +24,7 @@ void GModel::FrameLight() {
 		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
 		//D3DXMatrixRotationY(&mRotation, t * 0);
 		D3DXMatrixIdentity(&mRotation);
-		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mRotation, &mTranslate);
 
 		m_vLightVector.x = mLightWorld._41;
 		m_vLightVector.y = mLightWorld._42;
@@ -39,10 +39,10 @@ void GModel::SetLight(G_LIGHT_TYPE type) {
 
 	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
 		D3DXMATRIX mLightWorld, mTranslate, mRotation;
-		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, -100.0f);
+		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
 		D3DXMatrixIdentity(&mRotation);
 		//D3DXMatrixRotationY(&mRotation, D3DXToRadian(90.0f));
-		D3DXMatrixMultiply(&mLightWorld, &mTranslate, &mRotation);
+		D3DXMatrixMultiply(&mLightWorld, &mRotation, &mTranslate);
 		m_vLightVector.x = mLightWorld._41;
 		m_vLightVector.y = mLightWorld._42;
 		m_vLightVector.z = mLightWorld._43;

@@ -82,7 +82,7 @@ bool GProjMain::Init()
 
 
 	//m_vLightPos = D3DXVECTOR3( 15, 40, -35 );
-	m_vLightPos = D3DXVECTOR3(1000, 1000, 0);
+	m_vLightPos = D3DXVECTOR3(100, 100, 0);
 
 	float fWidthLength = m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols*
 		m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols;
@@ -94,10 +94,10 @@ bool GProjMain::Init()
 	//D3DXMatrixPerspectiveFovLH( &m_matShadowProj, D3DX_PI*0.25f, 1.0f, 20.0f, 200.0f );
 	//D3DXMatrixOrthoLH( &m_matShadowProj, fMaxViewDistance, fMaxViewDistance, 0.0f, 100.0f );
 	
-	D3DXMatrixOrthoOffCenterLH( &m_matShadowProj,	
-		-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 10000.0f );
-	//D3DXMatrixOrthoOffCenterLH(&m_matShadowProj,
-	//	-fMaxViewDistance, fMaxViewDistance, -fMaxViewDistance, fMaxViewDistance, 0.0f, 10000.0f);
+	//D3DXMatrixOrthoOffCenterLH( &m_matShadowProj,	
+	//	-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 10000.0f );
+	D3DXMatrixOrthoOffCenterLH(&m_matShadowProj,
+		-fMaxViewDistance, fMaxViewDistance, -fMaxViewDistance, fMaxViewDistance, 0.0f, 10000.0f);
 
 
 	D3DXMATRIX matScale, matRotation;
