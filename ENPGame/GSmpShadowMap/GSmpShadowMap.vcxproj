@@ -97,8 +97,9 @@
     <ClCompile Include="TMatrixEx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="CustomizeMap.hlsl" />
-    <FxCompile Include="DepthMapShadow.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\Character_shadow.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\CustomizeMap.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\DepthMapShadow.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

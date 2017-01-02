@@ -1,18 +1,22 @@
 #define SMAP_SIZE 1024
 #define SHADOW_EPSILON 0.0007f
-
-Texture2D		g_txDiffuse: register (t0);
+#define MAX_BONE_MATRICES 255 
+//#define FT_CONSTANTBUFFER 0
+//--------------------------------------------------------------------------------------
+// Constant Buffer Variables
+//--------------------------------------------------------------------------------------
+Texture2D g_txDiffuse: register (t0);
 Texture2D		g_txDepthMap: register (t1);
 
-SamplerState g_samLinear: register (s0);
+SamplerState samLinear: register (s0);
 SamplerState g_samShadowMap: register (s1);
 SamplerComparisonState g_samComShadowMap: register (s2);
 
 cbuffer cb0: register (b0)
 {
-	matrix	g_matWorld		: packoffset(c0);
-	matrix	g_matView		: packoffset(c4);
-	matrix	g_matProj		: packoffset(c8);
+	float4x4	g_matWorld	: packoffset(c0);
+	float4x4	g_matView	: packoffset(c4);
+	float4x4	g_matProj	: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
 //--------------------------------------------------------------------------------------
@@ -38,6 +42,8 @@ cbuffer cb1: register(b1)
 	float3				g_vEyePos : packoffset(c14);
 	float			    g_fEyeRadius : packoffset(c14.w);
 };
+//--------------------------------------------------------------------------------------
+
 cbuffer cb2: register (b2)
 {
 	float4x4		g_matShadow: packoffset(c0);
@@ -45,46 +51,107 @@ cbuffer cb2: register (b2)
 	float			g_iNumKernel : packoffset(c4.y);
 }
 
-struct PNCT_INPUT
-{
-    float3 p : POSITION;
-	float3 n : NORMAL;
-    float4 c : COLOR;
-    float2 t : TEXCOORD;
-};
+#ifdef FT_CONSTANTBUFFER
+	cbuffer cbAnimMatrices : register (b1)
+	{
+		matrix m_matConstBoneWorld[MAX_BONE_MATRICES];
+	};	
+	matrix FetchBoneTransform(uint iBone)
+	{
+		matrix mret;
+		mret = m_matConstBoneWorld[iBone];
+		return mret;
+	}
+#else
+	Buffer<float4>     g_BufferBoneWorld : register(t1);
+	float4x4 FetchBoneTransform(uint iBone)
+	{
+		float4x4 mret;
+		iBone *= 4;
+		float4 row1 = g_BufferBoneWorld.Load(iBone + 0);
+		float4 row2 = g_BufferBoneWorld.Load(iBone + 1);
+		float4 row3 = g_BufferBoneWorld.Load(iBone + 2);
+		float4 row4 = g_BufferBoneWorld.Load(iBone + 3);
+		mret = float4x4(row1, row2, row3, row4);
+		return mret;
+	}
+#endif
 
+struct PNCT5_VS_INPUT
+{
+	float3 p		: POSITION;
+	float3 n		: NORMAL;
+	float4 c		: COLOR0;
+	float2 t		: TEXCOORD0;
+	float4 w0		: TEXCOORD1;
+	float4 i0		: TEXCOORD2;
+	float4 w1		: TEXCOORD3;
+	float4 i1		: TEXCOORD4;
+};
 struct VS_OUTPUT
 {
-    float4 p : SV_POSITION;
+	float4 p : SV_POSITION;
 	float3 n : NORMAL;
-    float4 c : COLOR0;
-    float2 t : TEXCOORD;
+	float4 c : COLOR0;
+	float2 t : TEXCOORD0;
 	float4 TexShadow : TEXCOORD1;
+	//float4 d : TEXCOORD1;
 };
-
 
 struct PCT_VS_OUTPUT_SHADOW
 {
     float4 p		: SV_POSITION;
 	float2 d		: TEXCOORD0;
 };
+
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-VS_OUTPUT VS( PNCT_INPUT input )
+VS_OUTPUT VS(PNCT5_VS_INPUT input)//,uniform bool bHalfVector )
 {
-    VS_OUTPUT output = (VS_OUTPUT)0;
-    float4 vView = mul( float4(input.p, 1.0f), g_matWorld);  
-	vView = mul( vView, g_matView );
-	output.p = mul( vView, g_matProj );
-	output.n = normalize(mul(input.n, (float3x3)g_matWorldInverse));
-    output.c = input.c;
-    output.t  = input.t;
-	 // �ؽ�ó��ǥ
-	output.TexShadow = mul( float4(input.p,1.0f), g_matShadow);
-    return output;
-}
+	VS_OUTPUT output = (VS_OUTPUT)0;
 
+	float4 Pos = float4(input.p, 1);
+	float3 Norm = input.n;
+
+	float4x4 matMatrix;
+
+	float4 vLocal;
+	for (int iBiped = 0; iBiped < input.w1.w; iBiped++)
+	{
+		uint iBoneIndex = (uint)input.i0[iBiped];
+		float fWeight = input.w0[iBiped];
+
+		vLocal = Pos;
+		if (iBiped < 4)
+		{
+			matMatrix = FetchBoneTransform(iBoneIndex);
+			output.p += fWeight * mul(vLocal, matMatrix);
+			output.n += fWeight * mul(Norm, (float3x3)matMatrix);
+		}
+		else
+		{
+			iBoneIndex = (uint)input.i1[iBiped];
+			fWeight = input.w1[iBiped];
+			matMatrix = FetchBoneTransform(iBoneIndex);
+			output.p += fWeight * mul(vLocal, matMatrix);
+			output.n += fWeight * mul(Norm, (float3x3)matMatrix);
+		}
+	}
+
+	output.p = mul(output.p, g_matWorld);
+	output.n = normalize(mul(output.n, (float3x3)g_matWorld));// g_matWorldInvTrans));
+	//output.n = normalize(mul(output.n, (float3x3)g_matWorldInverse));
+
+	output.p = mul(output.p, g_matView);
+	output.p = mul(output.p, g_matProj);
+	output.t = input.t;
+	output.c = input.c;
+	
+	// 텍스처좌표
+	output.TexShadow = mul( float4(input.p,1.0f), g_matShadow);
+	return output;
+}
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
@@ -96,17 +163,15 @@ float4 Diffuse(float3 vNormal)
 	return diffuse;
 }
 
-float4 PS( VS_OUTPUT input) : SV_Target
+float4 PS(VS_OUTPUT vIn) : SV_Target
 {
-	//float4 vTexColor = g_txDiffuse.Sample(g_samLinear, input.t);
-	//float4 vFinalColorLight = vTexColor *Diffuse(input.n);// *input.c;
-	//vFinalColorLight.a = 1.0f;
-	//return vFinalColorLight;
-
-	//const float	g_iNumKernel = 3;
-	float4 vDiffuseColor = g_txDiffuse.Sample( g_samLinear, input.t );
+	//return g_txDiffuse.Sample(samLinear, vIn.t);// *vIn.c;
+	//float4 vTexColor = g_txDiffuse.Sample(samLinear, vIn.t);
+	//float4 vFinalColor = vTexColor *Diffuse(vIn.n) * vIn.c;
+	
+	float4 vDiffuseColor = g_txDiffuse.Sample(samLinear, vIn.t );
 	float fLightAmount=0.0f;
-	float3 ShadowTexColor =input.TexShadow.xyz / input.TexShadow.w;
+	float3 ShadowTexColor = vIn.TexShadow.xyz / vIn.TexShadow.w;
 
 	const float fdelta = 1.0f / SMAP_SIZE;
 	int iHalf = (g_iNumKernel - 1) / 2;
@@ -121,15 +186,51 @@ float4 PS( VS_OUTPUT input) : SV_Target
 	}		
 	fLightAmount /= g_iNumKernel*g_iNumKernel;	
 	float fColor = fLightAmount;
-	float4 vFinalColor = vDiffuseColor*Diffuse(input.n)*max(0.5f, fLightAmount);
+	float4 vFinalColor = vDiffuseColor*Diffuse(vIn.n)*max(0.5f, fLightAmount);
 	vFinalColor.a = 1.0f;
-	return  vFinalColor;
+	return vFinalColor;
 }
+
+//Matrix m =
+//FetchBoneTransform(Input.Bones.x) * Input.Weights.x
+//+ FetchBoneTransform(Input.Bones.y) * Input.Weights.y
+//+ FetchBoneTransform(Input.Bones.z) * Input.Weights.z
+//+ FetchBoneTransform(Input.Bones.w) * Input.Weights.w;
+//Output.Pos = mul(Pos, m);
+//Output.Norm = mul(Norm, (float3x3)m);
+//Output.Tan = mul(Tan, (float3x3)m);
+
+/*uint iBone = Input.Bones.x;
+float fWeight = Input.Weights.x;
+matrix m = g_mBoneWorld[ iTimeShift*MAX_BONE_MATRICES + iBone ];
+Output.Pos += fWeight * mul( pos, m );
+Output.Norm += fWeight * mul( norm, m );
+
+iBone = Input.Bones.y;
+fWeight = Input.Weights.y;
+m = g_mBoneWorld[ iTimeShift*MAX_BONE_MATRICES + iBone ];
+Output.Pos += fWeight * mul( pos, m );
+Output.Norm += fWeight * mul( norm, m );
+
+iBone = Input.Bones.z;
+fWeight = Input.Weights.z;
+m = g_mBoneWorld[ iTimeShift*MAX_BONE_MATRICES + iBone ];
+Output.Pos += fWeight * mul( pos, m );
+Output.Norm += fWeight * mul( norm, m );
+
+iBone = Input.Bones.w;
+fWeight = Input.Weights.w;
+m = g_mBoneWorld[ iTimeShift*MAX_BONE_MATRICES + iBone ];
+Output.Pos += fWeight * mul( pos, m );
+Output.Norm += fWeight * mul( norm, m );
+*/
+
+
 float4 PS_NO_CMP( VS_OUTPUT input ) : SV_Target
 {
 	//const float	g_iNumKernel = 3;
 	//float4 shadow  = g_txDepthMap.Sample( g_samShadowMap, input.TexShadow.xy / input.TexShadow.w ); 
-	float4 FinalColor = g_txDiffuse.Sample( g_samLinear, input.t );
+	float4 FinalColor = g_txDiffuse.Sample(samLinear, input.t );
 
 	float LightAmount=0.0f;
 	float4 vPosLight = input.TexShadow;
@@ -168,7 +269,7 @@ float4 AmbientColor( VS_OUTPUT input ) : SV_Target
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-PCT_VS_OUTPUT_SHADOW SHADOW_VS(PNCT_INPUT input )
+PCT_VS_OUTPUT_SHADOW SHADOW_VS(/*PNCT_INPUT*/PNCT5_VS_INPUT input )
 {
     PCT_VS_OUTPUT_SHADOW output = (PCT_VS_OUTPUT_SHADOW)0;
     output.p = mul( float4(input.p, 1.0f),  g_matWorld );   
