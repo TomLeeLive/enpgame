@@ -31,7 +31,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="DepthMapShadow.hlsl" />
-    <FxCompile Include="CustomizeMap.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\CustomizeMap.hlsl" />
+    <FxCompile Include="..\..\Output\data_test\shader_shadow\DepthMapShadow.hlsl" />
   </ItemGroup>
 </Project>
