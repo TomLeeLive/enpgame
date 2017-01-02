@@ -5,7 +5,7 @@ GProjMain* g_pMain;
 const float g_fMaxSize = 1024;
 bool GProjMain::Init()
 {
-	TMapDesc MapDesc = { 33, 33, 1.0f,1.0f, L"data_test/write.png", L"data_test/shader_shadow/CustomizeMap.hlsl" };
+	TMapDesc MapDesc = { 33, 33, 1.0f,1.0f, L"data_test/castle.jpg"/* L"data_test/write.png"*/, L"data_test/shader_shadow/CustomizeMap.hlsl" };
 	m_CustomMap.Init( GetDevice(), m_pImmediateContext );
 	if( FAILED( m_CustomMap.Load(MapDesc) ))
 	{
