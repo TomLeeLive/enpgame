@@ -188,6 +188,7 @@ float4 PS(VS_OUTPUT vIn) : SV_Target
 	float fColor = fLightAmount;
 	//float4 vFinalColor = vDiffuseColor*max(0.5f, fLightAmount);
 	float4 vFinalColor = vDiffuseColor*Diffuse(vIn.n)*max(0.5f, fLightAmount);
+	//float4 vFinalColor = max(0.5f, fLightAmount);
 	vFinalColor.a = 1.0f;
 	return vFinalColor;
 }

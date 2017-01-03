@@ -30,7 +30,8 @@ bool GProjMain::Init()
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_DIFFUSE_SHADOW, G_LIGHT_TYPE_DIFFUSE);				if (iIndex < 0) return false;
 
 	//연구소 로드
-	m_Obj = I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
+	m_Obj = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
+	m_Obj2 = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
 	D3DXMatrixScaling(&m_matObjScl, 1, 1, 1);
 	D3DXMatrixTranslation(&m_matObjTrans, 0.0f, 0.0f, 0.0f);
 	m_matObjWld = m_matObjScl * m_matObjRot * m_matObjTrans;
@@ -76,6 +77,12 @@ bool GProjMain::Init()
 	m_pShadowVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"data/shader_shadow/CustomizeMap_shadow.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
 	m_pShadowPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader_shadow/CustomizeMap_shadow.hlsl", "SHADOW_PS"));
 	
+	m_pObjShadowVS.Attach(DX::LoadVertexShaderFile(GetDevice(), G_SHA_OBJ_DIFFUSE_SHADOW, pVSBlob.GetAddressOf(), "SHADOW_VS"));
+	m_pObjShadowPS.Attach(DX::LoadPixelShaderFile(GetDevice(), G_SHA_OBJ_DIFFUSE_SHADOW, "SHADOW_PS"));
+
+	m_pCharShadowVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"data/shader_shadow/Character_shadow.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
+	m_pCharShadowPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader_shadow/Character_shadow.hlsl", "SHADOW_PS"));
+
 	// Create Source and Dest textures
 	m_RT.m_DSFormat = DXGI_FORMAT_R32_TYPELESS;
 	m_RT.Create(GetDevice(), g_fMaxSize, g_fMaxSize);// m_bColorTexRender );	
@@ -113,7 +120,7 @@ bool GProjMain::Init()
 	//D3DXMatrixOrthoOffCenterLH( &m_matShadowProj,	
 	//	-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 10000.0f );
 	D3DXMatrixOrthoOffCenterLH(&m_matShadowProj,
-		-fMaxViewDistance, fMaxViewDistance, -fMaxViewDistance, fMaxViewDistance, 0.0f, 10000.0f);
+		-fMaxViewDistance*2, fMaxViewDistance*2, -fMaxViewDistance*2, fMaxViewDistance*2, 0.0f, 10000.0f);
 
 
 	D3DXMATRIX matScale, matRotation;
@@ -245,22 +252,68 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		
 	}
 
+
+
+	/*
+	m_Obj->SetMatrix(&m_matObjWld, matView, matProj);
+	m_Obj->Render(GetContext());
+	*/
+	m_matObjWld._41 = -40.0f;
+	m_Obj->SetMatrix(&m_matObjWld, matView, matProj);
+	
+
+
 	D3DXMatrixInverse(&matInvView, 0, matView);
 	D3DXMATRIX matWVPT1 = m_matObjWld * m_matShadowView * m_matShadowProj * m_matTexture;
 	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
-	//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+	m_cbShadow.g_ShadowID = 0;
 	m_cbShadow.g_iNumKernel = 3;
 	GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
 	GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
 	GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+
+	//m_Obj->m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
+	//m_Obj->m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
+	//m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
+
+	
+
+	//ID3D11ShaderResourceView* aRViews[1] = { m_Obj->m_pBoneBufferRV.Get() };
+	//g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
+	m_Obj->PreRender(GetContext());
 	GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+	m_Obj->Draw(GetContext(), m_Obj);
 
-	m_Obj->m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
-	m_Obj->m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
-	m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
 
-	m_Obj->SetMatrix(&m_matObjWld, matView, matProj);
-	m_Obj->Render(GetContext());
+
+
+
+	m_matObjWld._41 = 30.0f;
+	m_Obj2->SetMatrix(&m_matObjWld, matView, matProj);
+	
+
+
+	D3DXMatrixInverse(&matInvView, 0, matView);
+	matWVPT1 = m_matObjWld * m_matShadowView * m_matShadowProj * m_matTexture;
+	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+	m_cbShadow.g_ShadowID = 0;
+	m_cbShadow.g_iNumKernel = 3;
+	GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+	GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+
+	//m_Obj->m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
+	//m_Obj->m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
+	//m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
+
+	
+
+	//ID3D11ShaderResourceView* aRViews[1] = { m_Obj->m_pBoneBufferRV.Get() };
+	//g_pImmediateContext->VSSetShaderResources(1, 1, aRViews);
+	m_Obj2->PreRender(GetContext());
+	GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+	m_Obj2->Draw(GetContext(), m_Obj2);
+	
 }
 void GProjMain::RenderShadow( D3DXMATRIX* matShadow, 
 						   D3DXMATRIX* matView, D3DXMATRIX* matProj )
@@ -308,18 +361,30 @@ void GProjMain::RenderShadow( D3DXMATRIX* matShadow,
 			//pModel->Render(GetContext());
 			pModel->PreRender(GetContext());
 			
-			GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+			GetContext()->VSSetShader(m_pCharShadowVS.Get(), NULL, 0);
 			GetContext()->PSSetShader(NULL, NULL, 0);
 			
 			pModel->Draw(GetContext(), pModel);
 		}
 		
 	}
-
+	m_matObjWld._41 = -40.0f;
 	m_Obj->SetMatrix(&m_matObjWld, matView, matProj);
-	GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+	//m_Obj->Render(GetContext());
+	m_Obj->PreRender(GetContext());
+	GetContext()->VSSetShader(m_pObjShadowVS.Get(), NULL, 0);
 	GetContext()->PSSetShader(NULL, NULL, 0);
-	m_Obj->Render(GetContext());
+	m_Obj->Draw(GetContext(), m_Obj);
+
+	m_matObjWld._41 = 30.0f;
+	m_Obj2->SetMatrix(&m_matObjWld, matView, matProj);
+	//m_Obj->Render(GetContext());
+	m_Obj->PreRender(GetContext());
+	GetContext()->VSSetShader(m_pObjShadowVS.Get(), NULL, 0);
+	GetContext()->PSSetShader(NULL, NULL, 0);
+	m_Obj->Draw(GetContext(), m_Obj);
+
+
 }
 bool GProjMain::Release()
 {	
@@ -341,10 +406,11 @@ bool GProjMain::Frame()
 
 	//m_Obj->SetMatrix(&m_matObjWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 	m_Obj->Frame();
+	m_Obj2->Frame();
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		m_HeroObj[iChar]->m_matWorld._41 = 40.0f;
+		m_HeroObj[iChar]->m_matWorld._41 = -80.0f;
 		m_HeroObj[iChar]->m_matWorld._42 = 36.0f;
 		m_HeroObj[iChar]->m_matWorld._43 = -10.0f;
 		m_HeroObj[iChar]->Frame();

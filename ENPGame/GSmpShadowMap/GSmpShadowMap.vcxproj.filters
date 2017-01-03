@@ -31,12 +31,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Output\data_test\shader_shadow\CustomizeMap.hlsl" />
-    <FxCompile Include="..\..\Output\data_test\shader_shadow\DepthMapShadow.hlsl" />
-    <FxCompile Include="..\..\Output\data_test\shader_shadow\Character_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Diffuse_Rev_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Diffuse_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Specular_Rev_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Specular_shadow.hlsl" />
+    <FxCompile Include="..\..\Output\data\shader_shadow\Character_shadow.hlsl" />
+    <FxCompile Include="..\..\Output\data\shader_shadow\CustomizeMap_shadow.hlsl" />
   </ItemGroup>
 </Project>
