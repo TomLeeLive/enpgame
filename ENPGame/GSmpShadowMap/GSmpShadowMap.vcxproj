@@ -89,21 +89,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GProjMain.h" />
-    <ClInclude Include="TMatrixEx.h" />
+    <ClInclude Include="Code\GProjMain.h" />
+    <ClInclude Include="Code\TMatrixEx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GProjMain.cpp" />
-    <ClCompile Include="TMatrixEx.cpp" />
+    <ClCompile Include="Code\GProjMain.cpp" />
+    <ClCompile Include="Code\TMatrixEx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\..\Output\data\shader_shadow\Character_shadow.hlsl" />
+    <FxCompile Include="..\..\Output\data\shader_shadow\CustomizeMap_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Diffuse_Rev_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Diffuse_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Specular_Rev_shadow.hlsl" />
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Specular_shadow.hlsl" />
-    <FxCompile Include="..\..\Output\data_test\shader_shadow\Character_shadow.hlsl" />
-    <FxCompile Include="..\..\Output\data_test\shader_shadow\CustomizeMap.hlsl" />
-    <FxCompile Include="..\..\Output\data_test\shader_shadow\DepthMapShadow.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,6 +18,7 @@
 #include "GCamera.h"
 
 #include "GZombie.h"
+#include "GGbsObj.h"
 
 const int MAX_OBJECT_CNT = 3;
 //struct SHADOW_CONSTANT_BUFFER
@@ -28,9 +29,30 @@ const int MAX_OBJECT_CNT = 3;
 //	float				fZ, fW;
 //};
 
+//오브젝트 위치
+#define G_OBJ_LOC_LAB _T("data/object/building/lab.GBS")
+#define G_OBJ_LOC_DROPSHIP_LAND _T("data/object/dropship/dropship_land.GBS")
+#define G_OBJ_LOC_CAR _T("data/object/car/car.GBS")
+
+//오브젝트 매니저 등록 이름.
+#define G_OBJ_NAME_LAB L"lab.GBS"
+#define G_OBJ_NAME_DROPSHIP_LAND L"dropship_land.GBS"
+#define G_OBJ_NAME_CAR L"car.GBS"
+
+#define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
+#define G_SHA_OBJ_DIFFUSE_SHADOW L"data/shader_shadow/Obj_Diffuse_shadow.hlsl"
+#define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
+#define G_SHA_OBJ_SPECULAR_SHADOW L"data/shader_shadow/Obj_Specular_shadow.hlsl"
+
 class GProjMain : public GCoreLibV2
 {
 public:	
+	GGbsObj*		m_Obj;
+	GGbsObj*		m_Obj2;
+
+	D3DXMATRIX	m_matObjWld;
+	D3DXMATRIX  m_matObjScl, m_matObjRot, m_matObjTrans;
+
 	vector<shared_ptr<GZombie>>	m_HeroObj;
 
 
@@ -55,8 +77,11 @@ public:
 	ComPtr<ID3D11VertexShader>		m_pShadowVS;
 	ComPtr<ID3D11PixelShader>		m_pShadowPS;
 
-	//ComPtr<ID3D11VertexShader>		m_pCharShadowVS;
-	//ComPtr<ID3D11PixelShader>		m_pCharShadowPS;
+	ComPtr<ID3D11VertexShader>		m_pCharShadowVS;
+	ComPtr<ID3D11PixelShader>		m_pCharShadowPS;
+
+	ComPtr<ID3D11VertexShader>		m_pObjShadowVS;
+	ComPtr<ID3D11PixelShader>		m_pObjShadowPS;
 public:	
 	bool		Init();
 	bool		Frame();

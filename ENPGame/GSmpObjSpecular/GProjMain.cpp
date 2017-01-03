@@ -59,7 +59,7 @@ bool GProjMain::Init()
 	D3DXMatrixIdentity(&m_matObjOBB);
 
 	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR_SHADOW,G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
 
 	//iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_DIFFUSE, G_LIGHT_TYPE_DIFFUSE);				if (iIndex < 0) return false;
 

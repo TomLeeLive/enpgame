@@ -50,7 +50,7 @@ struct PNCT_INPUT
     float3 p : POSITION;
 	float3 n : NORMAL;
     float4 c : COLOR;
-    float2 t : TEXCOORD;
+    float2 t : TEXCOORD0;
 };
 
 struct VS_OUTPUT
@@ -58,7 +58,7 @@ struct VS_OUTPUT
     float4 p : SV_POSITION;
 	float3 n : NORMAL;
     float4 c : COLOR0;
-    float2 t : TEXCOORD;
+    float2 t : TEXCOORD0;
 	float4 TexShadow : TEXCOORD1;
 };
 
@@ -104,6 +104,7 @@ float4 PS( VS_OUTPUT input) : SV_Target
 	//return vFinalColorLight;
 
 	//const float	g_iNumKernel = 3;
+	/*
 	float4 vDiffuseColor = g_txDiffuse.Sample( g_samLinear, input.t );
 	float fLightAmount=0.0f;
 	float3 ShadowTexColor =input.TexShadow.xyz / input.TexShadow.w;
@@ -122,6 +123,29 @@ float4 PS( VS_OUTPUT input) : SV_Target
 	fLightAmount /= g_iNumKernel*g_iNumKernel;	
 	float fColor = fLightAmount;
 	float4 vFinalColor = vDiffuseColor*Diffuse(input.n)*max(0.5f, fLightAmount);
+	//float4 vFinalColor = max(0.5f, fLightAmount);
+	vFinalColor.a = 1.0f;
+	*/
+	float4 vDiffuseColor = g_txDiffuse.Sample(g_samLinear, input.t);
+	float fLightAmount = 0.0f;
+	float3 ShadowTexColor = input.TexShadow.xyz / input.TexShadow.w;
+	const float fdelta = 1.0f / SMAP_SIZE;
+	int iHalf = (g_iNumKernel - 1) / 2;
+
+	for (int v = -iHalf; v <= iHalf; v++)
+	{
+		for (int u = -iHalf; u <= iHalf; u++)
+		{
+			float2 vOffset = float2(u*fdelta, v*fdelta);
+			fLightAmount +=
+				g_txDepthMap.SampleCmpLevelZero(g_samComShadowMap,
+					ShadowTexColor.xy + vOffset,
+					ShadowTexColor.z);
+		}
+	}
+	fLightAmount /= g_iNumKernel*g_iNumKernel;
+	float4 fColor = float4(fLightAmount, fLightAmount, fLightAmount, 1.0f);
+	float4 vFinalColor = vDiffuseColor*Diffuse(input.n);// *max(0.5f, fLightAmount);
 	vFinalColor.a = 1.0f;
 	return  vFinalColor;
 }

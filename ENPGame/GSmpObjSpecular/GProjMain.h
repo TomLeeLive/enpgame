@@ -12,6 +12,7 @@
 
 #define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
 #define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
+#define G_SHA_OBJ_SPECULAR_SHADOW L"data/shader_shadow/Obj_Specular_shadow.hlsl"
 
 class GProjMain : public GCoreLibV2
 {
