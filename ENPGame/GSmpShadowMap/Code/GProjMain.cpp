@@ -19,6 +19,22 @@ bool GProjMain::Init()
 	m_HeroObj.push_back(pObjA);
 
 
+	D3DXMatrixIdentity(&m_matObjWld);
+	D3DXMatrixIdentity(&m_matObjScl);
+	D3DXMatrixIdentity(&m_matObjRot);
+	D3DXMatrixIdentity(&m_matObjTrans);
+
+	int iIndex = -1;
+	//iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR_SHADOW, G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
+
+	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_DIFFUSE_SHADOW, G_LIGHT_TYPE_DIFFUSE);				if (iIndex < 0) return false;
+
+	//연구소 로드
+	m_Obj = I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
+	D3DXMatrixScaling(&m_matObjScl, 1, 1, 1);
+	D3DXMatrixTranslation(&m_matObjTrans, 0.0f, 0.0f, 0.0f);
+	m_matObjWld = m_matObjScl * m_matObjRot * m_matObjTrans;
+
 
 
 
@@ -228,6 +244,23 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		}
 		
 	}
+
+	D3DXMatrixInverse(&matInvView, 0, matView);
+	D3DXMATRIX matWVPT1 = m_matObjWld * m_matShadowView * m_matShadowProj * m_matTexture;
+	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+	//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+	m_cbShadow.g_iNumKernel = 3;
+	GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+	GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
+	m_Obj->m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
+	m_Obj->m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
+	m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
+
+	m_Obj->SetMatrix(&m_matObjWld, matView, matProj);
+	m_Obj->Render(GetContext());
 }
 void GProjMain::RenderShadow( D3DXMATRIX* matShadow, 
 						   D3DXMATRIX* matView, D3DXMATRIX* matProj )
@@ -282,6 +315,11 @@ void GProjMain::RenderShadow( D3DXMATRIX* matShadow,
 		}
 		
 	}
+
+	m_Obj->SetMatrix(&m_matObjWld, matView, matProj);
+	GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
+	GetContext()->PSSetShader(NULL, NULL, 0);
+	m_Obj->Render(GetContext());
 }
 bool GProjMain::Release()
 {	
@@ -289,6 +327,7 @@ bool GProjMain::Release()
 	SAFE_DEL(m_pBoxShape);
 	
 	I_CharMgr.Release();
+	I_ObjMgr.Release();
 
 	return m_CustomMap.Release();
 }
@@ -298,9 +337,14 @@ bool GProjMain::Frame()
 	float t = m_Timer.GetElapsedTime() * D3DX_PI;	
 	m_pMainCamera->Frame();
 
+
+
+	//m_Obj->SetMatrix(&m_matObjWld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+	m_Obj->Frame();
+
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
-		m_HeroObj[iChar]->m_matWorld._41 = 30.0f;
+		m_HeroObj[iChar]->m_matWorld._41 = 40.0f;
 		m_HeroObj[iChar]->m_matWorld._42 = 36.0f;
 		m_HeroObj[iChar]->m_matWorld._43 = -10.0f;
 		m_HeroObj[iChar]->Frame();

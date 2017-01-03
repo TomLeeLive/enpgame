@@ -89,12 +89,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GProjMain.h" />
-    <ClInclude Include="TMatrixEx.h" />
+    <ClInclude Include="Code\GProjMain.h" />
+    <ClInclude Include="Code\TMatrixEx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GProjMain.cpp" />
-    <ClCompile Include="TMatrixEx.cpp" />
+    <ClCompile Include="Code\GProjMain.cpp" />
+    <ClCompile Include="Code\TMatrixEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Output\data\shader_shadow\Obj_Diffuse_Rev_shadow.hlsl" />

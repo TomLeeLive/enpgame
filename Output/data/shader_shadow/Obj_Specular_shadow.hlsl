@@ -7,7 +7,7 @@
 // Constant Buffer Variables
 //--------------------------------------------------------------------------------------
 Texture2D g_txDiffuse: register (t0);
-Texture2D		g_txDepthMap: register (t1);
+Texture2D g_txDepthMap: register (t1);
 
 SamplerState g_samLinear: register (s0);
 SamplerState g_samShadowMap: register (s1);
@@ -20,12 +20,6 @@ cbuffer cb0: register(b0)
 	matrix	g_matProj		: packoffset(c8);
 	float4  g_MeshColor     : packoffset(c12);
 };
-cbuffer cb2: register (b2)
-{
-	float4x4		g_matShadow: packoffset(c0);
-	float			g_iObjectID : packoffset(c4.x);
-	float			g_iNumKernel : packoffset(c4.y);
-}
 //--------------------------------------------------------------------------------------
 //Lighting Variables
 //--------------------------------------------------------------------------------------
@@ -49,14 +43,21 @@ cbuffer cb1: register(b1)
 	float3				g_vEyePos : packoffset(c14);
 	float			    g_fEyeRadius : packoffset(c14.w);
 };
-//--------------------------------------------------------------------------------------
-struct PNCT_INPUT
+cbuffer cb2: register (b2)
 {
-	float3 p : POSITION;
-	float3 n : NORMAL;
-	float4 c : COLOR;
-	float2 t : TEXCOORD;
-};
+	float4x4		g_matShadow: packoffset(c0);
+	float			g_iObjectID : packoffset(c4.x);
+	float			g_iNumKernel : packoffset(c4.y);
+}
+
+//--------------------------------------------------------------------------------------
+//struct PNCT_INPUT
+//{
+//	float3 p : POSITION;
+//	float3 n : NORMAL;
+//	float4 c : COLOR;
+//	float2 t : TEXCOORD;
+//};
 
 struct VS_INPUT
 {
@@ -67,12 +68,12 @@ struct VS_INPUT
 };
 struct VS_OUTPUT
 {
-	float4 p : SV_POSITION;
-	float3 n : NORMAL;
-	float4 c : COLOR0;
-	float2 t : TEXCOORD0;
-	float4 v : TEXCOORD1;
-	float4 TexShadow : TEXCOORD2;
+	float4 p			: SV_POSITION;
+	float3 n			: NORMAL;
+	float4 c			: COLOR0;
+	float2 t			: TEXCOORD0;
+	float4 v			: TEXCOORD1;
+	float4 TexShadow	: TEXCOORD2;
 };
 struct PCT_VS_OUTPUT_SHADOW
 {
@@ -222,10 +223,10 @@ float4 AmbientColor(VS_OUTPUT input) : SV_Target
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-PCT_VS_OUTPUT_SHADOW SHADOW_VS(PNCT_INPUT input)
+PCT_VS_OUTPUT_SHADOW SHADOW_VS(VS_INPUT input)
 {
 	PCT_VS_OUTPUT_SHADOW output = (PCT_VS_OUTPUT_SHADOW)0;
-	output.p = mul(float4(input.p, 1.0f), g_matWorld);
+	output.p = mul(input.p, g_matWorld);
 	output.p = mul(output.p, g_matView);
 	output.p = mul(output.p, g_matProj);
 	output.d = output.p.zw;

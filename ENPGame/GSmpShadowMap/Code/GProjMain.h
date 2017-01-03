@@ -28,9 +28,29 @@ const int MAX_OBJECT_CNT = 3;
 //	float				fZ, fW;
 //};
 
+//오브젝트 위치
+#define G_OBJ_LOC_LAB _T("data/object/building/lab.GBS")
+#define G_OBJ_LOC_DROPSHIP_LAND _T("data/object/dropship/dropship_land.GBS")
+#define G_OBJ_LOC_CAR _T("data/object/car/car.GBS")
+
+//오브젝트 매니저 등록 이름.
+#define G_OBJ_NAME_LAB L"lab.GBS"
+#define G_OBJ_NAME_DROPSHIP_LAND L"dropship_land.GBS"
+#define G_OBJ_NAME_CAR L"car.GBS"
+
+#define G_SHA_OBJ_DIFFUSE L"data/shader_shadow/Obj_Diffuse_shadow.hlsl"
+#define G_SHA_OBJ_DIFFUSE_SHADOW L"data/shader_shadow/Obj_Specular_shadow.hlsl"
+#define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
+#define G_SHA_OBJ_SPECULAR_SHADOW L"data/shader_shadow/Obj_Specular_shadow.hlsl"
+
 class GProjMain : public GCoreLibV2
 {
 public:	
+	GModel*		m_Obj;
+	D3DXMATRIX	m_matObjOBB;
+	D3DXMATRIX	m_matObjWld;
+	D3DXMATRIX  m_matObjScl, m_matObjRot, m_matObjTrans;
+
 	vector<shared_ptr<GZombie>>	m_HeroObj;
 
 
