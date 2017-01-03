@@ -25,7 +25,7 @@ public:
 	//D3DXMATRIX	m_matObjScl;
 	//D3DXMATRIX	m_matObjRot;
 	D3DXMATRIX		m_matObjTrans;
-	int				m_iScl;
+	float			m_fScl;
 	float			m_fRotY;
 	bool			m_bLightReverse;
 	bool			m_bLightSpecular;
@@ -35,7 +35,7 @@ public:
 		m_bLightSpecular = false;
 		D3DXMatrixIdentity(&m_matObjWld);
 		D3DXMatrixIdentity(&m_matObjTrans);
-		m_iScl = 1;
+		m_fScl = 1.0;
 		m_fRotY = 0.0f;
 	};
 	~GObjData() {};

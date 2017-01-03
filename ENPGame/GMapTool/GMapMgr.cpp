@@ -80,30 +80,30 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 		D3DXMatrixIdentity(&matScl);
 		D3DXMatrixIdentity(&matRot);
 
-		if (I_Input.KeyCheck(DIK_Y) == KEY_PUSH)
+		if (I_Input.KeyCheck(DIK_Y) == KEY_HOLD)
 		{
-			m_pObjSelected->m_iScl += 1;
+			m_pObjSelected->m_fScl += 0.1;
 
 			m_bChanged = true;
 		}
-		if (I_Input.KeyCheck(DIK_U) == KEY_PUSH)
+		if (I_Input.KeyCheck(DIK_U) == KEY_HOLD)
 		{
-			m_pObjSelected->m_iScl -= 1;
+			m_pObjSelected->m_fScl -= 0.1;
 
-			if (m_pObjSelected->m_iScl < 1)
-				m_pObjSelected->m_iScl = 1;
-
-			m_bChanged = true;
-		}
-		if (I_Input.KeyCheck(DIK_H) == KEY_PUSH)
-		{
-			m_pObjSelected->m_fRotY += 5;
+			if (m_pObjSelected->m_fScl < 0.1)
+				m_pObjSelected->m_fScl = 0.1;
 
 			m_bChanged = true;
 		}
-		if (I_Input.KeyCheck(DIK_J) == KEY_PUSH)
+		if (I_Input.KeyCheck(DIK_H) == KEY_HOLD)
 		{
-			m_pObjSelected->m_fRotY -= 5;
+			m_pObjSelected->m_fRotY += 0.5;
+
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_J) == KEY_HOLD)
+		{
+			m_pObjSelected->m_fRotY -= 0.5;
 
 			m_bChanged = true;
 		}
@@ -132,7 +132,7 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 			m_bChanged = true;
 		}
 		if (m_bChanged) {
-			D3DXMatrixScaling(&matScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl);
+			D3DXMatrixScaling(&matScl, m_pObjSelected->m_fScl, m_pObjSelected->m_fScl, m_pObjSelected->m_fScl);
 			D3DXMatrixRotationY(&matRot, D3DXToRadian(m_pObjSelected->m_fRotY));
 
 			m_pObjSelected->m_matObjWld = matScl * matRot * m_pObjSelected->m_matObjTrans;
@@ -298,7 +298,7 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 
 		int iLightReverse	= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 1]);
 		int	iLightSpecular  = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 2]);
-		int iScl			= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
+		float fScl			= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
 		float fRotY			= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 4]);
 		float fTransX		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 5]);
 		float fTransY		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
@@ -334,9 +334,9 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 		D3DXMATRIX matScl, matRot;
 		D3DXMatrixIdentity(&matScl);
 		D3DXMatrixIdentity(&matRot);
-		objData->m_iScl = iScl;
+		objData->m_fScl = fScl;
 		objData->m_fRotY = fRotY;
-		D3DXMatrixScaling(&matScl, objData->m_iScl, objData->m_iScl, objData->m_iScl);
+		D3DXMatrixScaling(&matScl, objData->m_fScl, objData->m_fScl, objData->m_fScl);
 		D3DXMatrixRotationY(&matRot, D3DXToRadian(objData->m_fRotY));
 		D3DXMatrixTranslation(&objData->m_matObjTrans, fTransX, fTransY, fTransZ);
 		objData->m_matObjWld = matScl * matRot * objData->m_matObjTrans;

@@ -134,6 +134,7 @@ public:
 public:
 #ifdef G_MACRO_AI_ADD
 	GAIZombieMgr		m_GAIZombMgr;
+	bool JakeAI();
 #else
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif

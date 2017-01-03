@@ -148,10 +148,10 @@ void GObjForm::OnBnClickedButtonload()
 	D3DXMatrixIdentity(&matScl);
 	D3DXMatrixIdentity(&matRot);
 
-	objData->m_iScl = 1;
+	objData->m_fScl = 1.0;
 	objData->m_fRotY = 0.0f;
 
-	D3DXMatrixScaling(&matScl, objData->m_iScl, objData->m_iScl, objData->m_iScl);
+	D3DXMatrixScaling(&matScl, objData->m_fScl, objData->m_fScl, objData->m_fScl);
 	D3DXMatrixRotationY(&matRot, D3DXToRadian(objData->m_fRotY));
 
 
@@ -205,13 +205,13 @@ void GObjForm::OnBnClickedButton1()
 	m_fTransZ = _ttof(strTransZ);
 
 	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
-		theApp.m_MapMgr.m_pObjSelected->m_iScl = m_fScl;
+		theApp.m_MapMgr.m_pObjSelected->m_fScl = m_fScl;
 		theApp.m_MapMgr.m_pObjSelected->m_fRotY = m_fRotY;
 		theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._41 = m_fTransX;
 		theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42 = m_fTransY;
 		theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43 = m_fTransZ;
 
-		D3DXMatrixScaling(&matScl, theApp.m_MapMgr.m_pObjSelected->m_iScl, theApp.m_MapMgr.m_pObjSelected->m_iScl, theApp.m_MapMgr.m_pObjSelected->m_iScl);
+		D3DXMatrixScaling(&matScl, theApp.m_MapMgr.m_pObjSelected->m_fScl, theApp.m_MapMgr.m_pObjSelected->m_fScl, theApp.m_MapMgr.m_pObjSelected->m_fScl);
 		D3DXMatrixRotationY(&matRot, D3DXToRadian(theApp.m_MapMgr.m_pObjSelected->m_fRotY));
 		theApp.m_MapMgr.m_pObjSelected->m_matObjWld = matScl * matRot * theApp.m_MapMgr.m_pObjSelected->m_matObjTrans;
 	}
@@ -242,7 +242,7 @@ void GObjForm::OnLbnSelchangeListobj()
 
 	theApp.m_MapMgr.m_pObjSelected = theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iSelected].get();
 
-	m_fScl = theApp.m_MapMgr.m_pObjSelected->m_iScl;
+	m_fScl = theApp.m_MapMgr.m_pObjSelected->m_fScl;
 	m_fRotY = theApp.m_MapMgr.m_pObjSelected->m_fRotY;
 	m_fTransX = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._41;
 	m_fTransY= theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42;
