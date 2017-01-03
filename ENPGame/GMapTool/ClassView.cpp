@@ -74,11 +74,13 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 뷰를 만듭니다.
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 
+	
 	if (!m_wndClassView.Create(dwViewStyle, rectDummy, this, 2))
 	{
 		TRACE0("클래스 뷰를 만들지 못했습니다.\n");
 		return -1;      // 만들지 못했습니다.
 	}
+	
 
 	// 이미지를 로드합니다.
 	m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_SORT);

@@ -17,6 +17,8 @@
 #include "TMatrixEx.h"
 #include "GCamera.h"
 
+#include "GZombie.h"
+
 const int MAX_OBJECT_CNT = 3;
 //struct SHADOW_CONSTANT_BUFFER
 //{
@@ -29,6 +31,9 @@ const int MAX_OBJECT_CNT = 3;
 class GProjMain : public GCoreLibV2
 {
 public:	
+	vector<shared_ptr<GZombie>>	m_HeroObj;
+
+
 	shared_ptr<GCamera>	m_pMainCamera;
 	GMap				m_CustomMap;	
 	GBoxShape*			m_pBoxShape;
@@ -49,6 +54,9 @@ public:
 	ComPtr<ID3D11Buffer>			m_pShadowConstantBuffer;
 	ComPtr<ID3D11VertexShader>		m_pShadowVS;
 	ComPtr<ID3D11PixelShader>		m_pShadowPS;
+
+	//ComPtr<ID3D11VertexShader>		m_pCharShadowVS;
+	//ComPtr<ID3D11PixelShader>		m_pCharShadowPS;
 public:	
 	bool		Init();
 	bool		Frame();

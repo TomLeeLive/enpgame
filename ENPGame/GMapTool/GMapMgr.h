@@ -1,56 +1,55 @@
 #pragma once
 
-#include "map/GMap.h"
-#include "map/GQuadTree.h"
-#include "GMapMgr.h"
+#include "GMapGroup.h"
 #include "GInput.h"
-#include "map/GTileMap.h"
-#include "GModel.h"
 
-#define G_DEFINE_MAP_DIR L"data/map/"
-#define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap.hlsl"
+#define MAP_OBJ_INFO_LINES 8
+#define MAP_TEX_INFO_LINES 2
+
+class GMapGroup;
+
+class GObjData;
 
 class GMapMgr
 {
 public:
-	vector<GModel*>	m_vecObj;
+	TCHAR		m_strTex[MAX_PATH];
+	TCHAR		m_strHeight[MAX_PATH];
 
-	GTileMap		m_HeightMap;
 
+	GObjData*	m_pObjSelected;
+	int			m_iMapSelected;
 
-	bool			DrawQuadLine(GNode* pNode,GCamera* pCamera);
-	bool			DrawDebug(GCamera* pCamera);
+	vector<shared_ptr<GMapGroup>>	m_vecMapGroup;
+
+	//vector<GGbsObj*>	m_vecObj;
+
+	//GTileMap		m_HeightMap;
+	void	GetStringFileName(VOID* pOutStr, VOID* pInStr);
+	void	GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr);
+	bool	LoadMap(T_STR* strFile, GCamera* pCamera);
+
 
 public:
-	bool			CreateInit(int Width, int Height, float Distance, CString strTex,GCamera* pCamera);
+
 
 	//--------------------------------------------------------------------------------------
 	// Åø
 	//--------------------------------------------------------------------------------------
 	//GCreateMapDlg GCreateDlg;
 	//GSaveMapDlg GSaveDlg;
-	//--------------------------------------------------------------------------------------
-	// ¸Ê
-	//--------------------------------------------------------------------------------------
-	//GMap	 m_CustomMap;
-	TMapDesc m_MapDesc;
-	//--------------------------------------------------------------------------------------
-	// ÄõµåÆ®¸®
-	//--------------------------------------------------------------------------------------
-	GQuadTree m_QuadTree;
 
-	//--------------------------------------------------------------------------------------
-	// µð¹ö±ë ¿ëµµ
-	//--------------------------------------------------------------------------------------
-	GLineShape		m_DrawLine;
+
+
+
 	bool			m_bDebugRender;
-	int				m_iDrawDepth;
+
 
 
 
 	bool			Init();
-	bool			Frame(GInput* pInput = NULL);
-	bool			Render(GCamera* pCamera);
+	bool			Frame(GCamera* pCamera, GInput* pInput = NULL);
+	bool			Render(GCamera* pCamera, bool bDebug);
 	bool			Release();
 	HRESULT			CreateResource();
 	HRESULT			DeleteResource();

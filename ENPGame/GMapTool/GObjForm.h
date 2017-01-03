@@ -33,16 +33,21 @@ protected:
 public:
 	afx_msg void OnBnClickedButtonload();
 	CListBox m_listObj;
-	afx_msg void OnBnClickedButtonload2();
-	float m_fSclX;
-	float m_fSclY;
-	float m_fSclZ;
-	float m_fRotX;
+	//float m_fSclY;
+	//float m_fSclZ;
+	//float m_fRotX;
+	//float m_fRotZ;
+	float m_fScl;
 	float m_fRotY;
-	float m_fRotZ;
 	float m_fTransX;
 	float m_fTransY;
 	float m_fTransZ;
+	afx_msg void OnBnClickedButton1();
+	CListBox m_listMap;
+	afx_msg void OnLbnSelchangeListobj();
+	afx_msg void OnLbnSelchangeListmap();
+	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnBnClickedCheck2();
 };
 
 

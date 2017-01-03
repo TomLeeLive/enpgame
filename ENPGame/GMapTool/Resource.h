@@ -40,10 +40,6 @@
 #define ID_PROPERTIES1                  152
 #define ID_PROPERTIES2                  153
 #define ID_EXPAND_ALL                   154
-#define IDS_FILE_VIEW                   155
-#define IDS_CLASS_VIEW                  156
-#define IDS_OUTPUT_WND                  157
-#define IDS_PROPERTIES_WND              158
 #define IDI_FILE_VIEW                   161
 #define IDI_FILE_VIEW_HC                162
 #define IDI_CLASS_VIEW                  163
@@ -104,11 +100,13 @@
 #define IDC_TAB1                        1017
 #define IDC_BUTTON4                     1017
 #define IDC_EDIT8                       1018
+#define IDC_LISTMAP                     1019
+#define IDC_CHECK1                      1020
+#define IDC_CHECK2                      1021
 #define IDC_LISTOBJ                     1022
 #define IDC_BUTTON2                     1023
 #define IDC_BUTTONLOAD                  1023
 #define IDC_BUTTON3                     1024
-#define IDC_BUTTONLOAD2                 1024
 #define IDC_GUAGE_VALUE                 1027
 #define IDC_ObjSacleX                   1027
 #define IDC_GUAGE_VALUE2                1028
@@ -149,7 +147,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        335
 #define _APS_NEXT_COMMAND_VALUE         32802
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

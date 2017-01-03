@@ -12,29 +12,6 @@ public:
 		return pInstance_;
 	}
 public:
-#ifdef G_DEFINE_SHADOW
-	//그림자 [Start]
-	void		RenderShadow(D3DXMATRIX* matShadow, D3DXMATRIX* matView, D3DXMATRIX* matProj);
-	void		RenderObject(D3DXMATRIX* matView, D3DXMATRIX* matProj);
-	D3DXVECTOR3			m_vLightPos;
-	float				m_fObjID[G_OBJ_CNT];
-	D3DXMATRIX			m_matShadow;
-	D3DXMATRIX			m_matTexture;
-	D3DXMATRIX			m_matShadowView;
-	D3DXMATRIX			m_matShadowProj;
-	bool				m_bColorTexRender;
-	//--------------------------------------------------------------------------------------
-	// 랜더타켓 및 깊이/스텐실 버퍼
-	//--------------------------------------------------------------------------------------	
-	GDxRT							m_RT;
-	GPlaneShape*					m_pQuad;
-	SHADOW_CONSTANT_BUFFER			m_cbShadow;
-	ComPtr<ID3D11Buffer>			m_pShadowConstantBuffer;
-	ComPtr<ID3D11VertexShader>		m_pShadowVS;
-	ComPtr<ID3D11PixelShader>		m_pShadowPS;
-	//그림자 [End]
-#endif
-public:
 	int m_iEventNum;
 		int m_iScriptNum;
 	void							SetEventCamera(G_HERO hero);

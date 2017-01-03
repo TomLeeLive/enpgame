@@ -215,6 +215,8 @@
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="GCreateMapDlg.h" />
+    <ClInclude Include="GMapCamera.h" />
+    <ClInclude Include="GMapGroup.h" />
     <ClInclude Include="GMapMgr.h" />
     <ClInclude Include="GObjControl.h" />
     <ClInclude Include="GObjForm.h" />
@@ -236,6 +238,8 @@
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="GCreateMapDlg.cpp" />
+    <ClCompile Include="GMapCamera.cpp" />
+    <ClCompile Include="GMapGroup.cpp" />
     <ClCompile Include="GMapMgr.cpp" />
     <ClCompile Include="GObjControl.cpp" />
     <ClCompile Include="GObjForm.cpp" />

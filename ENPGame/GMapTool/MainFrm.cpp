@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SETTINGCHANGE()
 	ON_COMMAND(ID_CREATEMAP, &CMainFrame::OnCreatemap)
 	ON_COMMAND(ID_SAVEMAP, &CMainFrame::OnSavemap)
+	ON_COMMAND(ID_LOADMAP, &CMainFrame::OnLoadmap)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -66,6 +67,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
 
+	//추가된 메뉴가 축소되서 보이지 않아서 추가함[S]
+	m_wndMenuBar.SetRecentlyUsedMenus(FALSE);
+	//추가된 메뉴가 축소되서 보이지 않아서 추가함[E]
+
+
 	// 메뉴 모음을 활성화해도 포커스가 이동하지 않게 합니다.
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
@@ -75,6 +81,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("도구 모음을 만들지 못했습니다.\n");
 		return -1;      // 만들지 못했습니다.
 	}
+
+
+
 
 	CString strToolBarName;
 	bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
@@ -103,6 +112,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
 
+	/*
 	if (TRUE == m_wndSampleCtrl.CreateEx(
 		NULL, _T("GSampleCtrl"), this, CRect(0,0,300,300	),
 		TRUE,1234,
@@ -112,6 +122,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_wndSampleCtrl.EnableDocking(CBRS_ALIGN_ANY);
 		DockPane(&m_wndSampleCtrl);
 	}
+	*/
 
 	if (TRUE == m_wndObjCtrl.CreateEx(
 		NULL, _T("GObjCtrl"), this, CRect(0, 0, 300, 300),
@@ -139,15 +150,15 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndClassView.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndFileView);
+	//m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
+	//m_wndClassView.EnableDocking(CBRS_ALIGN_ANY);
+	//DockPane(&m_wndFileView);
 	CDockablePane* pTabbedBar = NULL;
-	m_wndClassView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
-	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndOutput);
-	m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndProperties);
+	//m_wndClassView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
+	//m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
+	//DockPane(&m_wndOutput);
+	//m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
+	//DockPane(&m_wndProperties);
 
 	// 보관된 값에 따라 비주얼 관리자 및 스타일을 설정합니다.
 	OnApplicationLook(theApp.m_nAppLook);
@@ -203,6 +214,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (!CFrameWndEx::PreCreateWindow(cs))
 		return FALSE;
+
+	cs.style &= ~FWS_ADDTOTITLE;
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
 
@@ -214,6 +227,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	BOOL bNameValid;
 
 	// 클래스 뷰를 만듭니다.
+	/*
 	CString strClassView;
 	bNameValid = strClassView.LoadString(IDS_CLASS_VIEW);
 	ASSERT(bNameValid);
@@ -222,8 +236,10 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("클래스 뷰 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	// 파일 뷰를 만듭니다.
+	/*
 	CString strFileView;
 	bNameValid = strFileView.LoadString(IDS_FILE_VIEW);
 	ASSERT(bNameValid);
@@ -232,8 +248,10 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("파일 뷰 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	// 출력 창을 만듭니다.
+	/*
 	CString strOutputWnd;
 	bNameValid = strOutputWnd.LoadString(IDS_OUTPUT_WND);
 	ASSERT(bNameValid);
@@ -242,8 +260,10 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("출력 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	// 속성 창을 만듭니다.
+	/*
 	CString strPropertiesWnd;
 	bNameValid = strPropertiesWnd.LoadString(IDS_PROPERTIES_WND);
 	ASSERT(bNameValid);
@@ -252,6 +272,7 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("속성 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
 	}
+	*/
 
 	SetDockingWindowIcons(theApp.m_bHiColorIcons);
 	return TRUE;
@@ -260,16 +281,16 @@ BOOL CMainFrame::CreateDockingWindows()
 void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 {
 	HICON hFileViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_FILE_VIEW_HC : IDI_FILE_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndFileView.SetIcon(hFileViewIcon, FALSE);
+	//m_wndFileView.SetIcon(hFileViewIcon, FALSE);
 
-	HICON hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndClassView.SetIcon(hClassViewIcon, FALSE);
+	//HICON hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	//m_wndClassView.SetIcon(hClassViewIcon, FALSE);
 
 	HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
+	//m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
 
 	HICON hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
+	//m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
 
 }
 
@@ -382,7 +403,7 @@ void CMainFrame::OnApplicationLook(UINT id)
 		CDockingManager::SetDockingMode(DT_SMART);
 	}
 
-	m_wndOutput.UpdateFonts();
+	//m_wndOutput.UpdateFonts();
 	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME | RDW_ERASE);
 
 	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
@@ -426,7 +447,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
-	m_wndOutput.UpdateFonts();
+	//m_wndOutput.UpdateFonts();
 }
 
 // 지형생성 다이얼로그 호출
@@ -437,87 +458,135 @@ void CMainFrame::OnCreatemap()
 	dlg.DoModal();
 
 }
+void CMainFrame::PrintToStatusbar(CString strMsg)
+{
+	m_wndStatusBar.SetPaneText(0, strMsg);
+}
+
 // 지형 저장 다이얼로그 호출
 void CMainFrame::OnSavemap()
 {
-	// FALSE -> 저장대화상자
-	CFileDialog dlg(FALSE);
-	if (dlg.DoModal() == IDOK)
-	{
-		//dlg.GetPathName();
-		FILE *fp;
-		m_strSaveFileName = dlg.GetPathName();
 
+	if (theApp.m_MapMgr.m_iMapSelected == -1) {
+		AfxMessageBox(
+			L"선택된 맵이 없습니다.\n"
+			L"맵을 우선 선택해주시겠습니까?", MB_OK);
+		return;
 	}
 
-	CFile file;
-	file.Open(m_strSaveFileName, CFile::modeCreate | CFile::modeWrite);
 
-	//TCHAR* str = new TCHAR[MAX_PATH];
-
-	char str[MAX_PATH] = { 0 };
-	float fstr[MAX_PATH] = { 0 };
-
-	//width 값
-	strcat(str,"Width");	strcat(str, "\t");
-	int data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	//theApp.m_MapDesc.iNumCols;
-	int tempValue = theApp.m_MapMgr.m_MapDesc.iNumCols;
-	_itoa(tempValue, str, 10);
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	//height 값
-	strcat(str, "\r\n");	strcat(str, "Height");	strcat(str, "\t");
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	// theApp.m_MapDesc.iNumRows;
-	tempValue = theApp.m_MapMgr.m_MapDesc.iNumRows;
-	_itoa(tempValue, str, 10);
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	//fDistance 값
-	strcat(str, "\r\n");	strcat(str, "fDistance");	strcat(str, "\t");
-	data_size = strlen(str);
-	file.Write(str, data_size);
-	memset(str, 0, sizeof(char) * 256);
-
-	// theApp.m_MapDesc.fSellDistance;
-	//_itoa(theApp.m_MapDesc.fSellDistance, fstr, 10);
-	//data_size = strlen(fstr);
-	//file.Write(fstr, data_size);
-	//memset(fstr, 0, sizeof(char) * 256);
-
-	file.Close();	
-#ifdef Test_save
-	//
-
-	char szChar[16];
-	CString strString;
-	strString = "test";
-	strcpy_s(szChar, 16, CW2A(strString));
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
 
 
-	FILE *f;	
-	char * str;
-	m_strSaveFileName;
-	f = fopen("StudentData.dat", "wt");
+	TCHAR current_path[MAX_PATH] = _T("");
+	GetCurrentDirectory(MAX_PATH, current_path); // 현재 경로 저장
+
+	CFileDialog dlg(false, _T("map"), _T("*.map"),
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		_T("MAP File(*.map)|*.map||"));
+
+	if (dlg.DoModal() == IDOK) { // OK 를 하는 순간 현재 경로가 변경된다.
+								 // 여기서 파일 저장 작업.
+								 // 여기서 얻는 dlg.GetFileName() 함수는 상대 경로로의 파일 이름을 반환해 준다.
+
+								 // 선택한 파일의 이름..
+								 // dlg.GetFileName();
+
+								 // 선택한 파일의 이름을 포함한 경로..
+		CString strFile = dlg.GetPathName();
+
+		{
+
+			FILE* fp = fopen((CStringA)strFile, "wt+");
+
+			CString str;
+			CString strNum;
+			TCHAR strTex[MAX_PATH];
+			TCHAR strHeight[MAX_PATH];
+
+			
+
+			_tcsncpy_s(strTex, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strTex, MAX_PATH);
+			_tcsncpy_s(strHeight, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_strHeight, MAX_PATH);
+
+			//Texture 이름 출력
+			str = (LPCTSTR)strTex;
+			str.Append(_T("\n"));
+			fprintf(fp, (CStringA)str);
+
+			//HeightMap 이름 출력
+			str = (LPCTSTR)strHeight;
+			str.Append(_T("\n"));
+			fprintf(fp, (CStringA)str);
+
+			for (int iMapObj = 0; iMapObj<theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); iMapObj++)
+			{
+				TCHAR strObj[MAX_PATH] = L"";// = L"data\\object\\building\\";
+				//오브젝트 gbs 이름 출력
+				_tcsncat(strObj, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName, _tcsclen(theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_strName));
+
+				str = strObj;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0
+				if (theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_bLightReverse == TRUE)
+					strNum.Format(_T("%d"), 1);
+				else
+					strNum.Format(_T("%d"), 0);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 Specular 여부 값 출력 true: 1, false: 0
+				if (theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_bLightSpecular == TRUE)
+					strNum.Format(_T("%d"), 1);
+				else
+					strNum.Format(_T("%d"), 0);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
 
 
-	//fprintf(f, buffer);
+				//오브젝트 scl 값 출력
+				strNum.Format(_T("%d"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_iScl);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 rot 값 출력
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_fRotY);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				//오브젝트 translation x,y,z 값 출력
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_matObjTrans._41);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_matObjTrans._42);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
+
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_matObjTrans._43);
+				str = strNum;
+				str.Append(_T("\n"));
+				fprintf(fp, (CStringA)str);
 
 
-	fclose(f);
+			}
 
-#endif
+			fclose(fp);
+			strFile.Append(_T(" 저장완료"));
+
+			AfxMessageBox( strFile, MB_OK);
+		}
+
+	}
+	SetCurrentDirectory(current_path); // 원래 경로로 돌아 간다.
 
 }
 
@@ -527,4 +596,59 @@ void CMainFrame::OnObjectformview()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 
 
+}
+
+
+void CMainFrame::OnLoadmap()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	if (!theApp.LoadFileDlg(_T("map"), _T("MAP Load")))
+	{
+		return;
+	}
+
+	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
+	pFrame->m_wndObjCtrl.m_wndForm->m_listObj.ResetContent();
+	pFrame->m_wndObjCtrl.m_wndForm->m_listObj.UpdateData(FALSE);
+	pFrame->m_wndObjCtrl.m_wndForm->m_listMap.ResetContent();
+	pFrame->m_wndObjCtrl.m_wndForm->m_listMap.UpdateData(FALSE);
+
+	int iLoad = theApp.m_LoadFiles.size() - 1;
+
+	//Map생성과 Obj 생성. 파일 이름을 넘겨서 함수에서 해당 파일 읽어서 처리한다.
+	if (theApp.m_MapMgr.LoadMap(&theApp.m_LoadFiles[iLoad], theApp.m_pMainCamera.get())) {
+		//로드가 끝난후 오브젝트 리스트 컨트롤과 맵 리스트 컨트롤을 업데이트 해준다.
+
+		theApp.m_MapMgr.m_iMapSelected = theApp.m_MapMgr.m_vecMapGroup.size() - 1;
+
+		for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup.size(); i++) {
+			TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+			_stprintf_s(szRet, _countof(szRet), _T("%d"), i);
+			pFrame->m_wndObjCtrl.m_wndForm->m_listMap.AddString(szRet);
+		}
+
+
+
+		pFrame->m_wndObjCtrl.m_wndForm->m_listObj.ResetContent();
+
+		for (int i = 0; i < theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj.size(); i++) {
+
+			TCHAR szRet[30] = { 0 }; // "10"의 NULL 처리를 위한 3 count
+
+			TCHAR strObjName[MAX_PATH];
+
+			_tcsncpy_s(strObjName, theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[i]->m_strName, MAX_PATH);
+
+			theApp.m_MapMgr.GetStringFileName(strObjName, strObjName);
+
+			_stprintf_s(szRet, _countof(szRet), _T("%d - %s"), i, strObjName);
+			pFrame->m_wndObjCtrl.m_wndForm->m_listObj.AddString(szRet);
+
+		}
+		pFrame->m_wndObjCtrl.m_wndForm->m_listObj.UpdateData(FALSE);
+	}
+
+
+	
 }

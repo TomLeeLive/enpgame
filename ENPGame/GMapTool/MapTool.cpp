@@ -30,77 +30,7 @@ BEGIN_MESSAGE_MAP(CMapToolApp, CWinAppEx)
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-bool CMapToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
-{
-	//OPENFILENAME    ofn;
-	//TCHAR           szFile[MAX_PATH] = { 0, };
-	//TCHAR			szFileTitle[MAX_PATH] = { 0, };
-	//static TCHAR    *szFilter;
 
-	//TCHAR lpCurBuffer[256] = { 0, };
-	//GetCurrentDirectory(256, lpCurBuffer);
-
-	//ZeroMemory(&ofn, sizeof(OPENFILENAME));
-	//_tcscpy_s(szFile, _T("*."));
-	//_tcscat_s(szFile, szExt);
-	//_tcscat_s(szFile, _T("\0"));
-
-	//ofn.lStructSize = sizeof(OPENFILENAME);
-	//ofn.hwndOwner = GetActiveWindow();
-	//ofn.lpstrFilter = szFilter;
-	//ofn.lpstrCustomFilter = NULL;
-	//ofn.nMaxCustFilter = 0L;
-	//ofn.nFilterIndex = 1;
-	//ofn.lpstrFile = szFile;
-	//ofn.nMaxFile = MAX_PATH;
-	//ofn.lpstrFileTitle = szFileTitle;
-	//ofn.nMaxFileTitle = MAX_PATH;
-	//ofn.lpstrInitialDir = _T("../../data/Character/");
-	//ofn.lpstrTitle = szTitle;
-	//ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
-	//ofn.nFileOffset = 0;
-	//ofn.nFileExtension = 0;
-	//ofn.lpstrDefExt = szExt;
-
-	//if (!GetOpenFileName(&ofn))
-	//{
-	//	return false;
-	//}
-	//TCHAR* load = _tcstok(szFile, _T("\n"));
-	//T_STR dir = szFile;
-	//load = &load[_tcslen(load) + 1];
-	//if (*load == 0)
-	//{
-	//	m_LoadFiles.push_back(dir);
-	//}
-
-	//while (*load != 0)
-	//{
-	//	T_STR dir = szFile;
-	//	load = _tcstok(load, _T("\n"));
-	//	dir += _T("\\");
-	//	dir += load;
-	//	m_LoadFiles.push_back(dir);
-	//	load = &load[_tcslen(load) + 1];
-	//}
-	//SetCurrentDirectory(lpCurBuffer);
-
-
-	////확장자를 검출하기 위해 추가한 코드
-	//string extension = getExt(TCHARToString(dir.c_str()));
-
-	//if (0 == extension.compare("GUI") || extension.compare("gui") == 0)
-	//{
-	//	m_FileExt = G_TOOL_EXT_GUI;
-	//	return true;
-	//}
-	//if (0 == extension.compare("GBS") || extension.compare("gbs") == 0) {
-	//	m_FileExt = G_TOOL_EXT_GBS;
-	//	return true;
-	//}
-
-	return true;
-}
 
 
 
@@ -111,10 +41,10 @@ bool CMapToolApp::Init()
 	//--------------------------------------------------------------------------------------
 	// 카메라  행렬 
 	//--------------------------------------------------------------------------------------	
-	m_pMainCamera = make_shared<GCamera>();
+	m_pMainCamera = make_shared<GMapCamera>();
 	m_pMainCamera->SetViewMatrix(D3DXVECTOR3(0.0f, 10.0f, -50.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	m_pMainCamera->SetProjMatrix(D3DX_PI * 0.25f,
-		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 1.0f, 3000.0f);
+		m_SwapChainDesc.BufferDesc.Width / (float)(m_SwapChainDesc.BufferDesc.Height), 0.1f, 20000.0f);
 
 
 	//--------------------------------------------------------------------------------------
@@ -126,6 +56,25 @@ bool CMapToolApp::Init()
 
 	m_MapMgr.Init();
 	
+
+	//좀비 캐릭터 추가[S]
+	I_CharMgr.Init();
+
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharZombie.gci")))
+	{
+		return false;
+	}
+
+	GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+
+	shared_ptr<GZombie> pObjA = make_shared<GZombie>();
+	pObjA->Set(pChar0,
+		pChar0->m_pBoneObject,
+		pChar0->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar0->m_pBoneObject->m_Scene.iLastFrame);
+	m_HeroObj.push_back(pObjA);
+	//좀비 캐릭터 추가[E]
+
 	return true;
 }
 bool CMapToolApp::Frame()
@@ -135,19 +84,49 @@ bool CMapToolApp::Frame()
 	//--------------------------------------------------------------------------------------
 	m_pMainCamera->Frame();
 
-	m_MapMgr.Frame(&I_Input.GetInstance());
+	CString strMsg;
+	strMsg.Format(_T("Camera Pos X: %f, Y:%f, Z:%f"), m_pMainCamera->m_vCameraPos.x, m_pMainCamera->m_vCameraPos.y, m_pMainCamera->m_vCameraPos.z);
 
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	pMainFrame->PrintToStatusbar(strMsg);
+	
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->Frame();
+	}
+	if (m_MapMgr.Frame(m_pMainCamera.get(), &I_Input.GetInstance())) {
+		CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
+		pFrame->m_wndObjCtrl.m_wndForm->m_fScl = theApp.m_MapMgr.m_pObjSelected->m_iScl;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fRotY = theApp.m_MapMgr.m_pObjSelected->m_fRotY;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fTransX = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._41;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fTransY = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._42;
+		pFrame->m_wndObjCtrl.m_wndForm->m_fTransZ = theApp.m_MapMgr.m_pObjSelected->m_matObjTrans._43;
+
+		pFrame->m_wndObjCtrl.m_wndForm->UpdateData(FALSE);
+	}
+	else {
+
+	}
 	return true; 
 }
 bool CMapToolApp::Render()
 {	
-	m_MapMgr.Render(m_pMainCamera.get());
+	m_MapMgr.Render(m_pMainCamera.get(),true);
+
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->m_matWorld._42 = 36.2f;
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->Render(m_pImmediateContext);
+	}
 	return true;
 }
 bool CMapToolApp::Release()
 {
 	m_MapMgr.Release();
 	
+	I_CharMgr.Release();
 	return true;
 }
 
@@ -164,7 +143,7 @@ HRESULT CMapToolApp::CreateResource()
 	if (m_pMainCamera != nullptr)
 	{
 		m_pMainCamera->SetProjMatrix((float)D3DX_PI * 0.25f,
-			m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 1.0f, 3000.0f);
+			m_SwapChainDesc.BufferDesc.Width / (FLOAT)m_SwapChainDesc.BufferDesc.Height, 0.1f, 20000.0f);
 	}
 
 	m_MapMgr.CreateResource();
@@ -257,6 +236,11 @@ BOOL CMapToolApp::InitInstance()
 	// TODO: 이 문자열을 회사 또는 조직의 이름과 같은
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
+
+	//추가된 메뉴가 축소되서 보이지 않아서 추가함[S]
+	CleanState();
+	//추가된 메뉴가 축소되서 보이지 않아서 추가함[E]
+
 	LoadStdProfileSettings(4);  // MRU를 포함하여 표준 INI 파일 옵션을 로드합니다.
 
 
@@ -395,6 +379,110 @@ void CMapToolApp::PreLoadState()
 	bNameValid = strName.LoadString(IDS_EXPLORER);
 	ASSERT(bNameValid);
 	GetContextMenuManager()->AddMenu(strName, IDR_POPUP_EXPLORER);
+}
+
+
+////////////////////////////////////////////////////////
+// 문자열 처리 관련 함수 추가함.
+
+//확장자를 얻기 위해.
+string getExt(string pathname) {
+	return pathname.substr(pathname.find_last_of(".") + 1);
+}
+typedef std::basic_string<TCHAR> tstring;
+
+// string to TChar
+TCHAR* StringToTCHAR(string& s)
+{
+	tstring tstr;
+	const char* all = s.c_str();
+	int len = 1 + strlen(all);
+	wchar_t* t = new wchar_t[len];
+	if (NULL == t) throw std::bad_alloc();
+	mbstowcs(t, all, len);
+	return (TCHAR*)t;
+}
+
+// TChar to string
+std::string TCHARToString(const TCHAR* ptsz)
+{
+	int len = wcslen((wchar_t*)ptsz);
+	char* psz = new char[2 * len + 1];
+	wcstombs(psz, (wchar_t*)ptsz, 2 * len + 1);
+	std::string s = psz;
+	delete[] psz;
+	return s;
+}
+bool CMapToolApp::LoadFileDlg(TCHAR* szExt, TCHAR* szTitle)
+{
+	OPENFILENAME    ofn;
+	TCHAR           szFile[MAX_PATH] = { 0, };
+	TCHAR			szFileTitle[MAX_PATH] = { 0, };
+	static TCHAR    *szFilter;
+
+	TCHAR lpCurBuffer[256] = { 0, };
+	GetCurrentDirectory(256, lpCurBuffer);
+
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	_tcscpy_s(szFile, _T("*."));
+	_tcscat_s(szFile, szExt);
+	_tcscat_s(szFile, _T("\0"));
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = GetActiveWindow();
+	ofn.lpstrFilter = szFilter;
+	ofn.lpstrCustomFilter = NULL;
+	ofn.nMaxCustFilter = 0L;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrFileTitle = szFileTitle;
+	ofn.nMaxFileTitle = MAX_PATH;
+	ofn.lpstrInitialDir = _T("../../data/map/");
+	ofn.lpstrTitle = szTitle;
+	ofn.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+	ofn.nFileOffset = 0;
+	ofn.nFileExtension = 0;
+	ofn.lpstrDefExt = szExt;
+
+	if (!GetOpenFileName(&ofn))
+	{
+		return false;
+	}
+	TCHAR* load = _tcstok(szFile, _T("\n"));
+	T_STR dir = szFile;
+	load = &load[_tcslen(load) + 1];
+	if (*load == 0)
+	{
+		m_LoadFiles.push_back(dir);
+	}
+
+	while (*load != 0)
+	{
+		T_STR dir = szFile;
+		load = _tcstok(load, _T("\n"));
+		dir += _T("\\");
+		dir += load;
+		m_LoadFiles.push_back(dir);
+		load = &load[_tcslen(load) + 1];
+	}
+	SetCurrentDirectory(lpCurBuffer);
+
+
+	//확장자를 검출하기 위해 추가한 코드
+	string extension = getExt(TCHARToString(dir.c_str()));
+
+	if (0 == extension.compare("MAP") || extension.compare("map") == 0)
+	{
+		m_FileExt = G_MAP_TOOL_EXT_MAP;
+		return true;
+	}
+	//if (0 == extension.compare("GBS") || extension.compare("gbs") == 0) {
+	//	m_FileExt = G_MAP_TOOL_EXT_GBS;
+	//	return true;
+	//}
+
+	return true;
 }
 
 void CMapToolApp::LoadCustomState()

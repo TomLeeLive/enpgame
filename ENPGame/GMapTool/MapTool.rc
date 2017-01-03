@@ -73,15 +73,25 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\MapTool.ico"
+
 IDR_MapToolTYPE         ICON                    "res\\MapToolDoc.ico"
+
 IDI_FILE_VIEW           ICON                    "res\\file_view.ico"
+
 IDI_FILE_VIEW_HC        ICON                    "res\\file_view_hc.ico"
+
 IDI_CLASS_VIEW          ICON                    "res\\class_view.ico"
+
 IDI_CLASS_VIEW_HC       ICON                    "res\\class_view_hc.ico"
+
 IDI_OUTPUT_WND          ICON                    "res\\output_wnd.ico"
+
 IDI_OUTPUT_WND_HC       ICON                    "res\\output_wnd_hc.ico"
+
 IDI_PROPERTIES_WND      ICON                    "res\\properties_wnd.ico"
+
 IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -89,19 +99,33 @@ IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
 IDR_SORT                BITMAP                  "res\\sort.bmp"
+
 IDB_SORT_24             BITMAP                  "res\\sort_hc.bmp"
+
 IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
+
 IDB_FILE_VIEW_24        BITMAP                  "res\\fileview_hc.bmp"
+
 IDB_CLASS_VIEW          BITMAP                  "res\\classview.bmp"
+
 IDB_CLASS_VIEW_24       BITMAP                  "res\\classview_hc.bmp"
+
 IDR_EXPLORER            BITMAP                  "res\\explorer.bmp"
+
 IDB_EXPLORER_24         BITMAP                  "res\\explorer_hc.bmp"
+
 IDR_MENU_IMAGES         BITMAP                  "res\\menuimages.bmp"
+
 IDB_MENU_IMAGES_24      BITMAP                  "res\\menuimages_hc.bmp"
+
 IDR_PROPERTIES          BITMAP                  "res\\properties.bmp"
+
 IDB_PROPERTIES_HC       BITMAP                  "res\\properties_hc.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -223,15 +247,15 @@ BEGIN
             END
         END
     END
-    POPUP "도움말(&H)"
-    BEGIN
-        MENUITEM "MapTool 정보(&A)...",           ID_APP_ABOUT
-    END
     POPUP "지형생성"
     BEGIN
         MENUITEM "생성(&C)\tCtr+1",               ID_CREATEMAP
         MENUITEM "저장",                          ID_SAVEMAP
         MENUITEM "로드",                          ID_LOADMAP
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "MapTool 정보(&A)...",           ID_APP_ABOUT
     END
 END
 
@@ -339,28 +363,20 @@ BEGIN
     DEFPUSHBUTTON   "확인",IDOK,113,41,50,14,WS_GROUP
 END
 
-IDD_CREATEMAP DIALOGEX 0, 0, 199, 191
+IDD_CREATEMAP DIALOGEX 0, 0, 199, 133
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "확인",IDOK,15,158,50,14
-    PUSHBUTTON      "취소",2,107,157,50,14
-    LTEXT           "타일 가로크기",IDC_STATIC,15,20,55,10
-    EDITTEXT        IDC_EDIT1,78,16,69,14,ES_AUTOHSCROLL
-    GROUPBOX        "지형정보",IDC_STATIC,7,7,180,147
-    LTEXT           "타일 세로크기",IDC_STATIC,15,37,55,10
-    EDITTEXT        IDC_EDIT6,77,31,69,14,ES_AUTOHSCROLL
-    LTEXT           "셀 갯수",IDC_STATIC,16,55,55,10
-    LTEXT           "셀 Distance",IDC_STATIC,15,72,55,10
-    EDITTEXT        IDC_EDIT3,77,68,69,14,ES_AUTOHSCROLL
-    COMBOBOX        IDC_COMBO2,78,50,69,12,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "텍스쳐",IDC_STATIC,16,90,55,10
-    PUSHBUTTON      "Find",IDC_BUTTON1,149,86,30,14
-    EDITTEXT        IDC_EDIT7,77,87,69,14,ES_AUTOHSCROLL
-    LTEXT           "Height",IDC_STATIC,16,109,55,10
-    PUSHBUTTON      "Find",IDC_BUTTON4,149,105,30,14
-    EDITTEXT        IDC_EDIT8,77,106,69,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "확인",IDOK,29,104,50,14
+    PUSHBUTTON      "취소",2,121,103,50,14
+    GROUPBOX        "지형정보",IDC_STATIC,7,7,180,92
+    LTEXT           "텍스쳐",IDC_STATIC,35,40,28,10
+    PUSHBUTTON      "Find",IDC_BUTTON1,136,38,30,14
+    EDITTEXT        IDC_EDIT7,64,39,69,14,ES_AUTOHSCROLL
+    LTEXT           "Height",IDC_STATIC,36,59,26,10
+    PUSHBUTTON      "Find",IDC_BUTTON4,136,57,30,14
+    EDITTEXT        IDC_EDIT8,64,58,69,14,ES_AUTOHSCROLL
 END
 
 IDD_SAMPLEFORM DIALOGEX 0, 0, 159, 101
@@ -370,36 +386,39 @@ BEGIN
     LTEXT           "TODO: 폼 뷰를 배치합니다.",IDC_STATIC,33,45,93,9
 END
 
-IDD_OBJFORM DIALOGEX 0, 0, 159, 388
+IDD_OBJFORM DIALOGEX 0, 0, 154, 412
 STYLE DS_SETFONT | WS_CHILD
 FONT 9, "굴림", 400, 0, 0x0
 BEGIN
-    LTEXT           "OBJECT LIST",IDC_STATIC,1,5,52,9
-    LISTBOX         IDC_LISTOBJ,10,18,137,91,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "ADD",IDC_STATIC,11,122,132,37
-    PUSHBUTTON      "Obj Load",IDC_BUTTONLOAD,34,134,37,17
-    PUSHBUTTON      "Obj Add",IDC_BUTTONLOAD2,85,134,37,17
-    GROUPBOX        "Scale",IDC_STATIC,10,166,132,66
-    EDITTEXT        IDC_ObjSacleX,32,174,52,17,ES_AUTOHSCROLL
-    LTEXT           "X",IDC_STATIC,17,177,8,9
-    LTEXT           "Y",IDC_STATIC,17,195,8,9
-    LTEXT           "Z",IDC_STATIC,17,213,8,9
-    EDITTEXT        IDC_ObjScaleY,32,192,52,17,ES_AUTOHSCROLL
-    EDITTEXT        IDC_ObjScaleZ,33,210,52,17,ES_AUTOHSCROLL
-    GROUPBOX        "Rotation",IDC_STATIC,11,237,132,66
-    EDITTEXT        IDC_ObjRotationX,33,246,52,17,ES_AUTOHSCROLL
-    EDITTEXT        IDC_ObjRotationY,33,264,52,17,ES_AUTOHSCROLL
-    GROUPBOX        "Translatioin",IDC_STATIC,12,308,132,66
-    EDITTEXT        IDC_ObjTransX,34,316,52,17,ES_AUTOHSCROLL
-    EDITTEXT        IDC_ObjTransY,34,334,52,17,ES_AUTOHSCROLL
-    EDITTEXT        IDC_ObjTransZ,34,352,52,17,ES_AUTOHSCROLL
-    LTEXT           "X",IDC_STATIC,16,247,8,9
-    LTEXT           "Y",IDC_STATIC,16,265,8,9
-    LTEXT           "Z",IDC_STATIC,16,283,8,9
-    LTEXT           "X",IDC_STATIC,18,320,8,9
-    LTEXT           "Y",IDC_STATIC,18,338,8,9
-    LTEXT           "Z",IDC_STATIC,18,356,8,9
-    EDITTEXT        IDC_ObjRotationZ,33,282,52,17,ES_AUTOHSCROLL
+    LTEXT           "OBJECT LIST",IDC_STATIC,4,6,52,9
+    LISTBOX         IDC_LISTOBJ,3,16,68,92,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Obj 추가",IDC_STATIC,11,112,132,37
+    PUSHBUTTON      "GBS",IDC_BUTTONLOAD,23,124,37,17
+    GROUPBOX        "Scale",IDC_STATIC,10,164,38,36
+    EDITTEXT        IDC_ObjSacleX,16,178,29,17,ES_AUTOHSCROLL
+    GROUPBOX        "Y Rotation",IDC_STATIC,47,164,38,36
+    EDITTEXT        IDC_ObjRotationY,53,178,27,17,ES_AUTOHSCROLL
+    GROUPBOX        "Translation",IDC_STATIC,10,208,129,35
+    EDITTEXT        IDC_ObjTransX,24,217,29,17,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ObjTransY,64,217,28,17,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ObjTransZ,101,217,30,17,ES_AUTOHSCROLL
+    LTEXT           "X",IDC_STATIC,16,220,8,9
+    LTEXT           "Y",IDC_STATIC,57,220,8,9
+    LTEXT           "Z",IDC_STATIC,95,220,8,9
+    GROUPBOX        "Obj 값 설정",IDC_STATIC,7,152,140,123
+    PUSHBUTTON      "셋팅",IDC_BUTTON1,45,249,57,18
+    LISTBOX         IDC_LISTMAP,74,16,72,92,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "MAP LIST",IDC_STATIC,75,5,34,8
+    GROUPBOX        "Obj 조작법",IDC_STATIC,23,281,92,70
+    LTEXT           "↑↓←→: 오브젝트 이동",IDC_STATIC,32,297,82,12
+    LTEXT           "Y, U: Scale Up, Down",IDC_STATIC,33,315,71,8
+    LTEXT           "H, J: Y Rotation",IDC_STATIC,33,331,51,8
+    GROUPBOX        "Camera 조작법",IDC_STATIC,24,355,91,44
+    LTEXT           "W,A,S,D: 이동 ",IDC_STATIC,34,369,48,8
+    LTEXT           "마우스 시선 변경",IDC_STATIC,34,383,54,8
+    CONTROL         "Reverse",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,173,40,16
+    LTEXT           "Light",IDC_STATIC,91,164,16,8
+    CONTROL         "Specular",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,190,45,10
 END
 
 
@@ -463,7 +482,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 192
         TOPMARGIN, 7
-        BOTTOMMARGIN, 184
+        BOTTOMMARGIN, 126
     END
 
     IDD_SAMPLEFORM, DIALOG
@@ -472,6 +491,8 @@ BEGIN
 
     IDD_OBJFORM, DIALOG
     BEGIN
+        RIGHTMARGIN, 153
+        BOTTOMMARGIN, 405
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -623,14 +644,6 @@ BEGIN
     IDS_STATUS_PANE2        "창 2"
     IDS_TOOLBAR_STANDARD    "표준"
     IDS_TOOLBAR_CUSTOMIZE   "사용자 지정..."
-END
-
-STRINGTABLE
-BEGIN
-    IDS_FILE_VIEW           "파일 뷰"
-    IDS_CLASS_VIEW          "클래스 뷰"
-    IDS_OUTPUT_WND          "출력"
-    IDS_PROPERTIES_WND      "속성"
 END
 
 STRINGTABLE

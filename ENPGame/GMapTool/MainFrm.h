@@ -27,7 +27,7 @@ public:
 	CString m_strSaveFileName;
 // 작업입니다.
 public:
-	GSampleControl m_wndSampleCtrl;
+	//GSampleControl m_wndSampleCtrl;
 	GObjControl m_wndObjCtrl;
 
 // 재정의입니다.
@@ -36,6 +36,7 @@ public:
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 
 // 구현입니다.
+	void PrintToStatusbar(CString strMsg);
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -48,10 +49,10 @@ protected:  // 컨트롤 모음이 포함된 멤버입니다.
 	CMFCToolBar       m_wndToolBar;
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
-	CFileView         m_wndFileView;
-	CClassView        m_wndClassView;
-	COutputWnd        m_wndOutput;
-	CPropertiesWnd    m_wndProperties;
+	//CFileView         m_wndFileView;
+	//CClassView        m_wndClassView;
+	//COutputWnd        m_wndOutput;
+	//CPropertiesWnd    m_wndProperties;
 
 // 생성된 메시지 맵 함수
 protected:
@@ -69,6 +70,7 @@ public:
 	afx_msg void OnCreatemap();
 	afx_msg void OnSavemap();
 	afx_msg void OnObjectformview();
+	afx_msg void OnLoadmap();
 };
 
 

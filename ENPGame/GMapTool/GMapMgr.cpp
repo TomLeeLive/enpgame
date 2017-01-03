@@ -3,114 +3,9 @@
 #include "GMapMgr.h"
 
 
-bool GMapMgr::DrawDebug(GCamera* pCamera)
-{
-	//-----------------------------------------------------------------------
-	// 적용되어 있는 카메라의 방향벡터 표시
-	//-----------------------------------------------------------------------
-	T_STR	str;
-	RECT	rc;
-	str.clear();
-	TCHAR pBuffer[256];
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("Depth Control Key[F4] : Current Depth: %d %d\n"), m_iDrawDepth, g_InputData.iMouseValue[1]);
-	str += pBuffer;
-
-	//_stprintf_s(pBuffer, _T("Look:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera->m_vLookVector.x,
-	//	m_pMainCamera->m_vLookVector.y,
-	//	m_pMainCamera->m_vLookVector.z);
-	//str += pBuffer;
-
-	//memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	//_stprintf_s(pBuffer, _T("Up:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera->m_vUpVector.x,
-	//	m_pMainCamera->m_vUpVector.y,
-	//	m_pMainCamera->m_vUpVector.z);
-	//str += pBuffer;
-
-	//memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	//_stprintf_s(pBuffer, _T("Right:%10.4f,%10.4f,%10.4f \n"), m_pMainCamera->m_vRightVector.x,
-	//	m_pMainCamera->m_vRightVector.y,
-	//	m_pMainCamera->m_vRightVector.z);
-	//str += pBuffer;
-
-	memset(pBuffer, 0, sizeof(TCHAR) * 256);
-	_stprintf_s(pBuffer, _T("p:%10.4f,%10.4f,%10.4f "), pCamera->m_vCameraPos.x,
-		pCamera->m_vCameraPos.y,
-		pCamera->m_vCameraPos.z);
-	str += pBuffer;
-
-	//rc.left = 0;
-	//rc.top = 100;
-	//rc.right = m_DefaultRT.m_vp.Width;
-	//rc.bottom = m_DefaultRT.m_vp.Height;
-	//DrawDebugRect(&rc, const_cast<TCHAR*>(str.c_str()), D3DXCOLOR(1.0f, 0.5f, 0.5f, 1.0f));
-
-	return true;
-	//return GCoreLibV2::DrawDebug();
-}
-
-bool GMapMgr::DrawQuadLine(GNode* pNode, GCamera* pCamera)
-{
-	if (pNode == NULL) return true;
-
-	if (m_QuadTree.m_iRenderDepth == pNode->m_iDepth ||
-		(pNode->m_isLeaf &&  m_QuadTree.m_iRenderDepth < 0))
-	{
-		m_DrawLine.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
-
-		D3DXVECTOR4 vColor = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
-		if (pNode->m_iDepth == 1) vColor = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
-		if (pNode->m_iDepth == 2) vColor = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
-		if (pNode->m_iDepth == 3) vColor = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
-		if (pNode->m_iDepth == 4) vColor = D3DXVECTOR4(1.0f, 0.0f, 1.0f, 1.0f);
-		if (pNode->m_iDepth == 5) vColor = D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f);
-		if (pNode->m_iDepth == 6) vColor = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		if (pNode->m_iDepth == 7) vColor = D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f);
-		if (pNode->m_iDepth == 8) vColor = D3DXVECTOR4(1.0f, 0.5f, 0.5f, 1.0f);
-		if (pNode->m_iDepth == 9) vColor = D3DXVECTOR4(1.0f, 0.5f, 1.0f, 1.0f);
-
-		D3DXVECTOR3 vPoint[8];
-		vPoint[0] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMin.z);
-		vPoint[1] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMin.z);
-		vPoint[2] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMin.z);
-		vPoint[3] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMin.z);
-		vPoint[4] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMax.z);
-		vPoint[5] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMax.y, pNode->m_tBox.vMax.z);
-		vPoint[6] = D3DXVECTOR3(pNode->m_tBox.vMax.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMax.z);
-		vPoint[7] = D3DXVECTOR3(pNode->m_tBox.vMin.x, pNode->m_tBox.vMin.y, pNode->m_tBox.vMax.z);
-
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[0], vPoint[1], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[1], vPoint[2], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[2], vPoint[3], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[3], vPoint[0], vColor);
-
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[4], vPoint[5], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[5], vPoint[6], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[6], vPoint[7], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[7], vPoint[0], vColor);
-
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[0], vPoint[4], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[1], vPoint[5], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[2], vPoint[6], vColor);
-		m_DrawLine.Draw(g_pImmediateContext, vPoint[3], vPoint[7], vColor);
-	}
-	for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
-	{
-		DrawQuadLine(pNode->m_ChildList[iNode], pCamera);
-	}
-	return true;
-}
 bool			GMapMgr::Init()
 {
 
-	//--------------------------------------------------------------------------------------
-	// 디버그 라인 생성
-	//--------------------------------------------------------------------------------------
-	if (FAILED(m_DrawLine.Create(g_pd3dDevice, L"data/shader/line.hlsl")))
-	{
-		MessageBox(0, _T("m_DrawLine 실패"), _T("Fatal error"), MB_OK);
-		return 0;
-	}
 
 
 
@@ -118,8 +13,10 @@ bool			GMapMgr::Init()
 	return true; 
 }
 
-bool GMapMgr::CreateInit(int Width, int Height, float Distance, CString strTex, GCamera* pCamera)
+bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex, GCamera* pCamera)
 {
+	Init();
+
 	//--------------------------------------------------------------------------------------
 	//  맵 생성
 	//--------------------------------------------------------------------------------------
@@ -130,12 +27,14 @@ bool GMapMgr::CreateInit(int Width, int Height, float Distance, CString strTex, 
 	//strString = "test";
 	_tcscpy_s(szChar, 16, strTex.GetBuffer());
 	_tcscat_s(szCharPath, szChar);
+
 	//theApp.m_MapDesc.strTextureFile = m_strCharName;
 
 	//m_MapDesc = { Width, Height, Distance, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
 	m_MapDesc = {
 		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,		
-		Distance, 0.1f,
+		//Distance, 0.1f,
+		20.0f, 1.0f,
 		szCharPath, 
 		G_DEFINE_MAP_SHADER };
 
@@ -153,7 +52,7 @@ bool GMapMgr::CreateInit(int Width, int Height, float Distance, CString strTex, 
 
 
 }
-bool			GMapMgr::Frame(GInput* pInput)
+bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 {
 
 
@@ -164,58 +63,103 @@ bool			GMapMgr::Frame(GInput* pInput)
 	//2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	//float t = cosf(m_Timer.GetElapsedTime()) * D3DX_PI;
 
-	//--------------------------------------------------------------------------------------
-	// QuadTree Frame
-	//--------------------------------------------------------------------------------------
-	if (m_MapDesc.iNumCols > 0 || m_MapDesc.iNumRows > 0)
+
+	//if (m_vecMapGroup.size() == 0)
+	//	return false;
+	if (m_iMapSelected == -1)
+		return false;
+	
+	//for(int i = 0; i < m_vecMapGroup.size(); i++)
+	m_vecMapGroup[m_iMapSelected]->Frame(pCamera, pInput);
+
+
+	if (m_pObjSelected !=NULL && pInput !=NULL)
 	{
-		//g_pImmediateContext->UpdateSubresource(
-		//	m_CustomMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_CustomMap.m_VertexList.at(0), 0, 0);
+		bool m_bChanged = false;
+		D3DXMATRIX matScl, matRot;
+		D3DXMatrixIdentity(&matScl);
+		D3DXMatrixIdentity(&matRot);
 
-		//m_CustomMap.Frame();
-
-		// 쿼드트리
-		if (pInput != NULL &&  pInput->KeyCheck(DIK_F4) == KEY_UP)
+		if (I_Input.KeyCheck(DIK_Y) == KEY_PUSH)
 		{
-			if (++m_iDrawDepth > 7)	m_iDrawDepth = -1;
-			m_QuadTree.SetRenderDepth(m_iDrawDepth);
+			m_pObjSelected->m_iScl += 1;
+
+			m_bChanged = true;
 		}
-		m_QuadTree.Frame();
+		if (I_Input.KeyCheck(DIK_U) == KEY_PUSH)
+		{
+			m_pObjSelected->m_iScl -= 1;
 
+			if (m_pObjSelected->m_iScl < 1)
+				m_pObjSelected->m_iScl = 1;
 
-		m_HeightMap.Frame();
-		g_pImmediateContext->UpdateSubresource(
-			m_HeightMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_HeightMap.m_VertexList.at(0), 0, 0);
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_H) == KEY_PUSH)
+		{
+			m_pObjSelected->m_fRotY += 5;
+
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_J) == KEY_PUSH)
+		{
+			m_pObjSelected->m_fRotY -= 5;
+
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_UP) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._43 += 200 * g_fSecPerFrame;
+
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_DOWN) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._43 += -200 * g_fSecPerFrame;
+
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._41 += -200 * g_fSecPerFrame;
+
+			m_bChanged = true;
+		}
+		if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
+		{
+			m_pObjSelected->m_matObjTrans._41 += 200 * g_fSecPerFrame;
+
+			m_bChanged = true;
+		}
+		if (m_bChanged) {
+			D3DXMatrixScaling(&matScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl, m_pObjSelected->m_iScl);
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(m_pObjSelected->m_fRotY));
+
+			m_pObjSelected->m_matObjWld = matScl * matRot * m_pObjSelected->m_matObjTrans;
+			return true;
+		}
 	}
-
-	return true;
+	return false;
 }
 
-bool			GMapMgr::Render(GCamera* pCamera)
+bool			GMapMgr::Render(GCamera* pCamera, bool bDebug)
 {
-	//--------------------------------------------------------------------------------------
-	//  QuadTree Render
-	//--------------------------------------------------------------------------------------
-	if (m_MapDesc.iNumCols > 0 || m_MapDesc.iNumRows > 0)
-	{
 
-		m_HeightMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
-		m_HeightMap.Render(g_pImmediateContext);
+	//if (m_vecMapGroup.size() == 0)
+	//	return false;
 
-		//m_CustomMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(),
-		//	pCamera->GetProjMatrix());
-		//m_CustomMap.Render(g_pImmediateContext);
+	if (m_iMapSelected == -1)
+		return false;
 
-		//DrawQuadLine(m_QuadTree.m_pRootNode);
-	}
+	//for (int i = 0; i < m_vecMapGroup.size(); i++)
+		m_vecMapGroup[m_iMapSelected]->Render(pCamera, bDebug);
 
 	return true;
 }
 bool			GMapMgr::Release()
 {
-	m_HeightMap.Release();
-	//m_CustomMap.Release();
-	m_QuadTree.Release();
+	for (int i = 0; i < m_vecMapGroup.size(); i++)
+		m_vecMapGroup[i]->Release();
 	return true;
 }
 HRESULT			GMapMgr::CreateResource()
@@ -229,10 +173,191 @@ HRESULT			GMapMgr::DeleteResource()
 	return S_OK;
 }
 
+void GMapMgr::GetStringFileName(VOID* pOutStr, VOID* pInStr) {
+
+	vector<TCHAR*> vString;
+
+	TCHAR* token = NULL;
+	token = _tcstok((TCHAR*)pInStr, L"\\");
+	while (token != NULL)
+	{
+		token = _tcstok(NULL, L"\\");
+		vString.push_back(token);
+	}
+	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 2]);
+
+	//TCHAR strDir[MAX_PATH] = L"data\\ui\\";
+	//_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
+
+	//_tcscpy((TCHAR*)pOutStr, strDir);
+}
+void GMapMgr::GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr) {
+
+	vector<TCHAR*> vString;
+
+	TCHAR* token = NULL;
+	token = _tcstok((TCHAR*)pInStr, L"\\");
+	while (token != NULL)
+	{
+		token = _tcstok(NULL, L"\\");
+		vString.push_back(token);
+	}
+	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 3]);
+
+	TCHAR strDir[MAX_PATH] = L"data\\object\\";
+	TCHAR strSlash[MAX_PATH] = L"\\";
+
+	_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
+
+	_tcsncat(strDir, strSlash, _tcsclen(strSlash));
+
+	_tcscpy((TCHAR*)pOutStr, vString[vString.size() - 2]);
+	_tcsncat(strDir, (TCHAR*)pOutStr, _tcsclen((TCHAR*)pOutStr));
+
+	_tcscpy((TCHAR*)pOutStr, strDir);
+}
+
+bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
+
+	vector<CString> vecStr;
+
+	FILE *pFile = NULL;
+
+	const wchar_t * pStrFile = strFile->c_str();
+
+	//int len = 256;
+	char ctemp[MAX_PATH];
+
+	//TCHAR -> char 변환
+	WideCharToMultiByte(CP_ACP, 0, pStrFile, MAX_PATH, ctemp, MAX_PATH, NULL, NULL);
+
+	pFile = fopen(ctemp, "r");
+	if (pFile != NULL)
+	{
+		char strTemp[MAX_PATH];
+		char *pStr;
+
+		while (!feof(pFile))
+		{
+			pStr = fgets(strTemp, sizeof(strTemp), pFile);
+
+			if (pStr == NULL)
+				break;
+
+			// char -> TCHAR 변환
+			TCHAR szUniCode[MAX_PATH] = { 0, };
+			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pStr, strlen(pStr), szUniCode, MAX_PATH);
+
+			// TCHAR -> CString 변환
+			CString str;
+			str.Format(L"%s", szUniCode);
+			str.TrimRight();//개행문자 삭제
+			vecStr.push_back(str);
+		}
+		fclose(pFile);
+	}
+	else
+	{
+		//에러 처리
+		return false;
+	}
+
+	//하이트맵 처리 & 지형생성..(with 텍스처)
+	auto pMap = make_shared<GMapGroup>();
+
+	pMap->m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
+	if (FAILED(pMap->m_HeightMap.CreateHeightMap((TCHAR*)(LPCTSTR)vecStr[1]/*strHeight*/)))
+	{
+		return false;
+	}
+
+	pMap->m_HeightMap.m_bStaticLight = true;
+
+	pMap->CreateInit(0, 0, 0, vecStr[0]/*strTex*/, pCamera);
+
+	_tcsncpy_s(pMap->m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
+	_tcsncpy_s(pMap->m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
+
+	_tcsnset_s(m_strHeight, 0, MAX_PATH);
+	_tcsnset_s(m_strTex, 0, MAX_PATH);
+	_tcsncpy_s(m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
+	_tcsncpy_s(m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
+
+	//오브젝트 생성..
+	for (int i = 0; i < (vecStr.size() - MAP_TEX_INFO_LINES) / MAP_OBJ_INFO_LINES; i++) {
+		int iItem = i * MAP_OBJ_INFO_LINES;
+		
+		//오브젝트 gbs 이름 출력								//vecStr[iItem +MAP_TEX_INFO_LINES + 0];
+		//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0  //vecStr[iItem +MAP_TEX_INFO_LINES + 1];
+		//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0  //vecStr[iItem +MAP_TEX_INFO_LINES + 2];
+		//오브젝트 scl 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 3];
+		//오브젝트 rot 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 4];
+		//오브젝트 translation x 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 5];
+		//오브젝트 translation y 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 6];
+		//오브젝트 translation z 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 7];
+
+		int iLightReverse	= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 1]);
+		int	iLightSpecular  = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 2]);
+		int iScl			= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
+		float fRotY			= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 4]);
+		float fTransX		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 5]);
+		float fTransY		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
+		float fTransZ		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 7]);
+
+		if (iLightSpecular == 1) {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_REVERSE, G_LIGHT_TYPE_SPECULAR);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR);
+		}
+		else {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_REVERSE);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE);
+		}
+
+
+		auto objData = make_shared<GObjData>();
+
+		_tcsncpy_s(objData->m_strName, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], vecStr[iItem + MAP_TEX_INFO_LINES + 0].GetLength());
+
+		TCHAR strObjName[MAX_PATH];
+
+		_tcsncpy_s(strObjName, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], vecStr[iItem + MAP_TEX_INFO_LINES + 0].GetLength());
+
+		GetStringFileName(strObjName, strObjName);
+
+		objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(strObjName);
+
+		//s, r, t 설정.
+		D3DXMATRIX matScl, matRot;
+		D3DXMatrixIdentity(&matScl);
+		D3DXMatrixIdentity(&matRot);
+		objData->m_iScl = iScl;
+		objData->m_fRotY = fRotY;
+		D3DXMatrixScaling(&matScl, objData->m_iScl, objData->m_iScl, objData->m_iScl);
+		D3DXMatrixRotationY(&matRot, D3DXToRadian(objData->m_fRotY));
+		D3DXMatrixTranslation(&objData->m_matObjTrans, fTransX, fTransY, fTransZ);
+		objData->m_matObjWld = matScl * matRot * objData->m_matObjTrans;
+
+
+		objData->m_bLightReverse = iLightReverse;
+		objData->m_bLightSpecular = iLightSpecular;
+
+		pMap->m_vecObj.push_back(objData);
+		pMap->m_vecObjRender.push_back(false);
+	}
+	
+	m_vecMapGroup.push_back(pMap);
+
+	return true;
+}
 
 GMapMgr::GMapMgr()
 {
-	m_iDrawDepth = 0;
+	m_iMapSelected = -1;
+	m_pObjSelected = NULL;
 	m_bDebugRender = false;
 }
 
