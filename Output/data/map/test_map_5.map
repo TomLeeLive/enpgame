@@ -3,7 +3,7 @@ data\map\Sand.jpg
 data\object\car\car.GBS
 1
 0
-1
+1.0
 0.000000
 -558.352417
 0.000000
@@ -11,7 +11,7 @@ data\object\car\car.GBS
 data\object\dropship\dropship_land.GBS
 1
 0
-15
+15.0
 145.000000
 311.232758
 0.000000

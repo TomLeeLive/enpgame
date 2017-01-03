@@ -760,7 +760,7 @@ bool CGciCharToolApp::Load()
 
 	I_CharMgr.Init();
 
-	if (!LoadFileDlg(_T("gci"), _T("GCI Viewer")))
+	if (!LoadFileDlg(_T("*"), _T("GCI Viewer")))
 	{
 		return false;
 	}

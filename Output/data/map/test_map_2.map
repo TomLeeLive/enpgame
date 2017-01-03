@@ -1,9 +1,9 @@
 Sand.jpg
-data\map\HeightTest.bmp
+data\map\HeightStage1.bmp
 data\object\building\building1.GBS
 1
 0
-3
+3.0
 30.000000
 -283.327789
 0.000000
@@ -11,7 +11,7 @@ data\object\building\building1.GBS
 data\object\building\building4.GBS
 1
 0
-3
+3.0
 30.000000
 190.896774
 0.000000

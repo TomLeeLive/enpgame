@@ -8,31 +8,31 @@
 	mesh01_mso	Multi/Sub-Object	9	0
 	#SUBMATERIAL 0
 		default_city_bldgs_2	Standard	0	1
-		1	axcv1.jpg
+		1	axcv1.png
 	#SUBMATERIAL 1
 		default	Standard	0	1
-		1	aw2.jpg
+		1	aw2.png
 	#SUBMATERIAL 2
 		default_water_canal	Standard	0	1
-		1	fl1.jpg
+		1	fl1.png
 	#SUBMATERIAL 3
 		default_city_base_2	Standard	0	1
-		1	aw2.jpg
+		1	aw2.png
 	#SUBMATERIAL 4
 		default_water_canal_city_base_2	Standard	0	1
-		1	fl1.jpg
+		1	fl1.png
 	#SUBMATERIAL 5
 		default_city_base_2_1	Standard	0	1
-		1	aw2.jpg
+		1	aw2.png
 	#SUBMATERIAL 6
 		default_water_canal_city_base_2_1	Standard	0	1
-		1	fl1.jpg
+		1	fl1.png
 	#SUBMATERIAL 7
 		default_city_base_2_2	Standard	0	1
-		1	aw2.jpg
+		1	aw2.png
 	#SUBMATERIAL 8
 		default_water_canal_city_base_2_2	Standard	0	1
-		1	fl1.jpg
+		1	fl1.png
 #OBJECTS 0
 mesh01 (null)
 0	774	0	0	0	0	0
