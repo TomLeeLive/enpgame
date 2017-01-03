@@ -50,6 +50,14 @@ cbuffer cb1: register(b1)
 	float			    g_fEyeRadius : packoffset(c14.w);
 };
 //--------------------------------------------------------------------------------------
+struct PNCT_INPUT
+{
+	float3 p : POSITION;
+	float3 n : NORMAL;
+	float4 c : COLOR;
+	float2 t : TEXCOORD;
+};
+
 struct VS_INPUT
 {
 	float4 p : POSITION;
@@ -64,9 +72,13 @@ struct VS_OUTPUT
 	float4 c : COLOR0;
 	float2 t : TEXCOORD0;
 	float4 v : TEXCOORD1;
-	float4 TexShadow : TEXCOORD1;
+	float4 TexShadow : TEXCOORD2;
 };
-
+struct PCT_VS_OUTPUT_SHADOW
+{
+	float4 p		: SV_POSITION;
+	float2 d		: TEXCOORD0;
+};
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
@@ -81,7 +93,7 @@ VS_OUTPUT VS(VS_INPUT vIn)
 	vOut.c = vIn.c * g_MeshColor;
 	vOut.v = vWorld;
 	 // 텍스처좌표
-	output.TexShadow = mul( float4(input.p,1.0f), g_matShadow);
+	vOut.TexShadow = mul( vIn.p, g_matShadow);
 	return vOut;
 }
 
@@ -116,9 +128,9 @@ float4 PS(VS_OUTPUT vIn) : SV_Target
 	//	vFinalColor.a = 1.0f;
 	//	return vTexColor *(Diffuse(vIn.n) + Specular(vIn.n));
 	
-	float4 vDiffuseColor = g_txDiffuse.Sample( g_samLinear, input.t );
+	float4 vDiffuseColor = g_txDiffuse.Sample( g_samLinear, vIn.t );
 	float fLightAmount=0.0f;
-	float3 ShadowTexColor =input.TexShadow.xyz / input.TexShadow.w;
+	float3 ShadowTexColor = vIn.TexShadow.xyz / vIn.TexShadow.w;
 
 	const float fdelta = 1.0f / SMAP_SIZE;
 	int iHalf = (g_iNumKernel - 1) / 2;
