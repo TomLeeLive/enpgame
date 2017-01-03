@@ -1,7 +1,10 @@
 #pragma once
 
+#include "GCoreLibV2.h"
 #include "GMapGroup.h"
 #include "GInput.h"
+
+
 
 #define MAP_OBJ_INFO_LINES 8
 #define MAP_TEX_INFO_LINES 2
@@ -27,7 +30,7 @@ public:
 	//GTileMap		m_HeightMap;
 	void	GetStringFileName(VOID* pOutStr, VOID* pInStr);
 	void	GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr);
-	bool	LoadMap(T_STR* strFile, GCamera* pCamera);
+	bool	LoadMap(T_STR* strFile, GCamera* pCamera, GCoreLibV2* pMain = NULL);
 
 
 public:
@@ -49,7 +52,11 @@ public:
 
 	bool			Init();
 	bool			Frame(GCamera* pCamera, GInput* pInput = NULL);
-	bool			Render(GCamera* pCamera, bool bDebug);
+	bool			Render(GCamera* pCamera, bool bDebug, GCoreLibV2* pMain = NULL);
+#ifdef G_DEFINE_SHADOW_ADD
+	bool			RenderShadow(GCoreLibV2* pMain, D3DXMATRIX* matView, D3DXMATRIX* matProj, bool bDebug);
+	bool			RenderObject(GCoreLibV2* pMain, GCamera* pCamera, bool bDebug);
+#endif
 	bool			Release();
 	HRESULT			CreateResource();
 	HRESULT			DeleteResource();

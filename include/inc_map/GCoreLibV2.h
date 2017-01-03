@@ -5,9 +5,34 @@
 #include "GDirectWrite.h"
 #include "GShape.h"
 
+#define G_DEFINE_SHADOW_ADD 1
+
+#ifdef G_DEFINE_SHADOW_ADD
+#define G_DEFINE_LIGHT_POS 100, 100, 0
+const float g_fMaxSize = 1024;
+#endif
+
 class GCoreLibV2 : public GWindow
 {
 public:
+#ifdef G_DEFINE_SHADOW_ADD
+	D3DXVECTOR3			m_vLightPos;
+	D3DXMATRIX			m_matShadow;
+	D3DXMATRIX			m_matTexture;
+	D3DXMATRIX			m_matShadowView;
+	D3DXMATRIX			m_matShadowProj;
+	bool				m_bColorTexRender;
+	//--------------------------------------------------------------------------------------
+	// 랜더타켓 및 깊이/스텐실 버퍼
+	//--------------------------------------------------------------------------------------	
+	GDxRT							m_RT;
+	GPlaneShape*					m_pQuad;
+	SHADOW_CONSTANT_BUFFER			m_cbShadow;
+	ComPtr<ID3D11Buffer>			m_pShadowConstantBuffer;
+	ComPtr<ID3D11VertexShader>		m_pShadowVS;
+	ComPtr<ID3D11PixelShader>		m_pShadowPS;
+#endif
+
 	bool  m_bRenderManually;		// 수동렌더링 for loading bar 출력.
 	float m_fScreenColor[4];		// 스크린 컬러 R,G,B,A
 	TCHAR m_pFPSBuffer[256];		// FPS 출력

@@ -101,7 +101,7 @@ void GCreateMapDlg::OnOK()
 	pMap->m_HeightMap.m_bStaticLight = true;
 
 
-	pMap->CreateInit(0, 0, 0, (LPCTSTR)theApp.m_MapMgr.m_strTex, theApp.m_pMainCamera.get());
+	pMap->CreateInit(&theApp, 0, 0, 0, (LPCTSTR)theApp.m_MapMgr.m_strTex, theApp.m_pMainCamera.get());
 
 	_tcsncpy_s(pMap->m_strHeight, theApp.m_MapMgr.m_strHeight, MAX_PATH);
 	_tcsncpy_s(pMap->m_strTex, theApp.m_MapMgr.m_strTex, MAX_PATH);

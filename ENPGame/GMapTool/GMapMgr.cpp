@@ -2,7 +2,69 @@
 //#include "_stdafx.h"
 #include "GMapMgr.h"
 
+#ifdef G_DEFINE_SHADOW_ADD
+bool			GMapMgr::RenderObject(GCoreLibV2* pMain, GCamera* pCamera,bool bDebug ) {
+	if (m_iMapSelected == -1)
+		return false;
 
+
+	D3DXMATRIX matInvView;
+	ApplySS(pMain->GetContext(), GDxState::g_pSSClampLinear, 1);
+	ApplySS(pMain->GetContext(), GDxState::g_pSSShadowMap, 2);
+	ApplyRS(pMain->GetContext(), GDxState::g_pRSNoneCullSolid);
+
+	//오브젝트 렌더링.
+	for (int i = 0; i < m_vecMapGroup[m_iMapSelected]->m_vecObj.size(); i++)
+	{
+		if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
+		{
+			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->SetMatrix(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Render(pMain->GetContext());
+
+			if (bDebug)
+				m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+		}
+	}
+	//지형 렌더링.
+	m_vecMapGroup[m_iMapSelected]->Render(pCamera, bDebug, pMain);
+
+	return true;
+	
+}
+bool			GMapMgr::RenderShadow(GCoreLibV2* pMain, D3DXMATRIX* matView, D3DXMATRIX* matProj,bool bDebug) {
+	if (m_iMapSelected == -1)
+		return false;
+
+	ApplyDSS(pMain->GetContext(), GDxState::g_pDSSDepthEnable);
+	//ApplyRS(GetContext(), TDxState::g_pRSBackCullSolid);
+	ApplyBS(pMain->GetContext(), GDxState::g_pAlphaBlend);
+	ApplyRS(pMain->GetContext(), GDxState::g_pRSSlopeScaledDepthBias);
+
+	m_vecMapGroup[m_iMapSelected]->m_HeightMap.SetMatrix(NULL, matView, matProj);
+	m_vecMapGroup[m_iMapSelected]->m_HeightMap.PreRender(pMain->GetContext());
+	pMain->GetContext()->VSSetShader(pMain->m_pShadowVS.Get(), NULL, 0);
+	//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
+	// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
+	// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
+	pMain->GetContext()->PSSetShader(NULL, NULL, 0);
+	m_vecMapGroup[m_iMapSelected]->m_HeightMap.PostRender(pMain->GetContext());
+
+	//오브젝트 렌더링.
+	for (int i = 0; i < m_vecMapGroup[m_iMapSelected]->m_vecObj.size(); i++)
+	{
+		if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
+		{
+			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->SetMatrix(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, matView, matProj);
+			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Render(pMain->GetContext());
+
+			if (bDebug)
+				m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, matView, matProj);
+		}
+	}
+
+	return true;
+}
+#endif
 bool			GMapMgr::Init()
 {
 
@@ -13,7 +75,7 @@ bool			GMapMgr::Init()
 	return true; 
 }
 
-bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex, GCamera* pCamera)
+bool GMapGroup::CreateInit(GCoreLibV2* pMain, int Width, int Height, float Distance, CString strTex, GCamera* pCamera)
 {
 	Init();
 
@@ -31,12 +93,24 @@ bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex
 	//theApp.m_MapDesc.strTextureFile = m_strCharName;
 
 	//m_MapDesc = { Width, Height, Distance, 0.1f,L"data/sand.jpg", L"data/shader/CustomizeMap.hlsl" };
+#ifdef G_DEFINE_SHADOW_ADD
 	m_MapDesc = {
-		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,		
+		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
 		//Distance, 0.1f,
 		20.0f, 1.0f,
-		szCharPath, 
-		G_DEFINE_MAP_SHADER };
+		szCharPath,
+		G_SHA_MAP_DIFFUSE_SHADOW
+};
+#else
+	m_MapDesc = {
+		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
+		//Distance, 0.1f,
+		20.0f, 1.0f,
+		szCharPath,
+		G_DEFINE_MAP_SHADER
+};
+#endif
+
 
 	if (!m_HeightMap.Load(m_MapDesc))
 	{
@@ -51,6 +125,22 @@ bool GMapGroup::CreateInit(int Width, int Height, float Distance, CString strTex
 	m_QuadTree.Update(g_pd3dDevice, pCamera);
 
 
+	if (pMain != NULL) {
+		float fWidthLength = m_HeightMap.m_fSellDistance*m_HeightMap.m_iNumCols*
+			m_HeightMap.m_fSellDistance*m_HeightMap.m_iNumCols;
+		float fHeightLength = m_HeightMap.m_fSellDistance*m_HeightMap.m_iNumRows*
+			m_HeightMap.m_fSellDistance*m_HeightMap.m_iNumRows;
+
+		// 지형의 대각선의 길이, 텍스처에 적합하게 배치하려고 작업한다.
+		float fMaxViewDistance = sqrt(fWidthLength + fHeightLength);
+		//D3DXMatrixPerspectiveFovLH( &m_matShadowProj, D3DX_PI*0.25f, 1.0f, 20.0f, 200.0f );
+		//D3DXMatrixOrthoLH( &m_matShadowProj, fMaxViewDistance, fMaxViewDistance, 0.0f, 100.0f );
+
+		D3DXMatrixOrthoOffCenterLH( &pMain->m_matShadowProj,
+			-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 10000.0f );
+		//D3DXMatrixOrthoOffCenterLH(&pMain->m_matShadowProj,
+		//	-fMaxViewDistance * 2, fMaxViewDistance * 2, -fMaxViewDistance * 2, fMaxViewDistance * 2, 0.0f, 10000.0f);
+	}
 }
 bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 {
@@ -142,7 +232,7 @@ bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 	return false;
 }
 
-bool			GMapMgr::Render(GCamera* pCamera, bool bDebug)
+bool			GMapMgr::Render(GCamera* pCamera, bool bDebug,GCoreLibV2* pMain)
 {
 
 	//if (m_vecMapGroup.size() == 0)
@@ -217,7 +307,7 @@ void GMapMgr::GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr) {
 	_tcscpy((TCHAR*)pOutStr, strDir);
 }
 
-bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
+bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera, GCoreLibV2* pMain) {
 
 	vector<CString> vecStr;
 
@@ -273,7 +363,7 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 
 	pMap->m_HeightMap.m_bStaticLight = true;
 
-	pMap->CreateInit(0, 0, 0, vecStr[0]/*strTex*/, pCamera);
+	pMap->CreateInit(pMain, 0, 0, 0, vecStr[0]/*strTex*/, pCamera);
 
 	_tcsncpy_s(pMap->m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
 	_tcsncpy_s(pMap->m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
@@ -304,18 +394,34 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera) {
 		float fTransY		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
 		float fTransZ		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 7]);
 
+#ifdef G_DEFINE_SHADOW_ADD
+		if (iLightSpecular == 1) {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_SHADOW_REVERSE, G_LIGHT_TYPE_SPECULAR);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_SHADOW, G_LIGHT_TYPE_SPECULAR);
+	}
+		else {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_SHADOW_REVERSE);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_SHADOW);
+		}
+#else
 		if (iLightSpecular == 1) {
 			if (iLightReverse == 1)
 				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_REVERSE, G_LIGHT_TYPE_SPECULAR);
 			else if (iLightReverse == 0)
-				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR,G_LIGHT_TYPE_SPECULAR);
-		}
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);
+	}
 		else {
 			if (iLightReverse == 1)
 				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_REVERSE);
 			else if (iLightReverse == 0)
 				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE);
 		}
+#endif
+		
 
 
 		auto objData = make_shared<GObjData>();

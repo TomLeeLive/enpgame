@@ -12,8 +12,6 @@
 #include "MapToolView.h"
 #include "GCreateMapDlg.h"
 
-
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -59,8 +57,11 @@ bool CMapToolApp::Init()
 
 	//좀비 캐릭터 추가[S]
 	I_CharMgr.Init();
-
+#ifdef G_DEFINE_SHADOW_ADD
+	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharZombie_shadow.gci")))
+#else
 	if (!I_CharMgr.Load(GetDevice(), m_pImmediateContext, _T("data/CharZombie.gci")))
+#endif
 	{
 		return false;
 	}
@@ -74,6 +75,8 @@ bool CMapToolApp::Init()
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 	m_HeroObj.push_back(pObjA);
 	//좀비 캐릭터 추가[E]
+
+
 
 	return true;
 }
@@ -112,7 +115,47 @@ bool CMapToolApp::Frame()
 }
 bool CMapToolApp::Render()
 {	
-	m_MapMgr.Render(m_pMainCamera.get(),true);
+#ifdef G_DEFINE_SHADOW_ADD
+	ID3D11ShaderResourceView* pSRVs[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+	GetContext()->PSSetShaderResources(0, 16, pSRVs);
+
+	D3DXVECTOR4 vClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	D3DXVECTOR3 vLookat = D3DXVECTOR3(0, 0, 0);
+	D3DXVECTOR3 vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	//-----------------------------------------------------
+	// 지형 및 오브젝트의 그림자맵 생성
+	//-----------------------------------------------------		
+	if (m_RT.Begin(m_pImmediateContext, vClearColor))
+	{
+		D3DXMatrixLookAtLH(&m_matShadowView, &m_vLightPos, &vLookat, &vUp);
+		m_MapMgr.RenderShadow(this, &m_matShadowView, &m_matShadowProj,true);
+
+		//캐릭터 렌더
+		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+		{
+			m_HeroObj[iChar]->m_matWorld._42 = 36.2f;
+			m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+			m_HeroObj[iChar]->Render(GetContext());
+		}
+
+
+		m_RT.End(m_pImmediateContext);
+	}
+	////-----------------------------------------------------
+	//// 오브젝트 + 쉐도우 랜더링
+	////-----------------------------------------------------	
+	m_MapMgr.RenderObject(this,m_pMainCamera.get(),true);
+
+	//캐릭터 렌더
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		m_HeroObj[iChar]->m_matWorld._42 = 36.2f;
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->Render(GetContext());
+	}
+
+#else
+	m_MapMgr.Render(m_pMainCamera.get(), true);
 
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
@@ -120,10 +163,13 @@ bool CMapToolApp::Render()
 		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
 		m_HeroObj[iChar]->Render(m_pImmediateContext);
 	}
+#endif
+
 	return true;
 }
 bool CMapToolApp::Release()
 {
+
 	m_MapMgr.Release();
 	
 	I_CharMgr.Release();
@@ -166,6 +212,7 @@ HRESULT CMapToolApp::DeleteResource()
 
 CMapToolApp::CMapToolApp()
 {
+
 	m_bHiColorIcons = TRUE;
 
 	// 다시 시작 관리자 지원
@@ -294,8 +341,6 @@ BOOL CMapToolApp::InitInstance()
 	GWindow::m_iWindowHeight = rcClient.Height();
 
 	GCoreLibV2::GInit();
-
-
 
 
 

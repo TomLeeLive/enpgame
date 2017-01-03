@@ -11,8 +11,17 @@
 
 #define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
 #define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
+
+#define G_SHA_OBJ_DIFFUSE_SHADOW L"data/shader_shadow/Obj_Diffuse_shadow.hlsl"
+#define G_SHA_OBJ_DIFFUSE_SHADOW_REVERSE L"data/shader_shadow/Obj_Diffuse_Rev_shadow.hlsl"
+
 #define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
 #define G_SHA_OBJ_SPECULAR_REVERSE L"data/shader/Obj_Specular_Rev.hlsl"
+
+#define G_SHA_OBJ_SPECULAR_SHADOW L"data/shader_shadow/Obj_Specular_shadow.hlsl"
+#define G_SHA_OBJ_SPECULAR_SHADOW_REVERSE L"data/shader_shadow/Obj_Specular_Rev_shadow.hlsl"
+
+#define G_SHA_MAP_DIFFUSE_SHADOW L"data/shader_shadow/CustomizeMap_shadow.hlsl"
 
 #define G_DEFINE_MAP_DIR L"data/map/"
 #define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap_light.hlsl"
@@ -68,12 +77,12 @@ public:
 
 	bool			DrawQuadLine(GNode* pNode, GCamera* pCamera);
 	bool			DrawDebug(GCamera* pCamera);
-	bool			CreateInit(int Width, int Height, float Distance, CString strTex, GCamera* pCamera);
+	bool			CreateInit(GCoreLibV2* pMain, int Width, int Height, float Distance, CString strTex, GCamera* pCamera);
 
 
 	bool			Init();
 	bool			Frame(GCamera* pCamera, bool bDebug,GInput* pInput = NULL);
-	bool			Render(GCamera* pCamera, bool bDebug);
+	bool			Render(GCamera* pCamera, bool bDebug, GCoreLibV2* pMain = NULL);
 	bool			Release();
 	HRESULT			CreateResource();
 	HRESULT			DeleteResource();

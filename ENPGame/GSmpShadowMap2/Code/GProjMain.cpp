@@ -2,7 +2,7 @@
 
 GProjMain* g_pMain;
 
-const float g_fMaxSize = 1024;
+//const float g_fMaxSize = 1024;
 bool GProjMain::Init()
 {
 	I_CharMgr.Init();
@@ -144,6 +144,14 @@ bool GProjMain::Render()
 	{					
 		D3DXMatrixLookAtLH( &m_matShadowView, &m_vLightPos, &vLookat, &vUp );		
 		RenderShadow( NULL, &m_matShadowView, &m_matShadowProj );
+
+		//Ä³¸¯ÅÍ ·»´õ¸µ.
+		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+		{
+			m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, &m_matShadowView, &m_matShadowProj);
+			m_HeroObj[iChar]->Render(GetContext());
+		}
+
 		m_RT.End(m_pImmediateContext);
 	}	
 	////-----------------------------------------------------
@@ -170,6 +178,30 @@ bool GProjMain::Render()
 		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
 	m_CustomMap.PostRender(GetContext());
 	
+
+
+	////-----------------------------------------------------
+	////Ä³¸¯ÅÍ ·»´õ¸µ
+	////-----------------------------------------------------
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		D3DXMATRIX matInvView;
+		D3DXMatrixInverse(&matInvView, 0, m_pMainCamera->GetViewMatrix());
+		D3DXMATRIX matWVPT1 = m_HeroObj[iChar]->m_matWorld * m_matShadowView * m_matShadowProj * m_matTexture;
+		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+		//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+		m_cbShadow.g_iNumKernel = 3;
+		GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+
+		m_HeroObj[iChar]->Render(GetContext());
+	}
+
+
 	/////////////////////////////////////////
 	// µð¹ö±ë
 	/////////////////////////////////////////
@@ -207,22 +239,7 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		m_pBoxShape->PostRender(GetContext());
 	}
 
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	{
-		D3DXMatrixInverse(&matInvView, 0, matView);
-		D3DXMATRIX matWVPT1 = m_HeroObj[iChar]->m_matWorld * m_matShadowView * m_matShadowProj * m_matTexture;
-		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
-		//m_cbShadow.g_ShadowID = m_fObjID[iObj];
-		m_cbShadow.g_iNumKernel = 3;
-		GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-		GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-		GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
 
-		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, matView, matProj);
-		
-		m_HeroObj[iChar]->Render(GetContext());
-	}
 
 	if(m_Obj->m_LightType == G_LIGHT_TYPE_SPECULAR){
 		m_Obj->m_cbLight.g_vEyeDir.x = m_pMainCamera->m_vLookVector.x;
@@ -266,14 +283,7 @@ void GProjMain::RenderShadow( D3DXMATRIX* matShadow,
 		m_pBoxShape->PostRender(GetContext());
 	}
 
-	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
-	{
-		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, matView, matProj);
-		
-		m_HeroObj[iChar]->Render(GetContext());
-	
-		
-	}
+
 	m_Obj->SetMatrix(&m_Obj->m_matWorld, matView, matProj);
 	m_Obj->Render(GetContext());
 

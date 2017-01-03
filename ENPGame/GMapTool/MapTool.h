@@ -40,7 +40,7 @@
 #include "GMapCamera.h"
 
 #include "GZombie.h"
-
+#include "_stdafx.h"
 
 enum G_MAP_TOOL_EXT {
 	G_MAP_TOOL_EXT_MAP,
@@ -56,6 +56,7 @@ enum G_MAP_TOOL_EXT {
 class CMapToolApp : public CWinAppEx, public GCoreLibV2
 {
 public:
+
 	GMapMgr							m_MapMgr;
 
 	vector<shared_ptr<GZombie>>		m_HeroObj;

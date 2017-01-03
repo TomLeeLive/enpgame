@@ -165,35 +165,76 @@ bool			GMapGroup::Frame(GCamera* pCamera,bool bDebug, GInput* pInput) {
 	return true;
 
 };
-bool			GMapGroup::Render(GCamera* pCamera, bool bDebug) {
+bool			GMapGroup::Render(GCamera* pCamera, bool bDebug, GCoreLibV2* pMain) {
 
+#ifdef G_DEFINE_SHADOW_ADD
+	if (pMain != NULL) {
+
+		////-----------------------------------------------------
+		//// 1패스: 지형 + 쉐도우 랜더링
+		////-----------------------------------------------------		
+		ApplySS(pMain->GetContext(), GDxState::g_pSSClampLinear, 1);
+		ApplySS(pMain->GetContext(), GDxState::g_pSSShadowMap, 2);
+		ApplyRS(pMain->GetContext(), GDxState::g_pRSBackCullSolid);
+
+		//m_CustomMap.SetMatrix(NULL, matView, matProj);
+		m_HeightMap.SetMatrix(NULL, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+		D3DXMATRIX matWVPT = pMain->m_matShadowView * pMain->m_matShadowProj * pMain->m_matTexture;
+		D3DXMatrixTranspose(&pMain->m_cbShadow.g_matShadow, &matWVPT);
+		pMain->m_cbShadow.g_ShadowID = 0;
+		pMain->m_cbShadow.g_iNumKernel = 3;
+		pMain->GetContext()->UpdateSubresource(pMain->m_pShadowConstantBuffer.Get(), 0, NULL, &pMain->m_cbShadow, 0, 0);
+		pMain->GetContext()->VSSetConstantBuffers(2, 1, pMain->m_pShadowConstantBuffer.GetAddressOf());
+		pMain->GetContext()->PSSetConstantBuffers(2, 1, pMain->m_pShadowConstantBuffer.GetAddressOf());
+
+		//m_CustomMap.PreRender(pMain->GetContext());
+		m_HeightMap.PreRender(pMain->GetContext());
+		pMain->GetContext()->PSSetShaderResources(1, 1, pMain->m_RT.m_pDsvSRV.GetAddressOf());
+		//m_CustomMap.PostRender(pMain->GetContext());
+		m_HeightMap.PostRender(pMain->GetContext());
+
+		/////////////////////////////////////////
+		// 디버깅
+		/////////////////////////////////////////
+		if (pMain->m_bColorTexRender)
+		{
+			pMain->m_pQuad->SetMatrix(NULL, NULL, NULL);
+			pMain->m_pQuad->PreRender(pMain->GetContext());
+			//GetContext()->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
+			pMain->GetContext()->PSSetShaderResources(0, 1, pMain->m_RT.m_pDsvSRV.GetAddressOf());
+			pMain->m_pQuad->PostRender(pMain->GetContext());
+		}
+	}
+#else
 	//--------------------------------------------------------------------------------------
 	//  QuadTree Render
 	//--------------------------------------------------------------------------------------
 	if (m_MapDesc.iNumCols > 0 || m_MapDesc.iNumRows > 0)
 	{
-
+	
 		m_HeightMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 		m_HeightMap.Render(g_pImmediateContext);
-
+	
 		//m_CustomMap.SetMatrix(pCamera->GetWorldMatrix(), pCamera->GetViewMatrix(),
 		//	pCamera->GetProjMatrix());
 		//m_CustomMap.Render(g_pImmediateContext);
-
+	
 		//DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
-
+	
 	for (int i = 0; i < m_vecObj.size(); i++)
 	{
 		if (true == m_vecObjRender[i])
 		{
 			m_vecObj[i]->m_pObj->SetMatrix(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 			m_vecObj[i]->m_pObj->Render(g_pImmediateContext);
-
+	
 			if (bDebug)
-			m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+				m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix   ());
 		}
 	}
+#endif
+	
 
 	return true;
 

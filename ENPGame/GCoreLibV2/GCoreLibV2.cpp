@@ -110,6 +110,41 @@ bool GCoreLibV2::GInit()
 	if( !PreInit() ) return false;
 	if( !Init() ) return false;
 	if( !PostInit() ) return false;
+
+#ifdef G_DEFINE_SHADOW_ADD
+
+	SAFE_ZERO(m_pQuad);
+	m_bColorTexRender = true;
+
+
+
+	SAFE_NEW(m_pQuad, GPlaneShape);
+	m_pQuad->SetScreenVertex(15, 15, 300, 300,
+		D3DXVECTOR2(m_iWindowWidth, m_iWindowHeight));
+	if (FAILED(m_pQuad->Create(GetDevice(), L"data/shader/plane.hlsl", L"data_test/castle.jpg")))
+	{
+		MessageBox(0, _T("m_pLIne ½ÇÆÐ"), _T("Fatal error"), MB_OK);
+		return false;
+	}
+	ComPtr<ID3DBlob> pVSBlob;
+	m_pShadowVS.Attach(DX::LoadVertexShaderFile(GetDevice(), L"data/shader_shadow/CustomizeMap_shadow.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
+	m_pShadowPS.Attach(DX::LoadPixelShaderFile(GetDevice(), L"data/shader_shadow/CustomizeMap_shadow.hlsl", "SHADOW_PS"));
+
+
+	// Create Source and Dest textures
+	m_RT.m_DSFormat = DXGI_FORMAT_R32_TYPELESS;
+	m_RT.Create(GetDevice(), g_fMaxSize, g_fMaxSize);// m_bColorTexRender );	
+
+	m_matTexture = D3DXMATRIX(0.5f, 0.0f, 0.0f, 0.0f
+		, 0.0f, -0.5f, 0.0f, 0.0f
+		, 0.0f, 0.0f, 1.0f, 0.0f
+		, 0.5f, 0.5f, 0.0f, 1.0f);
+	m_pShadowConstantBuffer.Attach(DX::CreateConstantBuffer(m_pd3dDevice, &m_cbShadow, 1, sizeof(SHADOW_CONSTANT_BUFFER)));
+
+
+	m_vLightPos = D3DXVECTOR3(G_DEFINE_LIGHT_POS);
+#endif
+
 	return true;
 }
 
@@ -200,6 +235,11 @@ bool GCoreLibV2::GRelease()
 	//if( !m_Font.Release() ) return false;	
 	if( !m_Font.Release() ) return false;	
 	if( !I_Input.Release() ) return false;	
+
+#ifdef G_DEFINE_SHADOW_ADD
+	SAFE_DEL(m_pQuad);
+#endif
+
 	return Release();
 }
 bool GCoreLibV2::GFrame()
@@ -242,6 +282,7 @@ bool GCoreLibV2::PreRender()
 	m_pImmediateContext->RSSetViewports(1, &m_DefaultRT.m_vp);
 	ApplyDSS(m_pImmediateContext, GDxState::g_pDSSDepthEnable);
 	//LeaveCriticalSection(&g_CSImmediateContext);
+
 	return true;
 }
 bool GCoreLibV2::DrawInfo() {
