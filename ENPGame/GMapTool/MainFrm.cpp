@@ -549,7 +549,7 @@ void CMainFrame::OnSavemap()
 
 
 				//오브젝트 scl 값 출력
-				strNum.Format(_T("%d"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_iScl);
+				strNum.Format(_T("%f"), theApp.m_MapMgr.m_vecMapGroup[theApp.m_MapMgr.m_iMapSelected]->m_vecObj[iMapObj]->m_fScl);
 				str = strNum;
 				str.Append(_T("\n"));
 				fprintf(fp, (CStringA)str);
