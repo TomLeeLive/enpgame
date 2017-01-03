@@ -51,7 +51,7 @@ bool GProjMain::Init()
 	// 박스 오브젝트 생성
 	//--------------------------------------------------------------------------------------
 	SAFE_NEW(m_pBoxShape, GBoxShape);
-	if (FAILED(m_pBoxShape->Create(GetDevice(), L"data/shader_shadow/Obj_shadow.hlsl", L"data_test/castle.jpg")))
+	if (FAILED(m_pBoxShape->Create(GetDevice(), L"data/shader_shadow/Obj_Diffuse_shadow.hlsl", L"data_test/castle.jpg")))
 	{
 		MessageBox(0, _T("m_pBoxShape 실패"), _T("Fatal error"), MB_OK);
 		return 0;
