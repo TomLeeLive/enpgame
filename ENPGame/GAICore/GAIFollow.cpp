@@ -26,11 +26,11 @@ bool GAIFollow::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX 
 	{
 		if (fDistance >= fDistance2)
 		{
-			iMyIndex->RotationAndTrans(vHeroPos);
+			iMyIndex->RotationAndTrans(vHeroPos2);
 		}
 		else
 		{
-			iMyIndex->RotationAndTrans(vHeroPos2);
+			iMyIndex->RotationAndTrans(vHeroPos);
 		}
 	}
 
