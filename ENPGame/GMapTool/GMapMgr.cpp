@@ -91,7 +91,7 @@ bool			GMapMgr::Init(GCoreLibV2* pMain)
 	RasterizerDesc.CullMode = D3D11_CULL_NONE;
 	RasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	RasterizerDesc.FrontCounterClockwise = FALSE;
-	RasterizerDesc.DepthBias = 100000;
+	RasterizerDesc.DepthBias = 16000;
 	RasterizerDesc.DepthBiasClamp = 0;
 	RasterizerDesc.SlopeScaledDepthBias = 1.0f;
 	RasterizerDesc.ScissorEnable = FALSE;
