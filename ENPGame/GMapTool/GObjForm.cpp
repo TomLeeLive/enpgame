@@ -6,7 +6,7 @@
 
 #include "MapTool.h"
 #include "GObjForm.h"
-#include "GMapMgr.h"
+#include "map/GMapMgr.h"
 
 #include "MainFrm.h"
 

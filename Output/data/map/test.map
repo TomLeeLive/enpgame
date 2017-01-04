@@ -26,7 +26,7 @@ data\object\building\building1.GBS
 1258.640015
 data\object\building\building4.GBS
 1
-0
+1
 10.000000
 135.000000
 1217.609985
@@ -34,7 +34,7 @@ data\object\building\building4.GBS
 1418.430054
 data\object\building\building5.GBS
 1
-0
+1
 10.000000
 45.000000
 3285.903809
@@ -45,6 +45,6 @@ data\object\dropship\dropship_land.GBS
 1
 9.000000
 0.000000
+1349.170288
 0.000000
-0.000000
-0.000000
+-494.514160

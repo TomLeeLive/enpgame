@@ -1,5 +1,5 @@
 #define WIDEN(x) g_##x
-#define SMAP_SIZE 1024
+#define SMAP_SIZE 2048
 #define SHADOW_EPSILON 0.005f
 
 Texture2D		g_txDiffuse: register (t0);

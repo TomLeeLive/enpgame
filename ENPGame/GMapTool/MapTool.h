@@ -36,7 +36,7 @@
 #include "GSaveMapDlg.h"
 
 
-#include "GMapMgr.h"
+#include "map/GMapMgr.h"
 #include "GMapCamera.h"
 
 #include "GZombie.h"

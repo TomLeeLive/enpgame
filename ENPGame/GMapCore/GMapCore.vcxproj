@@ -167,7 +167,9 @@ copy "*.h" "..\\..\\include\\Inc\\map"</Command>
     <ClCompile Include="GBspTree.cpp" />
     <ClCompile Include="GHeightMap.cpp" />
     <ClCompile Include="GMap.cpp" />
+    <ClCompile Include="GMapGroup.cpp" />
     <ClCompile Include="GMapLOD.cpp" />
+    <ClCompile Include="GMapMgr.cpp" />
     <ClCompile Include="GMapObject.cpp" />
     <ClCompile Include="GNode.cpp" />
     <ClCompile Include="GNoise.cpp" />
@@ -184,7 +186,9 @@ copy "*.h" "..\\..\\include\\Inc\\map"</Command>
     <ClInclude Include="GBspTree.h" />
     <ClInclude Include="GHeightMap.h" />
     <ClInclude Include="GMap.h" />
+    <ClInclude Include="GMapGroup.h" />
     <ClInclude Include="GMapLOD.h" />
+    <ClInclude Include="GMapMgr.h" />
     <ClInclude Include="GMapObject.h" />
     <ClInclude Include="GNode.h" />
     <ClInclude Include="GNoise.h" />
