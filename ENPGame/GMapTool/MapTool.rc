@@ -73,25 +73,15 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\MapTool.ico"
-
 IDR_MapToolTYPE         ICON                    "res\\MapToolDoc.ico"
-
 IDI_FILE_VIEW           ICON                    "res\\file_view.ico"
-
 IDI_FILE_VIEW_HC        ICON                    "res\\file_view_hc.ico"
-
 IDI_CLASS_VIEW          ICON                    "res\\class_view.ico"
-
 IDI_CLASS_VIEW_HC       ICON                    "res\\class_view_hc.ico"
-
 IDI_OUTPUT_WND          ICON                    "res\\output_wnd.ico"
-
 IDI_OUTPUT_WND_HC       ICON                    "res\\output_wnd_hc.ico"
-
 IDI_PROPERTIES_WND      ICON                    "res\\properties_wnd.ico"
-
 IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -99,33 +89,19 @@ IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
-
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
-
 IDR_SORT                BITMAP                  "res\\sort.bmp"
-
 IDB_SORT_24             BITMAP                  "res\\sort_hc.bmp"
-
 IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
-
 IDB_FILE_VIEW_24        BITMAP                  "res\\fileview_hc.bmp"
-
 IDB_CLASS_VIEW          BITMAP                  "res\\classview.bmp"
-
 IDB_CLASS_VIEW_24       BITMAP                  "res\\classview_hc.bmp"
-
 IDR_EXPLORER            BITMAP                  "res\\explorer.bmp"
-
 IDB_EXPLORER_24         BITMAP                  "res\\explorer_hc.bmp"
-
 IDR_MENU_IMAGES         BITMAP                  "res\\menuimages.bmp"
-
 IDB_MENU_IMAGES_24      BITMAP                  "res\\menuimages_hc.bmp"
-
 IDR_PROPERTIES          BITMAP                  "res\\properties.bmp"
-
 IDB_PROPERTIES_HC       BITMAP                  "res\\properties_hc.bmp"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -386,14 +362,14 @@ BEGIN
     LTEXT           "TODO: Æû ºä¸¦ ¹èÄ¡ÇÕ´Ï´Ù.",IDC_STATIC,33,45,93,9
 END
 
-IDD_OBJFORM DIALOGEX 0, 0, 154, 412
+IDD_OBJFORM DIALOGEX 0, 0, 154, 445
 STYLE DS_SETFONT | WS_CHILD
 FONT 9, "±¼¸²", 400, 0, 0x0
 BEGIN
     LTEXT           "OBJECT LIST",IDC_STATIC,4,6,52,9
     LISTBOX         IDC_LISTOBJ,3,16,68,92,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Obj Ãß°¡",IDC_STATIC,11,112,132,37
-    PUSHBUTTON      "GBS",IDC_BUTTONLOAD,23,124,37,17
+    PUSHBUTTON      "GBS",IDC_BUTTONLOAD,57,124,37,17
     GROUPBOX        "Scale",IDC_STATIC,10,164,38,36
     EDITTEXT        IDC_ObjSacleX,16,178,29,17,ES_AUTOHSCROLL
     GROUPBOX        "Y Rotation",IDC_STATIC,47,164,38,36
@@ -419,6 +395,7 @@ BEGIN
     CONTROL         "Reverse",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,173,40,16
     LTEXT           "Light",IDC_STATIC,91,164,16,8
     CONTROL         "Specular",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,190,45,10
+    PUSHBUTTON      "DepthMap On/Off",IDC_BUTTON3,32,406,74,18
 END
 
 
@@ -492,7 +469,7 @@ BEGIN
     IDD_OBJFORM, DIALOG
     BEGIN
         RIGHTMARGIN, 153
-        BOTTOMMARGIN, 405
+        BOTTOMMARGIN, 438
     END
 END
 #endif    // APSTUDIO_INVOKED

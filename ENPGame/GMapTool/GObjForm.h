@@ -48,6 +48,7 @@ public:
 	afx_msg void OnLbnSelchangeListmap();
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnBnClickedCheck2();
+	afx_msg void OnBnClickedButton3();
 };
 
 
