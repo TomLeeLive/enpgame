@@ -1,11 +1,14 @@
 // GCreateMapDlg.cpp : 구현 파일입니다.
 //
 
+
+
 #include "stdafx.h"
 #include "GCreateMapDlg.h"
 #include "afxdialogex.h"
 
 #include "MainFrm.h"
+
 // GCreateMapDlg 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(GCreateMapDlg, CDialogEx)
@@ -101,7 +104,7 @@ void GCreateMapDlg::OnOK()
 	pMap->m_HeightMap.m_bStaticLight = true;
 
 
-	pMap->CreateInit(&theApp, 0, 0, 0, (LPCTSTR)theApp.m_MapMgr.m_strTex, theApp.m_pMainCamera.get());
+	pMap->CreateInit(&theApp, 0, 0, 0, theApp.m_MapMgr.m_strTex, theApp.m_pMainCamera.get());
 
 	_tcsncpy_s(pMap->m_strHeight, theApp.m_MapMgr.m_strHeight, MAX_PATH);
 	_tcsncpy_s(pMap->m_strTex, theApp.m_MapMgr.m_strTex, MAX_PATH);
