@@ -114,7 +114,7 @@ void GSeqSinglePlay::RenderShadow(D3DXMATRIX* matShadow,
 //	matRot._31 = vLook_toTom.x;		matRot._32 = vLook_toTom.y;		matRot._33 = vLook_toTom.z;
 //
 //
-//	vTRans_toTom = vPosJake - vLook_toTom *1000.0f * g_fSecPerFrame;
+//	vTRans_toTom = vPosJake - vLook_toTom *1000.0f * g_fSecPerFrame;	
 //	D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
 //
 //	m_CharHero[1]->m_matWorld = matRot * matTrans;

@@ -41,6 +41,12 @@
 #define G_DEFINE_HERO_1_POS_Y 60.0f
 #define G_DEFINE_HERO_1_POS_Z -4050.0f
 
+enum CheckState
+{
+	G_JAKE_IDLE =0,
+	G_JAKE_WALK =1,
+	G_JAKE_HEAL =2
+};
 enum G_OBJECT {
 	G_OBJ_LAB = 0,
 	G_OBJ_DROPSHIP,
