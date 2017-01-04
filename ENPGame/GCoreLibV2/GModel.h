@@ -1,4 +1,12 @@
 #pragma once
+
+#define G_DEFINE_SHADOW_ADD 1
+
+#ifdef G_DEFINE_SHADOW_ADD
+#define G_DEFINE_LIGHT_POS 10307.0f, 6910.0f, 130.0f
+const float g_fMaxSize = 1024;
+#endif
+
 #include "GObjStd.h"
 #include "GLight.h"
 #include <tchar.h>

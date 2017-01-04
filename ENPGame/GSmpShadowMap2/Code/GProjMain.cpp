@@ -246,6 +246,17 @@ void GProjMain::RenderObject( D3DXMATRIX* matView, D3DXMATRIX* matProj )
 		m_Obj->m_cbLight.g_vEyeDir.y = m_pMainCamera->m_vLookVector.y;
 		m_Obj->m_cbLight.g_vEyeDir.z = m_pMainCamera->m_vLookVector.z;
 	}
+
+	D3DXMatrixInverse(&matInvView, 0, matView);
+	D3DXMATRIX matWVPT1 = m_Obj->m_matWorld * m_matShadowView * m_matShadowProj * m_matTexture;
+	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+	//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+	m_cbShadow.g_iNumKernel = 3;
+	GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+	GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+	GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
 	m_Obj->SetMatrix(&m_Obj->m_matWorld, matView, matProj);
 	m_Obj->Render(GetContext());
 	

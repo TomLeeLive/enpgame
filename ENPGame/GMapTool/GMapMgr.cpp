@@ -18,6 +18,16 @@ bool			GMapMgr::RenderObject(GCoreLibV2* pMain, GCamera* pCamera,bool bDebug ) {
 	{
 		if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
 		{
+			D3DXMatrixInverse(&matInvView, 0, pCamera->GetViewMatrix());
+			D3DXMATRIX matWVPT1 = m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld * pMain->m_matShadowView * pMain->m_matShadowProj * pMain->m_matTexture;
+			D3DXMatrixTranspose(&pMain->m_cbShadow.g_matShadow, &matWVPT1);
+			//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+			pMain->m_cbShadow.g_iNumKernel = 3;
+			pMain->GetContext()->UpdateSubresource(pMain->m_pShadowConstantBuffer.Get(), 0, NULL, &pMain->m_cbShadow, 0, 0);
+			pMain->GetContext()->VSSetConstantBuffers(2, 1, pMain->m_pShadowConstantBuffer.GetAddressOf());
+			pMain->GetContext()->PSSetConstantBuffers(2, 1, pMain->m_pShadowConstantBuffer.GetAddressOf());
+			pMain->GetContext()->PSSetShaderResources(1, 1, pMain->m_RT.m_pDsvSRV.GetAddressOf());
+
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->SetMatrix(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Render(pMain->GetContext());
 
@@ -43,23 +53,25 @@ bool			GMapMgr::RenderShadow(GCoreLibV2* pMain, D3DXMATRIX* matView, D3DXMATRIX*
 	m_vecMapGroup[m_iMapSelected]->m_HeightMap.SetMatrix(NULL, matView, matProj);
 	m_vecMapGroup[m_iMapSelected]->m_HeightMap.PreRender(pMain->GetContext());
 	pMain->GetContext()->VSSetShader(pMain->m_pShadowVS.Get(), NULL, 0);
-	//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
-	// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
-	// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
-	pMain->GetContext()->PSSetShader(NULL, NULL, 0);
+		//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
+		// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
+		// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
+		pMain->GetContext()->PSSetShader(NULL, NULL, 0);
 	m_vecMapGroup[m_iMapSelected]->m_HeightMap.PostRender(pMain->GetContext());
 
 	//오브젝트 렌더링.
 	for (int i = 0; i < m_vecMapGroup[m_iMapSelected]->m_vecObj.size(); i++)
 	{
-		if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
-		{
+		//if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
+		//{
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->SetMatrix(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, matView, matProj);
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Render(pMain->GetContext());
 
-			if (bDebug)
-				m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, matView, matProj);
-		}
+			//m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->PreRender(pMain->GetContext());
+			//pMain->GetContext()->VSSetShader(pMain->m_pShadowVS.Get(), NULL, 0);
+			//pMain->GetContext()->PSSetShader(NULL, NULL, 0);
+			//m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Draw(pMain->GetContext(), m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj);
+		//}
 	}
 
 	return true;
@@ -111,7 +123,7 @@ bool GMapGroup::CreateInit(GCoreLibV2* pMain, int Width, int Height, float Dista
 };
 #endif
 
-
+	//m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
 	if (!m_HeightMap.Load(m_MapDesc))
 	{
 		return false;
@@ -124,7 +136,7 @@ bool GMapGroup::CreateInit(GCoreLibV2* pMain, int Width, int Height, float Dista
 	m_QuadTree.Build(m_MapDesc.iNumCols, m_MapDesc.iNumRows);
 	m_QuadTree.Update(g_pd3dDevice, pCamera);
 
-
+#ifdef G_DEFINE_SHADOW_ADD
 	if (pMain != NULL) {
 		float fWidthLength = m_HeightMap.m_fSellDistance*m_HeightMap.m_iNumCols*
 			m_HeightMap.m_fSellDistance*m_HeightMap.m_iNumCols;
@@ -137,10 +149,11 @@ bool GMapGroup::CreateInit(GCoreLibV2* pMain, int Width, int Height, float Dista
 		//D3DXMatrixOrthoLH( &m_matShadowProj, fMaxViewDistance, fMaxViewDistance, 0.0f, 100.0f );
 
 		D3DXMatrixOrthoOffCenterLH( &pMain->m_matShadowProj,
-			-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 10000.0f );
+			-fMaxViewDistance/2, fMaxViewDistance/2, -fMaxViewDistance/2, fMaxViewDistance/2, 0.0f, 20000.0f );
 		//D3DXMatrixOrthoOffCenterLH(&pMain->m_matShadowProj,
 		//	-fMaxViewDistance * 2, fMaxViewDistance * 2, -fMaxViewDistance * 2, fMaxViewDistance * 2, 0.0f, 10000.0f);
 	}
+#endif
 }
 bool			GMapMgr::Frame(GCamera* pCamera, GInput* pInput)
 {
