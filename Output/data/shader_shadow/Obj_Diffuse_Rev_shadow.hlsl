@@ -145,7 +145,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
 	}
 	fLightAmount /= g_iNumKernel*g_iNumKernel;
 	float4 fColor = float4(fLightAmount, fLightAmount, fLightAmount, 1.0f);
-	float4 vFinalColor = vDiffuseColor*Diffuse(input.n);// *max(0.5f, fLightAmount);
+	float4 vFinalColor = vDiffuseColor*Diffuse(input.n)*max(0.5f, fLightAmount);
 	vFinalColor.a = 1.0f;
 	return  vFinalColor;
 }

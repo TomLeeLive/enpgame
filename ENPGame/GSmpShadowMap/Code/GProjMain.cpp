@@ -2,7 +2,7 @@
 
 GProjMain* g_pMain;
 
-const float g_fMaxSize = 1024;
+//const float g_fMaxSize = 1024;
 bool GProjMain::Init()
 {
 	I_CharMgr.Init();

@@ -4,13 +4,8 @@
 #include "GInput.h"
 #include "GDirectWrite.h"
 #include "GShape.h"
+#include "GModel.h"
 
-#define G_DEFINE_SHADOW_ADD 1
-
-#ifdef G_DEFINE_SHADOW_ADD
-#define G_DEFINE_LIGHT_POS 100, 100, 0
-const float g_fMaxSize = 1024;
-#endif
 
 class GCoreLibV2 : public GWindow
 {

@@ -113,6 +113,8 @@ bool CMapToolApp::Frame()
 	}
 	return true; 
 }
+#define G_DEFINE_LIGHT_LOOKAT_POS 0.0f, 0.0f, 0.0f
+
 bool CMapToolApp::Render()
 {	
 #ifdef G_DEFINE_SHADOW_ADD
@@ -120,7 +122,7 @@ bool CMapToolApp::Render()
 	GetContext()->PSSetShaderResources(0, 16, pSRVs);
 
 	D3DXVECTOR4 vClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	D3DXVECTOR3 vLookat = D3DXVECTOR3(0, 0, 0);
+	D3DXVECTOR3 vLookat = D3DXVECTOR3(G_DEFINE_LIGHT_LOOKAT_POS);
 	D3DXVECTOR3 vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	//-----------------------------------------------------
 	// 지형 및 오브젝트의 그림자맵 생성
@@ -134,7 +136,7 @@ bool CMapToolApp::Render()
 		for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 		{
 			m_HeroObj[iChar]->m_matWorld._42 = 36.2f;
-			m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+			m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, &m_matShadowView, &m_matShadowProj);
 			m_HeroObj[iChar]->Render(GetContext());
 		}
 
@@ -146,11 +148,45 @@ bool CMapToolApp::Render()
 	////-----------------------------------------------------	
 	m_MapMgr.RenderObject(this,m_pMainCamera.get(),true);
 
+	/*
 	//캐릭터 렌더
 	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
 	{
 		m_HeroObj[iChar]->m_matWorld._42 = 36.2f;
+	
+		D3DXMATRIX matInvView;
+		D3DXMatrixInverse(&matInvView, 0, m_pMainCamera->GetViewMatrix());
+		D3DXMATRIX matWVPT1 = m_HeroObj[iChar]->m_matWorld * m_matShadowView * m_matShadowProj * m_matTexture;
+		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+		//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+		m_cbShadow.g_iNumKernel = 3;
+		GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
 		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+		m_HeroObj[iChar]->Render(GetContext());
+	}*/
+
+	////-----------------------------------------------------
+	////캐릭터 렌더링
+	////-----------------------------------------------------
+	for (int iChar = 0; iChar < m_HeroObj.size(); iChar++)
+	{
+		D3DXMATRIX matInvView;
+		D3DXMatrixInverse(&matInvView, 0, m_pMainCamera->GetViewMatrix());
+		D3DXMATRIX matWVPT1 = m_HeroObj[iChar]->m_matWorld * m_matShadowView * m_matShadowProj * m_matTexture;
+		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
+		//m_cbShadow.g_ShadowID = m_fObjID[iObj];
+		m_cbShadow.g_iNumKernel = 3;
+		GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
+		GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
+		GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
+
+		m_HeroObj[iChar]->SetMatrix(&m_HeroObj[iChar]->m_matWorld, m_pMainCamera->GetViewMatrix(), m_pMainCamera->GetProjMatrix());
+
 		m_HeroObj[iChar]->Render(GetContext());
 	}
 

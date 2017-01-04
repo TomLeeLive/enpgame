@@ -617,7 +617,7 @@ void CMainFrame::OnLoadmap()
 	int iLoad = theApp.m_LoadFiles.size() - 1;
 
 	//Map생성과 Obj 생성. 파일 이름을 넘겨서 함수에서 해당 파일 읽어서 처리한다.
-	if (theApp.m_MapMgr.LoadMap(&theApp.m_LoadFiles[iLoad], theApp.m_pMainCamera.get())) {
+	if (theApp.m_MapMgr.LoadMap(&theApp.m_LoadFiles[iLoad], theApp.m_pMainCamera.get(),&theApp)) {
 		//로드가 끝난후 오브젝트 리스트 컨트롤과 맵 리스트 컨트롤을 업데이트 해준다.
 
 		theApp.m_MapMgr.m_iMapSelected = theApp.m_MapMgr.m_vecMapGroup.size() - 1;

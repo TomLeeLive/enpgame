@@ -6,7 +6,11 @@ void GModel::FrameLight() {
 	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
 		//float t = m_Timer.GetElapsedTime() * D3DX_PI;
 		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+#ifdef G_DEFINE_SHADOW_ADD
+		D3DXMatrixTranslation(&mTranslate, G_DEFINE_LIGHT_POS);
+#else
 		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+#endif
 		//D3DXMatrixRotationY(&mRotation, t*0.1f);
 		D3DXMatrixIdentity(&mRotation);
 		D3DXMatrixMultiply(&mLightWorld, &mRotation, &mTranslate);
@@ -21,7 +25,11 @@ void GModel::FrameLight() {
 	}
 	else if (G_LIGHT_TYPE_SPECULAR == m_LightType) {
 		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+#ifdef G_DEFINE_SHADOW_ADD
+		D3DXMatrixTranslation(&mTranslate, G_DEFINE_LIGHT_POS);
+#else
 		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+#endif
 		//D3DXMatrixRotationY(&mRotation, t * 0);
 		D3DXMatrixIdentity(&mRotation);
 		D3DXMatrixMultiply(&mLightWorld, &mRotation, &mTranslate);
@@ -39,7 +47,11 @@ void GModel::SetLight(G_LIGHT_TYPE type) {
 
 	if (G_LIGHT_TYPE_DIFFUSE == m_LightType) {
 		D3DXMATRIX mLightWorld, mTranslate, mRotation;
+#ifdef G_DEFINE_SHADOW_ADD
+		D3DXMatrixTranslation(&mTranslate, G_DEFINE_LIGHT_POS);
+#else
 		D3DXMatrixTranslation(&mTranslate, 100.0f, 100.0f, 0.0f);
+#endif
 		D3DXMatrixIdentity(&mRotation);
 		//D3DXMatrixRotationY(&mRotation, D3DXToRadian(90.0f));
 		D3DXMatrixMultiply(&mLightWorld, &mRotation, &mTranslate);
