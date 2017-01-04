@@ -111,6 +111,7 @@ public:
 public:
 #ifdef G_MACRO_AI_ADD
 	GAIZombieMgr		m_GAIZombMgr;
+	void FollowTom();
 #else
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif
