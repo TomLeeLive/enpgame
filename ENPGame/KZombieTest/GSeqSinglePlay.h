@@ -112,7 +112,10 @@ public:
 #ifdef G_MACRO_AI_ADD
 	GAIZombieMgr		m_GAIZombMgr;
 	void FollowTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos);
-	void HealingTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos);
+	void HealingTom();
+	void ChageJakeState(CheckState state);
+	int BeforeState = 0;
+	int AfterState = 0;
 #else
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif

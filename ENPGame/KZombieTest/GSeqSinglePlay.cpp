@@ -124,17 +124,46 @@ bool GSeqSinglePlay::Init()
 
 	return true;
 }
-void GSeqSinglePlay::HealingTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos)
+void GSeqSinglePlay::ChageJakeState(CheckState state)
 {
-	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_ATTACK");
+	switch (state)
+	{
+	case G_JAKE_IDLE: {
 
-	m_CharHero[G_HERO_TOM].get()->m_iHP = 100;
+	}
+	break;
+	case G_JAKE_WALK: {
+		GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_WALK");
+
+		m_CharHero[G_HERO_JAKE]->Set(pChar1,
+			pChar1->m_pBoneObject,
+			pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar1->m_pBoneObject->m_Scene.iLastFrame);
+	}
+	break;
+	case G_JAKE_HEAL: {
+		GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_HEAL");
+
+		m_CharHero[G_HERO_JAKE]->Set(pChar1,
+			pChar1->m_pBoneObject,
+			pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+			pChar1->m_pBoneObject->m_Scene.iLastFrame);
+	}
+	default:
+	break;
+
+	
+
+	}
+}
+
+void GSeqSinglePlay::HealingTom()
+{
+	m_CharHero[G_HERO_TOM].get()->m_iHP += 30;
 
 }
 
 void GSeqSinglePlay::FollowTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos) {
-
-	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_WALK");
 
 	D3DXMATRIX matRot;
 	D3DXMatrixIdentity(&matRot);
@@ -304,10 +333,11 @@ bool GSeqSinglePlay::Frame()
 	float fJakePos = D3DXVec3Length(&vJakePos);
 	
 	if (m_CharHero[G_HERO_TOM]->m_iHP > 50)
-	{
+	{	
 		if (abs(fTomPos - fJakePos) > 100.0f)
 		{
-			FollowTom(vTomPos, vJakePos);
+				//ChageJakeState(G_JAKE_WALK);
+				FollowTom(vTomPos, vJakePos);
 		}
 	}
 	else
@@ -316,9 +346,10 @@ bool GSeqSinglePlay::Frame()
 		{
 			FollowTom(vTomPos, vJakePos);
 		}
-		if ((abs(fTomPos - fJakePos) == 50.0f))
+		if (abs(fTomPos - fJakePos) < 50.0f)
 		{
-			HealingTom(vTomPos, vJakePos);
+			//ChageJakeState(G_JAKE_HEAL);
+			HealingTom();
 		}
 	}
 
