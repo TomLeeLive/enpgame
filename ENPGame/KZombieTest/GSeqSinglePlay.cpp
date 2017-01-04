@@ -144,11 +144,17 @@ void GSeqSinglePlay::FollowTom() {
 	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
 	matRot._31 = vLook_toTom.x;		matRot._32 = vLook_toTom.y;		matRot._33 = vLook_toTom.z;
 
-	D3DXVECTOR3 vTRans_toTom = vJakePos - vLook_toTom *10000.0f * g_fSecPerFrame;
-	D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
+	D3DXVECTOR3 vTRans_toTom = vJakePos - vLook_toTom *10.0f * g_fSecPerFrame;
+	//D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
 
 
-	m_CharHero[1]->m_matWorld = matRot * matTrans;
+	//m_CharHero[1]->m_matWorld = matRot * matTrans;
+
+	m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraPos.x = vTRans_toTom.x;
+	m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraPos.y = vTRans_toTom.y;
+	m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraPos.z = vTRans_toTom.z;
+	m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraDir = -vLook_toTom;
+
 
 }
 
@@ -450,7 +456,7 @@ bool        GSeqSinglePlay::InitGame() {
 	
 	for (int i = 0; i < m_pFPSCamera.size(); i++) {
 
-		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*100.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
+		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*10000.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
 			, D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 	}
 
