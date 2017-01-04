@@ -67,6 +67,7 @@ BEGIN_MESSAGE_MAP(GObjForm, CFormView)
 	ON_LBN_SELCHANGE(IDC_LISTMAP, &GObjForm::OnLbnSelchangeListmap)
 	ON_BN_CLICKED(IDC_CHECK1, &GObjForm::OnBnClickedCheck1)
 	ON_BN_CLICKED(IDC_CHECK2, &GObjForm::OnBnClickedCheck2)
+	ON_BN_CLICKED(IDC_BUTTON3, &GObjForm::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -326,7 +327,7 @@ void GObjForm::OnBnClickedCheck2()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
-	BOOL bCheck = IsDlgButtonChecked(IDC_CHECK1);
+	BOOL bCheck = IsDlgButtonChecked(IDC_CHECK2);
 
 	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
 		if (bCheck == TRUE) {
@@ -341,4 +342,11 @@ void GObjForm::OnBnClickedCheck2()
 			L"선택된 오브젝트가 없습니다.\n"
 			L"오브젝트를 우선 선택해주시겠습니까?", MB_OK);
 	}
+}
+
+
+void GObjForm::OnBnClickedButton3()
+{
+	theApp.m_bColorTexRender = !theApp.m_bColorTexRender;
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
