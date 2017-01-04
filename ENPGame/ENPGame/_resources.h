@@ -33,6 +33,9 @@ enum SNDRESOURCES {
 #define G_SHA_PLANE L"data/shader/plane.hlsl"
 #define G_SHA_LINE L"data/shader/line.hlsl"
 #define G_SHA_BOX L"data/shader/box.hlsl"
+
+
+/*
 #define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
 #define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
 #define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
@@ -40,3 +43,18 @@ enum SNDRESOURCES {
 #define G_SHA_OBJ_SHADOW L"data/shader/Obj_DepthMapShadow.hlsl"
 
 #define G_SHA_MAP_SHADOW L"data/shader/CustomizeMap_shadow.hlsl"
+*/
+
+#define G_SHA_OBJ_DIFFUSE L"data/shader/Obj_Diffuse.hlsl"
+#define G_SHA_OBJ_DIFFUSE_REVERSE L"data/shader/Obj_Diffuse_Rev.hlsl"
+
+#define G_SHA_OBJ_DIFFUSE_SHADOW L"data/shader_shadow/Obj_Diffuse_shadow.hlsl"
+#define G_SHA_OBJ_DIFFUSE_SHADOW_REVERSE L"data/shader_shadow/Obj_Diffuse_Rev_shadow.hlsl"
+
+#define G_SHA_OBJ_SPECULAR L"data/shader/Obj_Specular.hlsl"
+#define G_SHA_OBJ_SPECULAR_REVERSE L"data/shader/Obj_Specular_Rev.hlsl"
+
+#define G_SHA_OBJ_SPECULAR_SHADOW L"data/shader_shadow/Obj_Specular_shadow.hlsl"
+#define G_SHA_OBJ_SPECULAR_SHADOW_REVERSE L"data/shader_shadow/Obj_Specular_Rev_shadow.hlsl"
+
+#define G_SHA_MAP_DIFFUSE_SHADOW L"data/shader_shadow/CustomizeMap_shadow.hlsl"

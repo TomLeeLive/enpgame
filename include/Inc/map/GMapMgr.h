@@ -33,8 +33,9 @@ public:
 	void	GetStringFileName(VOID* pOutStr, VOID* pInStr);
 	void	GetStringFileNameWithPath(VOID* pOutStr, VOID* pInStr);
 	bool	LoadMap(T_STR* strFile, GCamera* pCamera, GCoreLibV2* pMain = NULL);
-
-
+#ifdef G_MAP_MGR_TEST
+	bool	LoadMap(TCHAR pStr[], GCamera* pCamera, GCoreLibV2* pMain = NULL);
+#endif
 public:
 
 

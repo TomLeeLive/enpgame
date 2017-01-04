@@ -222,8 +222,8 @@ bool GN2Skybox::Render(ID3D11DeviceContext*    pContext)
 
 	DX::ApplyDSS(pContext, DX::GDxState::g_pDSSDepthDisable);
 
-	ID3D11SamplerState* ppSamplerStates[2] = { DX::GDxState::g_pSSClampPoint, DX::GDxState::g_pSSWrapLinear };
-	pContext->PSSetSamplers(0, 2, ppSamplerStates);
+	//ID3D11SamplerState* ppSamplerStates[2] = { DX::GDxState::g_pSSClampPoint, DX::GDxState::g_pSSWrapLinear };
+	//pContext->PSSetSamplers(0, 2, ppSamplerStates);
 
 	SetMatrix(&m_matWorld, &matSkyBoxView, &m_matProj);
 

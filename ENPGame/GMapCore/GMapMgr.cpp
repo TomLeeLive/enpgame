@@ -334,8 +334,8 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera, GCoreLibV2* pMain) {
 	_tcsncpy_s(pMap->m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
 	_tcsncpy_s(pMap->m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
 
-	_tcsnset_s(m_strHeight, 0, MAX_PATH);
-	_tcsnset_s(m_strTex, 0, MAX_PATH);
+	//_tcsnset_s(m_strHeight, 0, MAX_PATH);
+	//_tcsnset_s(m_strTex, 0, MAX_PATH);
 	_tcsncpy_s(m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
 	_tcsncpy_s(m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
 
@@ -425,7 +425,161 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera, GCoreLibV2* pMain) {
 
 	return true;
 }
+#ifdef G_MAP_MGR_TEST
+bool	GMapMgr::LoadMap(TCHAR pStr[], GCamera* pCamera, GCoreLibV2* pMain) {
 
+	vector<CString> vecStr;
+
+	FILE *pFile = NULL;
+
+	const wchar_t * pStrFile = pStr;// strFile->c_str();
+
+	//int len = 256;
+	char ctemp[MAX_PATH];
+
+	//TCHAR -> char 변환
+	WideCharToMultiByte(CP_ACP, 0, pStrFile, MAX_PATH, ctemp, MAX_PATH, NULL, NULL);
+
+	pFile = fopen(ctemp, "r");
+	if (pFile != NULL)
+	{
+		char strTemp[MAX_PATH];
+		char *pStr;
+
+		while (!feof(pFile))
+		{
+			pStr = fgets(strTemp, sizeof(strTemp), pFile);
+
+			if (pStr == NULL)
+				break;
+
+			// char -> TCHAR 변환
+			TCHAR szUniCode[MAX_PATH] = { 0, };
+			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pStr, strlen(pStr), szUniCode, MAX_PATH);
+
+			// TCHAR -> CString 변환
+			CString str;
+			str.Format(L"%s", szUniCode);
+			str.TrimRight();//개행문자 삭제
+			vecStr.push_back(str);
+		}
+		fclose(pFile);
+	}
+	else
+	{
+		//에러 처리
+		return false;
+	}
+
+	//하이트맵 처리 & 지형생성..(with 텍스처)
+	auto pMap = make_shared<GMapGroup>();
+
+	pMap->m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
+	if (FAILED(pMap->m_HeightMap.CreateHeightMap((TCHAR*)(LPCTSTR)vecStr[1]/*strHeight*/)))
+	{
+		return false;
+	}
+
+	pMap->m_HeightMap.m_bStaticLight = true;
+
+	TCHAR* strTex = (TCHAR*)(LPCTSTR)vecStr[0];
+	pMap->CreateInit(pMain, 0, 0, 0, strTex, pCamera);
+
+	_tcsncpy_s(pMap->m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
+	_tcsncpy_s(pMap->m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
+
+	//_tcsnset_s(m_strHeight, 0, MAX_PATH);
+	//_tcsnset_s(m_strTex, 0, MAX_PATH);
+	_tcsncpy_s(m_strHeight, (TCHAR*)(LPCTSTR)vecStr[1], vecStr[1].GetLength());
+	_tcsncpy_s(m_strTex, (TCHAR*)(LPCTSTR)vecStr[0], vecStr[0].GetLength());
+
+	//오브젝트 생성..
+	for (int i = 0; i < (vecStr.size() - MAP_TEX_INFO_LINES) / MAP_OBJ_INFO_LINES; i++) {
+		int iItem = i * MAP_OBJ_INFO_LINES;
+
+		//오브젝트 gbs 이름 출력								//vecStr[iItem +MAP_TEX_INFO_LINES + 0];
+		//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0  //vecStr[iItem +MAP_TEX_INFO_LINES + 1];
+		//오브젝트 조명 reverse 여부 값 출력 true: 1, false: 0  //vecStr[iItem +MAP_TEX_INFO_LINES + 2];
+		//오브젝트 scl 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 3];
+		//오브젝트 rot 값 출력									//vecStr[iItem +MAP_TEX_INFO_LINES + 4];
+		//오브젝트 translation x 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 5];
+		//오브젝트 translation y 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 6];
+		//오브젝트 translation z 값 출력						//vecStr[iItem +MAP_TEX_INFO_LINES + 7];
+
+		int iLightReverse = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 1]);
+		int	iLightSpecular = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 2]);
+		float fScl = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
+		float fRotY = _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 4]);
+		float fTransX = _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 5]);
+		float fTransY = _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
+		float fTransZ = _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 7]);
+
+#ifdef G_DEFINE_SHADOW_ADD
+		if (iLightSpecular == 1) {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_SHADOW_REVERSE, G_LIGHT_TYPE_SPECULAR);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_SHADOW, G_LIGHT_TYPE_SPECULAR);
+		}
+		else {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_SHADOW_REVERSE);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_SHADOW);
+		}
+#else
+		if (iLightSpecular == 1) {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR_REVERSE, G_LIGHT_TYPE_SPECULAR);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);
+		}
+		else {
+			if (iLightReverse == 1)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE_REVERSE);
+			else if (iLightReverse == 0)
+				I_ObjMgr.Load(g_pd3dDevice, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], G_SHA_OBJ_DIFFUSE);
+		}
+#endif
+
+
+
+		auto objData = make_shared<GObjData>();
+
+		_tcsncpy_s(objData->m_strName, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], vecStr[iItem + MAP_TEX_INFO_LINES + 0].GetLength());
+
+		TCHAR strObjName[MAX_PATH];
+
+		_tcsncpy_s(strObjName, (TCHAR*)(LPCTSTR)vecStr[iItem + MAP_TEX_INFO_LINES + 0], vecStr[iItem + MAP_TEX_INFO_LINES + 0].GetLength());
+
+		GetStringFileName(strObjName, strObjName);
+
+		objData->m_pObj = (GGbsObj*)I_ObjMgr.GetPtr(strObjName);
+
+		//s, r, t 설정.
+		D3DXMATRIX matScl, matRot;
+		D3DXMatrixIdentity(&matScl);
+		D3DXMatrixIdentity(&matRot);
+		objData->m_fScl = fScl;
+		objData->m_fRotY = fRotY;
+		D3DXMatrixScaling(&matScl, objData->m_fScl, objData->m_fScl, objData->m_fScl);
+		D3DXMatrixRotationY(&matRot, D3DXToRadian(objData->m_fRotY));
+		D3DXMatrixTranslation(&objData->m_matObjTrans, fTransX, fTransY, fTransZ);
+		objData->m_matObjWld = matScl * matRot * objData->m_matObjTrans;
+
+
+		objData->m_bLightReverse = iLightReverse;
+		objData->m_bLightSpecular = iLightSpecular;
+
+		pMap->m_vecObj.push_back(objData);
+		pMap->m_vecObjRender.push_back(false);
+	}
+
+	m_vecMapGroup.push_back(pMap);
+
+	return true;
+}
+#endif
 GMapMgr::GMapMgr()
 {
 	m_iMapSelected = -1;
