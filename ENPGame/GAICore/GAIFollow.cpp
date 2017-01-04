@@ -19,8 +19,8 @@ bool GAIFollow::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	D3DXVECTOR3 Temp2 = vHeroPos2 - vPos;
 
-	float fDistance = D3DXVec3Length(&Temp);
-	float fDistance2 = D3DXVec3Length(&Temp2);
+			float fDistance = D3DXVec3Length(&Temp);
+			float fDistance2 = D3DXVec3Length(&Temp2);
 
 	if ((fDistance >= G_DEFINE_AI_ATTACK_CHECK && fDistance <= G_DEFINE_AI_FOLLOW_CHECK) || (fDistance2 >= G_DEFINE_AI_ATTACK_CHECK && fDistance2 <= G_DEFINE_AI_FOLLOW_CHECK))
 	{
