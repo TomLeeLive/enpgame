@@ -12,7 +12,7 @@ bool GAIZombieMgr::Load(int iNum, D3DXVECTOR3 position)
 	}
 
 	for (int i = 0; i < iNum; i++) {
-		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE2");
 
 		shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
 		pObjA->setState(G_AI_IDLE);
