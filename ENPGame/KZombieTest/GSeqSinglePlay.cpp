@@ -124,14 +124,20 @@ bool GSeqSinglePlay::Init()
 
 	return true;
 }
-void GSeqSinglePlay::FollowTom() {
+void GSeqSinglePlay::HealingTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos)
+{
+	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_ATTACK");
 
-	D3DXVECTOR3 vTomPos = D3DXVECTOR3(m_CharHero[0]->m_matWorld._41, m_CharHero[0]->m_matWorld._42, m_CharHero[0]->m_matWorld._43);
-	D3DXVECTOR3 vJakePos = D3DXVECTOR3(m_CharHero[1]->m_matWorld._41, m_CharHero[1]->m_matWorld._42, m_CharHero[1]->m_matWorld._43);
+	m_CharHero[G_HERO_TOM].get()->m_iHP = 100;
 
-	D3DXMATRIX matRot, matTrans;
+}
+
+void GSeqSinglePlay::FollowTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos) {
+
+	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_WALK");
+
+	D3DXMATRIX matRot;
 	D3DXMatrixIdentity(&matRot);
-	D3DXMatrixIdentity(&matTrans);
 	
 	D3DXVECTOR3 vLook_toTom = vJakePos - vTomPos;
 	
@@ -144,11 +150,9 @@ void GSeqSinglePlay::FollowTom() {
 	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
 	matRot._31 = vLook_toTom.x;		matRot._32 = vLook_toTom.y;		matRot._33 = vLook_toTom.z;
 
-	D3DXVECTOR3 vTRans_toTom = vJakePos - vLook_toTom *10.0f * g_fSecPerFrame;
-	//D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
 
+	D3DXVECTOR3 vTRans_toTom = vJakePos - vLook_toTom *G_DEFINE_AI_MOVE_SPEED * g_fSecPerFrame;
 
-	//m_CharHero[1]->m_matWorld = matRot * matTrans;
 
 	m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraPos.x = vTRans_toTom.x;
 	m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraPos.y = vTRans_toTom.y;
@@ -292,7 +296,34 @@ bool GSeqSinglePlay::Frame()
 
 
 #ifdef G_MACRO_AI_ADD
-	FollowTom();
+
+	D3DXVECTOR3 vTomPos = m_pFPSCamera[G_HERO_TOM].get()->m_vCameraPos;
+	D3DXVECTOR3 vJakePos = m_pFPSCamera[G_HERO_JAKE].get()->m_vCameraPos;
+
+	float fTomPos = D3DXVec3Length(&vTomPos);
+	float fJakePos = D3DXVec3Length(&vJakePos);
+	
+	if (m_CharHero[G_HERO_TOM]->m_iHP > 50)
+	{
+		if (abs(fTomPos - fJakePos) > 100.0f)
+		{
+			FollowTom(vTomPos, vJakePos);
+		}
+	}
+	else
+	{
+		if (abs(fTomPos - fJakePos) > 50.0f)
+		{
+			FollowTom(vTomPos, vJakePos);
+		}
+		if ((abs(fTomPos - fJakePos) == 50.0f))
+		{
+			HealingTom(vTomPos, vJakePos);
+		}
+	}
+
+	
+
 	int  iZombieAliveCnt = 0;
 
 	list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();
@@ -456,7 +487,7 @@ bool        GSeqSinglePlay::InitGame() {
 	
 	for (int i = 0; i < m_pFPSCamera.size(); i++) {
 
-		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*10000.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
+		m_pFPSCamera[i].get()->SetViewMatrix(D3DXVECTOR3(G_DEFINE_HERO_1_POS_X + i*1000.0f, G_DEFINE_HERO_1_POS_Y, G_DEFINE_HERO_1_POS_Z)
 			, D3DXVECTOR3(-10.0f, 10.0f, 50.0f));
 	}
 

@@ -111,7 +111,8 @@ public:
 public:
 #ifdef G_MACRO_AI_ADD
 	GAIZombieMgr		m_GAIZombMgr;
-	void FollowTom();
+	void FollowTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos);
+	void HealingTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos);
 #else
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif
