@@ -91,35 +91,35 @@ void GSeqSinglePlay::RenderShadow(D3DXMATRIX* matShadow,
 //±×¸²ÀÚ [End]
 #endif
 #ifdef G_MACRO_AI_ADD
-bool GSeqSinglePlay::JakeAI()
-{
-	D3DXVECTOR3 vPosTom,vPosJake,vLook_toTom, vTRans_toTom;
-
-	vPosTom = D3DXVECTOR3(m_CharHero[0]->m_matWorld._41, m_CharHero[0]->m_matWorld._42, m_CharHero[0]->m_matWorld._43);
-	vPosJake = D3DXVECTOR3(m_CharHero[1]->m_matWorld._41, m_CharHero[1]->m_matWorld._42, m_CharHero[1]->m_matWorld._43);
-
-	D3DXMATRIX matRot, matTrans;
-	D3DXMatrixIdentity(&matRot);
-	D3DXMatrixIdentity(&matTrans);
-
-	vLook_toTom = vPosJake - vPosTom;
-
-	D3DXVec3Normalize(&vLook_toTom, &vLook_toTom);
-	D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	D3DXVec3Cross(&vRight, &vUp, &vLook_toTom);
-	D3DXVec3Cross(&vUp, &vLook_toTom, &vRight);
-
-	matRot._11 = vRight.x;		    matRot._12 = vRight.y;			matRot._13 = vRight.z;
-	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
-	matRot._31 = vLook_toTom.x;		matRot._32 = vLook_toTom.y;		matRot._33 = vLook_toTom.z;
-
-
-	vTRans_toTom = vPosJake - vLook_toTom *1000.0f * g_fSecPerFrame;
-	D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
-
-	m_CharHero[1]->m_matWorld = matRot * matTrans;
-	return true;
-}
+//bool GSeqSinglePlay::JakeAI()
+//{
+//	D3DXVECTOR3 vPosTom,vPosJake,vLook_toTom, vTRans_toTom;
+//
+//	vPosTom = D3DXVECTOR3(m_CharHero[0]->m_matWorld._41, m_CharHero[0]->m_matWorld._42, m_CharHero[0]->m_matWorld._43);
+//	vPosJake = D3DXVECTOR3(m_CharHero[1]->m_matWorld._41, m_CharHero[1]->m_matWorld._42, m_CharHero[1]->m_matWorld._43);
+//
+//	D3DXMATRIX matRot, matTrans;
+//	D3DXMatrixIdentity(&matRot);
+//	//D3DXMatrixIdentity(&matTrans);
+//
+//	vLook_toTom = vPosJake - vPosTom;
+//
+//	D3DXVec3Normalize(&vLook_toTom, &vLook_toTom);
+//	D3DXVECTOR3 vRight, vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+//	D3DXVec3Cross(&vRight, &vUp, &vLook_toTom);
+//	D3DXVec3Cross(&vUp, &vLook_toTom, &vRight);
+//
+//	matRot._11 = vRight.x;		    matRot._12 = vRight.y;			matRot._13 = vRight.z;
+//	matRot._21 = vUp.x;				matRot._22 = vUp.y;				matRot._23 = vUp.z;
+//	matRot._31 = vLook_toTom.x;		matRot._32 = vLook_toTom.y;		matRot._33 = vLook_toTom.z;
+//
+//
+//	vTRans_toTom = vPosJake - vLook_toTom *1000.0f * g_fSecPerFrame;
+//	D3DXMatrixTranslation(&matTrans, vTRans_toTom.x, vTRans_toTom.y, vTRans_toTom.z);
+//
+//	m_CharHero[1]->m_matWorld = matRot * matTrans;
+//	return true;
+//}
 #endif
 bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
 {
@@ -419,7 +419,7 @@ bool GSeqSinglePlay::Frame()
 	
 
 #ifdef G_MACRO_AI_ADD
-	JakeAI();
+	//JakeAI();
 	int  iZombieAliveCnt = 0;
 
 	list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();

@@ -2,94 +2,6 @@
 
 GSeqSinglePlay * GSeqSinglePlay::pInstance_ = 0;
 
-//그림자 [Start]
-#ifdef G_DEFINE_SHADOW
-const float g_fMaxSize = 1024;
-void GSeqSinglePlay::RenderObject(D3DXMATRIX* matView, D3DXMATRIX* matProj)
-{
-	D3DXMATRIX matInvView;
-	ApplySS(g_pMain->GetContext(), GDxState::g_pSSClampLinear, 1);
-	ApplySS(g_pMain->GetContext(), GDxState::g_pSSShadowMap, 2);
-	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
-
-	/*
-	m_pBoxShape->PreRender(g_pMain->GetContext());
-	for (int iObj = 0; iObj < MAX_OBJECT_CNT; iObj++)
-	{
-		D3DXMatrixInverse(&matInvView, 0, matView);
-		D3DXMATRIX matWVPT1 = m_matWorld[iObj] * m_matShadowView * m_matShadowProj * m_matTexture;
-		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
-		m_cbShadow.g_ShadowID = m_fObjID[iObj];
-		m_cbShadow.g_iNumKernel = 3;
-		g_pMain->GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-		g_pMain->GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-		g_pMain->GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-		g_pMain->GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
-
-		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);
-		m_pBoxShape->PostRender(g_pMain->GetContext());
-	}
-	*/
-	for (int i = 0; i < G_OBJ_CNT; i++)
-	{
-		D3DXMatrixInverse(&matInvView, 0, matView);
-		D3DXMATRIX matWVPT1 = m_matObjWld[i] * m_matShadowView * m_matShadowProj * m_matTexture;
-		D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT1);
-		m_cbShadow.g_ShadowID = m_fObjID[i];
-		m_cbShadow.g_iNumKernel = 3;
-		g_pMain->GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-		g_pMain->GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-		g_pMain->GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-		g_pMain->GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
-
-		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-		m_Obj[i]->PostRender(g_pImmediateContext);
-	}
-}
-void GSeqSinglePlay::RenderShadow(D3DXMATRIX* matShadow,
-	D3DXMATRIX* matView, D3DXMATRIX* matProj)
-{
-	ApplyDSS(g_pMain->GetContext(), GDxState::g_pDSSDepthEnable);
-	//ApplyRS(GetContext(), TDxState::g_pRSBackCullSolid);
-	ApplyBS(g_pMain->GetContext(), GDxState::g_pAlphaBlend);
-	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSSlopeScaledDepthBias);
-
-	m_CustomMap.SetMatrix(NULL, matView, matProj);
-	m_CustomMap.PreRender(g_pMain->GetContext());
-	g_pMain->GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
-	//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
-	// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
-	// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
-	g_pMain->GetContext()->PSSetShader(NULL, NULL, 0);
-	m_CustomMap.PostRender(g_pMain->GetContext());
-
-	/*
-	for (int iObj = 0; iObj < MAX_OBJECT_CNT; iObj++)
-	{
-		m_pBoxShape->SetMatrix(&m_matWorld[iObj], matView, matProj);
-		m_pBoxShape->PreRender(g_pMain->GetContext());
-		g_pMain->GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
-		//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
-		// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
-		// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
-		g_pMain->GetContext()->PSSetShader(NULL, NULL, 0);
-		m_pBoxShape->PostRender(g_pMain->GetContext());
-	}
-	*/
-	for (int i = 0; i < G_OBJ_CNT; i++)
-	{
-		m_Obj[i]->SetMatrix(&m_matObjWld[i], matView, matProj);
-		m_Obj[i]->PreRender(g_pMain->GetContext());
-		g_pMain->GetContext()->VSSetShader(m_pShadowVS.Get(), NULL, 0);
-		//GetContext()->PSSetShader(m_pShadowPS.Get(), NULL, 0);
-		// 깊이스텐실 버퍼를 리소스로 전달하면 되기 때문에 픽쉘쉐이더를 사용하지 않아도 된다.
-		// 하지만, 화면에 쿼드로 깊이맵 결과를 확인하고자 위 문장에서 픽쉘쉐이더를 활성화 하였다.
-		g_pMain->GetContext()->PSSetShader(NULL, NULL, 0);
-		m_Obj[i]->PostRender(g_pMain->GetContext());
-	}
-}
-//그림자 [End]
-#endif
 
 bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
 {
@@ -158,48 +70,6 @@ bool GSeqSinglePlay::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
 
 bool GSeqSinglePlay::Init()
 {
-#ifdef G_DEFINE_SHADOW
-	//그림자 [Start]
-	SAFE_NEW(m_pQuad, GPlaneShape);
-	m_pQuad->SetScreenVertex(15, 15, 300, 300,
-		D3DXVECTOR2(g_pMain->m_iWindowWidth, g_pMain->m_iWindowHeight));
-	if (FAILED(m_pQuad->Create(g_pd3dDevice, L"data/shader/plane.hlsl", L"data/castle.jpg")))
-	{
-		MessageBox(0, _T("m_pLIne 실패"), _T("Fatal error"), MB_OK);
-		return false;
-	}
-	ComPtr<ID3DBlob> pVSBlob;
-	m_pShadowVS.Attach(DX::LoadVertexShaderFile(g_pd3dDevice, L"data/shader_shadow/CustomizeMap_shadow.hlsl", pVSBlob.GetAddressOf(), "SHADOW_VS"));
-	m_pShadowPS.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader_shadow/CustomizeMap_shadow.hlsl", "SHADOW_PS"));
-
-	// Create Source and Dest textures
-	m_RT.m_DSFormat = DXGI_FORMAT_R32_TYPELESS;
-	m_RT.Create(g_pd3dDevice, g_fMaxSize, g_fMaxSize);// m_bColorTexRender );
-
-													  //m_ShaderEditer.Create( L"CustomizeMap.fx", m_hWnd );
-	m_matTexture = D3DXMATRIX(0.5f, 0.0f, 0.0f, 0.0f
-		, 0.0f, -0.5f, 0.0f, 0.0f
-		, 0.0f, 0.0f, 1.0f, 0.0f
-		, 0.5f, 0.5f, 0.0f, 1.0f);
-	m_pShadowConstantBuffer.Attach(DX::CreateConstantBuffer(g_pd3dDevice, &m_cbShadow, 1, sizeof(SHADOW_CONSTANT_BUFFER)));
-
-
-	m_vLightPos = D3DXVECTOR3(15, 40, -35);
-
-	float fWidthLength = m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols*
-		m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumCols;
-	float fHeightLength = m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumRows*
-		m_CustomMap.m_fSellDistance*m_CustomMap.m_iNumRows;
-
-	// 지형의 대각선의 길이, 텍스처에 적합하게 배치하려고 작업한다.
-	float fMaxViewDistance = sqrt(fWidthLength + fHeightLength);
-	//D3DXMatrixPerspectiveFovLH( &m_matShadowProj, D3DX_PI*0.25f, 1.0f, 20.0f, 200.0f );
-	//D3DXMatrixOrthoLH( &m_matShadowProj, fMaxViewDistance, fMaxViewDistance, 0.0f, 100.0f );
-	D3DXMatrixOrthoOffCenterLH(&m_matShadowProj,
-		-fMaxViewDistance / 2, fMaxViewDistance / 2, -fMaxViewDistance / 2, fMaxViewDistance / 2, 0.0f, 100.0f);
-	//그림자 [End]
-#endif
-
 
 	T_STR strFile;
 	m_UIManager.Init();
@@ -384,7 +254,7 @@ bool GSeqSinglePlay::Frame()
 	FrameGame();
 	FrameChar();
 	FrameMap();
-	FrameObj();
+	//FrameObj();
 	FrameEffect();
 
 
@@ -491,64 +361,10 @@ bool GSeqSinglePlay::Render()
 	//float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; // red,green,blue,alpha
 	//g_pImmediateContext->ClearRenderTargetView(GetRenderTargetView(), ClearColor);
 
-#ifdef G_DEFINE_SHADOW
-	//그림자 [Start]
-	ID3D11ShaderResourceView* pSRVs[16] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	g_pMain->GetContext()->PSSetShaderResources(0, 16, pSRVs);
 
-	D3DXVECTOR4 vClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	D3DXVECTOR3 vLookat = D3DXVECTOR3(0, 0, 0);
-	D3DXVECTOR3 vUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	//-----------------------------------------------------
-	// 지형 및 오브젝트의 그림자맵 생성
-	//-----------------------------------------------------		
-	if (m_RT.Begin(g_pImmediateContext, vClearColor))
-	{
-		D3DXMatrixLookAtLH(&m_matShadowView, &m_vLightPos, &vLookat, &vUp);
-		RenderShadow(NULL, &m_matShadowView, &m_matShadowProj);
-		m_RT.End(g_pImmediateContext);
-	}
-	////-----------------------------------------------------
-	//// 오브젝트 + 쉐도우 랜더링
-	////-----------------------------------------------------	
-	RenderObject(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	////-----------------------------------------------------
-	//// 1패스: 지형 + 쉐도우 랜더링
-	////-----------------------------------------------------		
-	ApplySS(g_pMain->GetContext(), GDxState::g_pSSClampLinear, 1);
-	ApplySS(g_pMain->GetContext(), GDxState::g_pSSShadowMap, 2);
-	ApplyRS(g_pMain->GetContext(), GDxState::g_pRSBackCullSolid);
-
-	m_CustomMap.SetMatrix(NULL, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	D3DXMATRIX matWVPT = m_matShadowView * m_matShadowProj * m_matTexture;
-	D3DXMatrixTranspose(&m_cbShadow.g_matShadow, &matWVPT);
-	m_cbShadow.g_ShadowID = 0;
-	m_cbShadow.g_iNumKernel = 3;
-	g_pMain->GetContext()->UpdateSubresource(m_pShadowConstantBuffer.Get(), 0, NULL, &m_cbShadow, 0, 0);
-	g_pMain->GetContext()->VSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-	g_pMain->GetContext()->PSSetConstantBuffers(2, 1, m_pShadowConstantBuffer.GetAddressOf());
-
-	m_CustomMap.PreRender(g_pMain->GetContext());
-	g_pMain->GetContext()->PSSetShaderResources(1, 1, m_RT.m_pDsvSRV.GetAddressOf());
-	m_CustomMap.PostRender(g_pMain->GetContext());
-
-	/////////////////////////////////////////
-	// 디버깅
-	/////////////////////////////////////////
-	if (m_bColorTexRender)
-	{
-		m_pQuad->SetMatrix(NULL, NULL, NULL);
-		m_pQuad->PreRender(g_pMain->GetContext());
-		//GetContext()->PSSetShaderResources(0, 1, m_RT.m_pSRV.GetAddressOf());
-		g_pMain->GetContext()->PSSetShaderResources(0, 1, m_RT.m_pDsvSRV.GetAddressOf());
-		m_pQuad->PostRender(g_pMain->GetContext());
-	}
-	//그림자 [End]
-#else
 	RenderMap();
-	RenderObj();
+	//RenderObj();
 	RenderChar();
-#endif
 
 	RenderGame();
 	
@@ -576,11 +392,6 @@ bool GSeqSinglePlay::Render()
 }
 bool GSeqSinglePlay::Release()
 {
-#ifdef G_DEFINE_SHADOW
-	//그림자 [Start]
-	SAFE_DEL(m_pQuad);
-	//그림자 [End]
-#endif
 
 	ReleaseGame();
 	ReleaseMap();
@@ -698,43 +509,36 @@ bool        GSeqSinglePlay::InitMap() {
 	// 커스텀맵 생성
 	//--------------------------------------------------------------------------------------
 	//HeightMap
-	m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
-	if (FAILED(m_HeightMap.CreateHeightMap(L"data/HeightTest.bmp")))
-	{
-		return false;
-	}
+	//m_HeightMap.Init(g_pd3dDevice, g_pImmediateContext);
+	//if (FAILED(m_HeightMap.CreateHeightMap(L"data/map/HeightTest.bmp")))
+	//{
+	//	return false;
+	//}
 
-	m_HeightMap.m_bStaticLight = true;
+	//m_HeightMap.m_bStaticLight = true;
 
-#ifdef G_DEFINE_SHADOW
-	TMapDesc MapDesc = {
-		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
-		//5,5,
-		30.0f, 1.0f,
-		L"data/Sand.jpg",
-		L"data/shader/CustomizeMap_shadow.hlsl" };
-#else
-	TMapDesc MapDesc = {
-		m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
-		//5,5,
-		20.0f, 1.0f,
-		L"data/Sand.jpg",
-		L"data/shader/CustomizeMap_Light.hlsl" };
-#endif
+
+	//TMapDesc MapDesc = {
+	//	m_HeightMap.m_iNumRows,	m_HeightMap.m_iNumCols,
+	//	//5,5,
+	//	20.0f, 1.0f,
+	//	L"data/map/Sand.jpg",
+	//	L"data/shader/CustomizeMap_Light.hlsl" };
 
 
 
-	if (!m_HeightMap.Load(MapDesc))
-	{
-		return false;
-	}
+
+	//if (!m_HeightMap.Load(MapDesc))
+	//{
+	//	return false;
+	//}
 	
 
 	//--------------------------------------------------------------------------------------
 	//  쿼드 트리
 	//--------------------------------------------------------------------------------------
-	m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
-	m_QuadTree.Update(g_pd3dDevice, m_pCamera);
+	//m_QuadTree.Build(MapDesc.iNumCols, MapDesc.iNumRows);
+	//m_QuadTree.Update(g_pd3dDevice, m_pCamera);
 
 #endif
 
@@ -770,13 +574,13 @@ bool		GSeqSinglePlay::InitObj() {
 		D3DXMatrixIdentity(&m_matWallBB[i]);
 	}
 
-	for (int i = 0; i < G_OBJ_CNT; i++) {
-		D3DXMatrixIdentity(&m_matObjWld[i]);
-		D3DXMatrixIdentity(&m_matObjScl[i]);
-		D3DXMatrixIdentity(&m_matObjRot[i]);
-		D3DXMatrixIdentity(&m_matObjTrans[i]);
-		D3DXMatrixIdentity(&m_matObjOBB[i]);
-	}
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
+	//	D3DXMatrixIdentity(&m_matObjWld[i]);
+	//	D3DXMatrixIdentity(&m_matObjScl[i]);
+	//	D3DXMatrixIdentity(&m_matObjRot[i]);
+	//	D3DXMatrixIdentity(&m_matObjTrans[i]);
+	//	D3DXMatrixIdentity(&m_matObjOBB[i]);
+	//}
 
 	//--------------------------------------------------------------------------------------
 	// 오브젝트 생성
@@ -785,323 +589,319 @@ bool		GSeqSinglePlay::InitObj() {
 	//	m_Obj[i].Init();
 	//}
 
-#ifdef G_DEFINE_SHADOW
-	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_OBJ_SHADOW);			if (iIndex < 0) return false;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SHADOW);	if (iIndex < 0) return false;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_OBJ_SHADOW);				if (iIndex < 0) return false;
-#else
+
 	int iIndex = -1;
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_LAB, G_SHA_OBJ_DIFFUSE_REVERSE);			if (iIndex < 0) return false;
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_DROPSHIP_LAND, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);	if (iIndex < 0) return false;
 	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_CAR, G_SHA_OBJ_SPECULAR, G_LIGHT_TYPE_SPECULAR);				if (iIndex < 0) return false;
-#endif
 
 
-
+	/*
 	//연구소 로드
-	m_Obj[G_OBJ_LAB] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB], 2, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB], -4000.0f, 0.0f, -4000.0f);
-	m_matObjWld[G_OBJ_LAB] = m_matObjScl[G_OBJ_LAB] * m_matObjRot[G_OBJ_LAB] * m_matObjTrans[G_OBJ_LAB];
+	m_Obj[G_OBJ_LAB] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	D3DXMatrixScaling(&m_Obj[G_OBJ_LAB]->m_matObjScl, 2, 2, 2);
+	D3DXMatrixRotationY(&m_Obj[G_OBJ_LAB]->m_matObjRot, D3DXToRadian(180.0f));
+	D3DXMatrixTranslation(&m_Obj[G_OBJ_LAB]->m_matObjTrans, -4000.0f, 0.0f, -4000.0f);
+	m_Obj[G_OBJ_LAB]->m_matObjWld = m_Obj[G_OBJ_LAB]->m_matObjScl * m_Obj[G_OBJ_LAB]->m_matObjRot * m_Obj[G_OBJ_LAB]->m_matObjTrans;
 	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//((GGbsObj*)m_Obj[G_OBJ_LAB])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
 	//드롭십 로드
-	m_Obj[G_OBJ_DROPSHIP] = I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_DROPSHIP],3.f, 3.f, 3.f);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_DROPSHIP], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_DROPSHIP], 4000.0f, 0.0f, 4000.0f);
-	m_matObjWld[G_OBJ_DROPSHIP] = m_matObjScl[G_OBJ_DROPSHIP] * m_matObjRot[G_OBJ_DROPSHIP] * m_matObjTrans[G_OBJ_DROPSHIP];
+	m_Obj[G_OBJ_DROPSHIP] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_DROPSHIP_LAND);
+	D3DXMatrixScaling(&m_Obj[G_OBJ_DROPSHIP]->m_matObjScl,3.f, 3.f, 3.f);
+	D3DXMatrixRotationY(&m_Obj[G_OBJ_DROPSHIP]->m_matObjRot, D3DXToRadian(0.0f));
+	D3DXMatrixTranslation(&m_Obj[G_OBJ_DROPSHIP]->m_matObjTrans, 4000.0f, 0.0f, 4000.0f);
+	m_Obj[G_OBJ_DROPSHIP]->m_matObjWld = m_Obj[G_OBJ_DROPSHIP]->m_matObjScl * m_Obj[G_OBJ_DROPSHIP]->m_matObjRot * m_Obj[G_OBJ_DROPSHIP]->m_matObjTrans;
 	//드롭십 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(G_DEFINE_OBB_DROPSHIP_LAND);
+	//((GGbsObj*)m_Obj[G_OBJ_DROPSHIP])->m_OBB.Init(G_DEFINE_OBB_DROPSHIP_LAND);
+
 
 	//차량1 로드
-	m_Obj[G_OBJ_CAR1] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR1], 0.3, 0.3, 0.3);
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR1], 500.0f, 0.0f, -700.0f);
-	m_matObjWld[G_OBJ_CAR1] = m_matObjScl[G_OBJ_CAR1] * m_matObjRot[G_OBJ_CAR1] * m_matObjTrans[G_OBJ_CAR1];
+	m_Obj[G_OBJ_CAR1] = (GGbsObj*)I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
+	D3DXMatrixScaling(&m_Obj[G_OBJ_CAR1]->m_matObjScl, 0.3, 0.3, 0.3);
+	D3DXMatrixTranslation(&m_Obj[G_OBJ_CAR1]->m_matObjTrans, 500.0f, 0.0f, -700.0f);
+	m_Obj[G_OBJ_CAR1]->m_matObjWld = m_Obj[G_OBJ_CAR1]->m_matObjScl * m_Obj[G_OBJ_CAR1]->m_matObjRot * m_Obj[G_OBJ_CAR1]->m_matObjTrans;
 	//드롭십 차량1 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_CAR1])->m_OBB.Init(G_DEFINE_OBB_CAR);
+	//((GGbsObj*)m_Obj[G_OBJ_CAR1])->m_OBB.Init(G_DEFINE_OBB_CAR);
+	*/
 
-	//차량2 로드
-	m_Obj[G_OBJ_CAR2] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR2], 0.3, 0.3, 0.3);
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR2], -900.0f, 0.0f, 700.0f);
-	m_matObjWld[G_OBJ_CAR2] = m_matObjScl[G_OBJ_CAR2] * m_matObjRot[G_OBJ_CAR2] * m_matObjTrans[G_OBJ_CAR2];
-	//드롭십 차량2 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_CAR2])->m_OBB.Init(G_DEFINE_OBB_CAR);
+	////차량2 로드
+	//m_Obj[G_OBJ_CAR2] = I_ObjMgr.GetPtr(G_OBJ_NAME_CAR);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_CAR2], 0.3, 0.3, 0.3);
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_CAR2], -900.0f, 0.0f, 700.0f);
+	//m_matObjWld[G_OBJ_CAR2] = m_matObjScl[G_OBJ_CAR2] * m_matObjRot[G_OBJ_CAR2] * m_matObjTrans[G_OBJ_CAR2];
+	////드롭십 차량2 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_CAR2])->m_OBB.Init(G_DEFINE_OBB_CAR);
 
-	//-------------------------------------------------------------------------------------------------------------
-	//상단 세로길 만들기
-	//-------------------------------------------------------------------------------------------------------------
-	// 1 
-	m_Obj[G_OBJ_LAB1] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB1], 2, 2, 3);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB1], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB1], 2000.0f, 0.0f, 1350.0f);
-	m_matObjWld[G_OBJ_LAB1] = m_matObjScl[G_OBJ_LAB1] * m_matObjRot[G_OBJ_LAB1] * m_matObjTrans[G_OBJ_LAB1];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB1])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	////-------------------------------------------------------------------------------------------------------------
+	////상단 세로길 만들기
+	////-------------------------------------------------------------------------------------------------------------
+	//// 1 
+	//m_Obj[G_OBJ_LAB1] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB1], 2, 2, 3);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB1], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB1], 2000.0f, 0.0f, 1350.0f);
+	//m_matObjWld[G_OBJ_LAB1] = m_matObjScl[G_OBJ_LAB1] * m_matObjRot[G_OBJ_LAB1] * m_matObjTrans[G_OBJ_LAB1];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB1])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 2
-	m_Obj[G_OBJ_LAB2] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB2], 4, 1.5, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB2], D3DXToRadian(270.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB2], 2000.0f, 0.0f, 2100.0f);
-	m_matObjWld[G_OBJ_LAB2] = m_matObjScl[G_OBJ_LAB2] * m_matObjRot[G_OBJ_LAB2] * m_matObjTrans[G_OBJ_LAB2];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB2])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 2
+	//m_Obj[G_OBJ_LAB2] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB2], 4, 1.5, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB2], D3DXToRadian(270.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB2], 2000.0f, 0.0f, 2100.0f);
+	//m_matObjWld[G_OBJ_LAB2] = m_matObjScl[G_OBJ_LAB2] * m_matObjRot[G_OBJ_LAB2] * m_matObjTrans[G_OBJ_LAB2];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB2])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 3
-	m_Obj[G_OBJ_LAB3] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB3], 3.5, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB3], D3DXToRadian(270.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB3], 2000.0f, 0.0f, 2800.0f);
-	m_matObjWld[G_OBJ_LAB3] = m_matObjScl[G_OBJ_LAB3] * m_matObjRot[G_OBJ_LAB3] * m_matObjTrans[G_OBJ_LAB3];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB3])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 3
+	//m_Obj[G_OBJ_LAB3] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB3], 3.5, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB3], D3DXToRadian(270.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB3], 2000.0f, 0.0f, 2800.0f);
+	//m_matObjWld[G_OBJ_LAB3] = m_matObjScl[G_OBJ_LAB3] * m_matObjRot[G_OBJ_LAB3] * m_matObjTrans[G_OBJ_LAB3];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB3])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 4 
-	m_Obj[G_OBJ_LAB4] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB4], 10, 2, 3);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB4], D3DXToRadian(270.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB4], 2000.0f, 0.0f, 4000.0f);
-	m_matObjWld[G_OBJ_LAB4] = m_matObjScl[G_OBJ_LAB4] * m_matObjRot[G_OBJ_LAB4] * m_matObjTrans[G_OBJ_LAB4];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB4])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 4 
+	//m_Obj[G_OBJ_LAB4] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB4], 10, 2, 3);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB4], D3DXToRadian(270.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB4], 2000.0f, 0.0f, 4000.0f);
+	//m_matObjWld[G_OBJ_LAB4] = m_matObjScl[G_OBJ_LAB4] * m_matObjRot[G_OBJ_LAB4] * m_matObjTrans[G_OBJ_LAB4];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB4])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	//-------------------------------------------------------------------------------------------------------------
-	//상단 가로 길 만들기
-	//-------------------------------------------------------------------------------------------------------------
-	// 5 
-	m_Obj[G_OBJ_LAB5] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB5], 5, 1.7, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB5], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB5], 1400.0f, 0.0f, 1280.0f);
-	m_matObjWld[G_OBJ_LAB5] = m_matObjScl[G_OBJ_LAB5] * m_matObjRot[G_OBJ_LAB5] * m_matObjTrans[G_OBJ_LAB5];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB5])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	////-------------------------------------------------------------------------------------------------------------
+	////상단 가로 길 만들기
+	////-------------------------------------------------------------------------------------------------------------
+	//// 5 
+	//m_Obj[G_OBJ_LAB5] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB5], 5, 1.7, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB5], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB5], 1400.0f, 0.0f, 1280.0f);
+	//m_matObjWld[G_OBJ_LAB5] = m_matObjScl[G_OBJ_LAB5] * m_matObjRot[G_OBJ_LAB5] * m_matObjTrans[G_OBJ_LAB5];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB5])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 6  
-	m_Obj[G_OBJ_LAB6] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB6], 2, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB6], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB6], 750.0f, 0.0f, 1250.0f);
-	m_matObjWld[G_OBJ_LAB6] = m_matObjScl[G_OBJ_LAB6] * m_matObjRot[G_OBJ_LAB6] * m_matObjTrans[G_OBJ_LAB6];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB6])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 6  
+	//m_Obj[G_OBJ_LAB6] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB6], 2, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB6], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB6], 750.0f, 0.0f, 1250.0f);
+	//m_matObjWld[G_OBJ_LAB6] = m_matObjScl[G_OBJ_LAB6] * m_matObjRot[G_OBJ_LAB6] * m_matObjTrans[G_OBJ_LAB6];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB6])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 7 
-	m_Obj[G_OBJ_LAB7] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB7], 4, 2.5, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB7], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB7], 200.0f, 0.0f, 1250.0f);
-	m_matObjWld[G_OBJ_LAB7] = m_matObjScl[G_OBJ_LAB7] * m_matObjRot[G_OBJ_LAB7] * m_matObjTrans[G_OBJ_LAB7];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB7])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 7 
+	//m_Obj[G_OBJ_LAB7] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB7], 4, 2.5, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB7], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB7], 200.0f, 0.0f, 1250.0f);
+	//m_matObjWld[G_OBJ_LAB7] = m_matObjScl[G_OBJ_LAB7] * m_matObjRot[G_OBJ_LAB7] * m_matObjTrans[G_OBJ_LAB7];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB7])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 8
-	m_Obj[G_OBJ_LAB8] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB8], 4, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB8], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB8], -550.0f, 0.0f, 1250.0f);
-	m_matObjWld[G_OBJ_LAB8] = m_matObjScl[G_OBJ_LAB8] * m_matObjRot[G_OBJ_LAB8] * m_matObjTrans[G_OBJ_LAB8];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB8])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 8
+	//m_Obj[G_OBJ_LAB8] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB8], 4, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB8], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB8], -550.0f, 0.0f, 1250.0f);
+	//m_matObjWld[G_OBJ_LAB8] = m_matObjScl[G_OBJ_LAB8] * m_matObjRot[G_OBJ_LAB8] * m_matObjTrans[G_OBJ_LAB8];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB8])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 9
-	m_Obj[G_OBJ_LAB9] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB9], 3, 2.5, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB9], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB9], -1200.0f, 0.0f, 1200.0f);
-	m_matObjWld[G_OBJ_LAB9] = m_matObjScl[G_OBJ_LAB9] * m_matObjRot[G_OBJ_LAB9] * m_matObjTrans[G_OBJ_LAB9];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB9])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 9
+	//m_Obj[G_OBJ_LAB9] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB9], 3, 2.5, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB9], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB9], -1200.0f, 0.0f, 1200.0f);
+	//m_matObjWld[G_OBJ_LAB9] = m_matObjScl[G_OBJ_LAB9] * m_matObjRot[G_OBJ_LAB9] * m_matObjTrans[G_OBJ_LAB9];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB9])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 10
-	m_Obj[G_OBJ_LAB10] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB10], 2.7, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB10], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB10], -1700.0f, 0.0f, 1100.0f);
-	m_matObjWld[G_OBJ_LAB10] = m_matObjScl[G_OBJ_LAB10] * m_matObjRot[G_OBJ_LAB10] * m_matObjTrans[G_OBJ_LAB10];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB10])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 10
+	//m_Obj[G_OBJ_LAB10] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB10], 2.7, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB10], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB10], -1700.0f, 0.0f, 1100.0f);
+	//m_matObjWld[G_OBJ_LAB10] = m_matObjScl[G_OBJ_LAB10] * m_matObjRot[G_OBJ_LAB10] * m_matObjTrans[G_OBJ_LAB10];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB10])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 11
-	m_Obj[G_OBJ_LAB11] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB11], 4, 2.3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB11], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB11], -2300.0f, 0.0f, 1000.0f);
-	m_matObjWld[G_OBJ_LAB11] = m_matObjScl[G_OBJ_LAB11] * m_matObjRot[G_OBJ_LAB11] * m_matObjTrans[G_OBJ_LAB11];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB11])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 11
+	//m_Obj[G_OBJ_LAB11] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB11], 4, 2.3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB11], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB11], -2300.0f, 0.0f, 1000.0f);
+	//m_matObjWld[G_OBJ_LAB11] = m_matObjScl[G_OBJ_LAB11] * m_matObjRot[G_OBJ_LAB11] * m_matObjTrans[G_OBJ_LAB11];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB11])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 12
-	m_Obj[G_OBJ_LAB12] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB12], 3, 3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB12], D3DXToRadian(0.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB12], -2950.0f, 0.0f, 900.0f);
-	m_matObjWld[G_OBJ_LAB12] = m_matObjScl[G_OBJ_LAB12] * m_matObjRot[G_OBJ_LAB12] * m_matObjTrans[G_OBJ_LAB12];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB12])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 12
+	//m_Obj[G_OBJ_LAB12] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB12], 3, 3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB12], D3DXToRadian(0.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB12], -2950.0f, 0.0f, 900.0f);
+	//m_matObjWld[G_OBJ_LAB12] = m_matObjScl[G_OBJ_LAB12] * m_matObjRot[G_OBJ_LAB12] * m_matObjTrans[G_OBJ_LAB12];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB12])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 13
-	m_Obj[G_OBJ_LAB13] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB13], 4, 3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB13], D3DXToRadian(315.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB13], -3600.0f, 0.0f, 550.0f);
-	m_matObjWld[G_OBJ_LAB13] = m_matObjScl[G_OBJ_LAB13] * m_matObjRot[G_OBJ_LAB13] * m_matObjTrans[G_OBJ_LAB13];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB13])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 13
+	//m_Obj[G_OBJ_LAB13] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB13], 4, 3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB13], D3DXToRadian(315.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB13], -3600.0f, 0.0f, 550.0f);
+	//m_matObjWld[G_OBJ_LAB13] = m_matObjScl[G_OBJ_LAB13] * m_matObjRot[G_OBJ_LAB13] * m_matObjTrans[G_OBJ_LAB13];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB13])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 14
-	m_Obj[G_OBJ_LAB14] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB14], 6, 3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB14], D3DXToRadian(315.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB14], -4250.0f, 0.0f, -100.0f);
-	m_matObjWld[G_OBJ_LAB14] = m_matObjScl[G_OBJ_LAB14] * m_matObjRot[G_OBJ_LAB14] * m_matObjTrans[G_OBJ_LAB14];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB14])->m_OBB.Init(G_DEFINE_OBB_LAB);
-	//-------------------------------------------------------------------------------------------------------------
-	//하단 가로 길 만들기
-	//-----------------------------------------------------------------------------------------------------------
+	//// 14
+	//m_Obj[G_OBJ_LAB14] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB14], 6, 3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB14], D3DXToRadian(315.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB14], -4250.0f, 0.0f, -100.0f);
+	//m_matObjWld[G_OBJ_LAB14] = m_matObjScl[G_OBJ_LAB14] * m_matObjRot[G_OBJ_LAB14] * m_matObjTrans[G_OBJ_LAB14];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB14])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	////-------------------------------------------------------------------------------------------------------------
+	////하단 가로 길 만들기
+	////-----------------------------------------------------------------------------------------------------------
 
-	// 16
-	m_Obj[G_OBJ_LAB16] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB16], 5, 1.7, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB16], D3DXToRadian(135.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB16], 2880.0f, 0.0f, -850.0f);
-	m_matObjWld[G_OBJ_LAB16] = m_matObjScl[G_OBJ_LAB16] * m_matObjRot[G_OBJ_LAB16] * m_matObjTrans[G_OBJ_LAB16];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB16])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 16
+	//m_Obj[G_OBJ_LAB16] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB16], 5, 1.7, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB16], D3DXToRadian(135.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB16], 2880.0f, 0.0f, -850.0f);
+	//m_matObjWld[G_OBJ_LAB16] = m_matObjScl[G_OBJ_LAB16] * m_matObjRot[G_OBJ_LAB16] * m_matObjTrans[G_OBJ_LAB16];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB16])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 17 
-	m_Obj[G_OBJ_LAB17] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB17], 2, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB17], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB17], 2250.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB17] = m_matObjScl[G_OBJ_LAB17] * m_matObjRot[G_OBJ_LAB17] * m_matObjTrans[G_OBJ_LAB17];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB17])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 17 
+	//m_Obj[G_OBJ_LAB17] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB17], 2, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB17], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB17], 2250.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB17] = m_matObjScl[G_OBJ_LAB17] * m_matObjRot[G_OBJ_LAB17] * m_matObjTrans[G_OBJ_LAB17];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB17])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 18 
-	m_Obj[G_OBJ_LAB18] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB18], 4, 2.5, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB18], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB18], 1700.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB18] = m_matObjScl[G_OBJ_LAB18] * m_matObjRot[G_OBJ_LAB18] * m_matObjTrans[G_OBJ_LAB18];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB18])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 18 
+	//m_Obj[G_OBJ_LAB18] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB18], 4, 2.5, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB18], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB18], 1700.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB18] = m_matObjScl[G_OBJ_LAB18] * m_matObjRot[G_OBJ_LAB18] * m_matObjTrans[G_OBJ_LAB18];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB18])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 19
-	m_Obj[G_OBJ_LAB19] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB19], 4, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB19], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB19], 950.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB19] = m_matObjScl[G_OBJ_LAB19] * m_matObjRot[G_OBJ_LAB19] * m_matObjTrans[G_OBJ_LAB19];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB19])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 19
+	//m_Obj[G_OBJ_LAB19] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB19], 4, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB19], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB19], 950.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB19] = m_matObjScl[G_OBJ_LAB19] * m_matObjRot[G_OBJ_LAB19] * m_matObjTrans[G_OBJ_LAB19];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB19])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 20
-	m_Obj[G_OBJ_LAB20] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB20], 3, 2.5, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB20], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB20], 300.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB20] = m_matObjScl[G_OBJ_LAB20] * m_matObjRot[G_OBJ_LAB20] * m_matObjTrans[G_OBJ_LAB20];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB20])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 20
+	//m_Obj[G_OBJ_LAB20] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB20], 3, 2.5, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB20], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB20], 300.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB20] = m_matObjScl[G_OBJ_LAB20] * m_matObjRot[G_OBJ_LAB20] * m_matObjTrans[G_OBJ_LAB20];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB20])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 21
-	m_Obj[G_OBJ_LAB21] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB21], 2.7, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB21], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB21], -200.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB21] = m_matObjScl[G_OBJ_LAB21] * m_matObjRot[G_OBJ_LAB21] * m_matObjTrans[G_OBJ_LAB21];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB21])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 21
+	//m_Obj[G_OBJ_LAB21] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB21], 2.7, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB21], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB21], -200.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB21] = m_matObjScl[G_OBJ_LAB21] * m_matObjRot[G_OBJ_LAB21] * m_matObjTrans[G_OBJ_LAB21];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB21])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 22
-	m_Obj[G_OBJ_LAB22] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB22], 4, 2.3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB22], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB22], -800.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB22] = m_matObjScl[G_OBJ_LAB22] * m_matObjRot[G_OBJ_LAB22] * m_matObjTrans[G_OBJ_LAB22];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB22])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 22
+	//m_Obj[G_OBJ_LAB22] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB22], 4, 2.3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB22], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB22], -800.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB22] = m_matObjScl[G_OBJ_LAB22] * m_matObjRot[G_OBJ_LAB22] * m_matObjTrans[G_OBJ_LAB22];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB22])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 23
-	m_Obj[G_OBJ_LAB23] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB23], 3, 3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB23], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB23], -1450.0f, 0.0f, -1250.0f);
-	m_matObjWld[G_OBJ_LAB23] = m_matObjScl[G_OBJ_LAB23] * m_matObjRot[G_OBJ_LAB23] * m_matObjTrans[G_OBJ_LAB23];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB23])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 23
+	//m_Obj[G_OBJ_LAB23] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB23], 3, 3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB23], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB23], -1450.0f, 0.0f, -1250.0f);
+	//m_matObjWld[G_OBJ_LAB23] = m_matObjScl[G_OBJ_LAB23] * m_matObjRot[G_OBJ_LAB23] * m_matObjTrans[G_OBJ_LAB23];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB23])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 24
-	m_Obj[G_OBJ_LAB24] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB24], 4, 3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB24], D3DXToRadian(135.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB24], 3480.0f, 0.0f, -250.0f);
-	m_matObjWld[G_OBJ_LAB24] = m_matObjScl[G_OBJ_LAB24] * m_matObjRot[G_OBJ_LAB24] * m_matObjTrans[G_OBJ_LAB24];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB24])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 24
+	//m_Obj[G_OBJ_LAB24] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB24], 4, 3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB24], D3DXToRadian(135.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB24], 3480.0f, 0.0f, -250.0f);
+	//m_matObjWld[G_OBJ_LAB24] = m_matObjScl[G_OBJ_LAB24] * m_matObjRot[G_OBJ_LAB24] * m_matObjTrans[G_OBJ_LAB24];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB24])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 25
-	m_Obj[G_OBJ_LAB25] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB25], 7, 3, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB25], D3DXToRadian(135.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB25], 4250.0f, 0.0f, 450.0f);
-	m_matObjWld[G_OBJ_LAB25] = m_matObjScl[G_OBJ_LAB25] * m_matObjRot[G_OBJ_LAB25] * m_matObjTrans[G_OBJ_LAB25];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB25])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 25
+	//m_Obj[G_OBJ_LAB25] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB25], 7, 3, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB25], D3DXToRadian(135.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB25], 4250.0f, 0.0f, 450.0f);
+	//m_matObjWld[G_OBJ_LAB25] = m_matObjScl[G_OBJ_LAB25] * m_matObjRot[G_OBJ_LAB25] * m_matObjTrans[G_OBJ_LAB25];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB25])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	//-------------------------------------------------------------------------------------------------------------
-	//하단 세로길 만들기
-	//-------------------------------------------------------------------------------------------------------------
-	// 15
-	m_Obj[G_OBJ_LAB15] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB15], 2, 2, 3);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB15], D3DXToRadian(180.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB15], -1900.0f, 0.0f, -1350.0f);
-	m_matObjWld[G_OBJ_LAB15] = m_matObjScl[G_OBJ_LAB15] * m_matObjRot[G_OBJ_LAB15] * m_matObjTrans[G_OBJ_LAB15];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB15])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	////-------------------------------------------------------------------------------------------------------------
+	////하단 세로길 만들기
+	////-------------------------------------------------------------------------------------------------------------
+	//// 15
+	//m_Obj[G_OBJ_LAB15] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB15], 2, 2, 3);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB15], D3DXToRadian(180.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB15], -1900.0f, 0.0f, -1350.0f);
+	//m_matObjWld[G_OBJ_LAB15] = m_matObjScl[G_OBJ_LAB15] * m_matObjRot[G_OBJ_LAB15] * m_matObjTrans[G_OBJ_LAB15];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB15])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 26
-	m_Obj[G_OBJ_LAB26] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB26], 3.5, 2, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB26], D3DXToRadian(90.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB26], -1900.0f, 0.0f, -2050.0f);
-	m_matObjWld[G_OBJ_LAB26] = m_matObjScl[G_OBJ_LAB26] * m_matObjRot[G_OBJ_LAB26] * m_matObjTrans[G_OBJ_LAB26];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB26])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 26
+	//m_Obj[G_OBJ_LAB26] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB26], 3.5, 2, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB26], D3DXToRadian(90.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB26], -1900.0f, 0.0f, -2050.0f);
+	//m_matObjWld[G_OBJ_LAB26] = m_matObjScl[G_OBJ_LAB26] * m_matObjRot[G_OBJ_LAB26] * m_matObjTrans[G_OBJ_LAB26];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB26])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 27
-	m_Obj[G_OBJ_LAB27] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB27], 4, 1.5, 2);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB27], D3DXToRadian(90.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB27], -1900.0f, 0.0f, -2750.0f);
-	m_matObjWld[G_OBJ_LAB27] = m_matObjScl[G_OBJ_LAB27] * m_matObjRot[G_OBJ_LAB27] * m_matObjTrans[G_OBJ_LAB27];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB27])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 27
+	//m_Obj[G_OBJ_LAB27] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB27], 4, 1.5, 2);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB27], D3DXToRadian(90.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB27], -1900.0f, 0.0f, -2750.0f);
+	//m_matObjWld[G_OBJ_LAB27] = m_matObjScl[G_OBJ_LAB27] * m_matObjRot[G_OBJ_LAB27] * m_matObjTrans[G_OBJ_LAB27];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB27])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
-	// 28
-	m_Obj[G_OBJ_LAB28] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
-	D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB28], 10, 2, 3);
-	D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB28], D3DXToRadian(90.0f));
-	D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB28], -1800.0f, 0.0f, -4000.0f);
-	m_matObjWld[G_OBJ_LAB28] = m_matObjScl[G_OBJ_LAB28] * m_matObjRot[G_OBJ_LAB28] * m_matObjTrans[G_OBJ_LAB28];
-	//연구소 OBB 사이즈
-	((GGbsObj*)m_Obj[G_OBJ_LAB28])->m_OBB.Init(G_DEFINE_OBB_LAB);
+	//// 28
+	//m_Obj[G_OBJ_LAB28] = I_ObjMgr.GetPtr(G_OBJ_NAME_LAB);
+	//D3DXMatrixScaling(&m_matObjScl[G_OBJ_LAB28], 10, 2, 3);
+	//D3DXMatrixRotationY(&m_matObjRot[G_OBJ_LAB28], D3DXToRadian(90.0f));
+	//D3DXMatrixTranslation(&m_matObjTrans[G_OBJ_LAB28], -1800.0f, 0.0f, -4000.0f);
+	//m_matObjWld[G_OBJ_LAB28] = m_matObjScl[G_OBJ_LAB28] * m_matObjRot[G_OBJ_LAB28] * m_matObjTrans[G_OBJ_LAB28];
+	////연구소 OBB 사이즈
+	//((GGbsObj*)m_Obj[G_OBJ_LAB28])->m_OBB.Init(G_DEFINE_OBB_LAB);
 
 
-	for (int i = 0; i < G_OBJ_CNT; i++) {
+	//for (int i = 0; i < G_OBJ_CNT; i++) {
 
-		m_matObjOBB[i] = m_matObjScl[i] * m_matObjRot[i] * m_matObjTrans[i];
-	}
+	//	m_Obj[i]->m_matObjOBB = m_Obj[i]->m_matObjScl[i] * m_Obj[i]->m_matObjRot * m_Obj[i]->m_matObjTrans;
+	//}
 
 #endif
 	return true;
@@ -1413,29 +1213,30 @@ bool        GSeqSinglePlay::FrameGame() {
 
 bool        GSeqSinglePlay::FrameMap() {
 #ifdef G_MACRO_MAP_ADD
-
+	/*
 	if (I_Input.KeyCheck(DIK_F1) == KEY_UP)
 	{
 		if (++m_iDrawDepth > 7) m_iDrawDepth = -1;
 		m_QuadTree.SetRenderDepth(m_iDrawDepth);
 	}
-	m_QuadTree.Update(g_pd3dDevice, m_pCamera);
+	*/
+	//m_QuadTree.Update(g_pd3dDevice, m_pCamera);
 
 
 	if (I_Input.KeyCheck(DIK_O) == KEY_UP)
 	{
 		m_bMapDebugRender = !m_bMapDebugRender;
 	}
-	if (I_Input.KeyCheck(DIK_GRAVE) == KEY_UP) //문턱값 사용 ~
-	{
-		m_QuadTree.SetThresHold(!m_QuadTree.m_bThresHoldValue);
-	}
-	
-	m_QuadTree.Frame();	
+	//if (I_Input.KeyCheck(DIK_GRAVE) == KEY_UP) //문턱값 사용 ~
+	//{
+	//	m_QuadTree.SetThresHold(!m_QuadTree.m_bThresHoldValue);
+	//}
+	//
+	//m_QuadTree.Frame();	
 
-	m_HeightMap.Frame();
-	g_pImmediateContext->UpdateSubresource(
-		m_HeightMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_HeightMap.m_VertexList.at(0), 0, 0);
+	//m_HeightMap.Frame();
+	//g_pImmediateContext->UpdateSubresource(
+	//	m_HeightMap.m_dxobj.g_pVertexBuffer.Get(), 0, 0, &m_HeightMap.m_VertexList.at(0), 0, 0);
 #endif
 	return true;
 };
@@ -1536,7 +1337,7 @@ bool		GSeqSinglePlay::FrameChar() {
 	int iChange = 0;
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Frame(m_CharHero[G_HERO_TOM]->m_matWorld,m_CharHero[G_HERO_JAKE]->m_matWorld);
+	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld, m_CharHero[1]->m_matWorld);
 #else
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
@@ -1617,7 +1418,7 @@ bool		GSeqSinglePlay::FrameObj() {
 			m_Obj[i]->m_cbLight.g_vEyeDir.y = m_pCamera->m_vLookVector.y;
 			m_Obj[i]->m_cbLight.g_vEyeDir.z = m_pCamera->m_vLookVector.z;
 		}
-		m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+		m_Obj[i]->SetMatrix(&m_Obj[i]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_Obj[i]->Frame();
 
 		if (m_pCamera->CheckOBBInPlane(&(((GGbsObj*)m_Obj[i])->m_OBB)))
@@ -1722,13 +1523,13 @@ bool        GSeqSinglePlay::RenderMap() {
 	// 커스텀 맵
 	//--------------------------------------------------------------------------------------
 
-	m_HeightMap.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	m_HeightMap.Render(g_pImmediateContext);
+	//m_HeightMap.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	//m_HeightMap.Render(g_pImmediateContext);
 
 	DrawSelectTreeLevel(m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	if (m_bMapDebugRender)
 	{
-		DrawQuadLine(m_QuadTree.m_pRootNode);
+	//	DrawQuadLine(m_QuadTree.m_pRootNode);
 	}
 
 
@@ -1800,12 +1601,12 @@ bool		GSeqSinglePlay::RenderObj() {
 
 		if (m_Objbit[i])
 		{
-			m_Obj[i]->SetMatrix(&m_matObjWld[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			m_Obj[i]->SetMatrix(&m_Obj[i]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 			m_Obj[i]->Render(g_pImmediateContext);
 		}
 
 		if(m_bDebugMode)
-			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_matObjOBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+			((GGbsObj*)m_Obj[i])->m_OBB.Render(&m_Obj[i]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 	}
 
 	//BOUD
@@ -1897,8 +1698,8 @@ bool        GSeqSinglePlay::ReleaseGame() {
 bool        GSeqSinglePlay::ReleaseMap() {
 #ifdef G_MACRO_MAP_ADD
 	
-	m_HeightMap.Release();
-	m_QuadTree.Release();
+	//m_HeightMap.Release();
+	//m_QuadTree.Release();
 #endif
 	return true;
 };
@@ -2039,62 +1840,7 @@ void GSeqSinglePlay::AddZomb(int iNum) {
 }
 bool GSeqSinglePlay::Load()
 {
-#ifdef G_DEFINE_SHADOW
-	//좀비 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharZombie_shadow.gci") /*_T("data/CharTable.gci")*/))
-	{
-		return false;
-	}
 
-	AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
-
-
-	//주인공1 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero1_shadow.gci") /*_T("data/CharTable.gci")*/))
-	{
-		return false;
-	}
-
-	GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO1_IDLE");
-
-
-	shared_ptr<GHero> pObjB = make_shared<GHero>();
-	pObjB->Set(pChar1,
-		pChar1->m_pBoneObject,
-		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar1->m_pBoneObject->m_Scene.iLastFrame);
-
-	pObjB->Init();
-
-	m_CharHero.push_back(pObjB);
-
-	//주인공2 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero2_shadow.gci") /*_T("data/CharTable.gci")*/))
-	{
-		return false;
-	}
-
-	GCharacter* pChar2 = I_CharMgr.GetPtr(L"HERO2_IDLE");
-
-
-	shared_ptr<GHero> pObjC = make_shared<GHero>();
-	pObjC->Set(pChar2,
-		pChar2->m_pBoneObject,
-		pChar2->m_pBoneObject->m_Scene.iFirstFrame,
-		pChar2->m_pBoneObject->m_Scene.iLastFrame);
-
-	pObjC->Init();
-
-	pObjC.get()->m_HeroType = G_HERO_JAKE;
-	m_CharHero.push_back(pObjC);
-
-
-	for (int i = 0; i < m_CharHero.size(); i++) {
-		m_CharHero[i].get()->m_iBullet = 100;
-		m_CharHero[i].get()->m_iHP = 100;
-		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
-	}
-#else
 
 #ifdef G_MACRO_AI_ADD
 #else
@@ -2143,10 +1889,6 @@ bool GSeqSinglePlay::Load()
 
 	pObjC.get()->m_HeroType = G_HERO_JAKE;
 	m_CharHero.push_back(pObjC);
-
-
-
-#endif
 	
 	return true;
 }
@@ -2167,9 +1909,9 @@ void GSeqSinglePlay::DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj)
 bool GSeqSinglePlay::DrawQuadLine(GNode* pNode)
 {
 	if (pNode == NULL) return true;
-	if (m_QuadTree.m_iRenderDepth == pNode->m_iDepth ||
-		(pNode->m_isLeaf &&  m_QuadTree.m_iRenderDepth < 0))
-	{
+	//if (m_QuadTree.m_iRenderDepth == pNode->m_iDepth ||
+	//	(pNode->m_isLeaf &&  m_QuadTree.m_iRenderDepth < 0))
+	//{
 		m_DrawLine.SetMatrix(m_pCamera->GetWorldMatrix(), m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 
 		D3DXVECTOR4 vColor = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -2207,7 +1949,7 @@ bool GSeqSinglePlay::DrawQuadLine(GNode* pNode)
 		m_DrawLine.Draw(g_pImmediateContext, vPoint[1], vPoint[5], vColor);
 		m_DrawLine.Draw(g_pImmediateContext, vPoint[2], vPoint[6], vColor);
 		m_DrawLine.Draw(g_pImmediateContext, vPoint[3], vPoint[7], vColor);
-	}
+	//}
 	for (int iNode = 0; iNode < pNode->m_ChildList.size(); iNode++)
 	{
 		DrawQuadLine(pNode->m_ChildList[iNode]);
@@ -2267,12 +2009,6 @@ bool GSeqSinglePlay::InitValues(){
 
 GSeqSinglePlay::GSeqSinglePlay(void)
 {
-#ifdef G_DEFINE_SHADOW
-	//그림자 [Start]
-	SAFE_ZERO(m_pQuad);
-	m_bColorTexRender = true;
-	//그림자 [End]
-#endif
 
 	InitValues();
 	m_pCamera = nullptr;
