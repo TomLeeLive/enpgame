@@ -1,6 +1,6 @@
 #GBS_FILE_EXPORT Tue_Jan_03_20:59:48_2017
 #OBB_MIN_MAX
--0.120000 -0.001762 -0.120000	0.120000 0.001762 0.120000
+-0.120000 -0.000000 -0.120000	0.120000 0.0000000 0.120000
 #SCENE
 100	0	311	30	160	1	1	0
 #ROOT_MATERIAL	1
@@ -8,16 +8,16 @@
 	MultiMat_0	Multi/Sub-Object	5	0
 	#SUBMATERIAL 0
 		unnamed	Standard	0	1
-		1	CordonMedium.jpg
+		1	CordonMedium.png
 	#SUBMATERIAL 1
 		None__CordonMedium_jpg_001	Standard	0	1
-		1	CordonTop.jpg
+		1	CordonTop.png
 	#SUBMATERIAL 2
 		None__CordonTop_jpg_001	Standard	0	1
-		1	Vereda.jpg
+		1	Vereda.png
 	#SUBMATERIAL 3
 		None__FloorsRegular0277_1_S_jpg_001	Standard	0	1
-		1	Roadstraight.jpg
+		1	Roadstraight.png
 	#SUBMATERIAL 4
 		None__Roads0069_9_S_jpg	Standard	0	1
 		1	Vereda.png
