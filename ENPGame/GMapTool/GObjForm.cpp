@@ -327,7 +327,7 @@ void GObjForm::OnBnClickedCheck2()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
-	BOOL bCheck = IsDlgButtonChecked(IDC_CHECK1);
+	BOOL bCheck = IsDlgButtonChecked(IDC_CHECK2);
 
 	if (theApp.m_MapMgr.m_pObjSelected != NULL) {
 		if (bCheck == TRUE) {
