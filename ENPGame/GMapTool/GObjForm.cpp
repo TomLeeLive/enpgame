@@ -104,7 +104,7 @@ void GObjForm::OnBnClickedButtonload()
 	
 	CString strObjFile;
 
-	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, _T("GBS File(*.gbs)|*.gbs|All Files(*.*)|*.*||"));
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, _T(		"All Files(*.*)|*.*|		GBS File(*.gbs)|*.gbs|		|		"));
 
 	//CFileDialog dlg(TRUE);
 	if (dlg.DoModal() == IDOK)

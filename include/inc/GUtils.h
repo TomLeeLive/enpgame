@@ -161,7 +161,8 @@ namespace GCORESTD
 		bool bExit;
 		//bool bSpace; // 카메라의 이동가속도를 증가시킨다.
 		bool bLeftShift;// 카메라의 이동가속도를 증가시킨다.
-
+		bool bLeftBracket;
+		bool bRightBracket;
 		int  iMouseValue[3];
 
 		//bool bFullScreen;

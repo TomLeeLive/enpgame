@@ -19,9 +19,13 @@ public:
 
 
 		if (g_InputData.bLeftShift)	m_fSpeed += g_fSecPerFrame * 40.0f;
-		else						m_fSpeed -= g_fSecPerFrame * 40.0f;
+		else						m_fSpeed -= g_fSecPerFrame * 40.0f;		
+		//if (g_InputData.bLeftBracket) 
+		//	m_fSpeed += g_fSecPerFrame * 40.0f;		
+		//if (g_InputData.bRightBracket) 
+		//	m_fSpeed -= g_fSecPerFrame * 40.0f;
 		// 최소값으로 고정
-		if (m_fSpeed < 1.0f) m_fSpeed = 1.0f;
+		if (m_fSpeed < 400.0f) m_fSpeed = 400.0f;
 
 		if (g_InputData.bWKey) 	MoveLook(g_fSecPerFrame * 5.0f * m_fSpeed);
 		if (g_InputData.bSKey)		MoveLook(-g_fSecPerFrame * 5.0f* m_fSpeed);
