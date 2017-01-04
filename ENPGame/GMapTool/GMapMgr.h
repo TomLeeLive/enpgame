@@ -16,6 +16,8 @@ class GObjData;
 class GMapMgr
 {
 public:
+	ID3D11RasterizerState*      m_pRS;
+
 	TCHAR		m_strTex[MAX_PATH];
 	TCHAR		m_strHeight[MAX_PATH];
 
@@ -50,7 +52,7 @@ public:
 
 
 
-	bool			Init();
+	bool			Init(GCoreLibV2* pMain);
 	bool			Frame(GCamera* pCamera, GInput* pInput = NULL);
 	bool			Render(GCamera* pCamera, bool bDebug, GCoreLibV2* pMain = NULL);
 #ifdef G_DEFINE_SHADOW_ADD

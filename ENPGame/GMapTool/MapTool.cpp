@@ -52,7 +52,7 @@ bool CMapToolApp::Init()
 	m_pPixelShader.Attach(DX::LoadPixelShaderFile(g_pd3dDevice, L"data/shader/box.hlsl", "PS_Color"));
 
 
-	m_MapMgr.Init();
+	m_MapMgr.Init(this);
 	
 
 	//좀비 캐릭터 추가[S]

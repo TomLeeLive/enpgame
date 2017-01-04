@@ -48,7 +48,14 @@ bool			GMapMgr::RenderShadow(GCoreLibV2* pMain, D3DXMATRIX* matView, D3DXMATRIX*
 	ApplyDSS(pMain->GetContext(), GDxState::g_pDSSDepthEnable);
 	//ApplyRS(GetContext(), TDxState::g_pRSBackCullSolid);
 	ApplyBS(pMain->GetContext(), GDxState::g_pAlphaBlend);
-	ApplyRS(pMain->GetContext(), GDxState::g_pRSSlopeScaledDepthBias);
+
+
+	//ApplyRS(pMain->GetContext(), GDxState::g_pRSSlopeScaledDepthBias);
+	pMain->GetContext()->RSSetState(m_pRS);
+
+
+
+
 
 	m_vecMapGroup[m_iMapSelected]->m_HeightMap.SetMatrix(NULL, matView, matProj);
 	m_vecMapGroup[m_iMapSelected]->m_HeightMap.PreRender(pMain->GetContext());
@@ -77,9 +84,20 @@ bool			GMapMgr::RenderShadow(GCoreLibV2* pMain, D3DXMATRIX* matView, D3DXMATRIX*
 	return true;
 }
 #endif
-bool			GMapMgr::Init()
+bool			GMapMgr::Init(GCoreLibV2* pMain)
 {
-
+	D3D11_RASTERIZER_DESC   RasterizerDesc;
+	memset(&RasterizerDesc, 0, sizeof(D3D11_RASTERIZER_DESC));
+	RasterizerDesc.CullMode = D3D11_CULL_NONE;
+	RasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	RasterizerDesc.FrontCounterClockwise = FALSE;
+	RasterizerDesc.DepthBias = 100000;
+	RasterizerDesc.DepthBiasClamp = 0;
+	RasterizerDesc.SlopeScaledDepthBias = 1.0f;
+	RasterizerDesc.ScissorEnable = FALSE;
+	RasterizerDesc.MultisampleEnable = TRUE;
+	RasterizerDesc.AntialiasedLineEnable = FALSE;
+	pMain->GetDevice()->CreateRasterizerState(&RasterizerDesc, &m_pRS);
 
 
 
