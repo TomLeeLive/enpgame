@@ -483,7 +483,7 @@ bool        GSeqSinglePlay::InitMap() {
 	*/
 
 	T_STR strFile;
-	strFile = L"data/map/stage_1.map";
+	strFile = L"data/map/stage_1_2.map";
 	m_MapMgr.LoadMap(&strFile, m_pCamera, g_pMain);
 
 	m_MapMgr.m_iMapSelected = 0;
