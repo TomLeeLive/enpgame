@@ -30,6 +30,13 @@ unsigned int __stdcall LoadingThread(void* arg) {
 	g_pMain->m_pGameSeq[G_SEQ_SINGLE] = GSeqSinglePlay::CreateInstance();
 	g_pMain->m_pGameSeq[G_SEQ_SURVIVAL] = GSeqSurvivalMode::CreateInstance();
 
+	g_pMain->m_pGameSeq[G_SEQ_SINGLE_1S] = GSeqSingle1S::CreateInstance();
+	g_pMain->m_pGameSeq[G_SEQ_SINGLE_1E] = GSeqSingle1E::CreateInstance();
+	g_pMain->m_pGameSeq[G_SEQ_SINGLE_2S] = GSeqSingle2S::CreateInstance();
+	g_pMain->m_pGameSeq[G_SEQ_SINGLE_2E] = GSeqSingle2E::CreateInstance();
+	g_pMain->m_pGameSeq[G_SEQ_SINGLE_3S] = GSeqSingle3S::CreateInstance();
+	g_pMain->m_pGameSeq[G_SEQ_SINGLE_3E] = GSeqSingle3E::CreateInstance();
+
 
 	/*
 	G_SEQ_END = 0,
@@ -50,6 +57,13 @@ unsigned int __stdcall LoadingThread(void* arg) {
 	vecStr.push_back(L"Loading G_SEQ_SINGLE");
 	vecStr.push_back(L"Loading G_SEQ_SURVIVAL");
 	vecStr.push_back(L"Loading G_SEQ_LOADING");
+
+	vecStr.push_back(L"Loading G_SEQ_SINGLE_1S");
+	vecStr.push_back(L"Loading G_SEQ_SINGLE_1E");
+	vecStr.push_back(L"Loading G_SEQ_SINGLE_2S");
+	vecStr.push_back(L"Loading G_SEQ_SINGLE_2E");
+	vecStr.push_back(L"Loading G_SEQ_SINGLE_3S");
+	vecStr.push_back(L"Loading G_SEQ_SINGLE_3E");
 
 	//Init.
 	for (int i = 0; i < G_SEQ_CNT; i++) {

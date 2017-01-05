@@ -46,6 +46,24 @@
     <ClCompile Include="GEventData.cpp">
       <Filter>GameCode</Filter>
     </ClCompile>
+    <ClCompile Include="GSeqSingle1E.cpp">
+      <Filter>GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSingle1S.cpp">
+      <Filter>GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSingle2E.cpp">
+      <Filter>GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSingle2S.cpp">
+      <Filter>GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSingle3E.cpp">
+      <Filter>GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="GSeqSingle3S.cpp">
+      <Filter>GameEvent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GSeq.h">
@@ -102,6 +120,24 @@
     <ClInclude Include="GEventData.h">
       <Filter>GameCode</Filter>
     </ClInclude>
+    <ClInclude Include="GSeqSingle1E.h">
+      <Filter>GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSingle1S.h">
+      <Filter>GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSingle2E.h">
+      <Filter>GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSingle2S.h">
+      <Filter>GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSingle3E.h">
+      <Filter>GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="GSeqSingle3S.h">
+      <Filter>GameEvent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameSequence">
@@ -115,6 +151,9 @@
     </Filter>
     <Filter Include="GameCode">
       <UniqueIdentifier>{a967059e-219d-4909-9cf8-a0d1da788135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEvent">
+      <UniqueIdentifier>{77a1d8a6-f140-4dcf-a043-b2b946005528}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

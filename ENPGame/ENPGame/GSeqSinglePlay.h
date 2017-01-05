@@ -77,9 +77,9 @@ public:
 	//--------------------------------------------------------------------------------------
 	GMapMgr							m_MapMgr;
 
-	GBBox m_Wall[G_BB_CNT];
-	D3DXMATRIX m_matWallBB[G_BB_CNT];
-	bitset<G_BB_CNT> m_Wallbit;
+	//GBBox m_Wall[G_BB_CNT];
+	//D3DXMATRIX m_matWallBB[G_BB_CNT];
+	//bitset<G_BB_CNT> m_Wallbit;
 	
 #endif
 #ifdef G_MACRO_CHAR_ADD	

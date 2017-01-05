@@ -52,8 +52,8 @@ void		GAICol::ChangeZombState(GAICol* iNum, TCHAR* str) {
 		pChar0->m_pBoneObject->m_Scene.iLastFrame);
 
 	if (0 == _tcscmp(str, G_DEFINE_ANI_COL_DIE)) {
-		iNum->setState(G_AI_COL_DIE);
-		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_COL_DIE];
+		iNum->setState(G_AI_COL_ESCAPE);
+		iNum->m_pCurrentSeq = iNum->m_GameSeq[G_AI_COL_ESCAPE];
 	}
 	else if (0 == _tcscmp(str, G_DEFINE_ANI_COL_ATT)) {
 		iNum->setState(G_AI_COL_ATTACK);
@@ -122,7 +122,7 @@ bool	GAICol::Init()
 	m_GameSeq[G_AI_COL_MOVE] = new GAIColMove;//::CreateInstance();
 	m_GameSeq[G_AI_COL_FOLLOW] = new GAIColFollow;//::CreateInstance();
 	m_GameSeq[G_AI_COL_ATTACK] = new GAIColAttack;//::CreateInstance();
-	m_GameSeq[G_AI_COL_DIE] = new GAIColDie;//::CreateInstance();
+	m_GameSeq[G_AI_COL_ESCAPE] = new GAIColEscape;//::CreateInstance();
 	
 
 	
@@ -134,7 +134,7 @@ bool	GAICol::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHero
 {
 	GHero::Frame();
 
-	if (m_State == G_AI_COL_DIE)
+	if (m_State == G_AI_COL_ESCAPE)
 		m_bDead = true;
 	else
 		m_bDead = false;

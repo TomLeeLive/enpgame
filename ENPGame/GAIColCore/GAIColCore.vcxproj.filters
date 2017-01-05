@@ -24,9 +24,6 @@
     <ClInclude Include="GAIColAttack.h">
       <Filter>AIColSeq</Filter>
     </ClInclude>
-    <ClInclude Include="GAIColDie.h">
-      <Filter>AIColSeq</Filter>
-    </ClInclude>
     <ClInclude Include="GAIColFollow.h">
       <Filter>AIColSeq</Filter>
     </ClInclude>
@@ -48,12 +45,12 @@
     <ClInclude Include="GAICol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GAIColEscape.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GAIColAttack.cpp">
-      <Filter>AIColSeq</Filter>
-    </ClCompile>
-    <ClCompile Include="GAIColDie.cpp">
       <Filter>AIColSeq</Filter>
     </ClCompile>
     <ClCompile Include="GAIColFollow.cpp">
@@ -73,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="GAICol.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIColEscape.cpp">
+      <Filter>AIColSeq</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

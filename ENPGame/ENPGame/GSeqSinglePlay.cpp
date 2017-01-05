@@ -76,7 +76,7 @@ bool GSeqSinglePlay::Init()
 	strFile = L"data/ui_singleplay.gui";
 	m_UIManager.UILoad(&strFile, &g_pMain->m_SwapChainDesc, g_pMain->m_DefaultRT.m_vp.Width, g_pMain->m_DefaultRT.m_vp.Height);
 
-	I_GameEvent.init();
+	
 
 	m_ObjGun.Init();
 
@@ -123,6 +123,8 @@ bool GSeqSinglePlay::Init()
 	InitObj();
 
 	m_GAIColMgr.Load(1, m_pFPSCamera[G_HERO_JAKE]->m_vCameraPos);
+	
+	I_GameEventMgr.init();
 
 	return true;
 }
@@ -383,7 +385,7 @@ bool GSeqSinglePlay::Render()
 		rc.right = g_pMain->m_DefaultRT.m_vp.Width;
 
 
-		_stprintf_s(m_pTextOutBuffer, L"%s", I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Str.c_str());
+		_stprintf_s(m_pTextOutBuffer, L"%s", I_GameEventMgr.m_vecStage[m_MapMgr.m_iMapSelected]->m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Str.c_str());
 		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, DWRITE_TEXT_ALIGNMENT_CENTER, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 
@@ -406,8 +408,13 @@ bool GSeqSinglePlay::Release()
 bool        GSeqSinglePlay::InitGame() {
 #ifdef G_MACRO_GAME_ADD
 
-	for (int iEvent = 0; iEvent < I_GameEvent.m_vecEvent.size(); iEvent++)
-		I_GameEvent.m_vecEvent[iEvent]->m_bDone = false;
+	int i = I_GameEventMgr.m_vecStage.size();
+
+	for (int iStage = 0; iStage < I_GameEventMgr.m_vecStage.size(); iStage++)
+	{
+		for (int iEvent = 0; iEvent < I_GameEventMgr.m_vecStage[iStage]->m_vecEvent.size(); iEvent++)
+			I_GameEventMgr.m_vecStage[iStage]->m_vecEvent[iEvent]->m_bDone = false;
+	}
 
 	((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_IMG])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
 	((GImageCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_IMG])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
@@ -475,20 +482,7 @@ bool        GSeqSinglePlay::InitGame() {
 bool        GSeqSinglePlay::InitMap() {
 #ifdef G_MACRO_MAP_ADD
 
-	m_MapMgr.Init(g_pMain);
 	
-	m_pCamera = m_pFPSCamera[m_CurrentHero].get();
-
-	/*
-	TCHAR strFile[MAX_PATH] = L"data/map/stage_1.map";
-	m_MapMgr.LoadMap(strFile, m_pCamera, g_pMain);
-	*/
-
-	T_STR strFile;
-	strFile = L"data/map/stage_1_2.map";
-	m_MapMgr.LoadMap(&strFile, m_pCamera, g_pMain);
-
-	m_MapMgr.m_iMapSelected = 0;
 
 	g_pMain->m_bColorTexRender = false;
 	//--------------------------------------------------------------------------------------
@@ -523,21 +517,21 @@ bool		GSeqSinglePlay::InitObj() {
 #ifdef G_MACRO_MAP_ADD
 
 
-	//---------------------------------------------------------------------------
-	// Map Boudery
-	//---------------------------------------------------------------------------
-	//앞
-	m_Wall[G_BB_WALL1].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, -4500.0f));
-	//뒤
-	m_Wall[G_BB_WALL2].Init(D3DXVECTOR3(-4500.0f, 0.0f, 4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
-	//좌
-	m_Wall[G_BB_WALL3].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(-4500.0f, 1000.0f, 4500.0f));
-	//우
-	m_Wall[G_BB_WALL4].Init(D3DXVECTOR3(4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
-	for (int i = 0; i < G_BB_CNT; i++)
-	{
-		D3DXMatrixIdentity(&m_matWallBB[i]);
-	}
+	////---------------------------------------------------------------------------
+	//// Map Boudery
+	////---------------------------------------------------------------------------
+	////앞
+	//m_Wall[G_BB_WALL1].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, -4500.0f));
+	////뒤
+	//m_Wall[G_BB_WALL2].Init(D3DXVECTOR3(-4500.0f, 0.0f, 4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
+	////좌
+	//m_Wall[G_BB_WALL3].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(-4500.0f, 1000.0f, 4500.0f));
+	////우
+	//m_Wall[G_BB_WALL4].Init(D3DXVECTOR3(4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
+	//for (int i = 0; i < G_BB_CNT; i++)
+	//{
+	//	D3DXMatrixIdentity(&m_matWallBB[i]);
+	//}
 
 	
 #endif
@@ -636,101 +630,16 @@ bool        GSeqSinglePlay::FrameGame() {
 		ShowCursor(true);
 	}
 
-	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(m_CharHero[m_CurrentHero]->m_matWorld._41, m_CharHero[m_CurrentHero]->m_matWorld._42, m_CharHero[m_CurrentHero]->m_matWorld._43 );
-
-	static float fSpaceKeyShadeTime = 0.0f;
-	static bool	 fSpaceKeyShade = false;
-
-	//게임 이벤트 처리[Start]
-	{
-
-		for (int iEvent = 0; iEvent < I_GameEvent.m_vecEvent.size(); iEvent++) {
-	
-			if (m_bChatting == true)
-				break;
-
-			if (I_GameEvent.m_vecEvent[iEvent]->m_bDone == true)
-				continue;
-
-			if (D3DXVec3Length(&(I_GameEvent.m_vecEvent[iEvent]->m_vEventPos - vHeroPos)) < G_DEFINE_LENGTH_EVENT_RADIUS) {
-				m_bChatting = true;
-				m_iEventNum = iEvent;
-				m_iScriptNum = 0;
-
-				fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
-				m_pCamera = m_pEventCamera.get();
-
-				break;
-			}
-		}
-
-		if (m_bChatting) {
-
-			SetEventCamera(I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Hero);
-
-			//채팅 창을 보여준다.
-			if (I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript[m_iScriptNum]->m_Hero == G_HERO_TOM) {
-				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = true;
-				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
-			}
-			else {
-				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
-				m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = true;
-			}
 
 
 
 
-			//스페이스 키를 눌렀을때..
-			if (I_Input.KeyCheck(DIK_SPACE) == KEY_PUSH) {
-
-				if (m_iScriptNum < I_GameEvent.m_vecEvent[m_iEventNum]->m_vecScript.size()-1) {
-					m_iScriptNum++;
-				}
-				else {
-					I_GameEvent.m_vecEvent[m_iEventNum]->m_bDone = true;
-					m_iEventNum = -1;
-					m_iScriptNum = -1;
-					m_bChatting = false;
-
-					fSpaceKeyShadeTime = 0.0f;
-					fSpaceKeyShade = false;
-
-					//카메라를 바꾼다.
-					m_pCamera = m_pFPSCamera[m_CurrentHero].get();
-
-					//채팅 UI를 안보이게 한다.
-					m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P1_IMG]->m_bRender = false;
-					m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_P2_IMG]->m_bRender = false;
-				}
-				//클릭 사운드
-				g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
-			}
-
-			//경과시간.
-			float fElapsedTime = g_pMain->m_Timer.GetElapsedTime() - fSpaceKeyShadeTime;
-
-			if (fElapsedTime > G_DEFINE_TIME_SPACEKEY_SHADE) {
-				fSpaceKeyShadeTime = g_pMain->m_Timer.GetElapsedTime();
-				fSpaceKeyShade = !fSpaceKeyShade;
-			}
-
-			if (fSpaceKeyShade)
-				((GButtonCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_SPACE])->m_Box.SetColor(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
-			else
-				((GButtonCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_CHATTING_SPACE])->m_Box.SetColor(D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
-
-
-
-			
-			
-		}
-	}
-	//게임 이벤트 처리[End]
+	I_GameEventMgr.frame(this);
 
 
 	//게임 오버 처리 [Start]
-
+	static float fSpaceKeyShadeTime = 0.0f;
+	static bool	 fSpaceKeyShade = false;
 
 	for (int i = 0; i < m_CharHero.size(); i++) {
 		if (m_CharHero[i]->m_bDead == true && false == m_bGameOver) {
@@ -1032,14 +941,14 @@ bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	
 
-	for (int i = 0; i < G_BB_CNT; i++)
-	{
-		m_Wall[i].Frame(&m_matWallBB[i]);
-		if (m_pCamera->CheckOBBInPlane(&m_Wall[i]))
-		{
-			m_Wallbit.set(i);
-		}
-	}
+	//for (int i = 0; i < G_BB_CNT; i++)
+	//{
+	//	m_Wall[i].Frame(&m_matWallBB[i]);
+	//	if (m_pCamera->CheckOBBInPlane(&m_Wall[i]))
+	//	{
+	//		m_Wallbit.set(i);
+	//	}
+	//}
 
 #endif
 	return true;
@@ -1255,12 +1164,12 @@ bool		GSeqSinglePlay::RenderObj() {
 #ifdef G_MACRO_MAP_ADD
 	
 
-	//BOUD
-	for (int i = 0; i < G_BB_CNT; i++)
-	{
-		if(m_bDebugMode)
-		m_Wall[i].Render(&m_matWallBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	}
+	////BOUD
+	//for (int i = 0; i < G_BB_CNT; i++)
+	//{
+	//	if(m_bDebugMode)
+	//	m_Wall[i].Render(&m_matWallBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	//}
 
 #endif
 	return true;

@@ -9,6 +9,12 @@ enum G_SEQ {
 	G_SEQ_SINGLE,// = 5,
 	G_SEQ_SURVIVAL,// = 6,
 	G_SEQ_LOADING,// =7,
+	G_SEQ_SINGLE_1S,// =8,
+	G_SEQ_SINGLE_1E,// =9,
+	G_SEQ_SINGLE_2S,// =10,
+	G_SEQ_SINGLE_2E,// =11,
+	G_SEQ_SINGLE_3S,// =12,
+	G_SEQ_SINGLE_3E,// =13,
 	G_SEQ_CNT
 };
 

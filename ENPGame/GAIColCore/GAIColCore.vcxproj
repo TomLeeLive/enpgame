@@ -166,7 +166,7 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
   <ItemGroup>
     <ClInclude Include="GAICol.h" />
     <ClInclude Include="GAIColAttack.h" />
-    <ClInclude Include="GAIColDie.h" />
+    <ClInclude Include="GAIColEscape.h" />
     <ClInclude Include="GAIColFollow.h" />
     <ClInclude Include="GAIColIdle.h" />
     <ClInclude Include="GAIColMgr.h" />
@@ -177,7 +177,7 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
   <ItemGroup>
     <ClCompile Include="GAICol.cpp" />
     <ClCompile Include="GAIColAttack.cpp" />
-    <ClCompile Include="GAIColDie.cpp" />
+    <ClCompile Include="GAIColEscape.cpp" />
     <ClCompile Include="GAIColFollow.cpp" />
     <ClCompile Include="GAIColIdle.cpp" />
     <ClCompile Include="GAIColMgr.cpp" />
