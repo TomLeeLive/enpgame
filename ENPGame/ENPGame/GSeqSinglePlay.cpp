@@ -517,21 +517,21 @@ bool		GSeqSinglePlay::InitObj() {
 #ifdef G_MACRO_MAP_ADD
 
 
-	//---------------------------------------------------------------------------
-	// Map Boudery
-	//---------------------------------------------------------------------------
-	//菊
-	m_Wall[G_BB_WALL1].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, -4500.0f));
-	//第
-	m_Wall[G_BB_WALL2].Init(D3DXVECTOR3(-4500.0f, 0.0f, 4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
-	//谅
-	m_Wall[G_BB_WALL3].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(-4500.0f, 1000.0f, 4500.0f));
-	//快
-	m_Wall[G_BB_WALL4].Init(D3DXVECTOR3(4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
-	for (int i = 0; i < G_BB_CNT; i++)
-	{
-		D3DXMatrixIdentity(&m_matWallBB[i]);
-	}
+	////---------------------------------------------------------------------------
+	//// Map Boudery
+	////---------------------------------------------------------------------------
+	////菊
+	//m_Wall[G_BB_WALL1].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, -4500.0f));
+	////第
+	//m_Wall[G_BB_WALL2].Init(D3DXVECTOR3(-4500.0f, 0.0f, 4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
+	////谅
+	//m_Wall[G_BB_WALL3].Init(D3DXVECTOR3(-4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(-4500.0f, 1000.0f, 4500.0f));
+	////快
+	//m_Wall[G_BB_WALL4].Init(D3DXVECTOR3(4500.0f, 0.0f, -4500.0f), D3DXVECTOR3(4500.0f, 1000.0f, 4500.0f));
+	//for (int i = 0; i < G_BB_CNT; i++)
+	//{
+	//	D3DXMatrixIdentity(&m_matWallBB[i]);
+	//}
 
 	
 #endif
@@ -941,14 +941,14 @@ bool		GSeqSinglePlay::FrameObj() {
 #ifdef G_MACRO_MAP_ADD
 	
 
-	for (int i = 0; i < G_BB_CNT; i++)
-	{
-		m_Wall[i].Frame(&m_matWallBB[i]);
-		if (m_pCamera->CheckOBBInPlane(&m_Wall[i]))
-		{
-			m_Wallbit.set(i);
-		}
-	}
+	//for (int i = 0; i < G_BB_CNT; i++)
+	//{
+	//	m_Wall[i].Frame(&m_matWallBB[i]);
+	//	if (m_pCamera->CheckOBBInPlane(&m_Wall[i]))
+	//	{
+	//		m_Wallbit.set(i);
+	//	}
+	//}
 
 #endif
 	return true;
@@ -1164,12 +1164,12 @@ bool		GSeqSinglePlay::RenderObj() {
 #ifdef G_MACRO_MAP_ADD
 	
 
-	//BOUD
-	for (int i = 0; i < G_BB_CNT; i++)
-	{
-		if(m_bDebugMode)
-		m_Wall[i].Render(&m_matWallBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
-	}
+	////BOUD
+	//for (int i = 0; i < G_BB_CNT; i++)
+	//{
+	//	if(m_bDebugMode)
+	//	m_Wall[i].Render(&m_matWallBB[i], m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
+	//}
 
 #endif
 	return true;

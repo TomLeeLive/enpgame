@@ -43,55 +43,55 @@
 #define G_DEFINE_HERO_1_POS_Y 60.0f
 #define G_DEFINE_HERO_1_POS_Z -4050.0f
 
-enum G_OBJECT {
-	G_OBJ_LAB = 0,
-	G_OBJ_DROPSHIP,
-	G_OBJ_CAR1,
-	//G_OBJ_CAR2,
-
-	//G_OBJ_LAB1,
-	//G_OBJ_LAB2,
-	//G_OBJ_LAB3,
-	//G_OBJ_LAB4,
-
-	//G_OBJ_LAB5,
-	//G_OBJ_LAB6,
-	//G_OBJ_LAB7,
-	//G_OBJ_LAB8,
-	//G_OBJ_LAB9,
-	//G_OBJ_LAB10,
-	//G_OBJ_LAB11,
-	//G_OBJ_LAB12,
-	//G_OBJ_LAB13,
-	//G_OBJ_LAB14,
-
-	//G_OBJ_LAB15,
-	//G_OBJ_LAB16,
-	//G_OBJ_LAB17,
-	//G_OBJ_LAB18,
-	//G_OBJ_LAB19,
-	//G_OBJ_LAB20,
-	//G_OBJ_LAB21,
-	//G_OBJ_LAB22,
-	//G_OBJ_LAB23,
-	//G_OBJ_LAB24,
-	//G_OBJ_LAB25,
-
-	//G_OBJ_LAB26,
-	//G_OBJ_LAB27,
-	//G_OBJ_LAB28,
-
-	G_OBJ_CNT
-};
-
-enum G_WALL
-{
-	G_BB_WALL1 = 0,
-	G_BB_WALL2,
-	G_BB_WALL3,
-	G_BB_WALL4,
-	G_BB_CNT
-};
+//enum G_OBJECT {
+//	G_OBJ_LAB = 0,
+//	G_OBJ_DROPSHIP,
+//	G_OBJ_CAR1,
+//	//G_OBJ_CAR2,
+//
+//	//G_OBJ_LAB1,
+//	//G_OBJ_LAB2,
+//	//G_OBJ_LAB3,
+//	//G_OBJ_LAB4,
+//
+//	//G_OBJ_LAB5,
+//	//G_OBJ_LAB6,
+//	//G_OBJ_LAB7,
+//	//G_OBJ_LAB8,
+//	//G_OBJ_LAB9,
+//	//G_OBJ_LAB10,
+//	//G_OBJ_LAB11,
+//	//G_OBJ_LAB12,
+//	//G_OBJ_LAB13,
+//	//G_OBJ_LAB14,
+//
+//	//G_OBJ_LAB15,
+//	//G_OBJ_LAB16,
+//	//G_OBJ_LAB17,
+//	//G_OBJ_LAB18,
+//	//G_OBJ_LAB19,
+//	//G_OBJ_LAB20,
+//	//G_OBJ_LAB21,
+//	//G_OBJ_LAB22,
+//	//G_OBJ_LAB23,
+//	//G_OBJ_LAB24,
+//	//G_OBJ_LAB25,
+//
+//	//G_OBJ_LAB26,
+//	//G_OBJ_LAB27,
+//	//G_OBJ_LAB28,
+//
+//	G_OBJ_CNT
+//};
+//
+//enum G_WALL
+//{
+//	G_BB_WALL1 = 0,
+//	G_BB_WALL2,
+//	G_BB_WALL3,
+//	G_BB_WALL4,
+//	G_BB_CNT
+//};
 
 enum G_ZOMB_ST {
 	G_ZOMB_ST_WALK =0,
