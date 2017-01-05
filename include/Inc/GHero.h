@@ -5,8 +5,11 @@
 
 //오브젝트 위치
 #define G_OBJ_LOC_GUN_SHOTGUN _T("data/object/shotgun/shotgun.GBS")
+#define G_OBJ_LOC_GUN_SYRINGE _T("data/object/syringe/syringe.GBS")
+
 //오브젝트 매니저 등록 이름
 #define G_OBJ_NAME_GUN_SHOTGUN L"shotgun.GBS"
+#define G_OBJ_NAME_GUN_SYRINGE L"syringe.GBS"
 
 #define G_DEFINE_HERO1_GUN_POS_RIGHT_HAND 25
 #define G_DEFINE_HERO2_GUN_POS_RIGHT_HAND 26
@@ -48,6 +51,7 @@ public:
 	float			m_fFrame;
 	float			m_fLerpTime;
 	float			m_fSpeed;
+	int				m_State;
 	D3DXMATRIX		m_pMatrix[255];
 	CBConstBoneWorld m_cbBoneData;
 	ComPtr<ID3D11Buffer>    m_pCBConstBoneWorld;

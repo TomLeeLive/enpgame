@@ -29,6 +29,8 @@
 #define G_DEFINE_MAP_DIR L"data/map/"
 #define G_DEFINE_MAP_SHADER L"data/shader/CustomizeMap_light.hlsl"
 
+#define G_DEFINE_STAGE_FENCE_OBJ_NAME L"data\\object\\stage_fence\\stage_fence.GBS"
+
 class GObjData {
 public:
 	TCHAR			m_strName[MAX_PATH];

@@ -114,8 +114,6 @@ public:
 	void FollowTom(D3DXVECTOR3 vTomPos, D3DXVECTOR3 vJakePos);
 	void HealingTom();
 	void ChageJakeState(CheckState state);
-	int BeforeState = 0;
-	int AfterState = 0;
 #else
 	vector<shared_ptr<GN2Zombie>>	m_CharZombie;
 #endif

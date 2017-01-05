@@ -374,61 +374,21 @@ AI완료 할것(좀비, 동료)
 
 텍스처 깨짐 현상
 ===========================================================================
-아래파일정리
-Output/data/object/EnpGameStage/Stage_1.map        |    9 +
-Output/data/object/building/Barrack.GBS            |  436 +++
-Output/data/object/building/Car07.png              |  Bin 0 -> 237753 bytes
-Output/data/object/building/F01_512.png            |  Bin 0 -> 427584 bytes
-Output/data/object/building/F02_512.png            |  Bin 0 -> 337810 bytes
-Output/data/object/building/F03_512.png            |  Bin 0 -> 312882 bytes
-Output/data/object/building/Gravingdock.GBS        |  647 +++++
-Output/data/object/building/S01_512.png            |  Bin 0 -> 257477 bytes
-Output/data/object/building/S02_512.png            |  Bin 0 -> 257549 bytes
-Output/data/object/building/SpaceCar.GBS           | 2890 ++++++++++++++++++++
-Output/data/object/building/SpaceStation.GBS       |  489 ++++
-Output/data/object/building/landing_dock.GBS       |  975 +++++++
-Output/data/object/building/metal03_3_128x128.png  |  Bin 0 -> 19945 bytes
-Output/data/object/building/metal07_door2_128.png  |  Bin 0 -> 17675 bytes
-Output/data/object/building/metal07_door_128.png   |  Bin 0 -> 23171 bytes
-Output/data/object/building/metal07_nucl_128.png   |  Bin 0 -> 21599 bytes
-Output/data/object/building/metal_Landing_sign.png |  Bin 0 -> 15884 bytes
-.../data/object/building/metal_door_windws01.png   |  Bin 0 -> 24885 bytes
-Output/data/object/building/metal_window_01.png    |  Bin 0 -> 18752 bytes
-Output/data/object/building/metal_window_02.png    |  Bin 0 -> 19187 bytes
-Output/data/object/building/metal_windws01.png     |  Bin 0 -> 24875 bytes
-Output/data/object/building/sp_st_256.png          |  Bin 0 -> 123634 bytes
-Output/data/object/building/spacefighter01.GBS     |  430 +++
-Output/data/object/building/spacefighter02.GBS     |  565 ++++
-Output/data/object/building/spacefighter03.GBS     |  581 ++++
-Output/data/object/building/suttle01.GBS           |  438 +++
-Output/data/object/building/suttle02.GBS           |  426 +++
-Output/data/object/building/warn_stripe_128.png    |  Bin 0 -> 31471 bytes
-28 files changed, 7886 insertions(+)
-create mode 100644 Output/data/object/EnpGameStage/Stage_1.map
-create mode 100644 Output/data/object/building/Barrack.GBS
-create mode 100644 Output/data/object/building/Car07.png
-create mode 100644 Output/data/object/building/F01_512.png
-create mode 100644 Output/data/object/building/F02_512.png
-create mode 100644 Output/data/object/building/F03_512.png
-create mode 100644 Output/data/object/building/Gravingdock.GBS
-create mode 100644 Output/data/object/building/S01_512.png
-create mode 100644 Output/data/object/building/S02_512.png
-create mode 100644 Output/data/object/building/SpaceCar.GBS
-create mode 100644 Output/data/object/building/SpaceStation.GBS
-create mode 100644 Output/data/object/building/landing_dock.GBS
-create mode 100644 Output/data/object/building/metal03_3_128x128.png
-create mode 100644 Output/data/object/building/metal07_door2_128.png
-create mode 100644 Output/data/object/building/metal07_door_128.png
-create mode 100644 Output/data/object/building/metal07_nucl_128.png
-create mode 100644 Output/data/object/building/metal_Landing_sign.png
-create mode 100644 Output/data/object/building/metal_door_windws01.png
-create mode 100644 Output/data/object/building/metal_window_01.png
-create mode 100644 Output/data/object/building/metal_window_02.png
-create mode 100644 Output/data/object/building/metal_windws01.png
-create mode 100644 Output/data/object/building/sp_st_256.png
-create mode 100644 Output/data/object/building/spacefighter01.GBS
-create mode 100644 Output/data/object/building/spacefighter02.GBS
-create mode 100644 Output/data/object/building/spacefighter03.GBS
-create mode 100644 Output/data/object/building/suttle01.GBS
-create mode 100644 Output/data/object/building/suttle02.GBS
-create mode 100644 Output/data/object/building/warn_stripe_128.png
+주사기 들기
+
+누워있는 해골 오브젝트,누워있는 군인 오브젝트, 누워있는 연구원 오브젝트 export 
+
+이벤트 구현 작업
+
+스팀팩 맞는 소리.(사운드 작업)
+
+
+1인칭 충돌 처리
+
+
+캐릭터 충돌 처리
+-------------------
+AI 코드 마무리
+
+맵 작업 인게임 연동
+
