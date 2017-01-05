@@ -80,7 +80,7 @@ bool GEventMgr::initStage1(shared_ptr<GStage>* pStage) {
 	//Stage 1 [END]
 
 	T_STR strFile;
-	strFile = L"data/map/stage_1_2.map";
+	strFile = L"data/map/stage_1.map";
 	((GSeqSinglePlay*)g_pMain->m_pGameSeq[G_SEQ_SINGLE])->m_MapMgr.LoadMap(&strFile, ((GSeqSinglePlay*)g_pMain->m_pGameSeq[G_SEQ_SINGLE])->m_pCamera, g_pMain);
 
 	return true;
