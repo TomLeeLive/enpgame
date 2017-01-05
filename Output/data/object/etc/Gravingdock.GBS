@@ -16,7 +16,8 @@
 		VMtl03	Standard	0	1
 		1	metal07_nucl_128.png
 	#SUBMATERIAL 3
-		VMtl04	Standard	0	1		1	NULL
+		VMtl04	Standard	0	1		
+		1	NULL
 #OBJECTS 0
 Box01-FACES01 (null)
 0	232	0	0	0	0	0
