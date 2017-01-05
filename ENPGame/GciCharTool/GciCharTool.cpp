@@ -822,7 +822,7 @@ bool CGciCharToolApp::Load()
 		int iLoad = m_LoadFiles.size() - 1;
 
 		m_tbsobj.Init();
-		if (!m_tbsobj.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"data/shader/box.hlsl"))
+		if (!m_tbsobj.Load(GetDevice(), m_LoadFiles[iLoad].c_str(), L"data/shader/Obj_Diffuse.hlsl"))
 		{
 			return false;
 		}
