@@ -40,7 +40,8 @@ bool GSeqMenu::Render() {
 		case 1: 
 		{
 			//g_pMain->m_pGameSeq[G_SEQ_SINGLE]->Init();
-			g_pMain->ChangeSeq(G_SEQ_SINGLE);
+			//g_pMain->ChangeSeq(G_SEQ_SINGLE);
+			g_pMain->ChangeSeq(G_SEQ_SINGLE_1S);
 			g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
 
 		}

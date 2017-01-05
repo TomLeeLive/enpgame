@@ -35,6 +35,7 @@ class GStage
 public:
 	D3DXVECTOR3			m_vPosStart;
 	D3DXVECTOR3			m_vPosEnd;
+	vector<D3DXVECTOR3>			m_vecZombiePos;
 	vector<shared_ptr<GEvent>>  m_vecEvent;
 	virtual bool init();
 

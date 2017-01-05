@@ -264,6 +264,7 @@ bool GSeqSinglePlay::Frame()
 
 #ifdef G_MACRO_AI_ADD
 
+	/*
 	int  iZombieAliveCnt = 0;
 
 	list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();
@@ -276,35 +277,53 @@ bool GSeqSinglePlay::Frame()
 
 	if (iZombieAliveCnt< G_DEFINE_MAX_BASIC_ZOMBIE)
 		AddZomb(G_DEFINE_MAX_BASIC_ZOMBIE);
+	*/
 
+	list<shared_ptr<GNewZombie>>::iterator _F = m_GAIZombMgr.m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_GAIZombMgr.m_Zomb.end();
 
-	_F = m_GAIZombMgr.m_Zomb.begin();
-	_L = m_GAIZombMgr.m_Zomb.end();
+	//for (int i = 0; i < m_CharHero.size(); i++) {
 
-	for (int i = 0; i < m_CharHero.size(); i++) {
+	for (; _F != _L; ++_F)
+	{
+		if (GBBOXFUNC::ColCheck(&m_CharHero[G_HERO_TOM].get()->m_OBB, &(*_F)->m_OBB) && (*_F)->m_pChar->m_bAttack == true) {
 
-		for (; _F != _L; ++_F)
-		{
-			if (GBBOXFUNC::ColCheck(&m_CharHero[i].get()->m_OBB, &(*_F)->m_OBB) && (*_F)->m_pChar->m_bAttack == true) {
+			m_CharHero[G_HERO_TOM].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
 
-				m_CharHero[i].get()->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
+			g_pMain->m_pSound.Play(SND_HIT_BY_ZOMBIE, true, false);
 
-				g_pMain->m_pSound.Play(SND_HIT_BY_ZOMBIE, true, false);
-
-				//좀비 애니메이션 리셋
-				{
-					(*_F)->m_pChar->m_iCurrentFrame = (*_F)->m_pChar->m_iStartFrame;
-					(*_F)->m_pChar->m_fFrame = (float)(*_F)->m_pChar->m_iStartFrame + (*_F)->m_pChar->m_fLerpTime;
-				}
-
-				//hero dead 체크.
-				CheckHeroDead(i);
+			//좀비 애니메이션 리셋
+			{
+				(*_F)->m_pChar->m_iCurrentFrame = (*_F)->m_pChar->m_iStartFrame;
+				(*_F)->m_pChar->m_fFrame = (float)(*_F)->m_pChar->m_iStartFrame + (*_F)->m_pChar->m_fLerpTime;
 			}
-			else {
-			}
+
+			//hero dead 체크.
+			CheckHeroDead(G_HERO_TOM);
 		}
+		else {
+		}
+		
+		if (GBBOXFUNC::ColCheck(&m_GAIColMgr.m_Zomb[0]->m_OBB, &(*_F)->m_OBB) && (*_F)->m_pChar->m_bAttack == true) {
 
+			m_GAIColMgr.m_Zomb[0]->m_iHP -= G_DEFINE_DAMAGE_SHOTGUN_TO_PLAYER;
+
+			g_pMain->m_pSound.Play(SND_HIT_BY_ZOMBIE, true, false);
+
+			//좀비 애니메이션 리셋
+			{
+				(*_F)->m_pChar->m_iCurrentFrame = (*_F)->m_pChar->m_iStartFrame;
+				(*_F)->m_pChar->m_fFrame = (float)(*_F)->m_pChar->m_iStartFrame + (*_F)->m_pChar->m_fLerpTime;
+			}
+
+			//hero dead 체크.
+			//CheckHeroDead(G_HERO_JAKE);
+		}
+		else {
+		}
 	}
+
+	//}
 #else
 	int  iZombieAliveCnt = 0;
 	for (int i = 0; i < m_CharZombie.size(); i++) {
@@ -709,7 +728,7 @@ bool        GSeqSinglePlay::FrameGame() {
 			InitGame();
 
 			//카메라를 바꾼다.
-			m_pCamera = m_pFPSCamera[0].get();
+			m_pCamera = m_pFPSCamera[G_HERO_TOM].get();
 
 			//마우스를 화면에 보이게 한다.
 			ShowCursor(true);

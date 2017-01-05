@@ -46,11 +46,11 @@ bool GAIZombieMgr::Load(int iNum, D3DXVECTOR3 position)
 }
 bool		GAIZombieMgr::Init(int iNum) {
 
-	D3DXVECTOR3 StartPosition(500.0f, 40.0f, 500.0f);
-	D3DXVECTOR3 StartPosition2(-500.0f, 40.0f, -500.0f);
+	//D3DXVECTOR3 StartPosition(500.0f, 40.0f, 500.0f);
+	//D3DXVECTOR3 StartPosition2(-500.0f, 40.0f, -500.0f);
 	srand((unsigned)time(NULL));
-	Load(iNum, StartPosition);
-	Load(iNum, StartPosition2);
+	//Load(iNum, StartPosition);
+	//Load(iNum, StartPosition2);
 
 	
 	

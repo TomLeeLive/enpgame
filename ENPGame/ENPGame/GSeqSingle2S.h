@@ -6,10 +6,10 @@ public:
 		if (pInstance_ == 0) pInstance_ = new GSeqSingle2S;
 		return pInstance_;
 	}
-	bool Init() { return true; };
-	bool Frame() { return true; };
-	bool Render() { return true; };
-	bool Release() { return true; };
+	bool Init();
+	bool Frame();
+	bool Render();
+	bool Release();
 
 	//----------------------------------------------------
 	// 변경된 클라이언트 영역를 재설정을 위한 소멸 및 생성
