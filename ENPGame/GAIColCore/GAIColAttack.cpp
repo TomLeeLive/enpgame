@@ -1,19 +1,19 @@
-#include "_Colleague_std.h"
+#include "_ai_col_std.h"
 
-bool GAIHeal::Init(GNewZombie* iMyIndex)
+bool GAIColAttack::Init(GAICol* iMyIndex)
 {
-	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_ATTACK");
+	pChar0 = I_CharMgr.GetPtr(L"HERO2_ATTACK");
 
 	return true;
 }
 
-bool GAIHeal::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
+bool GAIColAttack::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
 	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
 	D3DXVECTOR3 vHeroPos2 = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);
 
-	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,
-		iMyIndex->m_matZombWld._42, iMyIndex->m_matZombWld._43);
+	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matWorld._41,
+		iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	D3DXVECTOR3 Temp2 = vHeroPos2 - vPos;
@@ -21,49 +21,49 @@ bool GAIHeal::Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX ma
 	float fDistance = D3DXVec3Length(&Temp);
 	float fDistance2 = D3DXVec3Length(&Temp2);
 
-	if (fDistance > G_DEFINE_AI_ATTACK_CHECK && fDistance2 > G_DEFINE_AI_ATTACK_CHECK)
+	if (fDistance > G_DEFINE_AI_COL_ATTACK_CHECK && fDistance2 > G_DEFINE_AI_COL_ATTACK_CHECK)
 	{
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_FOLLOW);
 	}
 	return true;
 }
-bool GAIHeal::Render()
+bool GAIColAttack::Render()
 {
 
 	return true;
 }
-bool GAIHeal::Release()
+bool GAIColAttack::Release()
 {
 	return true;
 }
-HRESULT GAIHeal::CreateResource()
+HRESULT GAIColAttack::CreateResource()
 {
 	HRESULT hr;
 
 	return S_OK;
 }
-HRESULT GAIHeal::DeleteResource()
+HRESULT GAIColAttack::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();
 	return S_OK;
 }
-GAIHeal::GAIHeal()
+GAIColAttack::GAIColAttack()
 {
 	//m_pMainCamera = nullptr;
 	//ZombieMgr = new GNewZombieMgr;
 	//pInstance_ = 0;
 
-	GAISeq::InitGSeq();
+	GAIColSeq::InitGSeq();
 
 
 }
 
 
-GAIHeal::~GAIHeal()
+GAIColAttack::~GAIColAttack()
 {
 }
-int GAIHeal::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int GAIColAttack::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	//if (m_pMainCamera != nullptr)
 	//{

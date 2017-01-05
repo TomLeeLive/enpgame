@@ -1,10 +1,10 @@
 #pragma once
 
-class GAIIdle : public GAISeq
+class GAIColIdle : public GAIColSeq
 {
 public:
-	bool Init(GNewZombie* iMyIndex);
-	bool Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld,D3DXMATRIX matHeroWorld2);
+	bool Init(GAICol* iMyIndex);
+	bool Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld,D3DXMATRIX matHeroWorld2);
 	bool Render();
 	bool Release();
 
@@ -21,8 +21,8 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	virtual ~GAIIdle();
-	GAIIdle();
+	virtual ~GAIColIdle();
+	GAIColIdle();
 protected:
 
 };

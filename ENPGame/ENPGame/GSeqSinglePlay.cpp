@@ -122,6 +122,8 @@ bool GSeqSinglePlay::Init()
 	InitMap();
 	InitObj();
 
+	m_GAIColMgr.Load(1, m_pFPSCamera[G_HERO_JAKE]->m_vCameraPos);
+
 	return true;
 }
 
@@ -512,6 +514,7 @@ bool		GSeqSinglePlay::InitChar() {
 
 	Load();
 
+	
 
 #endif
 	return true;
@@ -928,6 +931,10 @@ bool		GSeqSinglePlay::FrameChar() {
 	D3DXMATRIX matHeroTrans[G_HERO_CNT];
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
+
+		if (iChar == G_HERO_JAKE)
+			continue;
+
 		D3DXMatrixIdentity(&matHeroWld[iChar]);
 		D3DXMatrixIdentity(&matHeroScl[iChar]);
 		D3DXMatrixIdentity(&matHeroRot[iChar]);
@@ -942,8 +949,13 @@ bool		GSeqSinglePlay::FrameChar() {
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
+		if (iChar == G_HERO_JAKE)
+			continue;
+
 		m_CharHero[iChar]->Frame();
 	}
+
+	m_GAIColMgr.Frame(m_CharHero[G_HERO_TOM]->m_matWorld, m_CharHero[G_HERO_TOM]->m_matWorld);
 
 	int iChange = 0;
 
@@ -1190,6 +1202,9 @@ bool		GSeqSinglePlay::RenderChar() {
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
 	{
+		if (iChar == G_HERO_JAKE)
+			continue;
+
 		if (iChar == m_CurrentHero && m_bDebugMode==false 
 			&& m_CharHero[iChar]->m_bDead == false && m_bChatting == false)
 			continue;
@@ -1197,6 +1212,7 @@ bool		GSeqSinglePlay::RenderChar() {
 		m_CharHero[iChar].get()->SetMatrix(&m_CharHero[iChar]->m_matWorld, m_pCamera->GetViewMatrix(), m_pCamera->GetProjMatrix());
 		m_CharHero[iChar].get()->Render(g_pImmediateContext);
 	}
+	m_GAIColMgr.Render(m_pCamera);
 
 #ifdef G_MACRO_AI_ADD
 	m_GAIZombMgr.Render(m_pCamera);

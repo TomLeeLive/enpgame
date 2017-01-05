@@ -1,6 +1,6 @@
 #pragma once
 
-class GAIHeal : public GAISeq
+class GAIColAttack : public GAIColSeq
 {
 public:
 	D3DXVECTOR3 m_vADestLook;
@@ -8,8 +8,8 @@ public:
 	D3DXVECTOR3 m_vAUp;
 	void AttackMove(int i, D3DXVECTOR3 vBoxPosition, D3DXVECTOR3 vZombiePosition);
 
-	bool Init(GNewZombie* iMyIndex);
-	bool Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
+	bool Init(GAICol* iMyIndex);
+	bool Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool Render();
 	bool Release();
 
@@ -22,8 +22,8 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	virtual ~GAIHeal();
-	GAIHeal();
+	virtual ~GAIColAttack();
+	GAIColAttack();
 protected:
 
 };

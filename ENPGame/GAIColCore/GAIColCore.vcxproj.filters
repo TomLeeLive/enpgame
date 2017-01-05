@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ColleagueSeq">
+    <Filter Include="AIColSeq">
       <UniqueIdentifier>{0f155667-23b4-4ab7-a876-7b3aec810f51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -21,57 +21,57 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GAIZombieMgr.h">
+    <ClInclude Include="GAIColAttack.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIColDie.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIColFollow.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIColIdle.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIColMove.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
+    <ClInclude Include="GAIColSeq.h">
+      <Filter>AIColSeq</Filter>
+    </ClInclude>
+    <ClInclude Include="_ai_col_std.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GAIDie.h">
-      <Filter>ColleagueSeq</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIFollow.h">
-      <Filter>ColleagueSeq</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIIdle.h">
-      <Filter>ColleagueSeq</Filter>
-    </ClInclude>
-    <ClInclude Include="GAISeq.h">
-      <Filter>ColleagueSeq</Filter>
-    </ClInclude>
-    <ClInclude Include="_Colleague_std.h">
+    <ClInclude Include="GAIColMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GAIHeal.h">
-      <Filter>ColleagueSeq</Filter>
-    </ClInclude>
-    <ClInclude Include="GAIEscape.h">
-      <Filter>ColleagueSeq</Filter>
-    </ClInclude>
-    <ClInclude Include="GColleague.h">
+    <ClInclude Include="GAICol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GAIIdle.cpp">
-      <Filter>ColleagueSeq</Filter>
+    <ClCompile Include="GAIColAttack.cpp">
+      <Filter>AIColSeq</Filter>
     </ClCompile>
-    <ClCompile Include="GAISeq.cpp">
-      <Filter>ColleagueSeq</Filter>
+    <ClCompile Include="GAIColDie.cpp">
+      <Filter>AIColSeq</Filter>
     </ClCompile>
-    <ClCompile Include="GAIFollow.cpp">
-      <Filter>ColleagueSeq</Filter>
+    <ClCompile Include="GAIColFollow.cpp">
+      <Filter>AIColSeq</Filter>
     </ClCompile>
-    <ClCompile Include="GAIDie.cpp">
-      <Filter>ColleagueSeq</Filter>
+    <ClCompile Include="GAIColIdle.cpp">
+      <Filter>AIColSeq</Filter>
     </ClCompile>
-    <ClCompile Include="GAIZombieMgr.cpp">
+    <ClCompile Include="GAIColMove.cpp">
+      <Filter>AIColSeq</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIColSeq.cpp">
+      <Filter>AIColSeq</Filter>
+    </ClCompile>
+    <ClCompile Include="GAIColMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GAIHeal.cpp">
-      <Filter>ColleagueSeq</Filter>
-    </ClCompile>
-    <ClCompile Include="GAIEscape.cpp">
-      <Filter>ColleagueSeq</Filter>
-    </ClCompile>
-    <ClCompile Include="GColleague.cpp">
+    <ClCompile Include="GAICol.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7E711AFC-D4E7-407B-8F13-6A91ACA54180}</ProjectGuid>
+    <ProjectGuid>{F657D66D-3F32-4D9B-AB12-A86A8BEAC226}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GAICore</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>../../output/</OutDir>
-    <IntDir>../../output/AICore/</IntDir>
+    <IntDir>../../output/$(ProjectName)/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>../../output/</OutDir>
@@ -92,11 +92,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>GAICore32d.lib</OutputFile>
+      <OutputFile>GAIColCore32d.lib</OutputFile>
       <AdditionalLibraryDirectories>../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "./GAICore32d.lib" "..\\..\\lib"
+      <Command>copy "./GAIColCore32d.lib" "..\\..\\lib"
 copy "*.h" "..\\..\\include\\Inc"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -133,12 +133,12 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <OutputFile>GAICore32.lib</OutputFile>
+      <OutputFile>GAIColCore32.lib</OutputFile>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../lib;../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "./GAICore32.lib" "..\\..\\lib"
+      <Command>copy "./GAIColCore32.lib" "..\\..\\lib"
 copy "*.h" "..\\..\\include\\Inc"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -164,25 +164,25 @@ copy "*.h" "..\\..\\include\\Inc"</Command>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GAIHeal.h" />
-    <ClInclude Include="GAIDie.h" />
-    <ClInclude Include="GAIFollow.h" />
-    <ClInclude Include="GAIIdle.h" />
-    <ClInclude Include="GAIEscape.h" />
-    <ClInclude Include="GAISeq.h" />
-    <ClInclude Include="GAIZombieMgr.h" />
-    <ClInclude Include="GColleague.h" />
-    <ClInclude Include="_Colleague_std.h" />
+    <ClInclude Include="GAICol.h" />
+    <ClInclude Include="GAIColAttack.h" />
+    <ClInclude Include="GAIColDie.h" />
+    <ClInclude Include="GAIColFollow.h" />
+    <ClInclude Include="GAIColIdle.h" />
+    <ClInclude Include="GAIColMgr.h" />
+    <ClInclude Include="GAIColMove.h" />
+    <ClInclude Include="GAIColSeq.h" />
+    <ClInclude Include="_ai_col_std.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GAIHeal.cpp" />
-    <ClCompile Include="GAIDie.cpp" />
-    <ClCompile Include="GAIFollow.cpp" />
-    <ClCompile Include="GAIIdle.cpp" />
-    <ClCompile Include="GAIEscape.cpp" />
-    <ClCompile Include="GAISeq.cpp" />
-    <ClCompile Include="GAIZombieMgr.cpp" />
-    <ClCompile Include="GColleague.cpp" />
+    <ClCompile Include="GAICol.cpp" />
+    <ClCompile Include="GAIColAttack.cpp" />
+    <ClCompile Include="GAIColDie.cpp" />
+    <ClCompile Include="GAIColFollow.cpp" />
+    <ClCompile Include="GAIColIdle.cpp" />
+    <ClCompile Include="GAIColMgr.cpp" />
+    <ClCompile Include="GAIColMove.cpp" />
+    <ClCompile Include="GAIColSeq.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

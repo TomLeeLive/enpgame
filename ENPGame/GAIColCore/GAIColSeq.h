@@ -1,9 +1,9 @@
-//#include "GNewZombie.h"
+//#include "GAICol.h"
 
 #pragma once
 
 
-class GAISeq 
+class GAIColSeq 
 {
 public:
 	CStopwatch m_Stopwatch;//for debug
@@ -17,8 +17,8 @@ public:
 	float fTime;
 	GCharacter*	 pChar0;
 
-	virtual bool Init(GNewZombie* iMyIndex) = 0;
-	virtual bool Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2) = 0;
+	virtual bool Init(GAICol* iMyIndex) = 0;
+	virtual bool Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2) = 0;
 	virtual bool Render() = 0;
 	virtual bool Release() = 0;
 	void		InitGSeq() {
@@ -36,7 +36,7 @@ public:
 
 	virtual int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 
-	virtual ~GAISeq();
-	GAISeq();
+	virtual ~GAIColSeq();
+	GAIColSeq();
 };
 
