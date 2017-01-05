@@ -51,7 +51,6 @@ public:
 	float			m_fFrame;
 	float			m_fLerpTime;
 	float			m_fSpeed;
-	int				m_State;
 	D3DXMATRIX		m_pMatrix[255];
 	CBConstBoneWorld m_cbBoneData;
 	ComPtr<ID3D11Buffer>    m_pCBConstBoneWorld;
