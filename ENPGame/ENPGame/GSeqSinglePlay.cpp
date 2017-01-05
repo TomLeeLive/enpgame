@@ -1514,9 +1514,8 @@ bool GSeqSinglePlay::Load()
 		pChar2->m_pBoneObject->m_Scene.iFirstFrame,
 		pChar2->m_pBoneObject->m_Scene.iLastFrame);
 
-	pObjC->Init();
-
 	pObjC.get()->m_HeroType = G_HERO_JAKE;
+	pObjC->Init();
 	m_CharHero.push_back(pObjC);
 	
 	return true;
