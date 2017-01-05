@@ -184,6 +184,8 @@ bool			GMapGroup::Init() {
 	return true;
 };
 
+
+
 bool			GMapGroup::Frame(GCamera* pCamera,bool bDebug, GInput* pInput) {
 
 
@@ -226,6 +228,12 @@ bool			GMapGroup::Frame(GCamera* pCamera,bool bDebug, GInput* pInput) {
 		}
 		m_vecObj[i]->m_pObj->SetMatrix(&m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 		m_vecObj[i]->m_pObj->Frame();
+
+		if (!_tcsicmp(G_DEFINE_STAGE_FENCE_OBJ_NAME, m_vecObj[i]->m_strName)) {
+			m_vecObjRender[i] = true;
+			continue;
+		}
+			
 
 		if (pCamera->CheckOBBInPlane(&(m_vecObj[i]->m_pObj->m_OBB)))
 		{

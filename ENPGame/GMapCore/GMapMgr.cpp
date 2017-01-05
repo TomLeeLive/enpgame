@@ -3,6 +3,8 @@
 #include "GMapMgr.h"
 #include <atlstr.h>
 
+
+
 #ifdef G_DEFINE_SHADOW_ADD
 bool			GMapMgr::RenderObject(GCoreLibV2* pMain, GCamera* pCamera,bool bDebug ) {
 	if (m_iMapSelected == -1)
@@ -17,8 +19,15 @@ bool			GMapMgr::RenderObject(GCoreLibV2* pMain, GCamera* pCamera,bool bDebug ) {
 	//오브젝트 렌더링.
 	for (int i = 0; i < m_vecMapGroup[m_iMapSelected]->m_vecObj.size(); i++)
 	{
+
 		if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
 		{
+			if (bDebug)
+				m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+
+			if (!_tcsicmp(G_DEFINE_STAGE_FENCE_OBJ_NAME, m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_strName))
+				continue;
+
 			D3DXMatrixInverse(&matInvView, 0, pCamera->GetViewMatrix());
 			D3DXMATRIX matWVPT1 = m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld * pMain->m_matShadowView * pMain->m_matShadowProj * pMain->m_matTexture;
 			D3DXMatrixTranspose(&pMain->m_cbShadow.g_matShadow, &matWVPT1);
@@ -32,8 +41,7 @@ bool			GMapMgr::RenderObject(GCoreLibV2* pMain, GCamera* pCamera,bool bDebug ) {
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->SetMatrix(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Render(pMain->GetContext());
 
-			if (bDebug)
-				m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->m_OBB.Render(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, pCamera->GetViewMatrix(), pCamera->GetProjMatrix());
+
 		}
 	}
 	//지형 렌더링.
@@ -72,6 +80,10 @@ bool			GMapMgr::RenderShadow(GCoreLibV2* pMain, D3DXMATRIX* matView, D3DXMATRIX*
 	{
 		//if (true == m_vecMapGroup[m_iMapSelected]->m_vecObjRender[i])
 		//{
+		
+		if (!_tcsicmp(G_DEFINE_STAGE_FENCE_OBJ_NAME, m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_strName))
+			continue;
+
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->SetMatrix(&m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_matObjWld, matView, matProj);
 			m_vecMapGroup[m_iMapSelected]->m_vecObj[i]->m_pObj->Render(pMain->GetContext());
 
