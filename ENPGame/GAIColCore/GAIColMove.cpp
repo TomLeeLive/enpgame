@@ -22,52 +22,36 @@ D3DXVECTOR3 GAIColMove::RandomMove( )
 
 bool GAIColMove::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
-	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
-	D3DXVECTOR3 vHeroPos2 = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);
+	D3DXVECTOR3 vTomPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
+	//D3DXVECTOR3 vJakePos = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);
 
-	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matWorld._41,
+	D3DXVECTOR3 vJakePos = D3DXVECTOR3(iMyIndex->m_matWorld._41,
 		iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
 
-	D3DXVECTOR3 Temp = vHeroPos - vPos;
-	D3DXVECTOR3 Temp2 = vHeroPos2 - vPos;
+	//D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matWorld._41,iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
 
-	float fDistance = D3DXVec3Length(&Temp);
-	float fDistance2 = D3DXVec3Length(&Temp2);
+	//D3DXVECTOR3 Temp = vTomPos - vPos;
+	//D3DXVECTOR3 Temp2 = vJakePos - vPos;
 
-	//3초 후를 체크하기 위한 변수
-	float fCoolTime = G_DEFINE_AI_COL_MOVE_COOLTIME;
+	float fTomPos = D3DXVec3Length(&vTomPos);
+	float fJakePos = D3DXVec3Length(&vJakePos);
+	float fDistance = abs(fTomPos) - abs(fJakePos);
+
+	////3초 후를 체크하기 위한 변수
+	//float fCoolTime = G_DEFINE_AI_COL_MOVE_COOLTIME;
 
 
-	if (!m_bTime)
-	{
-		fTime = g_fDurationTime;
-		m_vPos = RandomMove();
-		m_bTime = true;
+	//if (!m_bTime)
+	//{
+	//	fTime = g_fDurationTime;
+	//	m_vPos = RandomMove();
+	//	m_bTime = true;
 
-	}
-
-	if (fDistance > G_DEFINE_AI_COL_IDLE_CHECK && fDistance2 > G_DEFINE_AI_COL_IDLE_CHECK)
-	{
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_IDLE);
-	}
-
-	else
-	{
-		if (fDistance < G_DEFINE_AI_COL_FOLLOW_CHECK|| fDistance2 < G_DEFINE_AI_COL_FOLLOW_CHECK) {
+	//}
+		if (fDistance >= G_DEFINE_AI_COL_FOLLOW_CHECK ) {
 			iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_FOLLOW);
 		}
-		if (g_fDurationTime - fTime > fCoolTime) {
-			m_bTime = false;
-		}
-		else
-		{
-			if (iMyIndex->RotationAndTrans(m_vPos) == false)
-			{
-				m_vPos = RandomMove();
-				m_bTime = true;
-			}
-		}
-	}
+
 
 	return true;
 }

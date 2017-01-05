@@ -10,10 +10,10 @@
 #define G_DEFINE_CHAR_COL_Y_POS 36.2f;
 #define G_DEFINE_AI_COL_ALMOST_ZERO	0.2f
 #define G_DEFINE_AI_COL_MOVE_COOLTIME 3.0f
-#define G_DEFINE_AI_COL_IDLE_CHECK 500.0f
-#define G_DEFINE_AI_COL_FOLLOW_CHECK 200.0f
+#define G_DEFINE_AI_COL_IDLE_CHECK 50.0f
+#define G_DEFINE_AI_COL_FOLLOW_CHECK 100.0f
 #define G_DEFINE_AI_COL_ATTACK_CHECK 40.0f
-#define G_DEFINE_AI_COL_MOVE_SPEED 50.0f
+#define G_DEFINE_AI_COL_MOVE_SPEED 180.0f
 #define G_DEFINE_AI_TEST_COL_HERO_SPEED 100.0f
 
 enum G_COL_AI_ST {
@@ -29,7 +29,7 @@ enum G_AI_COL {
 	G_AI_COL_IDLE = 0,
 	G_AI_COL_MOVE,
 	G_AI_COL_ATTACK,
-	G_AI_COL_DIE,
+	G_AI_COL_ESCAPE,
 	G_AI_COL_FOLLOW,
 	G_AI_COL_CNT
 };
@@ -50,7 +50,7 @@ enum G_AI_COL {
 #include "GAIColIdle.h"
 #include "GAIColMove.h"
 #include "GAIColFollow.h"
-#include "GAIColDie.h"
+#include "GAIColEscape.h"
 #include "GAIColAttack.h"
 
 #include "GDxHelperEX.h"

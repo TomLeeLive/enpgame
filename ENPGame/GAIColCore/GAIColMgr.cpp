@@ -1,8 +1,5 @@
 #include "_ai_col_std.h"
 
-
-
-
 bool GAIColMgr::Load(int iNum, D3DXVECTOR3 position)
 {
 

@@ -10,41 +10,23 @@ bool GAIColFollow::Init(GAICol* iMyIndex)
 
 bool GAIColFollow::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
-	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
-	D3DXVECTOR3 vHeroPos2 = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);
+	D3DXVECTOR3 vTomPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
+	D3DXVECTOR3 vJakePos = D3DXVECTOR3(iMyIndex->m_matWorld._41,iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
 
-	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matWorld._41,
-		iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43); 
+	
+	D3DXVECTOR3 Temp = vTomPos - vJakePos;
+	float fDistance = D3DXVec3Length(&Temp);
 
-	D3DXVECTOR3 Temp = vHeroPos - vPos;
-	D3DXVECTOR3 Temp2 = vHeroPos2 - vPos;
-
-			float fDistance = D3DXVec3Length(&Temp);
-			float fDistance2 = D3DXVec3Length(&Temp2);
-
-	if ((fDistance >= G_DEFINE_AI_COL_ATTACK_CHECK && fDistance <= G_DEFINE_AI_COL_FOLLOW_CHECK) || (fDistance2 >= G_DEFINE_AI_COL_ATTACK_CHECK && fDistance2 <= G_DEFINE_AI_COL_FOLLOW_CHECK))
+	if (fDistance <= G_DEFINE_AI_COL_FOLLOW_CHECK)
 	{
-		if (fDistance >= fDistance2)
-		{
-			iMyIndex->RotationAndTrans(vHeroPos2);
-		}
-		else
-		{
-			iMyIndex->RotationAndTrans(vHeroPos);
-		}
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_IDLE);
 	}
-
-	if (fDistance > G_DEFINE_AI_COL_FOLLOW_CHECK && fDistance2 > G_DEFINE_AI_COL_FOLLOW_CHECK)
+	else if(fDistance > G_DEFINE_AI_COL_FOLLOW_CHECK)
 	{
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_MOVE);
+		iMyIndex->RotationAndTrans(vTomPos);
 	}
-
-
-	if (fDistance < G_DEFINE_AI_COL_ATTACK_CHECK || fDistance2 < G_DEFINE_AI_COL_ATTACK_CHECK)
-	{
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_ATTACK);
-	}
-
+	
+	
 	return true;
 }
 bool GAIColFollow::Render()

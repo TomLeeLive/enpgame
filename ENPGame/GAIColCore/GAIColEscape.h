@@ -1,6 +1,6 @@
 #pragma once
 
-class GAIColDie : public GAIColSeq
+class GAIColEscape : public GAIColSeq
 {
 private:
 	//static GAIColDie *pInstance_;
@@ -26,8 +26,8 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	virtual ~GAIColDie();
-	GAIColDie();
+	virtual ~GAIColEscape();
+	GAIColEscape();
 protected:
 
 };

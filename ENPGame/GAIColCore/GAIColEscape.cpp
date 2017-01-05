@@ -2,49 +2,49 @@
 
 //GAIColDie * GAIColDie::pInstance_ = 0;
 
-bool GAIColDie::Init(GAICol* iMyIndex)
+bool GAIColEscape::Init(GAICol* iMyIndex)
 {
 	pChar0 = I_CharMgr.GetPtr(L"HERO2_DIE");
 	return true;
 }
-bool GAIColDie::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
+bool GAIColEscape::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
-	//iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_DIE);
+	//iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_ESCAPE);
 	
 	return true;
 }
-bool GAIColDie::Render()
+bool GAIColEscape::Render()
 {
 
 	return true;
 }
-bool GAIColDie::Release()
+bool GAIColEscape::Release()
 {
 	return true;
 }
-HRESULT GAIColDie::CreateResource()
+HRESULT GAIColEscape::CreateResource()
 {
 	HRESULT hr;
 
 	return S_OK;
 }
-HRESULT GAIColDie::DeleteResource()
+HRESULT GAIColEscape::DeleteResource()
 {
 	HRESULT hr = S_OK;
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();
 	return S_OK;
 }
-GAIColDie::GAIColDie()
+GAIColEscape::GAIColEscape()
 {
 	//pInstance_ = 0;
 	GAIColSeq::InitGSeq();
 }
 
 
-GAIColDie::~GAIColDie()
+GAIColEscape::~GAIColEscape()
 {
 }
-int GAIColDie::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int GAIColEscape::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	//if (m_pMainCamera != nullptr)
 	//{

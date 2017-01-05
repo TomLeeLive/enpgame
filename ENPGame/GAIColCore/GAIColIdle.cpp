@@ -8,19 +8,19 @@ bool GAIColIdle::Init(GAICol* iMyIndex)
 }
 bool GAIColIdle::Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
-	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
+	D3DXVECTOR3 vTomPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
+	D3DXVECTOR3 vJake = D3DXVECTOR3(iMyIndex->m_matWorld._41,iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
 
-	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matWorld._41,
-		iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
-
-	D3DXVECTOR3 Temp = vHeroPos - vPos;
+	D3DXVECTOR3 Temp = vTomPos - vJake;
 	float fDistance = D3DXVec3Length(&Temp);
-
-	if (fDistance <= G_DEFINE_AI_COL_IDLE_CHECK)
+	if (fDistance < G_DEFINE_AI_COL_FOLLOW_CHECK)
 	{
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_MOVE);
-	}
 
+	}
+	else 
+	{
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_FOLLOW);
+	}
 	return true;
 }
 bool GAIColIdle::Render()
