@@ -130,7 +130,7 @@ bool	GAICol::Init()
 	
 	return true;
 };
-bool	GAICol::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
+bool	GAICol::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero)
 {
 	GHero::Frame();
 

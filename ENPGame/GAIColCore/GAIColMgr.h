@@ -3,13 +3,13 @@
 class GAIColMgr
 {
 public:
-	list<shared_ptr<GAICol>> m_Zomb;
+	vector<shared_ptr<GAICol>> m_Zomb;
 	bool Load(int iNum, D3DXVECTOR3 position);
 
 
 public:
 	bool		Init(int iNum);
-	bool		Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
+	bool		Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero);
 	bool		Render(GCamera* camera);
 	bool		Render(D3DXMATRIX matView, D3DXMATRIX matProj);
 	bool		Release();

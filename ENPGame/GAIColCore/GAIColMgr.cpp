@@ -37,6 +37,10 @@ bool GAIColMgr::Load(int iNum, D3DXVECTOR3 position)
 		//OBB ¹Ú½º Init.
 		pObjA->m_OBB.Init(pObjA->m_pChar->m_vMin, pObjA->m_pChar->m_vMax);
 
+		pObjA->m_iHP = 100;
+		pObjA->m_iBullet = 100;
+
+
 		m_Zomb.push_back(pObjA);
 	}
 
@@ -52,23 +56,29 @@ bool		GAIColMgr::Init(int iNum) {
 
 	
 	
-	return true; };
+	return true; 
 
-bool		GAIColMgr::Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2) {
+};
+
+bool		GAIColMgr::Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero) {
 
 
 
-	list<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
-	list<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
+	vector<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
+	vector<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
 	for (; _F != _L; ++_F)
 	{
-		(*_F)->Frame((*_F).get(), matHeroWorld, matHeroWorld2);
+		(*_F)->Frame((*_F).get(), matHeroWorld, matHeroWorld2, pHero);
 	}
 
-	return true; };
+	return true; 
+
+};
+
+
 bool		GAIColMgr::Render(D3DXMATRIX matView, D3DXMATRIX matProj) {
-	list<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
-	list<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
+	vector<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
+	vector<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
 	for (; _F != _L; ++_F)
 	{
 		(*_F)->SetMatrix(&(*_F)->m_matWorld, &matView, &matProj);
@@ -81,8 +91,8 @@ bool		GAIColMgr::Render(D3DXMATRIX matView, D3DXMATRIX matProj) {
 }
 bool		GAIColMgr::Render(GCamera* camera) {
 	
-	list<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
-	list<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
+	vector<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
+	vector<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
 	for (; _F != _L; ++_F)
 	{
 		//D3DXMATRIX matWorld;
@@ -106,8 +116,8 @@ int		GAIColMgr::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { ret
 //----------------------------------------------------
 HRESULT		GAIColMgr::CreateResource() {
 
-	list<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
-	list<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
+	vector<shared_ptr<GAICol>>::iterator _F = m_Zomb.begin();
+	vector<shared_ptr<GAICol>>::iterator _L = m_Zomb.end();
 	for (; _F != _L; ++_F)
 	{
 		(*_F)->CreateResource();

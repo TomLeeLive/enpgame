@@ -16,8 +16,8 @@
 
 enum G_HERO {
 	G_HERO_TOM = 0,
-	G_HERO_JAKE,
-	G_HERO_CNT
+	G_HERO_CNT = 1,
+	G_HERO_JAKE
 };
 
 class GHero : public GModel

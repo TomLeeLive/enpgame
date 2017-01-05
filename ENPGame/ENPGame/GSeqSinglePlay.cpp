@@ -122,7 +122,7 @@ bool GSeqSinglePlay::Init()
 	InitMap();
 	InitObj();
 
-	m_GAIColMgr.Load(1, m_pFPSCamera[G_HERO_JAKE]->m_vCameraPos);
+	m_GAIColMgr.Load(1, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	
 	I_GameEventMgr.init();
 
@@ -343,11 +343,15 @@ bool GSeqSinglePlay::Frame()
 
 	m_UIManager.Frame(&g_pMain->m_SwapChainDesc);
 
-	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_HEALTH])->SetXSize(m_CharHero[0].get()->m_iHP);
-	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_HEALTH])->SetXSize(m_CharHero[1].get()->m_iHP);
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_HEALTH])->SetXSize(m_CharHero[G_HERO_TOM].get()->m_iHP);
+	//((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_HEALTH])->SetXSize(m_CharHero[G_HERO_JAKE].get()->m_iHP);
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_HEALTH])->SetXSize(m_GAIColMgr.m_Zomb[0]->m_iHP);
 
-	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_BULLET])->SetXSize(m_CharHero[0].get()->m_iBullet);
-	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_BULLET])->SetXSize(m_CharHero[1].get()->m_iBullet);
+	
+
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER1_BULLET])->SetXSize(m_CharHero[G_HERO_TOM].get()->m_iBullet);
+	//((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_BULLET])->SetXSize(m_CharHero[G_HERO_JAKE].get()->m_iBullet);
+	((GButtonHalfCtl*)m_UIManager.m_pUIList[G_DEFINE_UI_PLAYER2_BULLET])->SetXSize(m_GAIColMgr.m_Zomb[0]->m_iBullet);
 
 	m_UIManager.m_pUIList[G_DEFINE_UI_CROSSHAIR]->m_bRender = !m_bGameOver;
 	m_UIManager.m_pUIList[G_DEFINE_UI_GAMEOVER]->m_bRender = m_bGameOver;
@@ -577,10 +581,21 @@ bool		GSeqSinglePlay::InitEffect() {
 
 void	GSeqSinglePlay::SetEventCamera(G_HERO hero) {
 	//말하는 캐릭터 중심으로 카메라 회전 처리.
-	m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[hero]->m_matWorld._41;
-	m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[hero]->m_matWorld._43;
-	m_vEventCamPos.y = 100.f;
-	m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_CharHero[hero]->m_matWorld._41, m_CharHero[hero]->m_matWorld._42, m_CharHero[hero]->m_matWorld._43));
+
+	if (hero == G_HERO_TOM) {
+		m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[G_HERO_TOM]->m_matWorld._41;
+		m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_CharHero[G_HERO_TOM]->m_matWorld._43;
+		m_vEventCamPos.y = 100.f;
+		m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_CharHero[hero]->m_matWorld._41, m_CharHero[hero]->m_matWorld._42, m_CharHero[hero]->m_matWorld._43));
+	}
+	else {
+		m_vEventCamPos.x = 30.f*(FLOAT)cos(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_GAIColMgr.m_Zomb[0]->m_matWorld._41;
+		m_vEventCamPos.z = 30.f*(FLOAT)sin(0.7f*g_pMain->m_Timer.GetElapsedTime()) + m_GAIColMgr.m_Zomb[0]->m_matWorld._43;
+		m_vEventCamPos.y = 100.f;
+		m_pEventCamera->SetViewMatrix(m_vEventCamPos, D3DXVECTOR3(m_GAIColMgr.m_Zomb[0]->m_matWorld._41, m_GAIColMgr.m_Zomb[0]->m_matWorld._42, m_GAIColMgr.m_Zomb[0]->m_matWorld._43));
+	}
+
+
 }
 
 bool        GSeqSinglePlay::FrameGame() {
@@ -834,26 +849,26 @@ void		GSeqSinglePlay::ChangeZombState(int iNum, TCHAR* str) {
 bool		GSeqSinglePlay::FrameChar() {
 #ifdef G_MACRO_CHAR_ADD
 
-	D3DXMATRIX matHeroWld[G_HERO_CNT];
-	D3DXMATRIX matHeroScl[G_HERO_CNT];
-	D3DXMATRIX matHeroRot[G_HERO_CNT];
-	D3DXMATRIX matHeroTrans[G_HERO_CNT];
+	D3DXMATRIX matHeroWld;
+	D3DXMATRIX matHeroScl;
+	D3DXMATRIX matHeroRot;
+	D3DXMATRIX matHeroTrans;
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++) {
 
 		if (iChar == G_HERO_JAKE)
 			continue;
 
-		D3DXMatrixIdentity(&matHeroWld[iChar]);
-		D3DXMatrixIdentity(&matHeroScl[iChar]);
-		D3DXMatrixIdentity(&matHeroRot[iChar]);
-		D3DXMatrixIdentity(&matHeroTrans[iChar]);
-		D3DXMatrixTranslation(&matHeroTrans[iChar], m_pFPSCamera[iChar].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[iChar].get()->m_vCameraPos.z);
-		matHeroRot[iChar] = m_pFPSCamera[iChar].get()->GetRotMatY();
+		D3DXMatrixIdentity(&matHeroWld);
+		D3DXMatrixIdentity(&matHeroScl);
+		D3DXMatrixIdentity(&matHeroRot);
+		D3DXMatrixIdentity(&matHeroTrans);
+		D3DXMatrixTranslation(&matHeroTrans, m_pFPSCamera[iChar].get()->m_vCameraPos.x, G_DEFINE_CHAR_Y_POS_OFFSET, m_pFPSCamera[iChar].get()->m_vCameraPos.z);
+		matHeroRot = m_pFPSCamera[iChar].get()->GetRotMatY();
 
-		matHeroWld[iChar] = matHeroScl[iChar] * matHeroRot[iChar] * matHeroTrans[iChar];
+		matHeroWld = matHeroScl * matHeroRot * matHeroTrans;
 
-		m_CharHero[iChar]->m_matWorld = matHeroWld[iChar];
+		m_CharHero[iChar]->m_matWorld = matHeroWld;
 	}
 
 	for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
@@ -864,12 +879,12 @@ bool		GSeqSinglePlay::FrameChar() {
 		m_CharHero[iChar]->Frame();
 	}
 
-	m_GAIColMgr.Frame(m_CharHero[G_HERO_TOM]->m_matWorld, m_CharHero[G_HERO_TOM]->m_matWorld);
+	m_GAIColMgr.Frame(m_CharHero[G_HERO_TOM]->m_matWorld, m_CharHero[G_HERO_TOM]->m_matWorld, m_CharHero[G_HERO_TOM].get());
 
 	int iChange = 0;
 
 #ifdef G_MACRO_AI_ADD
-	m_GAIZombMgr.Frame(m_CharHero[0]->m_matWorld, m_CharHero[1]->m_matWorld);
+	m_GAIZombMgr.Frame(m_CharHero[G_HERO_TOM]->m_matWorld, m_GAIColMgr.m_Zomb[0]->m_matWorld);
 #else
 	if (I_Input.KeyCheck(DIK_F11) == KEY_UP)
 	{
@@ -1010,11 +1025,11 @@ bool        GSeqSinglePlay::RenderGame() {
 		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f));
 		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-		_stprintf_s(m_pTextOutBuffer, _T("Jake HP : %d"), m_CharHero[G_HERO_JAKE].get()->m_iHP);
+		_stprintf_s(m_pTextOutBuffer, _T("Jake HP : %d"), m_GAIColMgr.m_Zomb[0]->m_iHP);
 		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 		rc.top += G_MACRO_DEBUG_STR_INTERVAL;
 
-		_stprintf_s(m_pTextOutBuffer, _T("Jake Bullet : %d"), m_CharHero[G_HERO_JAKE].get()->m_iBullet);
+		_stprintf_s(m_pTextOutBuffer, _T("Jake Bullet : %d"), m_GAIColMgr.m_Zomb[0]->m_iBullet);
 		g_pMain->DrawDebugRect(&rc, m_pTextOutBuffer, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
 	}
 #endif
@@ -1066,6 +1081,7 @@ bool        GSeqSinglePlay::RenderMap() {
 
 #ifdef G_MACRO_AI_ADD
 		m_GAIZombMgr.Render(g_pMain->m_matShadowView, g_pMain->m_matShadowProj);
+		m_GAIColMgr.Render(g_pMain->m_matShadowView, g_pMain->m_matShadowProj);
 #else
 		for (int iChar = 0; iChar < m_CharZombie.size(); iChar++)
 		{
@@ -1424,8 +1440,9 @@ bool GSeqSinglePlay::Load()
 
 	m_CharHero.push_back(pObjB);
 
+	/*
 	//주인공2 로드
-	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero2.gci") /*_T("data/CharTable.gci")*/))
+	if (!I_CharMgr.Load(g_pd3dDevice, g_pImmediateContext, _T("data/CharHero2.gci") ))
 	{
 		return false;
 	}
@@ -1442,7 +1459,8 @@ bool GSeqSinglePlay::Load()
 	pObjC.get()->m_HeroType = G_HERO_JAKE;
 	pObjC->Init();
 	m_CharHero.push_back(pObjC);
-	
+	*/
+
 	return true;
 }
 #endif 
