@@ -16,19 +16,19 @@
 #define G_DEFINE_AI_MOVE_SPEED 50.0f
 #define G_DEFINE_AI_TEST_HERO_SPEED 100.0f
 
-enum G_ZOMB_AI_ST {
-	G_ZOMB_AI_ST_IDLE = 0,
-	G_ZOMB_AI_ST_WALK,
-	G_ZOMB_AI_ST_ATTACK,
-	G_ZOMB_AI_ST_DEAD,
-	G_ZOMB_AI_ST_FOLLOW,
-	G_ZOMB_AI_ST_CNT
+enum G_JAKE_AI_ST {
+	G_JAKE_AI_ST_IDLE = 0,
+	G_JAKE_AI_ST_ESCAPE,
+	G_JAKE_AI_ST_HEAL,
+	G_JAKE_AI_ST_DEAD,
+	G_JAKE_AI_ST_FOLLOW,
+	G_JAKE_AI_ST_CNT
 };
 
 enum G_AI {
 	G_AI_IDLE = 0,
-	G_AI_MOVE,
-	G_AI_ATTACK,
+	G_AI_ESCAPE,
+	G_AI_HEAL,
 	G_AI_DIE,
 	G_AI_FOLLOW,
 	G_AI_CNT
@@ -41,16 +41,16 @@ enum G_AI {
 #include "GCharacter.h"
 #include "GModel.h"
 #include "GZombie.h"
-#include "GNewZombie.h"
+#include "GColleague.h"
 #include "GObjMgr.h"
 #include "GAIZombieMgr.h"
 
 #include "GAISeq.h"
 #include "GAIIdle.h"
-#include "GAIMove.h"
+#include "GAIEscape.h"
 #include "GAIFollow.h"
 #include "GAIDie.h"
-#include "GAIAttack.h"
+#include "GAIHeal.h"
 
 #include "GDxHelperEX.h"
 #include "GMatrix.h"

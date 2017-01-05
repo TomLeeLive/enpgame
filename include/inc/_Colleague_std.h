@@ -47,10 +47,10 @@ enum G_AI {
 
 #include "GAISeq.h"
 #include "GAIIdle.h"
-#include "GAIMove.h"
+#include "GAIEscape.h"
 #include "GAIFollow.h"
 #include "GAIDie.h"
-#include "GAIAttack.h"
+#include "GAIHeal.h"
 
 #include "GDxHelperEX.h"
 #include "GMatrix.h"

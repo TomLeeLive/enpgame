@@ -126,35 +126,27 @@ bool GSeqSinglePlay::Init()
 }
 void GSeqSinglePlay::ChageJakeState(CheckState state)
 {
+	GCharacter* pChar1 = NULL;
 	switch (state)
 	{
-	case G_JAKE_IDLE: {
-
+	case G_HERO_IDLE: {
+		pChar1 = I_CharMgr.GetPtr(L"HERO2_WALK");
 	}
 	break;
-	case G_JAKE_WALK: {
-		GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_WALK");
-
-		m_CharHero[G_HERO_JAKE]->Set(pChar1,
-			pChar1->m_pBoneObject,
-			pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-			pChar1->m_pBoneObject->m_Scene.iLastFrame);
+	case G_HERO_WALK: {
+		 pChar1 = I_CharMgr.GetPtr(L"HERO2_WALK");
 	}
 	break;
-	case G_JAKE_HEAL: {
-		GCharacter* pChar1 = I_CharMgr.GetPtr(L"HERO2_HEAL");
-
-		m_CharHero[G_HERO_JAKE]->Set(pChar1,
-			pChar1->m_pBoneObject,
-			pChar1->m_pBoneObject->m_Scene.iFirstFrame,
-			pChar1->m_pBoneObject->m_Scene.iLastFrame);
+	case G_HERO_HEAL: {
+		 pChar1 = I_CharMgr.GetPtr(L"HERO2_HEAL");
 	}
 	default:
 	break;
-
-	
-
 	}
+	m_CharHero[G_HERO_JAKE]->Set(pChar1,
+		pChar1->m_pBoneObject,
+		pChar1->m_pBoneObject->m_Scene.iFirstFrame,
+		pChar1->m_pBoneObject->m_Scene.iLastFrame);
 }
 
 void GSeqSinglePlay::HealingTom()
@@ -336,7 +328,11 @@ bool GSeqSinglePlay::Frame()
 	{	
 		if (abs(fTomPos - fJakePos) > 100.0f)
 		{
-				//ChageJakeState(G_JAKE_WALK);
+			if (m_CharHero[G_HERO_JAKE]->m_State != G_HERO_WALK)
+			{
+				ChageJakeState(G_HERO_WALK);
+				m_CharHero[G_HERO_JAKE]->m_State = G_HERO_WALK;
+			}
 				FollowTom(vTomPos, vJakePos);
 		}
 	}
@@ -545,6 +541,8 @@ bool        GSeqSinglePlay::InitGame() {
 			pChar[i]->m_pBoneObject->m_Scene.iLastFrame);
 		
 		m_CharHero[i]->m_pChar->Init();
+
+		//m_CharHero[i]->m_State = G_HERO_IDLE;
 
 		m_CharHero[i].get()->m_bDead = false;
 		m_CharHero[i].get()->m_iBullet = 100;

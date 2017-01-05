@@ -43,9 +43,9 @@
 
 enum CheckState
 {
-	G_JAKE_IDLE =0,
-	G_JAKE_WALK =1,
-	G_JAKE_HEAL =2
+	G_HERO_IDLE =0,
+	G_HERO_WALK =1,
+	G_HERO_HEAL =2
 };
 enum G_OBJECT {
 	G_OBJ_LAB = 0,
