@@ -2085,6 +2085,7 @@ HRESULT GSeqSinglePlay::DeleteResource()
 	return S_OK;
 }
 bool GSeqSinglePlay::InitValues(){
+	m_MapMgr.m_iMapSelected = 0;
 	m_iEventNum = -1;
 	m_iScriptNum = -1;
 
