@@ -366,7 +366,7 @@ bool	GMapMgr::LoadMap(T_STR* strFile,GCamera* pCamera, GCoreLibV2* pMain) {
 
 		int iLightReverse	= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 1]);
 		int	iLightSpecular  = _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 2]);
-		float fScl			= _ttoi(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
+		float fScl			= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 3]);
 		float fRotY			= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 4]);
 		float fTransX		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 5]);
 		float fTransY		= _ttof(vecStr[iItem + MAP_TEX_INFO_LINES + 6]);
