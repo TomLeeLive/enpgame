@@ -20,7 +20,7 @@ D3DXVECTOR3 GAIColMove::RandomMove( )
 	return RandomPoint;
 }
 
-bool GAIColMove::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
+bool GAIColMove::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero)
 {
 	D3DXVECTOR3 vTomPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
 	//D3DXVECTOR3 vJakePos = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);

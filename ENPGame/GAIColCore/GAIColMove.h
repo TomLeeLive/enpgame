@@ -9,7 +9,7 @@ public:
 	static D3DXVECTOR3 RandomMove();
 
 	bool Init(GAICol* iMyIndex);
-	bool Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
+	bool Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero);
 	bool Render();
 	bool Release();
 	//----------------------------------------------------

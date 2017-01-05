@@ -18,7 +18,7 @@ public:
 	GCharacter*	 pChar0;
 
 	virtual bool Init(GAICol* iMyIndex) = 0;
-	virtual bool Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2) = 0;
+	virtual bool Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero) = 0;
 	virtual bool Render() = 0;
 	virtual bool Release() = 0;
 	void		InitGSeq() {

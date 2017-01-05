@@ -7,7 +7,7 @@ bool GAIColEscape::Init(GAICol* iMyIndex)
 	pChar0 = I_CharMgr.GetPtr(L"HERO2_DIE");
 	return true;
 }
-bool GAIColEscape::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
+bool GAIColEscape::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero)
 {
 	//iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_ESCAPE);
 	

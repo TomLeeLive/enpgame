@@ -736,7 +736,7 @@ bool        GSeqSinglePlay::FrameGame() {
 
 	
 	if (!m_bGameOver) {
-		if (I_Input.KeyCheck(DIK_TAB) == KEY_PUSH) {
+		/*if (I_Input.KeyCheck(DIK_TAB) == KEY_PUSH) {
 
 			if (G_HERO_TOM == m_CurrentHero) {
 				m_CurrentHero = G_HERO_JAKE;
@@ -755,7 +755,7 @@ bool        GSeqSinglePlay::FrameGame() {
 			m_bDebugMode = false;
 			g_pMain->m_bDebugInfoPrint = false;
 			g_pMain->m_bDebugFpsPrint = false;
-		}
+		}*/
 	}
 	// 2초당 1회전( 1 초 * D3DX_PI = 3.14 )
 	//float t = g_pMain->m_Timer.GetElapsedTime() * D3DX_PI;

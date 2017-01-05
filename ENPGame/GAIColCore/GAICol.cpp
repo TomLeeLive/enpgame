@@ -134,12 +134,7 @@ bool	GAICol::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHero
 {
 	GHero::Frame();
 
-	if (m_State == G_AI_COL_ESCAPE)
-		m_bDead = true;
-	else
-		m_bDead = false;
-
-	m_pCurrentSeq->Frame(iMyIndex, matHeroWorld, matHeroWorld2);
+	m_pCurrentSeq->Frame(iMyIndex, matHeroWorld, matHeroWorld2,pHero);
 
 	return true;
 };

@@ -6,7 +6,7 @@ bool GAIColIdle::Init(GAICol* iMyIndex)
 	pChar0 = I_CharMgr.GetPtr(L"HERO2_IDLE");
 	return true;
 }
-bool GAIColIdle::Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
+bool GAIColIdle::Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2, GHero* pHero)
 {
 	D3DXVECTOR3 vTomPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
 	D3DXVECTOR3 vJake = D3DXVECTOR3(iMyIndex->m_matWorld._41,iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
