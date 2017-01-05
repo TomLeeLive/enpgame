@@ -1,9 +1,6 @@
 #pragma once
 //#include"GNewZombieMgr.h"
-enum ZombieNum {
-	ZombieNum = G_DEFINE_MAX_AI_ZOMBIE
-};
-class GAIEscape : public GAISeq
+class GAIColMove : public GAIColSeq
 {
 public:
 	float		m_fTime;// = 0.0f;
@@ -11,8 +8,8 @@ public:
 
 	static D3DXVECTOR3 RandomMove();
 
-	bool Init(GNewZombie* iMyIndex);
-	bool Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
+	bool Init(GAICol* iMyIndex);
+	bool Frame(GAICol* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool Render();
 	bool Release();
 	//----------------------------------------------------
@@ -24,8 +21,8 @@ public:
 
 	int			WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) { return -1; };
 public:
-	virtual ~GAIEscape();
-	GAIEscape();
+	virtual ~GAIColMove();
+	GAIColMove();
 protected:
 
 };

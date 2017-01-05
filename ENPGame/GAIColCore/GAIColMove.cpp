@@ -1,14 +1,13 @@
-#include "_Colleague_std.h"
+#include "_ai_col_std.h"
 
-
-bool GAIEscape::Init()
+bool GAIColMove::Init(GAICol* iMyIndex)
 {
-	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_WALK");
+	pChar0 = I_CharMgr.GetPtr(L"HERO2_WALK");
 	
 	return true;
 }
 
-D3DXVECTOR3 GAIEscape::RandomMove( )
+D3DXVECTOR3 GAIColMove::RandomMove( )
 {
 	D3DXVECTOR3 RandomPoint;
 
@@ -21,13 +20,13 @@ D3DXVECTOR3 GAIEscape::RandomMove( )
 	return RandomPoint;
 }
 
-bool GAIEscape::Frame()
+bool GAIColMove::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)
 {
 	D3DXVECTOR3 vHeroPos = D3DXVECTOR3(matHeroWorld._41, matHeroWorld._42, matHeroWorld._43);
 	D3DXVECTOR3 vHeroPos2 = D3DXVECTOR3(matHeroWorld2._41, matHeroWorld2._42, matHeroWorld2._43);
 
-	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matZombWld._41,
-		iMyIndex->m_matZombWld._42, iMyIndex->m_matZombWld._43);
+	D3DXVECTOR3 vPos = D3DXVECTOR3(iMyIndex->m_matWorld._41,
+		iMyIndex->m_matWorld._42, iMyIndex->m_matWorld._43);
 
 	D3DXVECTOR3 Temp = vHeroPos - vPos;
 	D3DXVECTOR3 Temp2 = vHeroPos2 - vPos;
@@ -36,7 +35,7 @@ bool GAIEscape::Frame()
 	float fDistance2 = D3DXVec3Length(&Temp2);
 
 	//3초 후를 체크하기 위한 변수
-	float fCoolTime = G_DEFINE_AI_MOVE_COOLTIME;
+	float fCoolTime = G_DEFINE_AI_COL_MOVE_COOLTIME;
 
 
 	if (!m_bTime)
@@ -47,15 +46,15 @@ bool GAIEscape::Frame()
 
 	}
 
-	if (fDistance > G_DEFINE_AI_IDLE_CHECK && fDistance2 > G_DEFINE_AI_IDLE_CHECK)
+	if (fDistance > G_DEFINE_AI_COL_IDLE_CHECK && fDistance2 > G_DEFINE_AI_COL_IDLE_CHECK)
 	{
-		iMyIndex->ChangeZombState(iMyIndex, G_AI_IDLE);
+		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_IDLE);
 	}
 
 	else
 	{
-		if (fDistance < G_DEFINE_AI_FOLLOW_CHECK|| fDistance2 < G_DEFINE_AI_FOLLOW_CHECK) {
-			iMyIndex->ChangeZombState(iMyIndex, G_AI_FOLLOW);
+		if (fDistance < G_DEFINE_AI_COL_FOLLOW_CHECK|| fDistance2 < G_DEFINE_AI_COL_FOLLOW_CHECK) {
+			iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_FOLLOW);
 		}
 		if (g_fDurationTime - fTime > fCoolTime) {
 			m_bTime = false;
@@ -72,24 +71,24 @@ bool GAIEscape::Frame()
 
 	return true;
 }
-bool GAIEscape::Render()
+bool GAIColMove::Render()
 {
 
 
 	return true;
 }
-bool GAIEscape::Release()
+bool GAIColMove::Release()
 {
 
 	return true;
 }
-HRESULT GAIEscape::CreateResource()
+HRESULT GAIColMove::CreateResource()
 {
 	HRESULT hr;
 
 	return S_OK;
 }
-HRESULT GAIEscape::DeleteResource()
+HRESULT GAIColMove::DeleteResource()
 {
 	HRESULT hr;
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();
@@ -97,14 +96,14 @@ HRESULT GAIEscape::DeleteResource()
 }
 
 
-GAIEscape::GAIEscape()
+GAIColMove::GAIColMove()
 {
-	GAISeq::InitGSeq();
+	GAIColSeq::InitGSeq();
 	m_fTime = 0.0f;
 
 }
 
 
-GAIEscape::~GAIEscape()
+GAIColMove::~GAIColMove()
 {
 }

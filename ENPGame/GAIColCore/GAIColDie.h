@@ -1,20 +1,20 @@
 #pragma once
 
-class GAIDie : public GAISeq
+class GAIColDie : public GAIColSeq
 {
 private:
-	//static GAIDie *pInstance_;
+	//static GAIColDie *pInstance_;
 public:
-	//static GAISeq* CreateInstance()
+	//static GAIColSeq* CreateInstance()
 	//{
-	//	if (pInstance_ == 0) pInstance_ = new GAIDie;
+	//	if (pInstance_ == 0) pInstance_ = new GAIColDie;
 	//	return pInstance_;
 	//}
 	//shared_ptr<GCamera > m_pMainCamera;
 	//D3DXMATRIX  m_matWorld;
 
-	bool Init(GNewZombie* iMyIndex);
-	bool Frame(GNewZombie* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
+	bool Init(GAICol* iMyIndex);
+	bool Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool Render();
 	bool Release();
 	int	WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -26,8 +26,8 @@ public:
 	HRESULT		CreateResource();
 	HRESULT		DeleteResource();
 public:
-	virtual ~GAIDie();
-	GAIDie();
+	virtual ~GAIColDie();
+	GAIColDie();
 protected:
 
 };

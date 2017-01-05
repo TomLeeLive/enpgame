@@ -36,11 +36,14 @@
 
 #ifdef G_MACRO_AI_ADD
 #if defined(DEBUG) || defined(_DEBUG)
-#pragma comment( lib, "GAICore32d.lib" )	
+#pragma comment( lib, "GAICore32d.lib" )
+#pragma comment( lib, "GAIColCore32d.lib" )
 #else
 #pragma comment( lib, "GAICore32.lib" )
+#pragma comment( lib, "GAIColCore32.lib" )
 #endif
 #include "_ai_std.h"
+#include "_ai_col_std.h"
 #else
 #include "GZombie.h"
 #include "GN2Zombie.h"
