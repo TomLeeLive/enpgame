@@ -37,6 +37,7 @@ bool GProjMain::SoundLoad() {
 	iIndex = m_pSound.Load("data/sound/switch3.ogg");			//좀비 죽을때 나는 소리
 	iIndex = m_pSound.Load("data/sound/player/dead.mp3");		//플레이어1 Dead
 	iIndex = m_pSound.Load("data/sound/player/dead_2.mp3");		//플레이어2 Dead
+	iIndex = m_pSound.Load("data/sound/Intro.ogg");
 
 	return true;
 }

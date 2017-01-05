@@ -120,6 +120,12 @@
 #include "GSeqSinglePlay.h"
 #include "GSeqSurvivalMode.h"
 #include "GSeqLoading.h"
+#include "GSeqSingle1S.h"
+#include "GSeqSingle1E.h"
+#include "GSeqSingle2S.h"
+#include "GSeqSingle2E.h"
+#include "GSeqSingle3S.h"
+#include "GSeqSingle3E.h"
 
 //Main
 #include "GCoreLibV2.h"

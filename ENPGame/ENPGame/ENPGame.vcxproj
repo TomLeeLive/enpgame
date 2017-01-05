@@ -120,6 +120,12 @@
     <ClCompile Include="GSeqIntro.cpp" />
     <ClCompile Include="GSeqLoading.cpp" />
     <ClCompile Include="GSeqMenu.cpp" />
+    <ClCompile Include="GSeqSingle1E.cpp" />
+    <ClCompile Include="GSeqSingle1S.cpp" />
+    <ClCompile Include="GSeqSingle2E.cpp" />
+    <ClCompile Include="GSeqSingle2S.cpp" />
+    <ClCompile Include="GSeqSingle3E.cpp" />
+    <ClCompile Include="GSeqSingle3S.cpp" />
     <ClCompile Include="GSeqSinglePlay.cpp" />
     <ClCompile Include="GSeqSurvivalMode.cpp" />
     <ClCompile Include="GN2Skybox.cpp" />
@@ -137,6 +143,12 @@
     <ClInclude Include="GSeqIntro.h" />
     <ClInclude Include="GSeqLoading.h" />
     <ClInclude Include="GSeqMenu.h" />
+    <ClInclude Include="GSeqSingle1E.h" />
+    <ClInclude Include="GSeqSingle1S.h" />
+    <ClInclude Include="GSeqSingle2E.h" />
+    <ClInclude Include="GSeqSingle2S.h" />
+    <ClInclude Include="GSeqSingle3E.h" />
+    <ClInclude Include="GSeqSingle3S.h" />
     <ClInclude Include="GSeqSinglePlay.h" />
     <ClInclude Include="GSeqSurvivalMode.h" />
     <ClInclude Include="GN2Skybox.h" />
