@@ -1,5 +1,7 @@
 #pragma 
 
+class GSeqSinglePlay;
+
 class GScriptData
 {
 public:
@@ -14,31 +16,48 @@ public:
 	GScriptData() {};
 	virtual ~GScriptData() {};
 };
-class GEventData
+class GEvent
 {
 public:
 	bool		m_bDone;
 	D3DXVECTOR3 m_vEventPos;
 	vector<shared_ptr<GScriptData>> m_vecScript;
 
-	GEventData(D3DXVECTOR3 vecPos) {
+	GEvent(D3DXVECTOR3 vecPos) {
 		m_vEventPos = vecPos;
 	};
-	GEventData();
-	virtual ~GEventData();
+	GEvent();
+	virtual ~GEvent();
 };
 
-class GEvent : public GSingleton < GEvent >
+class GStage
 {
-private:
-	friend class GSingleton<GEvent>;
 public:
-	vector<shared_ptr<GEventData>>  m_vecEvent;
+	D3DXVECTOR3			m_vPosStart;
+	D3DXVECTOR3			m_vPosEnd;
+	vector<shared_ptr<GEvent>>  m_vecEvent;
 	virtual bool init();
 
 
-	GEvent();
-	virtual ~GEvent() {};
+	GStage();
+	virtual ~GStage() {};
 };
-#define I_GameEvent GEvent::GetInstance()
 
+
+class GEventMgr : public GSingleton < GEventMgr >
+{
+private:
+	friend class GSingleton<GStage>;
+public:
+	vector<shared_ptr<GStage>>  m_vecStage;
+	virtual bool init();
+	virtual bool initStage1(shared_ptr<GStage>* pStage);
+	virtual bool initStage2(shared_ptr<GStage>* pStage);
+	virtual bool initStage3(shared_ptr<GStage>* pStage);
+
+	virtual bool frame(GSeqSinglePlay* pGame);
+
+	GEventMgr();
+	virtual ~GEventMgr() {};
+};
+#define I_GameEventMgr GEventMgr::GetInstance()
