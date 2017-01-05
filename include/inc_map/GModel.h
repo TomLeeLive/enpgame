@@ -4,7 +4,7 @@
 
 #ifdef G_DEFINE_SHADOW_ADD
 #define G_DEFINE_LIGHT_POS 10307.0f, 6910.0f, 130.0f
-const float g_fMaxSize = 1024;
+const float g_fMaxSize = 2048;
 #endif
 
 #include "GObjStd.h"

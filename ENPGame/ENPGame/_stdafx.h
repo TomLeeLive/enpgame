@@ -16,7 +16,7 @@
 //각 기능별 코드 넣고/빼고 용도 for debugging
 #define G_MACRO_GAME_ADD		1	//게임 로직 관련
 #define G_MACRO_MAP_ADD		1	//맵
-#define G_MACRO_EFFECT_ADD   1	//이펙트
+//#define G_MACRO_EFFECT_ADD   1	//이펙트
 #define G_MACRO_CHAR_ADD     1	//캐릭터
 #define G_MACRO_AI_ADD		 1  //AI
 //#define G_MACRO_EFFECT_TEST_ADD 1//AI 테스트용 코드
@@ -78,11 +78,10 @@
 #include <bitset>
 
 #include "GN2Skybox.h"
-#include "map/GMap.h"
-#include "map/GHeightMap.h"
-#include "map/GTileMap.h"
-#include "map/GQuadTree.h"
-#include "map/GMapObject.h"
+//#include "map/GMap.h"
+//#include "map/GQuadTree.h"
+
+#include "map/GMapMgr.h"
 #endif
 
 //이펙트

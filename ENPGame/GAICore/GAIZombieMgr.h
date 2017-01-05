@@ -11,6 +11,7 @@ public:
 	bool		Init(int iNum);
 	bool		Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2);
 	bool		Render(GCamera* camera);
+	bool		Render(D3DXMATRIX matView, D3DXMATRIX matProj);
 	bool		Release();
 	int		WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

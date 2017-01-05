@@ -12,7 +12,7 @@ bool GAIZombieMgr::Load(int iNum, D3DXVECTOR3 position)
 	}
 
 	for (int i = 0; i < iNum; i++) {
-		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+		GCharacter* pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE2");
 
 		shared_ptr<GNewZombie> pObjA = make_shared<GNewZombie>();
 		pObjA->setState(G_AI_IDLE);
@@ -68,7 +68,19 @@ bool		GAIZombieMgr::Frame(D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2) {
 	}
 
 	return true; };
+bool		GAIZombieMgr::Render(D3DXMATRIX matView, D3DXMATRIX matProj) {
+	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();
+	list<shared_ptr<GNewZombie>>::iterator _L = m_Zomb.end();
+	for (; _F != _L; ++_F)
+	{
+		(*_F)->SetMatrix(&(*_F)->m_matZombWld, &matView, &matProj);
+		(*_F)->Render();
+	}
 
+
+
+	return true;
+}
 bool		GAIZombieMgr::Render(GCamera* camera) {
 	
 	list<shared_ptr<GNewZombie>>::iterator _F = m_Zomb.begin();

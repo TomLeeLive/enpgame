@@ -3,7 +3,7 @@
 bool GAIIdle::Init(GNewZombie* iMyIndex)
 {
 	
-	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE");
+	pChar0 = I_CharMgr.GetPtr(L"ZOMBIE_IDLE2");
 	return true;
 }
 bool GAIIdle::Frame(GNewZombie* iMyIndex,D3DXMATRIX matHeroWorld, D3DXMATRIX matHeroWorld2)

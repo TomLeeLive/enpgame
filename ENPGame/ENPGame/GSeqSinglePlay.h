@@ -73,39 +73,14 @@ public:
 	//--------------------------------------------------------------------------------------
 	shared_ptr<GN2Skybox>   		  m_pSkyBoxObj;
 	//--------------------------------------------------------------------------------------
-	// 오브젝트
+	// 맵 매니저
 	//--------------------------------------------------------------------------------------
-	GGbsObj*		m_Obj[G_OBJ_CNT];
-	//D3DXMATRIX	m_matObjOBB[G_OBJ_CNT];
-	//D3DXMATRIX	m_matObjWld[G_OBJ_CNT];
-	//D3DXMATRIX  m_matObjScl[G_OBJ_CNT], m_matObjRot[G_OBJ_CNT], m_matObjTrans[G_OBJ_CNT];
-	bitset<G_OBJ_CNT> m_Objbit;
+	GMapMgr							m_MapMgr;
 
 	GBBox m_Wall[G_BB_CNT];
 	D3DXMATRIX m_matWallBB[G_BB_CNT];
 	bitset<G_BB_CNT> m_Wallbit;
-	//--------------------------------------------------------------------------------------
-	// 쿼드트리
-	//--------------------------------------------------------------------------------------
-	GMap m_CustomMap;
-	//GHeightMap		m_HeightMap;
-	GTileMap		m_HeightMap;
-	//--------------------------------------------------------------------------------------
-	// 쿼드트리
-	//--------------------------------------------------------------------------------------
-	GQuadTree	m_QuadTree;
 	
-	//--------------------------------------------------------------------------------------
-	// 디버깅 용도
-	//--------------------------------------------------------------------------------------
-	GLineShape		m_DrawLine;
-	bool			m_bMapDebugRender;
-	int				m_iDrawDepth;
-	ComPtr<ID3D11PixelShader>   m_pPixelShader;// 프로스텀 전용 픽쉘쉐이더
-
-
-	void		DrawSelectTreeLevel(D3DXMATRIX* pView, D3DXMATRIX* pProj);
-	bool		DrawQuadLine(GNode* pNode);
 #endif
 #ifdef G_MACRO_CHAR_ADD	
 public:

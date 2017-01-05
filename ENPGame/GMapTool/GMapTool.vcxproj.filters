@@ -19,9 +19,6 @@
     <Filter Include="소스 파일\Form">
       <UniqueIdentifier>{cc585df7-814f-4cf6-887a-b492b04b14ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Common">
-      <UniqueIdentifier>{47113b3d-3b39-4dde-b58f-cbde52c60a23}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,12 +81,6 @@
     <ClInclude Include="GMapCamera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GMapMgr.h">
-      <Filter>소스 파일\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="GMapGroup.h">
-      <Filter>소스 파일\Common</Filter>
-    </ClInclude>
     <ClInclude Include="_stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -145,12 +136,6 @@
     </ClCompile>
     <ClCompile Include="GMapCamera.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GMapGroup.cpp">
-      <Filter>소스 파일\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="GMapMgr.cpp">
-      <Filter>소스 파일\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

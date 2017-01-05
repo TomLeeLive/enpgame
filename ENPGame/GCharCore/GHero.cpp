@@ -75,19 +75,37 @@ void GHero::SetBoneMatrices(vector<D3DXMATRIX>* pList)
 }
 bool		GHero::Init()
 {
-	//샷건 로드
-	int iIndex = -1;
-	iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/Obj_Diffuse.hlsl");
+	if (m_HeroType == G_HERO_JAKE) {
+		//주사기 로드
+		int iIndex = -1;
+		iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SYRINGE, L"data/shader/Obj_Diffuse.hlsl");
 
-	if (iIndex < 0)
-		return false;
+		if (iIndex < 0)
+			return false;
 
-	m_ObjGun = I_ObjMgr.GetPtr(G_OBJ_NAME_GUN_SHOTGUN);
-	D3DXMatrixScaling(&m_matObjGunScl, 1, 1, 1);
-	D3DXMatrixTranslation(&m_matObjGunTrans, 0.0f, 0.0f, 0.0f);
-	m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
+		m_ObjGun = I_ObjMgr.GetPtr(G_OBJ_NAME_GUN_SYRINGE);
+		D3DXMatrixScaling(&m_matObjGunScl, 1, 1, 1);
+		D3DXMatrixTranslation(&m_matObjGunTrans, 0.0f, 0.0f, 0.0f);
+		m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
 
-	m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+		m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+	}
+	else {
+		//샷건 로드
+		int iIndex = -1;
+		iIndex = I_ObjMgr.Load(g_pd3dDevice, G_OBJ_LOC_GUN_SHOTGUN, L"data/shader/Obj_Diffuse.hlsl");
+
+		if (iIndex < 0)
+			return false;
+
+		m_ObjGun = I_ObjMgr.GetPtr(G_OBJ_NAME_GUN_SHOTGUN);
+		D3DXMatrixScaling(&m_matObjGunScl, 1, 1, 1);
+		D3DXMatrixTranslation(&m_matObjGunTrans, 0.0f, 0.0f, 0.0f);
+		m_matObjGunWld = m_matObjGunScl * m_matObjGunRot * m_matObjGunTrans;
+
+		m_OBB.Init(D3DXVECTOR3(-1.5f, -1.5f, -1.5f), D3DXVECTOR3(1.5f, 1.5f, 1.5f));
+	}
+	
 
 	return true;
 }
