@@ -19,6 +19,10 @@ bool GSeqMenu::Frame() {
 
 		ShowCursor(true);
 	}
+	if (I_Input.KeyCheck(DIK_SPACE) == KEY_PUSH) {
+		g_pMain->ChangeSeq(G_SEQ_SINGLE_1S);
+		g_pMain->m_pSound.Play(SND_CLICK_BUTTON, true, false);
+	}
 	return true; 
 };
 bool GSeqMenu::Render() { 
