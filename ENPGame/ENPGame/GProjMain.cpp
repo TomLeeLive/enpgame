@@ -48,6 +48,11 @@ bool GProjMain::Init()
 {	
 	ClipMouse(true);
 
+	m_fScreenColor[0] = 0.0f; // R
+	m_fScreenColor[1] = 0.0f; // G
+	m_fScreenColor[2] = 0.0f; // B
+	m_fScreenColor[3] = 1.0f; // A
+
 	m_pGameSeq[G_SEQ_LOADING]->Init();
 	return true;
 }
