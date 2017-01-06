@@ -7,9 +7,16 @@
 #define MOUSE_RIGHT_BUTTON  0x04
 #define MOUSE_WHEEL         0x08
 
+class GObjData;
+
 class GFPSCamera : public GCamera
 {
 public :
+	GSelect						m_Select;
+	G_RAY						m_Ray;
+	bool						ChkOBBToRay(GBBox* pBox, G_RAY* pRay);
+
+
 	D3DXVECTOR3					m_vCameraDir;
 	D3DXMATRIX					m_matRotY;
 	D3DXMATRIX					GetRotMatY();
@@ -51,7 +58,7 @@ public:
 	// 오일러 각에 따른 뷰 행렬 계산 
 	//--------------------------------------------------------------------------------------
 	virtual D3DXMATRIX			Update( D3DXVECTOR4 vDirValue );
-	virtual bool				Frame();
+	virtual bool				Frame(vector<shared_ptr<GObjData>>*	pVecObj);
 
 	// 회전 및 이동에 적용할 버튼 세팅 
 	virtual void				SetButtonMasks( int nRotateModelButtonMask, int nZoomButtonMask, int nRotateCameraButtonMask );

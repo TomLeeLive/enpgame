@@ -248,8 +248,10 @@ bool GSeqSinglePlay::FrameGun() {
 bool GSeqSinglePlay::Frame()
 {
 
-
-	m_pCamera->Frame();
+	if(!m_bDebugMode && m_pCamera !=NULL)
+		((GFPSCamera*)m_pCamera)->Frame(&m_MapMgr.m_vecMapGroup[m_MapMgr.m_iMapSelected]->m_vecObj);
+	else if (m_pCamera != NULL)
+		m_pCamera->Frame();
 
 	if (!m_bGameOver) {
 		FrameGun();
