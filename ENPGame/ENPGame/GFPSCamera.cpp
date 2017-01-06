@@ -4,77 +4,6 @@
 //
 //#include "GInput.h"
 //#include "GTimer.h"
-bool GFPSCamera::ChkOBBToRay(GBBox* pBox, G_RAY* pRay)
-{
-	if (pRay == NULL) pRay = &m_Ray;
-	float t_min = -999999.0f;
-	float t_max = 999999.0f;
-	float  f[3], fa[3], s[3], sa[3];
-
-	D3DXVECTOR3 vR = pRay->vOrigin - pBox->center;
-
-	for (int v = 0; v < 3; v++)
-	{
-		f[v] = D3DXVec3Dot(&pBox->axis[v], &pRay->vDirection);
-		s[v] = D3DXVec3Dot(&pBox->axis[v], &vR);
-		fa[v] = fabs(f[v]);
-		sa[v] = fabs(s[v]);
-
-		if (sa[v] > pBox->extent[v] && s[v] * f[v] >= 0.0f)
-			return false;
-
-		float t1 = (-s[v] - pBox->extent[v]) / f[v];
-		float t2 = (-s[v] + pBox->extent[v]) / f[v];
-		if (t1 > t2)
-		{
-			swap(t1, t2);
-		}
-		t_min = max(t_min, t1);
-		t_max = min(t_max, t2);
-		if (t_min > t_max)
-			return false;
-	}
-
-	float  fCross[3], fRhs;
-	D3DXVECTOR3 vDxR;
-	D3DXVec3Cross(&vDxR, &pRay->vDirection, &vR);
-	// D X pBox->vAxis[0]  분리축
-	fCross[0] = fabs(D3DXVec3Dot(&vDxR, &pBox->axis[0]));
-	float fAxis2 = pBox->extent[1] * fa[2];
-	float fAxis1 = pBox->extent[2] * fa[1];
-	fRhs = fAxis2 + fAxis1;
-	if (fCross[0] > fRhs)
-	{
-		m_Select.m_vDxR = vDxR;
-		return false;
-	}
-	// D x pBox->vAxis[1]  분리축
-	fCross[1] = fabs(D3DXVec3Dot(&vDxR, &pBox->axis[1]));
-	fRhs = pBox->extent[0] * fa[2] + pBox->extent[2] * fa[0];
-	if (fCross[1] > fRhs)
-	{
-		m_Select.m_vDxR = vDxR;
-		return false;
-	}
-	// D x pBox->vAxis[2]  분리축
-	fCross[2] = fabs(D3DXVec3Dot(&vDxR, &pBox->axis[2]));
-	fRhs = pBox->extent[0] * fa[1] + pBox->extent[1] * fa[0];
-	if (fCross[2] > fRhs)
-	{
-		m_Select.m_vDxR = vDxR;
-		return false;
-	}
-
-	m_Select.m_vIntersection = pRay->vOrigin + pRay->vDirection* t_min;
-
-	//코드 추가함. 거리를 구해서 광선의 길이 보다 짧았을때 true 리턴.
-	D3DXVECTOR3 vLength = pRay->vOrigin - m_Select.m_vIntersection;
-	float fLength = D3DXVec3Length(&vLength);
-	if (fLength > pRay->fExtent)
-		return false;
-
-	return true;
-}
 
 int GFPSCamera::WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -251,7 +180,7 @@ D3DXMATRIX GFPSCamera::Update( D3DXVECTOR4 vDirValue )
 
 	return UpdateVector();	
 }
-bool GFPSCamera::Frame(vector<shared_ptr<GObjData>>*	pVecObj)
+bool GFPSCamera::Frame()
 {
 	if (g_pMain->m_pGameSeq[G_SEQ_SINGLE]->m_bGameOver)
 		return false;
@@ -270,170 +199,11 @@ bool GFPSCamera::Frame(vector<shared_ptr<GObjData>>*	pVecObj)
 	// 최소값으로 고정
 	if( m_fSpeed < 100.0f ) m_fSpeed = 100.0f;
 
-	/*
 	if( g_InputData.bWKey ) 	MoveLook(g_fSecPerFrame * 5.0f * m_fSpeed);
 	if( g_InputData.bSKey )		MoveLook(-g_fSecPerFrame * 5.0f* m_fSpeed);
 	if( g_InputData.bDKey )		MoveSide(g_fSecPerFrame * 5.0f* m_fSpeed);
 	if( g_InputData.bAKey )		MoveSide(-g_fSecPerFrame * 5.0f* m_fSpeed);
-	*/
-
-
-
-
-
-
-	D3DXMATRIX matRot;
-	D3DXMatrixIdentity(&matRot);
-
-	UpdateCameraDir();
-	m_vCameraDir;
-
-
-	bool bContact = false;
-	D3DXVECTOR3 slidingVector;
-	//				0   1  2
-	//				    |
-	//				|   |  |
-	//		6	----|------|----   9
-	//		7 ------|      |------ 10
-	//		8	----|------|----   11
-	//				|   |  |
-	//				    |
-	//				3   4  5
-	D3DXVECTOR3 vRayPos[12];
-
-	vRayPos[0] = D3DXVECTOR3(-1.5f, 0.0f, 1.5f);
-	vRayPos[1] = D3DXVECTOR3(0.0f, 0.0f, 1.5f);
-	vRayPos[2] = D3DXVECTOR3(1.5f, 0.0f, 1.5f);
-	vRayPos[3] = D3DXVECTOR3(-1.5f, 0.0f, -1.5f);
-	vRayPos[4] = D3DXVECTOR3(0.0f, 0.0f, -1.5f);
-	vRayPos[5] = D3DXVECTOR3(1.5f, 0.0f, -1.5f);
-
-	vRayPos[6] = D3DXVECTOR3(-1.5f, 0.0f, 1.5f);
-	vRayPos[7] = D3DXVECTOR3(-1.5f, 0.0f, 0.0f);
-	vRayPos[8] = D3DXVECTOR3(-1.5f, 0.0f, -1.5f);
-	vRayPos[9] = D3DXVECTOR3(1.5f, 0.0f, 1.5f);
-	vRayPos[10] = D3DXVECTOR3(1.5f, 0.0f, 0.0f);
-	vRayPos[11] = D3DXVECTOR3(1.5f, 0.0f, -1.5f);
-
-	for (int i = 0; i<12; i++)
-		D3DXVec3TransformCoord(&vRayPos[i], &vRayPos[i], &m_matWorld);
-
-
-
-	for (int j = 0; j < 12; j++) {
-		m_Ray.vOrigin = vRayPos[j];
-
-		//if (j == 1 || j == 4)
-		//	m_Ray.fExtent = 2.0f;
-		//else
-		m_Ray.fExtent = 1.5f;
-
-
-
-		if (j >= 9) {
-			D3DXMatrixRotationY(&matRot, D3DXToRadian(90.0f));
-			D3DXVec3TransformCoord(&m_Ray.vDirection, &m_vCameraDir, &matRot);
-		}
-		else if (j >= 6) {
-			D3DXMatrixRotationY(&matRot, D3DXToRadian(270.0f));
-			D3DXVec3TransformCoord(&m_Ray.vDirection, &m_vCameraDir, &matRot);
-		}
-		else if (j >= 3) {
-			m_Ray.vDirection = -m_vCameraDir;
-		}
-		else {
-			m_Ray.vDirection = m_vCameraDir;
-		}
-
-		for (int iObbCnt = 0; iObbCnt < (*pVecObj).size(); iObbCnt++) {
-			
-
-			if (ChkOBBToRay(&(*pVecObj)[iObbCnt]->m_pObj->m_OBB, &m_Ray)) {
-				//충돌이 되면. 해당 교점이 어느 평면인지 찾은후 해당 평면의 노말을 얻어온다.그후 슬라이딩 벡터 계산
-				//슬라이딩 벡터를 DirectX로 표현하면 다음과 같다.
-				//D3DXVECTOR3 slidingVector = moveVec - D3DXVec3Dot(&moveVec,&contactNormal)*contactNormal;
-
-				D3DXVECTOR3 vPoint[8];
-				for (int k = 0; k < 8; k++)
-					D3DXVec3TransformCoord(&vPoint[k], &(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_vPoint[k], &(*pVecObj)[iObbCnt]->m_matObjWld);
-
-				(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[G_OBB_UP].CreatePlane(vPoint[2], vPoint[0], vPoint[3]);
-				(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[G_OBB_DOWN].CreatePlane(vPoint[4], vPoint[6], vPoint[5]);
-				(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[G_OBB_LEFT].CreatePlane(vPoint[4], vPoint[0], vPoint[6]);
-				(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[G_OBB_RIGHT].CreatePlane(vPoint[7], vPoint[3], vPoint[5]);
-				(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[G_OBB_FRONT].CreatePlane(vPoint[5], vPoint[1], vPoint[4]);
-				(*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[G_OBB_BACK].CreatePlane(vPoint[6], vPoint[2], vPoint[7]);
-
-
-				D3DXVECTOR3 vNormal;
-				float fCalc = 0.0f;
-
-				for (int i = 0; i < G_OBB_SIDE_CNT; i++) {
-					vNormal = D3DXVECTOR3((*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[i].fA, (*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[i].fB, (*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[i].fC);
-					float fCalc = vNormal.x* m_Select.m_vIntersection.x + vNormal.y* m_Select.m_vIntersection.y + vNormal.z* m_Select.m_vIntersection.z + (*pVecObj)[iObbCnt]->m_pObj->m_OBB.m_Plane[i].fD;
-					if (fCalc < 0.001f && fCalc >= 0.0f)
-					{
-						slidingVector = m_Ray.vDirection - D3DXVec3Dot(&m_Ray.vDirection, &vNormal)*vNormal;
-						bContact = true;
-					}
-				}
-			}
-		}
-
-		
-	}
-
-	if (bContact == true) {
-		if (g_InputData.bWKey) {
-
-			m_vCameraPos = m_vCameraPos + g_fSecPerFrame * 5.0f * m_fSpeed * slidingVector;
-		}
-		if (g_InputData.bSKey) {
-
-			m_vCameraPos = m_vCameraPos - g_fSecPerFrame * 5.0f * m_fSpeed * m_vCameraDir;
-		}
-		if (g_InputData.bAKey)
-		{
-			m_vCameraPos = m_vCameraPos + g_fSecPerFrame * 5.0f * m_fSpeed * slidingVector;
-		}
-		else if (g_InputData.bDKey)
-		{
-			m_vCameraPos = m_vCameraPos + g_fSecPerFrame * 5.0f * m_fSpeed * slidingVector;
-
-		}
-	}
-	else {
-		if (g_InputData.bWKey) 	MoveLook(g_fSecPerFrame * 5.0f * m_fSpeed);
-		if (g_InputData.bSKey)		MoveLook(-g_fSecPerFrame * 5.0f* m_fSpeed);
-		if (g_InputData.bDKey)		MoveSide(g_fSecPerFrame * 5.0f* m_fSpeed);
-		if (g_InputData.bAKey)		MoveSide(-g_fSecPerFrame * 5.0f* m_fSpeed);
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 	//if( g_InputData.bQKey )		MoveUp(g_fSecPerFrame * 5.0f* m_fSpeed);
 	//if( g_InputData.bEKey )		MoveUp(-g_fSecPerFrame * 5.0f* m_fSpeed);
 
@@ -509,7 +279,7 @@ void GFPSCamera::MoveLook( float fValue )
 {
 	//g_pMain->m_pSound.Play(SND_BOOTS1, true, true);
 
-	//UpdateCameraDir();
+	UpdateCameraDir();
 	m_vCameraPos += m_vCameraDir * fValue;
 }
 void GFPSCamera::MoveSide( float fValue )
