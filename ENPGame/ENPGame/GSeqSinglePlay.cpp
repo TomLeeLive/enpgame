@@ -1088,15 +1088,15 @@ bool        GSeqSinglePlay::RenderMap() {
 		//½¦µµ¿ì ¸Ê¿¡ Á»ºñ & Ä³¸¯ÅÍ ·»´õ
 		//-----------------------------------------------------
 #ifdef G_MACRO_CHAR_ADD
-		for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
-		{
-			if (iChar == m_CurrentHero && m_bDebugMode == false
-				&& m_CharHero[iChar]->m_bDead == false && m_bChatting == false)
-				continue;
+		//for (int iChar = 0; iChar < m_CharHero.size(); iChar++)
+		//{
+		//	if (iChar == m_CurrentHero && m_bDebugMode == false
+		//		&& m_CharHero[iChar]->m_bDead == false && m_bChatting == false)
+		//		continue;
 
-			m_CharHero[iChar].get()->SetMatrix(&m_CharHero[iChar]->m_matWorld, &g_pMain->m_matShadowView, &g_pMain->m_matShadowProj);
-			m_CharHero[iChar].get()->Render(g_pMain->GetContext());
-		}
+			m_CharHero[G_HERO_TOM].get()->SetMatrix(&m_CharHero[G_HERO_TOM]->m_matWorld, &g_pMain->m_matShadowView, &g_pMain->m_matShadowProj);
+			m_CharHero[G_HERO_TOM].get()->Render(g_pMain->GetContext());
+		//}
 
 #ifdef G_MACRO_AI_ADD
 		m_GAIZombMgr.Render(g_pMain->m_matShadowView, g_pMain->m_matShadowProj);
