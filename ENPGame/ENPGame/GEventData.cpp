@@ -97,11 +97,11 @@ bool GEventMgr::initStage2(shared_ptr<GStage>* pStage) {
 	//Stage 2 [START]
 	auto pEvent1 = make_shared<GEvent>(D3DXVECTOR3(-3131.0f, 40.0f, -3504.0f));
 
-	auto pEvent1_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"N2 행성에 도착하였는데. 아무도 없는 걸? 이상하지만 전진해 보자.");
+	auto pEvent1_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"연구단지도 인기척이 없다..");
 	pEvent1->m_vecScript.push_back(pEvent1_Script1);
-	auto pEvent1_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"아무래도 느낌이 안좋아.");
+	auto pEvent1_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"우린 여기서 살아남아야 해");
 	pEvent1->m_vecScript.push_back(pEvent1_Script2);
-	auto pEvent1_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"별일 없을 수도 있어 너무 걱정 하지마.");
+	auto pEvent1_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"빨리가서 H-Bio Tech에서 어떤일이 있었는지 알아내고 여기서 탈출 하자구");
 	pEvent1->m_vecScript.push_back(pEvent1_Script3);
 
 	(*pStage)->m_vecEvent.push_back(pEvent1);
@@ -111,11 +111,11 @@ bool GEventMgr::initStage2(shared_ptr<GStage>* pStage) {
 
 	auto pEvent2 = make_shared<GEvent>(D3DXVECTOR3(-2523.0f, 40.0f, -735.0f));
 
-	auto pEvent2_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"저기 멀리 생존자인가?");
+	auto pEvent2_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"이 괴물들은 여기 사람들이 변형이 된 것인가");
 	pEvent2->m_vecScript.push_back(pEvent2_Script1);
-	auto pEvent2_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"아니야 뭔가 이상해.");
+	auto pEvent2_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"옷들을 보면 연구복을 입고 있어서 그럴 수 도 있을 것 같군");
 	pEvent2->m_vecScript.push_back(pEvent2_Script2);
-	auto pEvent2_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"가까이 가보도록 하자.");
+	auto pEvent2_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"분명 H-Bio Tech에서 사고가 나서 이렇게 된 것일 거야");
 	pEvent2->m_vecScript.push_back(pEvent2_Script3);
 
 	(*pStage)->m_vecEvent.push_back(pEvent2);
@@ -125,9 +125,9 @@ bool GEventMgr::initStage2(shared_ptr<GStage>* pStage) {
 
 	auto pEvent3 = make_shared<GEvent>(D3DXVECTOR3(2126.0f, 40.0f, 979.0f));
 
-	auto pEvent3_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"여기 사람들이 이상하게 변했어...");
+	auto pEvent3_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"저기 드디어 H-Bio Tech가 보이는군");
 	pEvent3->m_vecScript.push_back(pEvent3_Script1);
-	auto pEvent3_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"가까운 드롭십으로 빠르게 이동하자.");
+	auto pEvent3_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"괴물들이 도처에 있는데 잘 피해서 가자");
 	pEvent3->m_vecScript.push_back(pEvent3_Script2);
 	auto pEvent3_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"빨리가자구!!!");
 	pEvent3->m_vecScript.push_back(pEvent3_Script3);
@@ -139,11 +139,11 @@ bool GEventMgr::initStage2(shared_ptr<GStage>* pStage) {
 
 	auto pEvent4 = make_shared<GEvent>(D3DXVECTOR3(3273.0f, 40.0f, 3534.0f));
 
-	auto pEvent4_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"다음 스테이지는 4차 발표에서 보여 드리겠습니다.");
+	auto pEvent4_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"문이 잠겨 있다.(사실은 이 게임 만든 담당자가 실내 지형을 구현 못해서..)");
 	pEvent4->m_vecScript.push_back(pEvent4_Script1);
-	auto pEvent4_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"다음에 다시 만나요~~");
+	auto pEvent4_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"연구소를 못 들어가니 더 이상 진상을 파악할 방법이 없다.");
 	pEvent4->m_vecScript.push_back(pEvent4_Script2);
-	auto pEvent4_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"안녕~~");
+	auto pEvent4_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"탈출을 위해 N2에 있는 우주공항으로 이동 하자");
 	pEvent4->m_vecScript.push_back(pEvent4_Script3);
 
 	(*pStage)->m_vecEvent.push_back(pEvent4);
@@ -165,11 +165,11 @@ bool GEventMgr::initStage3(shared_ptr<GStage>* pStage) {
 	//Stage 3 [START]
 	auto pEvent1 = make_shared<GEvent>(D3DXVECTOR3(-3588.0f, 40.0f, 2500.0f));
 
-	auto pEvent1_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"N2 행성에 도착하였는데. 아무도 없는 걸? 이상하지만 전진해 보자.");
+	auto pEvent1_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"여기도 괴물들이 서성이고 있다.");
 	pEvent1->m_vecScript.push_back(pEvent1_Script1);
-	auto pEvent1_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"아무래도 느낌이 안좋아.");
+	auto pEvent1_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"저기 앞의 모퉁이를 돌면 우리가 타고 갈 수 있는 건쉽이 있을거야");
 	pEvent1->m_vecScript.push_back(pEvent1_Script2);
-	auto pEvent1_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"별일 없을 수도 있어 너무 걱정 하지마.");
+	auto pEvent1_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"이 지옥 같은 곳. 꼭 살아서 나간다.");
 	pEvent1->m_vecScript.push_back(pEvent1_Script3);
 
 	(*pStage)->m_vecEvent.push_back(pEvent1);
@@ -179,11 +179,11 @@ bool GEventMgr::initStage3(shared_ptr<GStage>* pStage) {
 
 	auto pEvent2 = make_shared<GEvent>(D3DXVECTOR3(199.0f, 40.0f, 1908.0f));
 
-	auto pEvent2_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"저기 멀리 생존자인가?");
+	auto pEvent2_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"조금 만 더 가면 되!!!");
 	pEvent2->m_vecScript.push_back(pEvent2_Script1);
-	auto pEvent2_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"아니야 뭔가 이상해.");
+	auto pEvent2_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"제이크! 내가 HP가 떨어지면 빨리 달려와서 주사기로 치료 해 달라구");
 	pEvent2->m_vecScript.push_back(pEvent2_Script2);
-	auto pEvent2_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"가까이 가보도록 하자.");
+	auto pEvent2_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"OK 알았어. 대신 날 잘 지켜 달라구!");
 	pEvent2->m_vecScript.push_back(pEvent2_Script3);
 
 	(*pStage)->m_vecEvent.push_back(pEvent2);
@@ -193,11 +193,11 @@ bool GEventMgr::initStage3(shared_ptr<GStage>* pStage) {
 
 	auto pEvent3 = make_shared<GEvent>(D3DXVECTOR3(3245.0f, 40.0f, -2630.0f));
 
-	auto pEvent3_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"여기 사람들이 이상하게 변했어...");
+	auto pEvent3_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"휴. 겨우 도착하였다.");
 	pEvent3->m_vecScript.push_back(pEvent3_Script1);
-	auto pEvent3_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"가까운 드롭십으로 빠르게 이동하자.");
+	auto pEvent3_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"이 우주선은 조종 할 수는 있는거지? 난 이 기종은 조종해본적이 없다.");
 	pEvent3->m_vecScript.push_back(pEvent3_Script2);
-	auto pEvent3_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"빨리가자구!!!");
+	auto pEvent3_Script3 = make_shared < GScriptData>(G_HERO_JAKE, L"나만 믿으라구. 빨리 탑승하도록 해!");
 	pEvent3->m_vecScript.push_back(pEvent3_Script3);
 
 	(*pStage)->m_vecEvent.push_back(pEvent3);
@@ -255,22 +255,7 @@ bool GEventMgr::frame(GSeqSinglePlay* pGame) {
 
 	//게임 이벤트 처리[Start]
 	{
-		if (pGame->m_bChatting != true)
-		{
-			D3DXVECTOR3 vDist = I_GameEventMgr.m_vecStage[pGame->m_MapMgr.m_iMapSelected]->m_vPosEnd - vHeroPos;
-			if (D3DXVec3Length(&vDist) < G_DEFINE_LENGTH_EVENT_RADIUS)
-			{
-				if (pGame->m_MapMgr.m_iMapSelected == 0) {
-					g_pMain->ChangeSeq(G_SEQ_SINGLE_2S);
-				}
-				else if (pGame->m_MapMgr.m_iMapSelected == 1) {
-					g_pMain->ChangeSeq(G_SEQ_SINGLE_3S);
-				}
-				else if (pGame->m_MapMgr.m_iMapSelected == 2) {
-					g_pMain->ChangeSeq(G_SEQ_SINGLE_3E);
-				}
-			}
-		}
+
 
 		for (int iEvent = 0; iEvent < I_GameEventMgr.m_vecStage[pGame->m_MapMgr.m_iMapSelected]->m_vecEvent.size(); iEvent++) {
 
@@ -352,6 +337,24 @@ bool GEventMgr::frame(GSeqSinglePlay* pGame) {
 
 
 
+		}
+
+
+		if (pGame->m_bChatting != true)
+		{
+			D3DXVECTOR3 vDist = I_GameEventMgr.m_vecStage[pGame->m_MapMgr.m_iMapSelected]->m_vPosEnd - vHeroPos;
+			if (D3DXVec3Length(&vDist) < G_DEFINE_LENGTH_EVENT_RADIUS)
+			{
+				if (pGame->m_MapMgr.m_iMapSelected == 0) {
+					g_pMain->ChangeSeq(G_SEQ_SINGLE_2S);
+				}
+				else if (pGame->m_MapMgr.m_iMapSelected == 1) {
+					g_pMain->ChangeSeq(G_SEQ_SINGLE_3S);
+				}
+				else if (pGame->m_MapMgr.m_iMapSelected == 2) {
+					g_pMain->ChangeSeq(G_SEQ_SINGLE_3E);
+				}
+			}
 		}
 	}
 	//게임 이벤트 처리[End]
