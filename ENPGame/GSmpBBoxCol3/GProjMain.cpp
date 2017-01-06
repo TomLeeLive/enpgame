@@ -181,6 +181,9 @@ bool GProjMain::Release()
 
 bool GProjMain::Frame()
 {	
+	D3DXMATRIX matRot;
+	D3DXMatrixIdentity(&matRot);
+
 	static float fSpeed = G_MACRO_CAR_SPEED;//박스 이동 스피드
 	static float angle = 0.0f;//for 박스 회전 각도
 	static D3DXVECTOR3 vPos = D3DXVECTOR3(0.0f,0.0f,0.0f);// 박스 위치.
@@ -253,15 +256,17 @@ bool GProjMain::Frame()
 
 	*/
 
-		if (I_Input.KeyCheck(DIK_LEFT) == KEY_HOLD)
+	
+		if (I_Input.KeyCheck(DIK_A) == KEY_HOLD)
 		{
 			D3DXMatrixRotationY(&m_matRotation, D3DXToRadian(angle -= 20.0f*m_Timer.GetSPF()*fSpeed));
 		}
-		else if (I_Input.KeyCheck(DIK_RIGHT) == KEY_HOLD)
+		else if (I_Input.KeyCheck(DIK_D) == KEY_HOLD)
 		{
 			D3DXMatrixRotationY(&m_matRotation, D3DXToRadian(angle += 20.0f*m_Timer.GetSPF()*fSpeed));
 
 		}
+	
 
 		m_vLook.x = m_matRotation._31;
 		m_vLook.y = m_matRotation._32;
@@ -291,41 +296,57 @@ bool GProjMain::Frame()
 
 		bool bContact = false;
 		D3DXVECTOR3 slidingVector;
-	// 0   1  2
-	//     |
-	// |   |  |
-	// |------|
-	// |      |
-	// |------|
-	// |   |  |
-	//     |
-	// 3   4  5
-	D3DXVECTOR3 vRayPos[6];
+	//				0   1  2
+	//				    |
+	//				|   |  |
+	//		6	----|------|----   9
+	//		7 ------|      |------ 10
+	//		8	----|------|----   11
+	//				|   |  |
+	//				    |
+	//				3   4  5
+	D3DXVECTOR3 vRayPos[12];
 
-	vRayPos[0] = D3DXVECTOR3(-1.5f, 0.0f, 0.0f);
-	vRayPos[1]= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vRayPos[2] = D3DXVECTOR3(1.5f, 0.0f, 0.0f);
-	vRayPos[3] = D3DXVECTOR3(-1.5f, 0.0f, 0.0f);
-	vRayPos[4] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	vRayPos[5] = D3DXVECTOR3(1.5f, 0.0f, 0.0f);
+	vRayPos[0] = D3DXVECTOR3(-1.5f, 0.0f, 1.5f);
+	vRayPos[1]= D3DXVECTOR3(0.0f, 0.0f, 1.5f);
+	vRayPos[2] = D3DXVECTOR3(1.5f, 0.0f, 1.5f);
+	vRayPos[3] = D3DXVECTOR3(-1.5f, 0.0f,-1.5f);
+	vRayPos[4] = D3DXVECTOR3(0.0f, 0.0f, -1.5f);
+	vRayPos[5] = D3DXVECTOR3(1.5f, 0.0f, -1.5f);
 
-	for(int i=0;i<6;i++)
+	vRayPos[6] = D3DXVECTOR3(-1.5f, 0.0f, 1.5f);
+	vRayPos[7] = D3DXVECTOR3(-1.5f, 0.0f, 0.0f);
+	vRayPos[8] = D3DXVECTOR3(-1.5f, 0.0f, -1.5f);
+	vRayPos[9] = D3DXVECTOR3(1.5f, 0.0f, 1.5f);
+	vRayPos[10] = D3DXVECTOR3(1.5f, 0.0f, 0.0f);
+	vRayPos[11] = D3DXVECTOR3(1.5f, 0.0f, -1.5f);
+
+	for(int i=0;i<12;i++)
 		D3DXVec3TransformCoord(&vRayPos[i], &vRayPos[i], &m_matWorld);
 
 
 
-	for (int j = 0; j < 6; j++) {
+	for (int j = 0; j < 12; j++) {
 		m_Ray.vOrigin = vRayPos[j]; 
 
-		if (j == 1 || j == 4)
-			m_Ray.fExtent = 2.0f;
-		else
+		//if (j == 1 || j == 4)
+		//	m_Ray.fExtent = 2.0f;
+		//else
 			m_Ray.fExtent = 1.5f;
 
-		if (j >= 3)
-			m_Ray.vDirection = -m_vLook;
-		else
-			m_Ray.vDirection = m_vLook;
+
+
+			if (j >= 9) {
+				D3DXMatrixRotationY(&matRot, D3DXToRadian(90.0f));
+				D3DXVec3TransformCoord(&m_Ray.vDirection, &m_vLook, &matRot);
+			}else if (j >= 6) {
+				D3DXMatrixRotationY(&matRot, D3DXToRadian(270.0f));
+				D3DXVec3TransformCoord(&m_Ray.vDirection, &m_vLook, &matRot);
+			}else if (j >= 3) {
+				m_Ray.vDirection = -m_vLook;
+			}else{
+				m_Ray.vDirection = m_vLook;
+			}
 
 		if (ChkOBBToRay(&m_pBBoxEnemy, &m_Ray)) {
 			//충돌이 되면. 해당 교점이 어느 평면인지 찾은후 해당 평면의 노말을 얻어온다.그후 슬라이딩 벡터 계산
@@ -368,25 +389,68 @@ bool GProjMain::Frame()
 
 			vPos = vPos - m_Timer.GetSPF()*fSpeed * m_vLook;
 		}
+		if (I_Input.KeyCheck(DIK_LEFT) )
+		{
+			vPos = vPos + m_Timer.GetSPF()*fSpeed * slidingVector;
+		}
+		else if (I_Input.KeyCheck(DIK_RIGHT) )
+		{
+			vPos = vPos + m_Timer.GetSPF()*fSpeed * slidingVector;
 
+		}
 	}
 	else {
 		if (I_Input.KeyCheck(DIK_UP)) {
 
 			vPos = vPos + m_Timer.GetSPF()*fSpeed * m_vLook;
+
+			D3DXMatrixTranslation(&m_matTrans, vPos.x, vPos.y, vPos.z);
+			m_matWorld = m_matScale * m_matRotation * m_matTrans;
+			m_pBBox.Frame(&m_matWorld);
+			return true;
 		}
 		if (I_Input.KeyCheck(DIK_DOWN)) {
 
 			vPos = vPos - m_Timer.GetSPF()*fSpeed * m_vLook;
-		}
 
+			D3DXMatrixTranslation(&m_matTrans, vPos.x, vPos.y, vPos.z);
+			m_matWorld = m_matScale * m_matRotation * m_matTrans;
+			m_pBBox.Frame(&m_matWorld);
+			return true;
+		}
+		if (I_Input.KeyCheck(DIK_LEFT))
+		{
+			D3DXVECTOR3 vecDir;
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(270.0f));
+			D3DXVec3TransformCoord(&vecDir, &m_vLook, &matRot);
+
+			vPos = vPos + m_Timer.GetSPF()*fSpeed * vecDir;
+
+			D3DXMatrixTranslation(&m_matTrans, vPos.x, vPos.y, vPos.z);
+			m_matWorld = m_matScale * m_matRotation * m_matTrans;
+			m_pBBox.Frame(&m_matWorld);
+			return true;
+		}
+		else if (I_Input.KeyCheck(DIK_RIGHT))
+		{
+			D3DXVECTOR3 vecDir;
+			D3DXMatrixRotationY(&matRot, D3DXToRadian(90.0f));
+			D3DXVec3TransformCoord(&vecDir, &m_vLook, &matRot);
+
+			vPos = vPos + m_Timer.GetSPF()*fSpeed * vecDir;
+
+			D3DXMatrixTranslation(&m_matTrans, vPos.x, vPos.y, vPos.z);
+			m_matWorld = m_matScale * m_matRotation * m_matTrans;
+			m_pBBox.Frame(&m_matWorld);
+			return true;
+
+		}
 
 	}
 
 
 
 	D3DXMatrixTranslation(&m_matTrans, vPos.x, vPos.y, vPos.z);
-
 	m_matWorld = m_matScale * m_matRotation * m_matTrans;
 	m_pBBox.Frame(&m_matWorld);
 
