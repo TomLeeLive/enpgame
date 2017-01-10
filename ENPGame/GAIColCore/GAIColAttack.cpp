@@ -18,6 +18,8 @@ bool GAIColAttack::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX m
 	
 	if (pHero->m_iHP <= 50)
 	{
+		pHero->m_bHealing = true;
+
 		if (fDistance < G_DEFINE_AI_COL_ATTACK_CHECK)
 		{
 			float Time = g_fSecPerFrame;
@@ -34,6 +36,8 @@ bool GAIColAttack::Frame(GAICol* iMyIndex, D3DXMATRIX matHeroWorld, D3DXMATRIX m
 	}
 	else
 	{
+		pHero->m_bHealing = false;
+
 		if(fDistance > G_DEFINE_AI_COL_ATTACK_CHECK)
 		iMyIndex->ChangeZombState(iMyIndex, G_AI_COL_FOLLOW);
 	}

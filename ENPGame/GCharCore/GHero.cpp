@@ -273,6 +273,8 @@ bool GHero::Release() {
 
 GHero::GHero()
 {
+	m_bHealing = false;
+
 	m_HeroType = G_HERO_TOM;
 
 	D3DXMatrixIdentity(&m_matObjGunWld);

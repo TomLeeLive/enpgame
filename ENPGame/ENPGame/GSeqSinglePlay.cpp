@@ -484,6 +484,7 @@ bool        GSeqSinglePlay::InitGame() {
 		m_CharHero[i]->m_pChar->Init();
 
 		m_CharHero[i].get()->m_bDead = false;
+		m_CharHero[i].get()->m_bHealing = false;
 		m_CharHero[i].get()->m_iBullet = 100;
 		m_CharHero[i].get()->m_iHP = 100;
 		m_CharHero[i].get()->m_OBB.Init(m_CharHero[i].get()->m_pChar->m_vMin, m_CharHero[i].get()->m_pChar->m_vMax);
