@@ -139,7 +139,7 @@ bool GEventMgr::initStage2(shared_ptr<GStage>* pStage) {
 
 	auto pEvent4 = make_shared<GEvent>(D3DXVECTOR3(3273.0f, 40.0f, 3534.0f));
 
-	auto pEvent4_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"문이 잠겨 있다.(사실은 이 게임 만든 담당자가 실내 지형을 구현 못해서..)");
+	auto pEvent4_Script1 = make_shared < GScriptData>(G_HERO_JAKE, L"문이 잠겨 있다.");
 	pEvent4->m_vecScript.push_back(pEvent4_Script1);
 	auto pEvent4_Script2 = make_shared < GScriptData>(G_HERO_TOM, L"연구소를 못 들어가니 더 이상 진상을 파악할 방법이 없다.");
 	pEvent4->m_vecScript.push_back(pEvent4_Script2);
@@ -252,9 +252,18 @@ bool GEventMgr::frame(GSeqSinglePlay* pGame) {
 
 	static float fSpaceKeyShadeTime = 0.0f;
 	static bool	 fSpaceKeyShade = false;
+	
+	static bool  bHealing = false;
 
 	//게임 이벤트 처리[Start]
 	{
+		if (pGame->m_CharHero[G_HERO_TOM]->m_bHealing == true)
+			bHealing = true;
+
+		if (bHealing == true && pGame->m_CharHero[G_HERO_TOM]->m_bHealing == false) {
+			bHealing = false;
+			g_pMain->m_pSound.Play(SND_HEAL, true, false);
+		}
 
 
 		for (int iEvent = 0; iEvent < I_GameEventMgr.m_vecStage[pGame->m_MapMgr.m_iMapSelected]->m_vecEvent.size(); iEvent++) {

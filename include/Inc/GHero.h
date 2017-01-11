@@ -28,6 +28,8 @@ class GHero : public GModel
 	};
 
 public:
+	bool			m_bHealing;
+
 	G_HERO			m_HeroType;
 	GModel*			m_ObjGun;
 	D3DXMATRIX		m_matObjGunWld, m_matObjGunScl, m_matObjGunRot, m_matObjGunTrans;
